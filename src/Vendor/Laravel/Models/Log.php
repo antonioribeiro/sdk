@@ -1,0 +1,126 @@
+<?php
+
+/**
+ * Part of the SDK package.
+ *
+ * NOTICE OF LICENSE
+ *
+ * Licensed under the 3-clause BSD License.
+ *
+ * This source file is subject to the 3-clause BSD License that is
+ * bundled with this package in the LICENSE file.  It is also available at
+ * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
+ *
+ * @package    SDK
+ * @author     Antonio Carlos Ribeiro @ PragmaRX
+ * @license    BSD License (3-clause)
+ * @copyright  (c) 2013, PragmaRX
+ * @link       http://pragmarx.com
+ */
+
+namespace PragmaRX\SDK\Vendor\Laravel\Models;
+
+class Log extends Base {
+
+	protected $table = 'sdk_log';
+
+	protected $fillable = array(
+		'session_id',
+		'method',
+		'path_id',
+		'query_id',
+		'route_path_id',
+		'is_ajax',
+		'is_secure',
+		'is_json',
+		'wants_json',
+		'error_id',
+	);
+
+	public function session()
+	{
+		return $this->belongsTo($this->getConfig()->get('session_model'));
+	}
+
+	public function path()
+	{
+		return $this->belongsTo($this->getConfig()->get('path_model'));
+	}
+
+	public function error()
+	{
+		return $this->belongsTo($this->getConfig()->get('error_model'));
+	}
+
+	public function logQuery()
+	{
+		return $this->belongsTo($this->getConfig()->get('query_model'), 'query_id');
+	}
+
+	public function routePath()
+	{
+		return $this->belongsTo($this->getConfig()->get('route_path_model'), 'route_path_id');
+	}
+
+	public function pageViews($minutes)
+	{
+		return $this->select(
+				$this->getConnection()->raw('DATE(created_at) as date, count(*) as total')
+			)->groupBy(
+				$this->getConnection()->raw('DATE(created_at)')
+			)
+			->period($minutes)
+			->orderBy('date')
+			->get();
+	}
+
+	public function pageViewsByCountry($minutes)
+	{
+		return
+			$this
+			->select(
+				'sdk_geoip.country_name as label'
+				, $this->getConnection()->raw('count(sdk_log.id) as value')
+			)
+			->join('sdk_sessions', 'sdk_log.session_id', '=', 'sdk_sessions.id')
+			->join('sdk_geoip', 'sdk_sessions.geoip_id', '=', 'sdk_geoip.id')
+			->groupBy('sdk_geoip.country_name')
+			->period($minutes, 'sdk_log')
+			->whereNotNull('sdk_sessions.geoip_id')
+			->orderBy('value', 'desc')
+			->get();
+	}
+
+	public function errors($minutes)
+	{
+		return $this
+				->period($minutes, 'sdk_log')
+				->whereNotNull('error_id')
+				->orderBy('created_at', 'desc')
+				->get();
+	}
+
+	public function allByRouteName($name, $minutes = null)
+	{
+		$result = $this
+					->join('sdk_route_paths', 'sdk_route_paths.id', '=', 'sdk_log.route_path_id')
+
+					->join(
+						'sdk_route_path_parameters',
+						'sdk_route_path_parameters.route_path_id',
+						'=',
+						'sdk_route_paths.id'
+					)
+
+					->join('sdk_routes', 'sdk_routes.id', '=', 'sdk_route_paths.route_id')
+
+					->where('sdk_routes.name', $name);
+
+		if ($minutes)
+		{
+			$result->period($minutes, 'sdk_log');
+		}
+
+		return $result;
+	}
+}

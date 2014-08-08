@@ -1,0 +1,42 @@
+{
+    "name": "pragmarx/sdk",
+
+    "description": "A Laravel 4.1+ Visitor SDK",
+
+    "keywords": ["sdk", "tracking", "visitor", "logging", "user agent", "mobile detection", "laravel", "pragmarx"],
+
+    "license": "MIT",
+
+    "authors": [
+        {
+            "name": "Antonio Carlos Ribeiro",
+            "email": "acr@antoniocarlosribeiro.com",
+            "role": "Creator & Designer"
+        }
+    ],
+
+    "require": {
+        "php": ">=5.3.7",
+        "laravel/framework": "~4.1",
+        "pragmarx/support": "~0.2",
+        "rhumsaa/uuid": "~2.7",
+        "jenssegers/agent": "~2.1",
+        "pragmarx/ua-parser" : "0.3.4"
+    },
+
+    "suggest": {
+        "geoip/geoip": "~1.14"
+    },
+
+    "require-dev": {
+        "mockery/mockery": "~0.8"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "PragmaRX\\SDK\\": "src/"
+        }
+    },
+
+    "minimum-stability": "dev"
+}
