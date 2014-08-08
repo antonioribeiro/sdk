@@ -1,9 +1,9 @@
 {
     "name": "pragmarx/sdk",
 
-    "description": "A Laravel 4.1+ Visitor SDK",
+    "description": "A Laravel 4.2+ SDK",
 
-    "keywords": ["sdk", "tracking", "visitor", "logging", "user agent", "mobile detection", "laravel", "pragmarx"],
+    "keywords": ["sdk", "laravel", "pragmarx"],
 
     "license": "MIT",
 
@@ -16,21 +16,45 @@
     ],
 
     "require": {
-        "php": ">=5.3.7",
-        "laravel/framework": "~4.1",
-        "pragmarx/support": "~0.2",
-        "rhumsaa/uuid": "~2.7",
-        "jenssegers/agent": "~2.1",
-        "pragmarx/ua-parser" : "0.3.4"
-    },
-
-    "suggest": {
-        "geoip/geoip": "~1.14"
+        "php": ">=5.5.0",
+        "laravel/framework": "4.2.*",
+        "pragmarx/support": "0.2.*",
+		"pragmarx/tracker": "0.5.*",
+        "pragmarx/firewall": "0.2.*",
+        "pragmarx/glottos": "*",
+        "cartalyst/sentinel": "1.0.*",
+        "cartalyst/support": "1.0.*",
+        "heybigname/backup-manager": "dev-prefix",
+        "laracasts/utilities":"1.*",
+        "laracasts/validation": "1.*",
+        "laracasts/flash": "1.*",
+        "laracasts/commander": "1.*",
+        "laracasts/presenter": "0.*",
+        "h4kuna/number-format": "1.2.*",
+        "jenssegers/date": "2.0.*"
     },
 
     "require-dev": {
-        "mockery/mockery": "~0.8"
+        "phpspec/phpspec": "2.0.*@dev",
+        "codeception/codeception": "2.0.*@dev",
+        "behat/behat": "3.0.*",
+        "mockery/mockery": "~0.8",
+        "laracasts/testdummy": "1.*",
+        "fzaninotto/faker": "1.4.*",
+        "way/generators": "~2",
+        "pragmarx/sqli": "0.*"
     },
+
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packages.cartalyst.com"
+        },
+        {
+            "type": "vcs",
+            "url":  "https://github.com/antonioribeiro/backup-manager.git"
+        }
+    ],
 
     "autoload": {
         "psr-4": {
