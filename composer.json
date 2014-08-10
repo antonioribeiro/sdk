@@ -22,6 +22,7 @@
 		"pragmarx/tracker": "0.5.*",
         "pragmarx/firewall": "0.2.*",
         "pragmarx/glottos": "*",
+        "guzzlehttp/guzzle": "~4.0",
         "cartalyst/sentinel": "1.0.*",
         "cartalyst/support": "1.0.*",
         "heybigname/backup-manager": "dev-prefix",
