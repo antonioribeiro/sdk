@@ -11,6 +11,8 @@ class Controller extends BaseController {
 	function __construct(UserRepository $userRepository)
 	{
 		$this->userRepository = $userRepository;
+
+		$this->beforeFilter('auth');
 	}
 
 	public function show($username)

@@ -30,6 +30,8 @@ return [
 	    'Accounts',
 	    'Passwords',
 	    'Profiles',
+	    'Follow',
+	    'Users',
 	],
 
 	'disabled.packages' => [
@@ -104,15 +106,6 @@ return [
 			'enabled' => true,
 			'serviceProvider' => 'Laracasts\Utilities\UtilitiesServiceProvider',
 		],
-
-//		[
-//			'name' => 'laracasts/flash',
-//			'enabled' => true,
-//			'serviceProvider' => 'Laracasts\Flash\FlashServiceProvider',
-//			'facades' => [
-//				'Flash' => 'Laracasts\Flash\Flash',
-//			]
-//		],
 
 		[
 			'name' => 'cartalyst/sentinel',

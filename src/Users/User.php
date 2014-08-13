@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use PragmaRX\SDK\Accounts\Exceptions\InvalidActivationToken;
 use PragmaRX\SDK\Accounts\Exceptions\UserActivationNotFound;
 use PragmaRX\SDK\Accounts\Exceptions\UserAlreadyActivated;
+use PragmaRX\SDK\Users\FollowableTrait;
 use PragmaRX\SDK\Registration\Events\UserRegistered;
 use Laracasts\Commander\Events\EventGenerator;
 use Laracasts\Presenter\PresentableTrait;
@@ -19,7 +20,7 @@ use Auth;
 
 class User extends CartalystUser implements UserInterface, RemindableInterface {
 
-	use UserTrait, RemindableTrait, EventGenerator, PresentableTrait;
+	use FollowableTrait, UserTrait, RemindableTrait, EventGenerator, PresentableTrait;
 
 	protected $fillable = ['username', 'email', 'password', 'first_name', 'last_name'];
 
@@ -96,6 +97,11 @@ class User extends CartalystUser implements UserInterface, RemindableInterface {
 	public function statuses()
 	{
 		return $this->hasMany('PragmaRX\SDK\Statuses\Status');
+	}
+
+	public function contactInformation()
+	{
+		return $this->hasMany('PragmaRX\SDK\ContactInformation\ContactInformation');
 	}
 
 	/**

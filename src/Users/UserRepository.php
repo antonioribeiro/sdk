@@ -98,28 +98,32 @@ class UserRepository {
 	/**
 	 * Follow a user.
 	 *
-	 * @param $user_to_follow_id
+	 * @param $user_to_follow
 	 * @param $user_id
 	 * @return mixed
 	 */
-	public function follow($user_to_follow_id, $user_id)
+	public function follow($user_to_follow, $user_id)
 	{
 		$user = $this->findById($user_id);
 
-		return $user->following()->attach($user_to_follow_id);
+		$user_to_follow = $this->findByUsername($user_to_follow);
+
+		return $user->following()->attach($user_to_follow->id);
 	}
 
 	/**
 	 * Unfollow a user.
 	 *
-	 * @param $user_to_unfollow_id
+	 * @param $user_to_unfollow
 	 * @param $user_id
 	 * @return mixed
 	 */
-	public function unfollow($user_to_unfollow_id, $user_id)
+	public function unfollow($user_to_unfollow, $user_id)
 	{
 		$user = $this->findById($user_id);
 
-		return $user->following()->detach($user_to_unfollow_id);
+		$user_to_unfollow = $this->findByUsername($user_to_unfollow);
+
+		return $user->following()->detach($user_to_unfollow->id);
 	}
 }

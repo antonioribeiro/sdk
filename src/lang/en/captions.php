@@ -34,4 +34,14 @@ return [
     'forgot-password'       => "Forgot Password",
 
     'your-username'         => "Your Username",
+
+    'follow'                => "Follow",
+
+    'unfollow'              => "Unfollow",
+
+    'connect'               => "Connect",
+
+    'dashboard'             => "Dashboard",
+
+    'users'                 => "Users",
 ];
