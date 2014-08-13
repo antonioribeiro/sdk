@@ -24,6 +24,8 @@ return [
 
     'account-activated'         => 'Account <strong class="styleColor">Activated</strong>',
 
+    'account-already-activated'         => 'Account <strong class="styleColor">Already Activated</strong>',
+
     'welcome'                   => '<strong>Welcome</strong>!',
 
     'need-to-type-your-username' => 'You need to type a username',

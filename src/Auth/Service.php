@@ -2,7 +2,7 @@
 
 namespace PragmaRX\SDK\Auth;
 
-use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use Sentinel;
 
 class Service {
 
@@ -36,4 +36,13 @@ class Service {
 		return Sentinel::logout();
 	}
 
+	public function authenticate($credentials, $remember = false, $login = true)
+	{
+		return Sentinel::authenticate($credentials, $remember, $login);
+	}
+
+	public function register($credentials)
+	{
+		return Sentinel::register($credentials);
+	}
 }

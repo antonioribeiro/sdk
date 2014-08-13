@@ -30,4 +30,8 @@ return [
 	'last-name' 			=> "Last Name",
 
     'create-account'        => "Create Account",
+
+    'forgot-password'       => "Forgot Password",
+
+    'your-username'         => "Your Username",
 ];

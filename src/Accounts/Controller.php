@@ -1,11 +1,9 @@
 <?php
 
-namespace PragmaRX\SDK\Controllers;
+namespace PragmaRX\SDK\Accounts;
 
 use PragmaRX\SDK\Core\Controller as BaseController;
 use Redirect;
-
-use PragmaRX\SDK\Accounts\ActivateCommand;
 
 class Controller extends BaseController {
 
@@ -19,7 +17,7 @@ class Controller extends BaseController {
 
 		$this->execute(ActivateCommand::class, $input);
 
-		return Redirect::route('messages.index')
+		return Redirect::route('message')
 			->with('title', t('titles.account-activated'))
 			->with('message', t('paragraphs.account-activated'))
 			->with('buttons', [[

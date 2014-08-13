@@ -3,6 +3,8 @@
 return [
 	'forgot-password'               => "If you forgot your password or want to change the current one, please type your e-mail address below and click the send button. A link to change your password will be sent to your inbox.",
 
+	'forgot-password?'              => "Forgot password?",
+
 	'dont-have-account?'            => "Don't have an account yet?",
 
 	'click-to-create-one'           => "Click to create one",
@@ -57,9 +59,11 @@ return [
 
     'to-reset-your-password'        => "To reset your password, complete this form",
 
-    'this-link-will-expire'         => "This link will expire in :time minutes.",
-
     'reset-password-sent'           => "A reset password link was sent to your inbox. Please click that link to change your password.",
+
+    'invalid-password'              => "This password is invalid",
+
+    'this-link-will-expire'         => "This link will expire in :time minutes.",
 
     'account-activated'             => "Your email address has been confirmed and your account activated!",
 
@@ -98,5 +102,25 @@ return [
 	'terms-and-conditions' 			=> "Terms and Conditions",
 
 	'already-registered?' 			=> "Already registered?",
+
+	'you-are-logged-out'            => "You are now logged out.",
+
+    'type-email-or-username'        => "Please enter email address/username",
+
+    'type-your-email-address'       => "Enter your email address",
+
+    'type-your-password'            => "Enter your password",
+
+    'type-username'                 => "Enter your username",
+
+    'stay-signed-in'                => "Stay signed in",
+
+    'please-enter-your-email-for-password-reset' => "Please enter email address for password reset",
+
+    'OR'                            => "OR",
+
+    'i-remembered-password'         => "I remembered my password!",
+
+    'type-a-new-password'           => "Type a new password",
 ];
 

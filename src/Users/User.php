@@ -14,14 +14,14 @@ use PragmaRX\SDK\Accounts\Exceptions\UserAlreadyActivated;
 use PragmaRX\SDK\Registration\Events\UserRegistered;
 use Laracasts\Commander\Events\EventGenerator;
 use Laracasts\Presenter\PresentableTrait;
-use Sentinel;
 use Activation;
+use Auth;
 
 class User extends CartalystUser implements UserInterface, RemindableInterface {
 
 	use UserTrait, RemindableTrait, EventGenerator, PresentableTrait;
 
-	protected $fillable = ['first_name', 'username', 'email', 'password'];
+	protected $fillable = ['username', 'email', 'password', 'first_name', 'last_name'];
 
 	protected $presenter = 'PragmaRX\SDK\Users\UserPresenter';
 
@@ -47,16 +47,17 @@ class User extends CartalystUser implements UserInterface, RemindableInterface {
 	 * @param $password
 	 * @return static
 	 */
-	public static function register($first_name, $username, $email, $password)
+	public static function register($username, $email, $password, $first_name, $last_name)
 	{
 		$credentials = [
 		    'email'    => $email,
 		    'password' => $password,
 		    'first_name' => $first_name,
+		    'last_name' => $last_name,
 		    'username' => $username,
 		];
 
-		$user = Sentinel::register($credentials);
+		$user = Auth::register($credentials);
 
 		$user->raise(new UserRegistered($user));
 

@@ -4,7 +4,7 @@ namespace PragmaRX\SDK\Users;
 
 use Activation;
 use PragmaRX\SDK\Mailer\Mailer;
-use Laracasts\Flash\Flash;
+use Flash;
 
 class UserRepository {
 
@@ -38,10 +38,12 @@ class UserRepository {
 	 */
 	public function findByUsername($username)
 	{
-		return User::with(['statuses' => function($query)
-		{
-			$query->latest();
-		}])->where('username', $username)->first();
+		return User::where('username', $username)->first();
+
+//		return User::with(['statuses' => function($query)
+//		{
+//			$query->latest();
+//		}])->where('username', $username)->first();
 	}
 
 	/**

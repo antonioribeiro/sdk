@@ -142,7 +142,9 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	private function registerGlobalExceptionHandlers()
 	{
-		$this->includeFile(__DIR__ . "/Exceptions/handlers.php");
+		$this->includeFile(__DIR__ . "/App/handlers.php");
+
+		$this->includeFile(__DIR__ . "/App/filters.php");
 	}
 
 	private function configurePackages()

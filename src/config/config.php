@@ -28,6 +28,8 @@ return [
 		'Login',
 		'Messaging',
 	    'Accounts',
+	    'Passwords',
+	    'Profiles',
 	],
 
 	'disabled.packages' => [
@@ -42,6 +44,16 @@ return [
 		    'serviceProvider' => 'PragmaRX\SDK\Auth\ServiceProvider',
 			'facades' => [
 				'Authentication' => 'PragmaRX\SDK\Auth\Facade',
+				'Auth'           => 'PragmaRX\SDK\Auth\Facade', /// overrides the Laravel Facade
+			]
+		],
+
+		[
+			'name' => 'pragmarx/flash',
+			'enabled' => true,
+		    'serviceProvider' => 'PragmaRX\SDK\Flash\ServiceProvider',
+			'facades' => [
+				'Flash' => 'PragmaRX\SDK\Flash\Facade',
 			]
 		],
 
@@ -93,14 +105,14 @@ return [
 			'serviceProvider' => 'Laracasts\Utilities\UtilitiesServiceProvider',
 		],
 
-		[
-			'name' => 'laracasts/flash',
-			'enabled' => true,
-			'serviceProvider' => 'Laracasts\Flash\FlashServiceProvider',
-			'facades' => [
-				'Flash' => 'Laracasts\Flash\Flash',
-			]
-		],
+//		[
+//			'name' => 'laracasts/flash',
+//			'enabled' => true,
+//			'serviceProvider' => 'Laracasts\Flash\FlashServiceProvider',
+//			'facades' => [
+//				'Flash' => 'Laracasts\Flash\Flash',
+//			]
+//		],
 
 		[
 			'name' => 'cartalyst/sentinel',
@@ -124,9 +136,3 @@ return [
 
 	]
 ];
-
-//		// overrides
-//
-//		'Auth'              => 'PragmaRX\SDK\Services\Auth\Facade',
-//		'Authentication'    => 'PragmaRX\SDK\Services\Auth\Facade',
-//		'DeepScraper'       => 'PragmaRX\SDK\Services\Scraper\DeepScraperFacade',

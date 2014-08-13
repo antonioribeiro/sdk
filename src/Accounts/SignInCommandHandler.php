@@ -4,7 +4,7 @@ use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use PragmaRX\SDK\Users\UserRepository;
 use Laracasts\Commander\CommandHandler;
 use Laracasts\Commander\Events\DispatchableTrait;
-use Sentinel;
+use Auth;
 
 class SignInCommandHandler implements CommandHandler {
 
@@ -33,7 +33,7 @@ class SignInCommandHandler implements CommandHandler {
 
 	    try
 	    {
-		    if( ! $user = Sentinel::authenticate($credentials))
+		    if( ! $user = Auth::authenticate($credentials))
 		    {
 			    throw new Exceptions\InvalidPassword();
 		    }

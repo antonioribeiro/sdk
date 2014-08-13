@@ -4,13 +4,15 @@ namespace PragmaRX\SDK\Login;
 
 use Illuminate\Support\Facades\Redirect;
 use PragmaRX\SDK\Accounts\SignInCommand;
-use Laracasts\Flash\Flash;
-use View;
 use PragmaRX\SDK\Core\Controller as BaseController;
+use PragmaRX\SDK\Login\Forms\SignIn as SignInForm;
+
+use View;
 use Input;
 use Auth;
-use PragmaRX\SDK\Login\Forms\SignIn as SignInForm;
 use Sentinel;
+use Session;
+use Flash;
 
 class Controller extends BaseController {
 
@@ -50,14 +52,14 @@ class Controller extends BaseController {
 
 		Flash::message(t('paragraphs.welcome-back'));
 
-		return Redirect::intended('realties');
+		return Redirect::intended('/');
 	}
 
 	public function destroy()
 	{
-		Auth::logout();
+		Flash::message(t('paragraphs.you-are-logged-out'));
 
-		Flash::message('You are now logged out.');
+		Auth::logout();
 
 		return Redirect::home();
 	}
