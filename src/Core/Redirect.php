@@ -11,10 +11,22 @@ class Redirect {
 	{
 		if (Request::ajax())
 		{
-			$response = [
-				'result' => $parameters,
-				'success' => true,
-			];
+			if ($name == 'route')
+			{
+				$response = [
+					'redirect' => route_ajax(
+						$parameters[0],
+						isset($parameters[1]) ? $parameters[1] : null
+					)
+			    ];
+			}
+			else
+			{
+				$response = [
+					'result' => $parameters,
+					'success' => true,
+				];
+			}
 
 			return Response::json($response);
 		}

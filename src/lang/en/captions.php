@@ -39,9 +39,25 @@ return [
 
     'unfollow'              => "Unfollow",
 
+    'follower-count'        => "Follower|Followers",
+
+    'following'             => "Following",
+
+    'blocking'              => "Blocking",
+
     'connect'               => "Connect",
+
+    'disconnect'            => "Disconnect",
 
     'dashboard'             => "Dashboard",
 
     'users'                 => "Users",
+
+    'block'                 => "Block",
+
+    'unblock'               => "Unblock",
+
+    'connection-count'      => "Connection|Connections",
+
+    'profile-visit-count'   => "Visit|Visits",
 ];

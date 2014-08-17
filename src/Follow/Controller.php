@@ -4,7 +4,7 @@ namespace PragmaRX\SDK\Follow;
 
 use Auth;
 use Flash;
-use Redirect;
+use PragmaRX\SDK\Core\Redirect;
 use PragmaRX\SDK\Core\Controller as BaseController;
 
 class Controller extends BaseController {

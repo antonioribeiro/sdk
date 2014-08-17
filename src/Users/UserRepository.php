@@ -2,9 +2,13 @@
 
 namespace PragmaRX\SDK\Users;
 
-use Activation;
 use PragmaRX\SDK\Mailer\Mailer;
+use PragmaRX\SDK\Profiles\Events\ProfileVisited;
+use PragmaRX\SDK\ProfilesVisits\ProfileVisit;
+
+use Activation;
 use Flash;
+use Auth;
 
 class UserRepository {
 
@@ -108,7 +112,12 @@ class UserRepository {
 
 		$user_to_follow = $this->findByUsername($user_to_follow);
 
-		return $user->following()->attach($user_to_follow->id);
+		if ( ! $user_to_follow->isFollowedBy($user))
+		{
+			$user = $user->following()->attach($user_to_follow->id);
+		}
+
+		return $user;
 	}
 
 	/**
@@ -126,4 +135,101 @@ class UserRepository {
 
 		return $user->following()->detach($user_to_unfollow->id);
 	}
+
+	/**
+	 * Connect to a user.
+	 *
+	 * @param $user_to_connect
+	 * @param $user_id
+	 * @return mixed
+	 */
+	public function connect($user_to_connect, $user_id)
+	{
+		$user = $this->findById($user_id);
+
+		$user_to_connect = $this->findByUsername($user_to_connect);
+
+		if ( ! $user->isConnectedOrIsPendingTo($user_to_connect))
+		{
+			$user = $user->connections()->attach($user_to_connect->id);
+		}
+
+		return $user;
+	}
+
+	/**
+	 * Disconnect from a user
+	 *
+	 * @param $user_to_disconnect
+	 * @param $user_id
+	 * @return mixed
+	 */
+	public function disconnect($user_to_disconnect, $user_id)
+	{
+		$user = $this->findById($user_id);
+
+		$user_to_disconnect = $this->findByUsername($user_to_disconnect);
+
+		return $user->connections()->detach($user_to_disconnect->id);
+	}
+
+	/**
+	 * Block a user.
+	 *
+	 * @param $user_to_block
+	 * @param $user_id
+	 * @return mixed
+	 */
+	public function block($user_to_block, $user_id)
+	{
+		$user = $this->findById($user_id);
+
+		$user_to_block = $this->findByUsername($user_to_block);
+
+		if ( ! $user_to_block->isBlockedBy($user))
+		{
+			$user = $user->blockages()->attach($user_to_block->id);
+		}
+
+		return $user;
+	}
+
+	/**
+	 * Unblock a user
+	 *
+	 * @param $user_to_unblock
+	 * @param $user_id
+	 * @return mixed
+	 */
+	public function unblock($user_to_unblock, $user_id)
+	{
+		$user = $this->findById($user_id);
+
+		$user_to_unblock = $this->findByUsername($user_to_unblock);
+
+		return $user->blockages()->detach($user_to_unblock->id);
+	}
+
+	public function getProfile($username)
+	{
+		$user = $this->findByUsername($username);
+
+		$user->raise(new ProfileVisited($user));
+
+		return $user;
+	}
+
+	public function registerVisitation($user)
+	{
+		if (Auth::id() == $user->id)
+		{
+			return;
+		}
+
+		ProfileVisit::visit([
+			'visitor_id' => Auth::user()->id,
+			'visited_id' => $user->id,
+         ]);
+	}
+
 }

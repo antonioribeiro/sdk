@@ -94,6 +94,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 			$this->includeFile(__DIR__ . "/$service/handlers.php");
 
 			$this->includeFile(__DIR__ . "/$service/events.php");
+
+			$this->includeFile(__DIR__ . "/$service/listeners.php");
 		}
 	}
 

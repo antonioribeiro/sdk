@@ -30,7 +30,9 @@ class UserPresenter extends Presenter {
 
 	public function connectionsCount()
 	{
-		return 40;
+		$count = $this->entity->connections()->count();
+
+		return $count;
 	}
 
 	public function getContactInfos()

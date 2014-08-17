@@ -31,6 +31,8 @@ return [
 	    'Passwords',
 	    'Profiles',
 	    'Follow',
+	    'Connect',
+	    'Block',
 	    'Users',
 	],
 

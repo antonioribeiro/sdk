@@ -1,28 +1,38 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: AntonioCarlos
- * Date: 04/08/2014
- * Time: 18:21
- */
 
 namespace PragmaRX\SDK\Users;
 
 
 trait FollowableTrait {
 
+	/**
+	 * @return mixed
+	 */
 	public function following()
 	{
-		return $this
-				->belongsToMany(static::class, 'follows', 'follower_id', 'followed_id')
-				->withTimestamps();
+		$relation = $this
+					->belongsToMany(static::class, 'follows', 'follower_id', 'followed_id')
+					->withTimestamps();
+
+		$this->filterRelationBlockages($relation, 'followed_id', 'follower_id');
+
+		return $relation;
 	}
 
 	public function followedBy()
 	{
-		return $this
-				->belongsToMany(static::class, 'follows', 'followed_id', 'follower_id')
-				->withTimestamps();
+		$relation = $this
+					->belongsToMany(static::class, 'follows', 'followed_id', 'follower_id')
+					->withTimestamps();
+
+		$this->filterRelationBlockages($relation, 'followed_id', 'follower_id');
+
+		if ($blocked = $this->blockages()->lists('blocked_id'))
+		{
+			$relation->whereNotIn('follower_id', $blocked);
+		}
+
+		return $relation;
 	}
 
 	/**
@@ -38,4 +48,4 @@ trait FollowableTrait {
 		return in_array($this->id, $idsWhoOtherUserFollows);
 	}
 
-} 
+}

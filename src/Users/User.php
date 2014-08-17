@@ -20,7 +20,15 @@ use Auth;
 
 class User extends CartalystUser implements UserInterface, RemindableInterface {
 
-	use FollowableTrait, UserTrait, RemindableTrait, EventGenerator, PresentableTrait;
+	use
+		FollowableTrait,
+		ConnectableTrait,
+		BlockableTrait,
+		VisitableTrait,
+		UserTrait,
+		RemindableTrait,
+		EventGenerator,
+		PresentableTrait;
 
 	protected $fillable = ['username', 'email', 'password', 'first_name', 'last_name'];
 
@@ -128,4 +136,16 @@ class User extends CartalystUser implements UserInterface, RemindableInterface {
 		return $activation->code;
 	}
 
+	public function filterRelationBlockages($relation, $otherColumn, $userColumn)
+	{
+		if ($blocked = $this->blockages()->lists('blocked_id'))
+		{
+			$relation->whereNotIn($otherColumn, $blocked);
+		}
+
+		if ($blocked = $this->blockedBy()->lists('blocker_id'))
+		{
+			$relation->whereNotIn($userColumn, $blocked);
+		}
+	}
 }

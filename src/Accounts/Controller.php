@@ -3,7 +3,7 @@
 namespace PragmaRX\SDK\Accounts;
 
 use PragmaRX\SDK\Core\Controller as BaseController;
-use Redirect;
+use PragmaRX\SDK\Core\Redirect;
 
 class Controller extends BaseController {
 

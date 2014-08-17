@@ -3,7 +3,7 @@
 namespace PragmaRX\SDK\Messaging;
 
 use PragmaRX\SDK\Core\Controller as BaseController;
-use Redirect;
+use PragmaRX\SDK\Core\Redirect;
 use Session;
 use View;
 

@@ -7,7 +7,7 @@ use Password as PasswordReminder;
 use Hash;
 use Input;
 use Flash;
-use Redirect;
+use PragmaRX\SDK\Core\Redirect;
 use View;
 
 class Controller extends BaseController {
