@@ -4,9 +4,15 @@ namespace PragmaRX\SDK\Core;
 
 use Response;
 use Request;
+use Input;
 
 class Redirect {
 
+	/**
+	 * @param $name
+	 * @param array $parameters
+	 * @return \Illuminate\Http\JsonResponse|mixed
+	 */
 	public static function __callstatic($name, array $parameters = [])
 	{
 		if (Request::ajax())
@@ -39,18 +45,29 @@ class Redirect {
 		return static::call($name, $parameters);
 	}
 
+	/**
+	 * @param $parameters
+	 * @return mixed
+	 */
 	private static function back($parameters)
 	{
-		$referer = Request::instance()->headers->get('referer');
+		$referer = static::__getReferer();
 
-		if ( ! $referer)
+		if ( ! $referer || static::__isBadReferer($referer))
 		{
 			return static::call('home', $parameters);
 		}
 
-		return static::call('back', $parameters);
+		array_unshift($parameters, $referer);
+
+		return static::call('to', $parameters);
 	}
 
+	/**
+	 * @param $name
+	 * @param $parameters
+	 * @return mixed
+	 */
 	private static function call($name, $parameters)
 	{
 		return call_user_func_array(
@@ -59,4 +76,40 @@ class Redirect {
 		);
 	}
 
+	/**
+	 * @return array|mixed|string
+	 */
+	public static function __getReferer()
+	{
+		if ( ! $referer = Input::get('referer-url'))
+		{
+			$referer = Request::instance()->headers->get('referer');
+		}
+
+		if (static::__isBadReferer($referer))
+		{
+			$referer = convert_url_to_ajax(Request::getUri());
+		}
+
+		return $referer;
+	}
+
+	/**
+	 * @param $referer
+	 * @return bool
+	 */
+	public static function __isBadReferer($referer)
+	{
+		return Request::method() != 'GET' && $referer == self::__getOrigin();
+	}
+
+	/**
+	 * @return string
+	 */
+	private static function __getOrigin()
+	{
+		$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+
+		return "$origin/";
+	}
 }

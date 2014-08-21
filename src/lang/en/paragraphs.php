@@ -122,5 +122,14 @@ return [
     'i-remembered-password'         => "I remembered my password!",
 
     'type-a-new-password'           => "Type a new password",
-];
 
+    'click-to-change-avatar'        => "Click to change your avatar.",
+
+    'what-are-you-thinking?'        => "What are you thinking?",
+
+    'profile-updated'               => "Your profile has been updated.",
+
+    'email-change-already-requested' => "You already requested your e-mail address to be changed. Please check your inbox.",
+
+    'email-change-message-sent'     => "A message, with instructions for changing your e-mail address, was sent to your inbox.",
+];

@@ -89,13 +89,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	{
 		foreach($services as $service)
 		{
-			$this->includeFile(__DIR__ . "/$service/routes.php");
-
-			$this->includeFile(__DIR__ . "/$service/handlers.php");
-
-			$this->includeFile(__DIR__ . "/$service/events.php");
-
-			$this->includeFile(__DIR__ . "/$service/listeners.php");
+			$this->includeSupportFiles($service);
 		}
 	}
 
@@ -114,14 +108,15 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 */
 	private function registerServiceProvider($package, $disabled_packages = [])
 	{
-		if ($package['enabled']
-			&& ! in_array($package['name'], $disabled_packages)
-			&& class_exists($class = $package['serviceProvider']))
+		if (isset($package['serviceProvider'])
+			&& class_exists($class = $package['serviceProvider'])
+			&& $package['enabled']
+			&& ! in_array($package['name'], $disabled_packages))
 		{
 			App::register($class);
-
-			$this->loadFacades($package);
 		}
+
+		$this->loadFacades($package);
 	}
 
 	private function registerServices()
@@ -152,5 +147,48 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	private function configurePackages()
 	{
 		$this->app['config']->set('cartalyst/sentinel::users.model', $this->getConfig('models.user'));
+	}
+
+	private function includeSupportFiles($service)
+	{
+		$loadable = [
+			'routes.php',
+			'filters.php',
+			'listeners.php',
+			'handlers.php',
+			'events.php',
+		];
+
+		$files = App::make('files')->allFiles(__DIR__ . "/$service");
+
+		foreach($files as $file)
+		{
+			if (in_array($file->getFileName(), $loadable))
+			{
+				include $file->getPathName();
+			}
+		}
+
+//		$loadables = [
+//			'routes.php',
+//			'HTTP/routes.php',
+//
+//			'filters.php',
+//			'HTTP/filters.php',
+//
+//			'listeners.php',
+//			'Events/listeners.php',
+//
+//			'events.php',
+//			'Events/events.php',
+//
+//			'handlers.php',
+//			'Errors/handlers.php',
+//		];
+//
+//		foreach($loadables as $loadable)
+//		{
+//			$this->includeFile(__DIR__ . "/$service/" . $loadable);
+//		}
 	}
 }

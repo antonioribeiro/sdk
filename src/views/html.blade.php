@@ -9,13 +9,13 @@
 		<meta name="description" content="{{ $html_description or '' }}" />
 		<meta name="Author" content="{{ $html_author or '' }}" />
 
-		@if(isset($html_meta_tags))
+		@if (isset($html_meta_tags))
 		    @foreach($html_meta_tags as $meta)
 		        {{ $meta }}
 		    @endforeach
 		@endif
 
-        @if(isset($html_viewport))
+        @if (isset($html_viewport))
 		    <!-- mobile settings -->
 		    <meta name="viewport" content="{{ $html_viewport }}" />
 		@endif

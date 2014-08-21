@@ -19,21 +19,26 @@
 
 return [
 
+	'files_path' => public_path() . '/files/',
+
 	'models' => [
-		'user' => 'PragmaRX\SDK\Users\User',
+		'user' => 'PragmaRX\SDK\Services\Users\Data\Entities\User',
 	],
 
 	'services' => [
-		'Registration',
-		'Login',
-		'Messaging',
-	    'Accounts',
-	    'Passwords',
-	    'Profiles',
-	    'Follow',
-	    'Connect',
-	    'Block',
-	    'Users',
+		'Services/Registration',
+		'Services/Login',
+		'Services/Messaging',
+	    'Services/Accounts',
+	    'Services/Passwords',
+	    'Services/Profiles',
+	    'Services/Follow',
+	    'Services/Connect',
+	    'Services/Block',
+	    'Services/Users',
+	    'Services/Statuses',
+	    'Services/EmailChanges',
+	    'Services/Files',
 	],
 
 	'disabled.packages' => [
@@ -43,21 +48,47 @@ return [
 	'packages' => [
 
 		[
+			'name' => 'pragmarx/file',
+			'enabled' => true,
+			'serviceProvider' => 'PragmaRX\SDK\Services\Files\File\ServiceProvider',
+			'facades' => [
+				'File' => 'PragmaRX\SDK\Services\Files\File\Facade', /// overrides the Laravel Facade
+			]
+		],
+
+		[
 			'name' => 'pragmarx/auth',
 			'enabled' => true,
-		    'serviceProvider' => 'PragmaRX\SDK\Auth\ServiceProvider',
+		    'serviceProvider' => 'PragmaRX\SDK\Services\Auth\Service\Provider',
 			'facades' => [
-				'Authentication' => 'PragmaRX\SDK\Auth\Facade',
-				'Auth'           => 'PragmaRX\SDK\Auth\Facade', /// overrides the Laravel Facade
+				'Authentication' => 'PragmaRX\SDK\Services\Auth\Service\Facade',
+				'Auth'           => 'PragmaRX\SDK\Services\Auth\Service\Facade', /// overrides the Laravel Facade
+			]
+		],
+
+		[
+			'name' => 'pragmarx/redirect',
+			'enabled' => true,
+			'facades' => [
+				'Redirect' => 'PragmaRX\SDK\Core\Redirect', /// overrides the Laravel Facade
+			]
+		],
+
+		[
+			'name' => 'pragmarx/form',
+			'enabled' => true,
+			'serviceProvider' => 'PragmaRX\SDK\Services\Form\Service\Provider',
+			'facades' => [
+				'Form' => 'PragmaRX\SDK\Services\Form\Service\Facade', /// overrides the Laravel Facade
 			]
 		],
 
 		[
 			'name' => 'pragmarx/flash',
 			'enabled' => true,
-		    'serviceProvider' => 'PragmaRX\SDK\Flash\ServiceProvider',
+		    'serviceProvider' => 'PragmaRX\SDK\Services\Flash\Service\Provider',
 			'facades' => [
-				'Flash' => 'PragmaRX\SDK\Flash\Facade',
+				'Flash' => 'PragmaRX\SDK\Services\Flash\Service\Facade',
 			]
 		],
 

@@ -57,7 +57,19 @@ return [
 
     'unblock'               => "Unblock",
 
+    'connections'           => "Connections",
+
     'connection-count'      => "Connection|Connections",
 
     'profile-visit-count'   => "Visit|Visits",
+
+    'statuses'              => "Statuses",
+
+    'edit-profile'          => "Edit Profile",
+
+    'edit-your-profile'     => "Edit Your Profile",
+
+    'bio'                   => "Bio",
+
+    'save'                  => "Save",
 ];

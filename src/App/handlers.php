@@ -2,5 +2,7 @@
 
 App::error(function(Laracasts\Validation\FormValidationException $exception, $code)
 {
-	return Redirect::back()->withInput()->withErrors($exception->getErrors());
+	Flash::errors($exception->getErrors());
+
+	return \PragmaRX\SDK\Core\Redirect::back()->withInput();
 });

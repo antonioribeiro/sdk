@@ -18,7 +18,7 @@
  * @link       http://pragmarx.com
  */
 
-namespace PragmaRX\SDK\Support;
+namespace PragmaRX\SDK\Services\Support;
 
 use Illuminate\Filesystem\Filesystem as IlluminateFilesystem;
 
