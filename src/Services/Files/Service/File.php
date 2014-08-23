@@ -1,11 +1,13 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Files\File;
+namespace PragmaRX\SDK\Services\Files\Service;
 
+use Symfony\Component\Finder\Finder;
 use Illuminate\Filesystem\Filesystem;
 use App;
+use Illuminate\Support\Str;
 
-class Service {
+class File {
 
 	/**
 	 * @var Filesystem
@@ -20,8 +22,6 @@ class Service {
 	public function upload($file)
 	{
 		// $fileName = $this->getFileName($file);
-
-
 	}
 
 	public function __call($name, $arguments)
@@ -30,6 +30,18 @@ class Service {
 			array($this->filesystem, $name),
 			$arguments
 		);
+	}
+
+	public function allDirectories($directory)
+	{
+		$directories = [];
+
+		foreach (Finder::create()->in($directory)->directories() as $dir)
+		{
+			$directories[] = $dir;
+		}
+
+		return $directories;
 	}
 
 }

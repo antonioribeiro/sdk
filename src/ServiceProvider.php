@@ -3,6 +3,7 @@
 namespace PragmaRX\SDK;
 
 use App;
+use PragmaRX\SDK\Core\Migration\MigrateCommand;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 
 class ServiceProvider extends PragmaRXServiceProvider {
@@ -56,7 +57,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
     public function registerConfig()
     {
-        $this->app['tracker.config'] = $this->app->share(function($app)
+        $this->app['pragmarx.config'] = $this->app->share(function($app)
         {
             return new Config($app['config'], self::PACKAGE_NAMESPACE);
         });
@@ -124,6 +125,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		$services = $this->getConfig('services');
 
 		$this->includeServiceScripts($services);
+
+		$this->registerCommands();
 	}
 
 	/**
@@ -139,9 +142,9 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	private function registerGlobalExceptionHandlers()
 	{
-		$this->includeFile(__DIR__ . "/App/handlers.php");
+		$this->includeFile(__DIR__ . "/SDK/Errors/handlers.php");
 
-		$this->includeFile(__DIR__ . "/App/filters.php");
+		$this->includeFile(__DIR__ . "/SDK/HTTP/filters.php");
 	}
 
 	private function configurePackages()
@@ -168,27 +171,15 @@ class ServiceProvider extends PragmaRXServiceProvider {
 				include $file->getPathName();
 			}
 		}
+	}
 
-//		$loadables = [
-//			'routes.php',
-//			'HTTP/routes.php',
-//
-//			'filters.php',
-//			'HTTP/filters.php',
-//
-//			'listeners.php',
-//			'Events/listeners.php',
-//
-//			'events.php',
-//			'Events/events.php',
-//
-//			'handlers.php',
-//			'Errors/handlers.php',
-//		];
-//
-//		foreach($loadables as $loadable)
-//		{
-//			$this->includeFile(__DIR__ . "/$service/" . $loadable);
-//		}
+	private function registerCommands()
+	{
+		$this->app->bindShared('command.migrate', function($app)
+		{
+			$packagePath = $app['path.base'].'/vendor';
+
+			return new MigrateCommand($app['migrator'], $packagePath);
+		});
 	}
 }

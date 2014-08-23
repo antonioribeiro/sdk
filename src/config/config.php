@@ -50,9 +50,9 @@ return [
 		[
 			'name' => 'pragmarx/file',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\SDK\Services\Files\File\ServiceProvider',
+			'serviceProvider' => 'PragmaRX\SDK\Services\Files\Service\Provider',
 			'facades' => [
-				'File' => 'PragmaRX\SDK\Services\Files\File\Facade', /// overrides the Laravel Facade
+				'File' => 'PragmaRX\SDK\Services\Files\Service\Facade', /// overrides the Laravel Facade
 			]
 		],
 

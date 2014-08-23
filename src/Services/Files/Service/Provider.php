@@ -1,12 +1,10 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Files\File;
+namespace PragmaRX\SDK\Services\Files\Service;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
-use PragmaRX\SDK\Services\Files\File\Service as File;
-
-class ServiceProvider extends IlluminateServiceProvider {
+class Provider extends IlluminateServiceProvider {
 
 	/**
 	 * Indicates if loading of the provider is deferred.
