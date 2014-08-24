@@ -3,6 +3,7 @@
 namespace PragmaRX\SDK\Services\Form\Service;
 
 use App;
+use Input;
 
 class Form {
 
@@ -33,7 +34,8 @@ class Form {
 
 		return
 			$this->form->{$method}($params1, $params2) .
-			$this->makeReferer();
+			$this->makeReferer() .
+			$this->addToken();
 	}
 
 	private function makeReferer()
@@ -47,5 +49,17 @@ class Form {
 			array($this->form, $name),
 			$arguments
 		);
+	}
+
+	private function addToken()
+	{
+		$token = isset($token) ? $token : null;
+		$token = isset($token) ? $token : Input::get('token');
+		$token = isset($token) ? $token : Input::query('token');
+
+		if (isset($token))
+		{
+			return Form::hidden('token', $token);
+		}
 	}
 }

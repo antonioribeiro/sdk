@@ -54,6 +54,8 @@ class Passwords extends BaseController {
 	{
 		if (is_null($token)) App::abort(404);
 
+		Input::merge(['token' => $token]);
+
 		return View::make('passwords.reset')->with('token', $token);
 	}
 
