@@ -42,7 +42,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	    $this->registerServices();
 
-	    $this->registerGlobalExceptionHandlers();
+	    $this->registerGlobalScripts();
 
 	    $this->configurePackages();
     }
@@ -142,13 +142,15 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		}
 	}
 
-	private function registerGlobalExceptionHandlers()
+	private function registerGlobalScripts()
 	{
 		$this->includeFile(__DIR__ . "/SDK/Errors/handlers.php");
 
 		$this->includeFile(__DIR__ . "/SDK/HTTP/filters.php");
 
 		$this->includeFile(__DIR__ . "/Support/helpers.php");
+
+		$this->includeFile(__DIR__ . "/Support/blade.php");
 	}
 
 	private function configurePackages()
