@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ $html_lang }}" {{ explode_attributes($html_attributes) }}> <!--<![endif]-->
+<html lang="{{ $html_lang or 'en' }}" {{ isset($html_attributes) ? explode_attributes($html_attributes) : '' }}> <!--<![endif]-->
 	<head>
 		<meta charset="{{ $html_charset or 'utf-8' }}" />
 
@@ -23,7 +23,7 @@
 		@yield('html.head')
 	</head>
 
-	<body {{ explode_attributes($html_body_attributes) }}>
+	<body {{ isset($html_body_attributes) ? explode_attributes($html_body_attributes) : '' }}>
 
 		@yield('html.body')
 

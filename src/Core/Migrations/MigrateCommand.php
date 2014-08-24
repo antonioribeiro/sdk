@@ -1,11 +1,10 @@
 <?php
 
-namespace PragmaRX\SDK\Core\Migration;
+namespace PragmaRX\SDK\Core\Migrations;
 
 use App;
 use File;
 use Illuminate\Database\Console\Migrations\MigrateCommand as IlluminateMigrateCommand;
-use Symfony\Component\Console\Input\InputOption;
 
 class MigrateCommand extends IlluminateMigrateCommand {
 
@@ -40,7 +39,10 @@ class MigrateCommand extends IlluminateMigrateCommand {
 	{
 		$this->paths[] = $this->getMigrationPath();
 
-		$this->paths = array_merge($this->paths, $this->getServicesMigrationPaths());
+		if ( ! $this->input->getOption('package'))
+		{
+			$this->paths = array_merge($this->paths, $this->getServicesMigrationPaths());
+		}
 
 		return $this->paths;
 	}

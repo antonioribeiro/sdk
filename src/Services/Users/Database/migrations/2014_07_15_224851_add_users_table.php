@@ -37,7 +37,6 @@ class AddUsersTable extends Migration {
 	{
 		$this->dropColumn('users', 'username');
 		$this->dropColumn('users', 'bio');
-
 	}
 
 }

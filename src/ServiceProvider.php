@@ -3,7 +3,8 @@
 namespace PragmaRX\SDK;
 
 use App;
-use PragmaRX\SDK\Core\Migration\MigrateCommand;
+use PragmaRX\SDK\Core\Migrations\MigrateCommand;
+use PragmaRX\SDK\Core\Migrations\RollbackCommand;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 
 class ServiceProvider extends PragmaRXServiceProvider {
@@ -23,6 +24,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
     protected function wakeUp()
     {
+
     }
 
     /**
@@ -145,6 +147,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		$this->includeFile(__DIR__ . "/SDK/Errors/handlers.php");
 
 		$this->includeFile(__DIR__ . "/SDK/HTTP/filters.php");
+
+		$this->includeFile(__DIR__ . "/Support/helpers.php");
 	}
 
 	private function configurePackages()
@@ -180,6 +184,11 @@ class ServiceProvider extends PragmaRXServiceProvider {
 			$packagePath = $app['path.base'].'/vendor';
 
 			return new MigrateCommand($app['migrator'], $packagePath);
+		});
+
+		$this->app->bindShared('command.migrate.rollback', function($app)
+		{
+			return new RollbackCommand($app['migrator']);
 		});
 	}
 }
