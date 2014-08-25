@@ -19,7 +19,7 @@
         "php": ">=5.5.0",
         "laravel/framework": "*",
         "pragmarx/support": "0.2.*",
-		"pragmarx/tracker": "0.5.*",
+		"pragmarx/tracker": "dev-master",
         "pragmarx/firewall": "0.2.*",
         "pragmarx/glottos": "*",
         "guzzlehttp/guzzle": "~4.0",

@@ -92,11 +92,11 @@ return [
 			]
 		],
 
-		[
-			'name' => 'pragmarx/tracker',
-			'enabled' => true,
-		    'serviceProvider' => 'PragmaRX\Tracker\Vendor\Laravel\ServiceProvider',
-		],
+//		[
+//			'name' => 'pragmarx/tracker',
+//			'enabled' => true,
+//		    'serviceProvider' => 'PragmaRX\Tracker\Vendor\Laravel\ServiceProvider',
+//		],
 
 		[
 			'name' => 'pragmarx/firewall',
