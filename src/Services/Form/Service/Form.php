@@ -43,14 +43,6 @@ class Form {
 		return $this->form->input('hidden', 'referer-url', '', ['id' => 'referer-url']);
 	}
 
-	public function __call($name, $arguments)
-	{
-		return call_user_func_array(
-			array($this->form, $name),
-			$arguments
-		);
-	}
-
 	private function addToken()
 	{
 		$token = isset($token) ? $token : null;
@@ -62,4 +54,13 @@ class Form {
 			return Form::hidden('token', $token);
 		}
 	}
+
+	public function __call($name, $arguments)
+	{
+		return call_user_func_array(
+			array($this->form, $name),
+			$arguments
+		);
+	}
+
 }

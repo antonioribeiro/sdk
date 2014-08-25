@@ -84,6 +84,15 @@ return [
 		],
 
 		[
+			'name' => 'pragmarx/html',
+			'enabled' => true,
+			'facades' => [
+				'Html' => 'PragmaRX\SDK\Services\Html\Service\Facade', /// overrides the Laravel Facade
+				'HTML' => 'PragmaRX\SDK\Services\Html\Service\Facade', /// overrides the Laravel Facade
+			]
+		],
+
+		[
 			'name' => 'pragmarx/flash',
 			'enabled' => true,
 		    'serviceProvider' => 'PragmaRX\SDK\Services\Flash\Service\Provider',
