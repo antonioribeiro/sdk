@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Statuses\HTTP\Controllers;
+namespace PragmaRX\SDK\Services\Statuses\Http\Controllers;
 
 use PragmaRX\SDK\Core\Controller as BaseController;
 use PragmaRX\SDK\Services\Statuses\Commands\PostStatusCommand;

@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Profiles\HTTP\Controllers;
+namespace PragmaRX\SDK\Services\Profiles\Http\Controllers;
 
 use Laracasts\Commander\Events\DispatchableTrait;
 use PragmaRX\SDK\Core\Controller as BaseController;

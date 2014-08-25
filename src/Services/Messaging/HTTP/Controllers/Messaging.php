@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Messaging\HTTP\Controllers;
+namespace PragmaRX\SDK\Services\Messaging\Http\Controllers;
 
 use PragmaRX\SDK\Core\Controller as BaseController;
 use PragmaRX\SDK\Core\Redirect;

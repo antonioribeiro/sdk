@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Passwords\HTTP\Controllers;
+namespace PragmaRX\SDK\Services\Passwords\Http\Controllers;
 
 use PragmaRX\SDK\Core\Controller as BaseController;
 use Password as PasswordReminder;

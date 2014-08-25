@@ -5,9 +5,9 @@ namespace PragmaRX\SDK\Services\Users\Data\Entities;
 use Cartalyst\Sentinel\Users\EloquentUser as CartalystUser;
 
 use Illuminate\Auth\UserTrait;
-use Illuminate\Auth\UserInterface;
+use Illuminate\Contracts\Auth\User as UserContract;
+use Illuminate\Contracts\Auth\Remindable as RemindableContract;
 use Illuminate\Auth\Reminders\RemindableTrait;
-use Illuminate\Auth\Reminders\RemindableInterface;
 use Illuminate\Support\Facades\Hash;
 
 use PragmaRX\SDK\Services\Accounts\Exceptions\InvalidActivationToken;
@@ -21,7 +21,7 @@ use Laracasts\Presenter\PresentableTrait;
 use Activation;
 use Auth;
 
-class User extends CartalystUser implements UserInterface, RemindableInterface {
+class User extends CartalystUser implements UserContract, RemindableContract {
 
 	use
 		FollowableTrait,

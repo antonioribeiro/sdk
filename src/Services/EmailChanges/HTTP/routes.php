@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['namespace' => 'PragmaRX\SDK\Services\EmailChanges\HTTP\Controllers'], function()
+Route::group(['namespace' => 'PragmaRX\SDK\Services\EmailChanges\Http\Controllers'], function()
 {
 	Route::group(['prefix' => 'email/change'], function()
 	{

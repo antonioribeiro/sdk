@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Users\HTTP\Controllers;
+namespace PragmaRX\SDK\Services\Users\Http\Controllers;
 
 use PragmaRX\SDK\Services\Users\Data\Repositories\UserRepository;
 use View;

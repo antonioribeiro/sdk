@@ -2,7 +2,7 @@
 
 namespace PragmaRX\SDK\Core;
 
-use Controller as IlluminateController;
+use Illuminate\Routing\Controller as IlluminateController;
 use Laracasts\Commander\CommanderTrait;
 
 class Controller extends IlluminateController {

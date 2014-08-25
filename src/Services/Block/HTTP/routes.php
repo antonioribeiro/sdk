@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['namespace' => 'PragmaRX\SDK\Services\Block\HTTP\Controllers'], function()
+Route::group(['namespace' => 'PragmaRX\SDK\Services\Block\Http\Controllers'], function()
 {
 	Route::group(['prefix' => 'block'], function()
 	{

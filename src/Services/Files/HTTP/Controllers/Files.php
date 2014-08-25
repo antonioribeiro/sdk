@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Files\HTTP\Controllers;
+namespace PragmaRX\SDK\Services\Files\Http\Controllers;
 
 use PragmaRX\SDK\Core\Controller as BaseController;
 

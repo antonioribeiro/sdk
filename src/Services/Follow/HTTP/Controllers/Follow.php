@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Follow\HTTP\Controllers;
+namespace PragmaRX\SDK\Services\Follow\Http\Controllers;
 
 use Auth;
 use Flash;

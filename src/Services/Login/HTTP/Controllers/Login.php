@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Login\HTTP\Controllers;
+namespace PragmaRX\SDK\Services\Login\Http\Controllers;
 
 use Illuminate\Support\Facades\Redirect;
 use PragmaRX\SDK\Core\Controller as BaseController;
