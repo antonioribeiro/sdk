@@ -44,7 +44,11 @@ class MigrateCommand extends IlluminateMigrateCommand {
 			$this->paths = array_merge($this->paths, $this->getServicesMigrationPaths());
 		}
 
-		return $this->paths;
+		$tempPath = $this->getTemporaryPath();
+
+		$this->copyMigrations($this->paths, $tempPath);
+
+		return [$tempPath];
 	}
 
 	private function getServicesMigrationPaths()
@@ -90,6 +94,25 @@ class MigrateCommand extends IlluminateMigrateCommand {
 		foreach ($this->migrator->getNotes() as $note)
 		{
 			$this->output->writeln($note);
+		}
+	}
+
+	private function getTemporaryPath()
+	{
+		return File::tempDir();
+	}
+
+	private function copyMigrations($paths, $tempPath)
+	{
+		foreach($paths as $path)
+		{
+			if (file_exists($path))
+			{
+				foreach(File::allFiles($path) as $file)
+				{
+					File::copy($file->getPathName(), $tempPath . '/' . $file->getFileName());
+				}
+			}
 		}
 	}
 

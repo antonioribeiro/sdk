@@ -5,7 +5,6 @@ namespace PragmaRX\Sdk\Services\Files\Service;
 use Symfony\Component\Finder\Finder;
 use Illuminate\Filesystem\Filesystem;
 use App;
-use Illuminate\Support\Str;
 
 class File {
 
@@ -42,6 +41,21 @@ class File {
 		}
 
 		return $directories;
+	}
+
+	public function tempDir()
+	{
+		$name = 'tempfolder';
+		$counter = 0;
+
+		while(file_exists($directory = sys_get_temp_dir()."/{$name}_{$counter}"))
+		{
+			$counter++;
+		}
+
+		mkdir($directory);
+
+		return $directory;
 	}
 
 }
