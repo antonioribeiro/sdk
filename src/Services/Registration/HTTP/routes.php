@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['namespace' => 'PragmaRX\SDK\Services\Registration\Http\Controllers'], function()
+Route::group(['namespace' => 'PragmaRX\Sdk\Services\Registration\Http\Controllers'], function()
 {
 	Route::group(['prefix' => 'register'], function()
 	{

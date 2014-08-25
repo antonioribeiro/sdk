@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\EmailChanges\Events;
+namespace PragmaRX\Sdk\Services\EmailChanges\Events;
 
-use PragmaRX\SDK\Core\Events\GenericEvent;
+use PragmaRX\Sdk\Core\Events\GenericEvent;
 
 class EmailChangeRequested extends GenericEvent {
 

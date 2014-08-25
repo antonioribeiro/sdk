@@ -1,7 +1,7 @@
 {
     "name": "pragmarx/sdk",
 
-    "description": "A Laravel 4.2+ SDK",
+    "description": "A Laravel 4.2+ Sdk",
 
     "keywords": ["sdk", "laravel", "pragmarx"],
 
@@ -59,7 +59,7 @@
 
     "autoload": {
         "psr-4": {
-            "PragmaRX\\SDK\\": "src/"
+            "PragmaRX\\Sdk\\": "src/"
         }
     },
 

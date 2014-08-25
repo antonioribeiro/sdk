@@ -6,7 +6,7 @@
  * Time: 20:12
  */
 
-namespace PragmaRX\SDK\Services\Follow\Commands;
+namespace PragmaRX\Sdk\Services\Follow\Commands;
 
 
 class UnfollowUserCommand {

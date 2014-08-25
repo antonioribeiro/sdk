@@ -1,10 +1,10 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Profiles\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Profiles\Http\Controllers;
 
 use Laracasts\Commander\Events\DispatchableTrait;
-use PragmaRX\SDK\Core\Controller as BaseController;
-use PragmaRX\SDK\Services\Users\Data\Repositories\UserRepository;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 use View;
 use Auth;

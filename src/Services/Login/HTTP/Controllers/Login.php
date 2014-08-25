@@ -1,11 +1,11 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Login\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Login\Http\Controllers;
 
 use Illuminate\Support\Facades\Redirect;
-use PragmaRX\SDK\Core\Controller as BaseController;
-use PragmaRX\SDK\Services\Accounts\Commands\SignInCommand;
-use PragmaRX\SDK\Services\Login\Forms\SignIn as SignInForm;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Accounts\Commands\SignInCommand;
+use PragmaRX\Sdk\Services\Login\Forms\SignIn as SignInForm;
 
 use View;
 use Input;

@@ -6,7 +6,7 @@
  * Time: 20:29
  */
 
-namespace PragmaRX\SDK\Core;
+namespace PragmaRX\Sdk\Core;
 
 use Laracasts\Presenter\Presenter as LaracastsPresenter;
 

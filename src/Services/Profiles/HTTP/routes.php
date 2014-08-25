@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['namespace' => 'PragmaRX\SDK\Services\Profiles\Http\Controllers'], function()
+Route::group(['namespace' => 'PragmaRX\Sdk\Services\Profiles\Http\Controllers'], function()
 {
 	Route::group(['prefix' => 'profile'], function()
 	{

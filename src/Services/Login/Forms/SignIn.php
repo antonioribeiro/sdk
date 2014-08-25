@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Login\Forms;
+namespace PragmaRX\Sdk\Services\Login\Forms;
 
 use Laracasts\Validation\FormValidator;
 

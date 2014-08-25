@@ -1,7 +1,7 @@
-<?php namespace PragmaRX\SDK\Services\Auth\Service;
+<?php namespace PragmaRX\Sdk\Services\Auth\Service;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
-use PragmaRX\SDK\Services\Auth\Service\Auth;
+use PragmaRX\Sdk\Services\Auth\Service\Auth;
 
 class Provider extends IlluminateServiceProvider {
 

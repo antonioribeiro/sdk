@@ -1,4 +1,4 @@
-<?php namespace PragmaRX\SDK\Services\Auth\Service;
+<?php namespace PragmaRX\Sdk\Services\Auth\Service;
 
 use Illuminate\Support\Facades\Facade as LaravelFacade;
 

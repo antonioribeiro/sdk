@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\States\Data\Entities;
+namespace PragmaRX\Sdk\Services\States\Data\Entities;
 
-use PragmaRX\SDK\Core\Model;
+use PragmaRX\Sdk\Core\Model;
 
 class State extends Model {
 

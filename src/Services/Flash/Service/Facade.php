@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Flash\Service;
+namespace PragmaRX\Sdk\Services\Flash\Service;
 
 use Illuminate\Support\Facades\Facade as LaravelFacade;
 

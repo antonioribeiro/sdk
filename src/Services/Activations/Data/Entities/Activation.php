@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Activations\Data\Entities;
+namespace PragmaRX\Sdk\Services\Activations\Data\Entities;
 
-use PragmaRX\SDK\Core\Model;
+use PragmaRX\Sdk\Core\Model;
 
 class Activation extends Model {
 

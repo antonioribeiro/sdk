@@ -1,9 +1,9 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Messaging\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Messaging\Http\Controllers;
 
-use PragmaRX\SDK\Core\Controller as BaseController;
-use PragmaRX\SDK\Core\Redirect;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Core\Redirect;
 use Session;
 use View;
 

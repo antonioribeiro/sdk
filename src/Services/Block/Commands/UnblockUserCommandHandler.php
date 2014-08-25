@@ -1,9 +1,9 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Block\Commands;
+namespace PragmaRX\Sdk\Services\Block\Commands;
 
 use Laracasts\Commander\CommandHandler;
-use PragmaRX\SDK\Services\Users\Data\Repositories\UserRepository;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 class UnblockUserCommandHandler implements CommandHandler {
 

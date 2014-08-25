@@ -1,11 +1,11 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Registration\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Registration\Http\Controllers;
 
-use PragmaRX\SDK\Core\Controller as BaseController;
-use PragmaRX\SDK\Core\Redirect;
-use PragmaRX\SDK\Services\Registration\Commands\RegisterUserCommand;
-use PragmaRX\SDK\Services\Registration\Forms\Registration as RegistrationForm;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Core\Redirect;
+use PragmaRX\Sdk\Services\Registration\Commands\RegisterUserCommand;
+use PragmaRX\Sdk\Services\Registration\Forms\Registration as RegistrationForm;
 use View;
 use Input;
 

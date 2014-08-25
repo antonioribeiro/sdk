@@ -1,10 +1,10 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Users\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Users\Http\Controllers;
 
-use PragmaRX\SDK\Services\Users\Data\Repositories\UserRepository;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use View;
-use PragmaRX\SDK\Core\Controller as BaseController;
+use PragmaRX\Sdk\Core\Controller as BaseController;
 
 class Users extends BaseController {
 

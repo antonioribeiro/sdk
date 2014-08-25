@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Files\Repositories;
+namespace PragmaRX\Sdk\Services\Files\Repositories;
 
 class File {
 

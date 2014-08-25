@@ -1,4 +1,4 @@
-<?php namespace PragmaRX\SDK\Services\Accounts\Commands;
+<?php namespace PragmaRX\Sdk\Services\Accounts\Commands;
 
 class ActivateCommand {
 

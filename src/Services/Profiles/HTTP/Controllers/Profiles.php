@@ -1,12 +1,12 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Profiles\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Profiles\Http\Controllers;
 
 use Laracasts\Commander\Events\DispatchableTrait;
-use PragmaRX\SDK\Core\Controller as BaseController;
-use PragmaRX\SDK\Services\Statuses\Data\Repositories\StatusRepository;
-use PragmaRX\SDK\Services\Users\Data\Repositories\UserRepository;
-use PragmaRX\SDK\Services\Profiles\Forms\Edit as EditForm;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Statuses\Data\Repositories\StatusRepository;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
+use PragmaRX\Sdk\Services\Profiles\Forms\Edit as EditForm;
 
 use View;
 use Auth;

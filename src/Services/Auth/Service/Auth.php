@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Auth\Service;
+namespace PragmaRX\Sdk\Services\Auth\Service;
 
 use Sentinel;
 

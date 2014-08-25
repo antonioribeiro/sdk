@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['namespace' => 'PragmaRX\SDK\Services\Passwords\Http\Controllers'], function()
+Route::group(['namespace' => 'PragmaRX\Sdk\Services\Passwords\Http\Controllers'], function()
 {
 	Route::group(['prefix' => 'password'], function()
 	{

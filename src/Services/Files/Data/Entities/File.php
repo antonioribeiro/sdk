@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Files\Entities;
+namespace PragmaRX\Sdk\Services\Files\Entities;
 
-use PragmaRX\SDK\Core\Model;
+use PragmaRX\Sdk\Core\Model;
 
 class File extends Model {
 

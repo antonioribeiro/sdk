@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Currencies\Data\Entities;
+namespace PragmaRX\Sdk\Services\Currencies\Data\Entities;
 
-use PragmaRX\SDK\Core\Model;
+use PragmaRX\Sdk\Core\Model;
 
 class Currency extends Model {
 

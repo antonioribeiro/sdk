@@ -1,10 +1,10 @@
 <?php
 
-namespace PragmaRX\SDK;
+namespace PragmaRX\Sdk;
 
 use App;
-use PragmaRX\SDK\Core\Migrations\MigrateCommand;
-use PragmaRX\SDK\Core\Migrations\RollbackCommand;
+use PragmaRX\Sdk\Core\Migrations\MigrateCommand;
+use PragmaRX\Sdk\Core\Migrations\RollbackCommand;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 
 class ServiceProvider extends PragmaRXServiceProvider {
@@ -13,7 +13,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
     protected $packageVendorCapitalized = 'PragmaRX';
 
     protected $packageName = 'sdk';
-    protected $packageNameCapitalized = 'SDK';
+    protected $packageNameCapitalized = 'Sdk';
 
     /**
      * Indicates if loading of the provider is deferred.
@@ -144,9 +144,9 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	private function registerGlobalScripts()
 	{
-		$this->includeFile(__DIR__ . "/SDK/Errors/handlers.php");
+		$this->includeFile(__DIR__ . "/Sdk/Errors/handlers.php");
 
-		$this->includeFile(__DIR__ . "/SDK/HTTP/filters.php");
+		$this->includeFile(__DIR__ . "/Sdk/HTTP/filters.php");
 
 		$this->includeFile(__DIR__ . "/Support/helpers.php");
 

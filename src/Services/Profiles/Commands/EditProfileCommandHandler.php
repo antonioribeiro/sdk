@@ -1,9 +1,9 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Profiles\Commands;
+namespace PragmaRX\Sdk\Services\Profiles\Commands;
 
 use Auth;
-use PragmaRX\SDK\Services\Users\Data\Repositories\UserRepository;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use Laracasts\Commander\CommandHandler;
 use Laracasts\Commander\Events\DispatchableTrait;
 

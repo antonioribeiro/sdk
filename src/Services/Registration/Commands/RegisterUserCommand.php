@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Registration\Commands;
+namespace PragmaRX\Sdk\Services\Registration\Commands;
 
 
 class RegisterUserCommand {

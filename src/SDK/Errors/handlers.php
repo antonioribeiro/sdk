@@ -4,5 +4,5 @@ App::error(function(Laracasts\Validation\FormValidationException $exception, $co
 {
 	Flash::errors($exception->getErrors());
 
-	return \PragmaRX\SDK\Core\Redirect::back()->withInput();
+	return \PragmaRX\Sdk\Core\Redirect::back()->withInput();
 });

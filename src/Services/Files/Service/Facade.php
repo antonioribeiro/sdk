@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Files\Service;
+namespace PragmaRX\Sdk\Services\Files\Service;
 
 use Illuminate\Support\Facades\Facade as LaravelFacade;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Block\Commands;
+namespace PragmaRX\Sdk\Services\Block\Commands;
 
 
 class BlockUserCommand {

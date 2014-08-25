@@ -1,13 +1,13 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Connect\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Connect\Http\Controllers;
 
 use Auth;
 use Flash;
-use PragmaRX\SDK\Core\Redirect;
-use PragmaRX\SDK\Core\Controller as BaseController;
-use PragmaRX\SDK\Services\Connect\Commands\ConnectUserCommand;
-use PragmaRX\SDK\Services\Connect\Commands\DisconnectUserCommand;
+use PragmaRX\Sdk\Core\Redirect;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Connect\Commands\ConnectUserCommand;
+use PragmaRX\Sdk\Services\Connect\Commands\DisconnectUserCommand;
 
 class Connect extends BaseController {
 

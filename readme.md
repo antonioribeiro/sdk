@@ -1,8 +1,8 @@
-# Laravel Stats SDK
+# Laravel Stats Sdk
 
 [![Latest Stable Version](https://poser.pugx.org/pragmarx/sdk/v/stable.png)](https://packagist.org/packages/pragmarx/sdk) [![License](https://poser.pugx.org/pragmarx/sdk/license.png)](https://packagist.org/packages/pragmarx/sdk)
 
-###SDK gathers a lot of information from your requests to identify and store:
+###Sdk gathers a lot of information from your requests to identify and store:
 
 - **Sessions**
 - **Page Views (hits on routes)**
@@ -26,12 +26,12 @@ Storing user tracking information, on indexed and normalized database tables, wa
 
 ## Usage
 
-As soon as you install and enable it, SDK will start storing all information you tell it to, then you can in your application use the SDK Facade to access everything. Here are some of the methods and relatioships available:
+As soon as you install and enable it, Sdk will start storing all information you tell it to, then you can in your application use the Sdk Facade to access everything. Here are some of the methods and relatioships available:
 
 #### Current Session/Visitor
 
 ```
-$visitor = SDK::currentSession();
+$visitor = Sdk::currentSession();
 ```
 
 Most of those methods return an Eloquent model or collection, so you can use not only its attributes, but also relational data:
@@ -49,7 +49,7 @@ var_dump( $visitor->geoIp->city );
 #### Sessions (visits)
 
 ```
-$sessions = SDK::sessions(60 * 24); // get sessions (visits) from the past day
+$sessions = Sdk::sessions(60 * 24); // get sessions (visits) from the past day
 ```
 
 ```
@@ -73,31 +73,31 @@ foreach($sessions as $session)
 #### Users
 
 ```
-$users = SDK::users(60 * 24);
+$users = Sdk::users(60 * 24);
 ```
 
 #### Events
 
 ```
-$events = SDK::events(60 * 24);
+$events = Sdk::events(60 * 24);
 ```
 
 #### Errors
 
 ```
-$errors = SDK::errors(60 * 24);
+$errors = Sdk::errors(60 * 24);
 ```
 
 #### PageViews summary
 
 ```
-$pageViews = SDK::pageViews(60 * 24 * 30);
+$pageViews = Sdk::pageViews(60 * 24 * 30);
 ```
 
 #### PageViews By Country summary
 
 ```
-$pageViews = SDK::pageViewsByCountry(60 * 24);
+$pageViews = Sdk::pageViewsByCountry(60 * 24);
 ```
 
 #### Routes By Name
@@ -111,7 +111,7 @@ Route::get('user/{id}', ['as' => 'user.profile', 'use' => 'UsersController@profi
 You can use this method to select all hits on that particular route and count them using Laravel: 
 
 ```
-return SDK::logByRouteName('user.profile')
+return Sdk::logByRouteName('user.profile')
         ->where(function($query)
         {
             $query
@@ -124,7 +124,7 @@ return SDK::logByRouteName('user.profile')
 And if you need count how many unique visitors accessed that route, you can do:
 
 ```
-return SDK::logByRouteName('sdk.stats.log')
+return Sdk::logByRouteName('sdk.stats.log')
         ->where(function($query)
         {
             $query
@@ -228,10 +228,10 @@ All tables are prefixed by `sdk_`, and here's an extract of some of them, showin
 | id | code | message                                                                                                                                                                                                                      |
 +----+------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | 1  | 404  |                                                                                                                                                                                                                              |
-| 2  | 500  | Call to undefined method PragmaRX\SDK\SDK::sessionLog()                                                                                                                                                              |
+| 2  | 500  | Call to undefined method PragmaRX\Sdk\Sdk::sessionLog()                                                                                                                                                              |
 | 3  | 500  | Trying to get property of non-object (View: /home/forge/stage.antoniocarlosribeiro.com/app/views/admin/sdk/log.blade.php)                                                                                                |
 | 4  | 500  | syntax error, unexpected 'foreach' (T_FOREACH)                                                                                                                                                                               |
-| 5  | 500  | Call to undefined method PragmaRX\SDK\SDK::pageViewsByCountry()                                                                                                                                                      |
+| 5  | 500  | Call to undefined method PragmaRX\Sdk\Sdk::pageViewsByCountry()                                                                                                                                                      |
 | 6  | 500  | Class PragmaRX\Firewall\Vendor\Laravel\Artisan\Base contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (Illuminate\Console\Command::fire)                                 |
 | 7  | 405  |                                                                                                                                                                                                                              |
 | 8  | 500  | Trying to get property of non-object                                                                                                                                                                                         |
@@ -372,23 +372,23 @@ All tables are prefixed by `sdk_`, and here's an extract of some of them, showin
 | 3  | login.form                           | ACR\Controllers\Logon@form                               |
 | 4  | login.do                             | ACR\Controllers\Logon@login                              |
 | 5  | admin.languages.index                | ACR\Controllers\Admin\Languages@index                    |
-| 6  | admin.sdk.index                  | ACR\Controllers\Admin\SDK@index                      |
+| 6  | admin.sdk.index                  | ACR\Controllers\Admin\Sdk@index                      |
 | 7  | admin.pages.index                    | ACR\Controllers\Admin\Pages@index                        |
-| 8  | admin.sdk.log                    | ACR\Controllers\Admin\SDK@log                        |
+| 8  | admin.sdk.log                    | ACR\Controllers\Admin\Sdk@log                        |
 | 9  | technology                           | ACR\Controllers\Technology@index                         |
 | 10 | technology.articles.show             | ACR\Controllers\Technology@show                          |
 | 11 | language.select                      | ACR\Controllers\Language@select                          |
-| 12 | admin.sdk.summary                | ACR\Controllers\Admin\SDK@summary                    |
-| 13 | admin.sdk.api.pageviews          | ACR\Controllers\Admin\SDK@apiPageviews               |
-| 14 | admin.sdk.api.pageviewsbycountry | ACR\Controllers\Admin\SDK@apiPageviewsByCountry      |
+| 12 | admin.sdk.summary                | ACR\Controllers\Admin\Sdk@summary                    |
+| 13 | admin.sdk.api.pageviews          | ACR\Controllers\Admin\Sdk@apiPageviews               |
+| 14 | admin.sdk.api.pageviewsbycountry | ACR\Controllers\Admin\Sdk@apiPageviewsByCountry      |
 | 15 | admin.pages.create                   | ACR\Controllers\Admin\Pages@create                       |
 | 16 | api.markdown                         | ACR\Controllers\Api@markdown                             |
 | 17 | admin.pages.store                    | ACR\Controllers\Admin\Pages@store                        |
 | 18 | bio                                  | ACR\Controllers\StaticPages@show                         |
 | 19 | logout.do                            | ACR\Controllers\Logon@logout                             |
-| 20 | admin.sdk.index                  | ACR\Controllers\Admin\UsageSDK@index                 |
-| 21 | admin.sdk.api.pageviewsbycountry | ACR\Controllers\Admin\UsageSDK@apiPageviewsByCountry |
-| 22 | admin.sdk.api.pageviews          | ACR\Controllers\Admin\UsageSDK@apiPageviews          |
+| 20 | admin.sdk.index                  | ACR\Controllers\Admin\UsageSdk@index                 |
+| 21 | admin.sdk.api.pageviewsbycountry | ACR\Controllers\Admin\UsageSdk@apiPageviewsByCountry |
+| 22 | admin.sdk.api.pageviews          | ACR\Controllers\Admin\UsageSdk@apiPageviews          |
 +----+--------------------------------------+----------------------------------------------------------+
 ```
 
@@ -427,7 +427,7 @@ And execute
 
 Add the service provider to your app/config/app.php:
 
-    'PragmaRX\SDK\Vendor\Laravel\ServiceProvider',
+    'PragmaRX\Sdk\Vendor\Laravel\ServiceProvider',
 
 Create the migration:
 
@@ -445,7 +445,7 @@ Create the UA Parser regex file (every time you run `composer update` you must a
 
     php artisan sdk:updateparser
 
-And edit the file `app/config/packages/pragmarx/sdk/config.php` to enable SDK.
+And edit the file `app/config/packages/pragmarx/sdk/config.php` to enable Sdk.
 
     'enabled' => true,
 
@@ -491,7 +491,7 @@ This is the sdk connection pointing to the same database:
 		'schema'   => 'public',
 	],
 
-On your `sdk/config.php` file, set the SDK connection to the one you created for it:
+On your `sdk/config.php` file, set the Sdk connection to the one you created for it:
 
 	'connection' => 'sdk',
 
@@ -501,7 +501,7 @@ And ignore this connection for SQL queries logging:
 		'sdk'
 	),
 
-You don't need to use a different database, but, since SDK may generate a huge number of records, this would be a good practice.
+You don't need to use a different database, but, since Sdk may generate a huge number of records, this would be a good practice.
 
 ## Stats Panel
 
@@ -520,7 +520,7 @@ And enabled in your config file:
 
 ## License
 
-SDK is licensed under the BSD 3-Clause License - see the `LICENSE` file for details
+Sdk is licensed under the BSD 3-Clause License - see the `LICENSE` file for details
 
 ## Contributing
 

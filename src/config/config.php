@@ -1,6 +1,6 @@
 <?php
 /**
- * Part of the SDK package.
+ * Part of the Sdk package.
  *
  * NOTICE OF LICENSE
  *
@@ -10,7 +10,7 @@
  * bundled with this package in the LICENSE file.  It is also available at
  * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
  *
- * @package    SDK
+ * @package    Sdk
  * @author     Antonio Carlos Ribeiro @ PragmaRX
  * @license    BSD License (3-clause)
  * @copyright  (c) 2013, PragmaRX
@@ -22,7 +22,7 @@ return [
 	'files_path' => public_path() . '/files/',
 
 	'models' => [
-		'user' => 'PragmaRX\SDK\Services\Users\Data\Entities\User',
+		'user' => 'PragmaRX\Sdk\Services\Users\Data\Entities\User',
 	],
 
 	'services' => [
@@ -50,19 +50,19 @@ return [
 		[
 			'name' => 'pragmarx/file',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\SDK\Services\Files\Service\Provider',
+			'serviceProvider' => 'PragmaRX\Sdk\Services\Files\Service\Provider',
 			'facades' => [
-				'File' => 'PragmaRX\SDK\Services\Files\Service\Facade', /// overrides the Laravel Facade
+				'File' => 'PragmaRX\Sdk\Services\Files\Service\Facade', /// overrides the Laravel Facade
 			]
 		],
 
 		[
 			'name' => 'pragmarx/auth',
 			'enabled' => true,
-		    'serviceProvider' => 'PragmaRX\SDK\Services\Auth\Service\Provider',
+		    'serviceProvider' => 'PragmaRX\Sdk\Services\Auth\Service\Provider',
 			'facades' => [
-				'Authentication' => 'PragmaRX\SDK\Services\Auth\Service\Facade',
-				'Auth'           => 'PragmaRX\SDK\Services\Auth\Service\Facade', /// overrides the Laravel Facade
+				'Authentication' => 'PragmaRX\Sdk\Services\Auth\Service\Facade',
+				'Auth'           => 'PragmaRX\Sdk\Services\Auth\Service\Facade', /// overrides the Laravel Facade
 			]
 		],
 
@@ -70,16 +70,16 @@ return [
 			'name' => 'pragmarx/redirect',
 			'enabled' => true,
 			'facades' => [
-				'Redirect' => 'PragmaRX\SDK\Core\Redirect', /// overrides the Laravel Facade
+				'Redirect' => 'PragmaRX\Sdk\Core\Redirect', /// overrides the Laravel Facade
 			]
 		],
 
 		[
 			'name' => 'pragmarx/form',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\SDK\Services\Form\Service\Provider',
+			'serviceProvider' => 'PragmaRX\Sdk\Services\Form\Service\Provider',
 			'facades' => [
-				'Form' => 'PragmaRX\SDK\Services\Form\Service\Facade', /// overrides the Laravel Facade
+				'Form' => 'PragmaRX\Sdk\Services\Form\Service\Facade', /// overrides the Laravel Facade
 			]
 		],
 
@@ -87,17 +87,17 @@ return [
 			'name' => 'pragmarx/html',
 			'enabled' => true,
 			'facades' => [
-				'Html' => 'PragmaRX\SDK\Services\Html\Service\Facade', /// overrides the Laravel Facade
-				'HTML' => 'PragmaRX\SDK\Services\Html\Service\Facade', /// overrides the Laravel Facade
+				'Html' => 'PragmaRX\Sdk\Services\Html\Service\Facade', /// overrides the Laravel Facade
+				'HTML' => 'PragmaRX\Sdk\Services\Html\Service\Facade', /// overrides the Laravel Facade
 			]
 		],
 
 		[
 			'name' => 'pragmarx/flash',
 			'enabled' => true,
-		    'serviceProvider' => 'PragmaRX\SDK\Services\Flash\Service\Provider',
+		    'serviceProvider' => 'PragmaRX\Sdk\Services\Flash\Service\Provider',
 			'facades' => [
-				'Flash' => 'PragmaRX\SDK\Services\Flash\Service\Facade',
+				'Flash' => 'PragmaRX\Sdk\Services\Flash\Service\Facade',
 			]
 		],
 

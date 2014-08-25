@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Statuses\Commands;
+namespace PragmaRX\Sdk\Services\Statuses\Commands;
 
 
 class PostStatusCommand {

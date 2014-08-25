@@ -1,13 +1,13 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Follow\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Follow\Http\Controllers;
 
 use Auth;
 use Flash;
-use PragmaRX\SDK\Core\Redirect;
-use PragmaRX\SDK\Core\Controller as BaseController;
-use PragmaRX\SDK\Services\Follow\Commands\FollowUserCommand;
-use PragmaRX\SDK\Services\Follow\Commands\UnfollowUserCommand;
+use PragmaRX\Sdk\Core\Redirect;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Follow\Commands\FollowUserCommand;
+use PragmaRX\Sdk\Services\Follow\Commands\UnfollowUserCommand;
 
 class Follow extends BaseController {
 

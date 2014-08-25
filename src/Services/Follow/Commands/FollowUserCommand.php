@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Follow\Commands;
+namespace PragmaRX\Sdk\Services\Follow\Commands;
 
 
 class FollowUserCommand {

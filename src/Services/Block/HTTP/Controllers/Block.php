@@ -1,13 +1,13 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Block\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Block\Http\Controllers;
 
 use Auth;
 use Flash;
-use PragmaRX\SDK\Core\Redirect;
-use PragmaRX\SDK\Core\Controller as BaseController;
-use PragmaRX\SDK\Services\Block\Commands\BlockUserCommand;
-use PragmaRX\SDK\Services\Block\Commands\UnblockUserCommand;
+use PragmaRX\Sdk\Core\Redirect;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Block\Commands\BlockUserCommand;
+use PragmaRX\Sdk\Services\Block\Commands\UnblockUserCommand;
 
 class Block extends BaseController {
 

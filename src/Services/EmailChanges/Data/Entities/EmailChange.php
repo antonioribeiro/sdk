@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\EmailChanges\Data\Entities;
+namespace PragmaRX\Sdk\Services\EmailChanges\Data\Entities;
 
-use PragmaRX\SDK\Core\Model;
+use PragmaRX\Sdk\Core\Model;
 
 class EmailChange extends Model {
 

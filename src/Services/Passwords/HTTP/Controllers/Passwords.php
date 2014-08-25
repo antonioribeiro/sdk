@@ -1,14 +1,14 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Passwords\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Passwords\Http\Controllers;
 
-use PragmaRX\SDK\Core\Controller as BaseController;
+use PragmaRX\Sdk\Core\Controller as BaseController;
 use Password as PasswordReminder;
 use Hash;
 use Input;
 use Flash;
-use PragmaRX\SDK\Core\Redirect;
-use PragmaRX\SDK\Services\Passwords\Validators\ReminderToken as ReminderTokenValidator;
+use PragmaRX\Sdk\Core\Redirect;
+use PragmaRX\Sdk\Services\Passwords\Validators\ReminderToken as ReminderTokenValidator;
 use View;
 
 class Passwords extends BaseController {

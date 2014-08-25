@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Core\Traits;
+namespace PragmaRX\Sdk\Core\Traits;
 
 
 use Lang;

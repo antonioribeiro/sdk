@@ -6,7 +6,7 @@
  * Time: 16:34
  */
 
-namespace PragmaRX\SDK\Services\Statuses\Events;
+namespace PragmaRX\Sdk\Services\Statuses\Events;
 
 
 class StatusWasPublished {

@@ -1,4 +1,4 @@
-# Laravel Stats SDK Upgrading Guide
+# Laravel Stats Sdk Upgrading Guide
 
 ## to 0.6.0
 
@@ -84,7 +84,7 @@ unzip /tmp/sba2.zip -d public/templates/
 /**
  * Stats Panel controllers namespace
  */
-'stats_controllers_namespace' => 'PragmaRX\SDK\Vendor\Laravel\Controllers',
+'stats_controllers_namespace' => 'PragmaRX\Sdk\Vendor\Laravel\Controllers',
 ```
 
 ####The Stats Panel must be enabled in your config file

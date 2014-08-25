@@ -1,10 +1,10 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Accounts\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Accounts\Http\Controllers;
 
-use PragmaRX\SDK\Core\Controller as BaseController;
-use PragmaRX\SDK\Core\Redirect;
-use PragmaRX\SDK\Services\Accounts\Commands\ActivateCommand;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Core\Redirect;
+use PragmaRX\Sdk\Services\Accounts\Commands\ActivateCommand;
 
 class Accounts extends BaseController {
 

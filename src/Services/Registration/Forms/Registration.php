@@ -6,7 +6,7 @@
  * Time: 12:31
  */
 
-namespace PragmaRX\SDK\Services\Registration\Forms;
+namespace PragmaRX\Sdk\Services\Registration\Forms;
 
 use Laracasts\Validation\FormValidator;
 

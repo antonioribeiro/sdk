@@ -1,7 +1,7 @@
 <?php
 
-use PragmaRX\SDK\Services\Accounts\Exceptions\UserAlreadyActivated;
-use PragmaRX\SDK\Services\Accounts\Exceptions\InvalidPassword;
+use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
+use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidPassword;
 
 App::error(function(UserAlreadyActivated $exception, $code)
 {

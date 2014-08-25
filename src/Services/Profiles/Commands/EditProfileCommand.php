@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Profiles\Commands;
+namespace PragmaRX\Sdk\Services\Profiles\Commands;
 
 
 class EditProfileCommand {

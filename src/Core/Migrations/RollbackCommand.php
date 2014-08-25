@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Core\Migrations;
+namespace PragmaRX\Sdk\Core\Migrations;
 
 use Illuminate\Database\Console\Migrations\RollbackCommand as IlluminateRollbackCommand;
 

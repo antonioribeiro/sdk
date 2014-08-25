@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\ProfilesVisits\Data\Entities;
+namespace PragmaRX\Sdk\Services\ProfilesVisits\Data\Entities;
 
-use PragmaRX\SDK\Core\Model;
+use PragmaRX\Sdk\Core\Model;
 use Session;
 
 class ProfileVisit extends Model {

@@ -1,11 +1,11 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Statuses\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Statuses\Http\Controllers;
 
-use PragmaRX\SDK\Core\Controller as BaseController;
-use PragmaRX\SDK\Services\Statuses\Commands\PostStatusCommand;
-use PragmaRX\SDK\Services\Statuses\Data\Repositories\StatusRepository;
-use PragmaRX\SDK\Services\Statuses\Forms\PostStatus;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Statuses\Commands\PostStatusCommand;
+use PragmaRX\Sdk\Services\Statuses\Data\Repositories\StatusRepository;
+use PragmaRX\Sdk\Services\Statuses\Forms\PostStatus;
 
 use Redirect;
 use Flash;

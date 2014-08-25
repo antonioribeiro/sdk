@@ -6,10 +6,10 @@
  * Time: 20:13
  */
 
-namespace PragmaRX\SDK\Services\Follow\Commands;
+namespace PragmaRX\Sdk\Services\Follow\Commands;
 
 use Laracasts\Commander\CommandHandler;
-use PragmaRX\SDK\Services\Users\Data\Repositories\UserRepository;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 class FollowUserCommandHandler implements CommandHandler{
 

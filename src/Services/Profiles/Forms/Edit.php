@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Profiles\Forms;
+namespace PragmaRX\Sdk\Services\Profiles\Forms;
 
-use PragmaRX\SDK\Core\FormValidator;
+use PragmaRX\Sdk\Core\FormValidator;
 
 class Edit extends FormValidator {
 

@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['namespace' => 'PragmaRX\SDK\Services\Statuses\Http\Controllers'], function()
+Route::group(['namespace' => 'PragmaRX\Sdk\Services\Statuses\Http\Controllers'], function()
 {
 	Route::group(['prefix' => 'statuses'], function()
 	{

@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Countries\Data\Entities;
+namespace PragmaRX\Sdk\Services\Countries\Data\Entities;
 
-use PragmaRX\SDK\Core\Model;
+use PragmaRX\Sdk\Core\Model;
 
 class Country extends Model {
 

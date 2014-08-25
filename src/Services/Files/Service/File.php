@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Files\Service;
+namespace PragmaRX\Sdk\Services\Files\Service;
 
 use Symfony\Component\Finder\Finder;
 use Illuminate\Filesystem\Filesystem;

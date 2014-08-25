@@ -1,8 +1,8 @@
 <?php
 
-use PragmaRX\SDK\Services\Users\Data\Repositories\UserRepository;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
-Event::listen('PragmaRX.SDK.Services.Registration.Events.UserRegistered', function($event)
+Event::listen('PragmaRX.Sdk.Services.Registration.Events.UserRegistered', function($event)
 {
 	$repo = new UserRepository();
 

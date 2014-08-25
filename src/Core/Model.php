@@ -6,7 +6,7 @@
  * Time: 13:10
  */
 
-namespace PragmaRX\SDK\Core;
+namespace PragmaRX\Sdk\Core;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 

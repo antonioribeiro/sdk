@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Statuses\Data\Entities;
+namespace PragmaRX\Sdk\Services\Statuses\Data\Entities;
 
-use PragmaRX\SDK\Core\Presenter;
+use PragmaRX\Sdk\Core\Presenter;
 
 class StatusPresenter extends Presenter {
 

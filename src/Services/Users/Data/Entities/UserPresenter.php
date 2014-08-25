@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Users\Data\Entities;
+namespace PragmaRX\Sdk\Services\Users\Data\Entities;
 
-use PragmaRX\SDK\Core\Presenter;
+use PragmaRX\Sdk\Core\Presenter;
 
 class UserPresenter extends Presenter {
 

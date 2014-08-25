@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Core\Events;
+namespace PragmaRX\Sdk\Core\Events;
 
 abstract class UserEvent {
 

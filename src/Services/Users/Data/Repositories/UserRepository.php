@@ -1,18 +1,18 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Users\Data\Repositories;
+namespace PragmaRX\Sdk\Services\Users\Data\Repositories;
 
-use PragmaRX\SDK\Services\EmailChanges\Data\Entities\EmailChange;
-use PragmaRX\SDK\Services\EmailChanges\Events\EmailChangeMessageSent;
-use PragmaRX\SDK\Services\EmailChanges\Events\EmailChangeRequested;
-use PragmaRX\SDK\Services\Mailer\Service\Mailer;
-use PragmaRX\SDK\Services\Profiles\Events\ProfileVisited;
-use PragmaRX\SDK\Services\ProfilesVisits\Data\Entities\ProfileVisit;
+use PragmaRX\Sdk\Services\EmailChanges\Data\Entities\EmailChange;
+use PragmaRX\Sdk\Services\EmailChanges\Events\EmailChangeMessageSent;
+use PragmaRX\Sdk\Services\EmailChanges\Events\EmailChangeRequested;
+use PragmaRX\Sdk\Services\Mailer\Service\Mailer;
+use PragmaRX\Sdk\Services\Profiles\Events\ProfileVisited;
+use PragmaRX\Sdk\Services\ProfilesVisits\Data\Entities\ProfileVisit;
 
 use Activation;
 use Flash;
 use Auth;
-use PragmaRX\SDK\Services\Users\Data\Entities\User;
+use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 use Rhumsaa\Uuid\Uuid;
 
 class UserRepository {

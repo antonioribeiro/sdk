@@ -1,9 +1,9 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Statuses\Data\Repositories;
+namespace PragmaRX\Sdk\Services\Statuses\Data\Repositories;
 
-use PragmaRX\SDK\Services\Statuses\Data\Entities\Status;
-use PragmaRX\SDK\Services\Users\Data\Entities\User;
+use PragmaRX\Sdk\Services\Statuses\Data\Entities\Status;
+use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 
 class StatusRepository {
 

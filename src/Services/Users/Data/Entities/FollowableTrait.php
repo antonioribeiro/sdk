@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Users\Data\Entities;
+namespace PragmaRX\Sdk\Services\Users\Data\Entities;
 
 
 trait FollowableTrait {

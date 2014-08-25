@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Mailer\Service;
+namespace PragmaRX\Sdk\Services\Mailer\Service;
 
 use Mail;
 

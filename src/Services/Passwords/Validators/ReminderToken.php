@@ -1,9 +1,9 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Passwords\Validators;
+namespace PragmaRX\Sdk\Services\Passwords\Validators;
 
 use Laracasts\Validation\FormValidator;
-use PragmaRX\SDK\Core\Traits\TranslatableValidationMessageTrait;
+use PragmaRX\Sdk\Core\Traits\TranslatableValidationMessageTrait;
 
 class ReminderToken extends FormValidator {
 

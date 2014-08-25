@@ -1,9 +1,9 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Statuses\Data\Entities;
+namespace PragmaRX\Sdk\Services\Statuses\Data\Entities;
 
-use PragmaRX\SDK\Core\Model;
-use PragmaRX\SDK\Services\Statuses\Events\StatusWasPublished;
+use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Statuses\Events\StatusWasPublished;
 use Laracasts\Commander\Events\EventGenerator;
 use Laracasts\Presenter\PresentableTrait;
 
@@ -20,7 +20,7 @@ class Status extends Model {
 	 */
 	protected $table = 'statuses';
 
-	protected $presenter = 'PragmaRX\SDK\Services\Statuses\Data\Entities\StatusPresenter';
+	protected $presenter = 'PragmaRX\Sdk\Services\Statuses\Data\Entities\StatusPresenter';
 
 	/**
 	 * Publish a new status
@@ -39,6 +39,6 @@ class Status extends Model {
 
 	public function user()
 	{
-		return $this->belongsTo('PragmaRX\SDK\Services\Users\Data\Entities\User');
+		return $this->belongsTo('PragmaRX\Sdk\Services\Users\Data\Entities\User');
 	}
 }

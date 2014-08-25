@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['namespace' => 'PragmaRX\SDK\Services\Messaging\Http\Controllers'], function()
+Route::group(['namespace' => 'PragmaRX\Sdk\Services\Messaging\Http\Controllers'], function()
 {
 	Route::group(['prefix' => 'message'], function()
 	{

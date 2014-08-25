@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Users\Data\Entities;
+namespace PragmaRX\Sdk\Services\Users\Data\Entities;
 
 use Cartalyst\Sentinel\Users\EloquentUser as CartalystUser;
 
@@ -10,10 +10,10 @@ use Illuminate\Contracts\Auth\Remindable as RemindableContract;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Support\Facades\Hash;
 
-use PragmaRX\SDK\Services\Accounts\Exceptions\InvalidActivationToken;
-use PragmaRX\SDK\Services\Accounts\Exceptions\UserActivationNotFound;
-use PragmaRX\SDK\Services\Accounts\Exceptions\UserAlreadyActivated;
-use PragmaRX\SDK\Services\Registration\Events\UserRegistered;
+use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidActivationToken;
+use PragmaRX\Sdk\Services\Accounts\Exceptions\UserActivationNotFound;
+use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
+use PragmaRX\Sdk\Services\Registration\Events\UserRegistered;
 
 use Laracasts\Commander\Events\EventGenerator;
 use Laracasts\Presenter\PresentableTrait;
@@ -35,7 +35,7 @@ class User extends CartalystUser implements UserContract, RemindableContract {
 
 	protected $fillable = ['username', 'email', 'password', 'first_name', 'last_name'];
 
-	protected $presenter = 'PragmaRX\SDK\Services\Users\Data\Entities\UserPresenter';
+	protected $presenter = 'PragmaRX\Sdk\Services\Users\Data\Entities\UserPresenter';
 
 	/**
 	 * The database table used by the model.
@@ -107,12 +107,12 @@ class User extends CartalystUser implements UserContract, RemindableContract {
 
 	public function statuses()
 	{
-		return $this->hasMany('PragmaRX\SDK\Services\Statuses\Data\Entities\Status');
+		return $this->hasMany('PragmaRX\Sdk\Services\Statuses\Data\Entities\Status');
 	}
 
 	public function contactInformation()
 	{
-		return $this->hasMany('PragmaRX\SDK\Services\ContactInformation\Data\Entities\ContactInformation');
+		return $this->hasMany('PragmaRX\Sdk\Services\ContactInformation\Data\Entities\ContactInformation');
 	}
 
 	/**

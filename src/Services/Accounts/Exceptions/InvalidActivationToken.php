@@ -6,7 +6,7 @@
  * Time: 18:58
  */
 
-namespace PragmaRX\SDK\Services\Accounts\Exceptions;
+namespace PragmaRX\Sdk\Services\Accounts\Exceptions;
 
 use Exception;
 

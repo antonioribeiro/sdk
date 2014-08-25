@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Profiles\Events;
+namespace PragmaRX\Sdk\Services\Profiles\Events;
 
-use PragmaRX\SDK\Core\Events\UserEvent;
+use PragmaRX\Sdk\Core\Events\UserEvent;
 
 class ProfileVisited extends UserEvent {
 

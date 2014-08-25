@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Files\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Files\Http\Controllers;
 
-use PragmaRX\SDK\Core\Controller as BaseController;
+use PragmaRX\Sdk\Core\Controller as BaseController;
 
 class Files extends BaseController {
 

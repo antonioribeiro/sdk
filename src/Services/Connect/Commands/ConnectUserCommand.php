@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Connect\Commands;
+namespace PragmaRX\Sdk\Services\Connect\Commands;
 
 
 class ConnectUserCommand {

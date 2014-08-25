@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\ContactInformation\Data\Entities;
+namespace PragmaRX\Sdk\Services\ContactInformation\Data\Entities;
 
-use PragmaRX\SDK\Core\Model;
+use PragmaRX\Sdk\Core\Model;
 use Laracasts\Commander\Events\EventGenerator;
 use Laracasts\Presenter\PresentableTrait;
 
@@ -14,11 +14,11 @@ class ContactInformation extends Model {
 
 	protected $fillable = ['user_id', 'kind_id', 'info'];
 
-	protected $presenter = 'PragmaRX\SDK\Services\Users\ContactInformationPresenter';
+	protected $presenter = 'PragmaRX\Sdk\Services\Users\ContactInformationPresenter';
 
 	public function kind()
 	{
-		return $this->belongsTo('PragmaRX\SDK\Services\Kinds\Data\Entities\Kind');
+		return $this->belongsTo('PragmaRX\Sdk\Services\Kinds\Data\Entities\Kind');
 	}
 
 }

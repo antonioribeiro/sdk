@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Kinds\Data\Entities;
+namespace PragmaRX\Sdk\Services\Kinds\Data\Entities;
 
-use PragmaRX\SDK\Core\Model;
+use PragmaRX\Sdk\Core\Model;
 
 class Kind extends Model {
 

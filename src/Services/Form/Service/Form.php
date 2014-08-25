@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\SDK\Services\Form\Service;
+namespace PragmaRX\Sdk\Services\Form\Service;
 
 use App;
 use Input;
