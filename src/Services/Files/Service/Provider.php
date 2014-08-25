@@ -2,16 +2,16 @@
 
 namespace PragmaRX\Sdk\Services\Files\Service;
 
-use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
+use PragmaRX\Support\ServiceProvider;
 
-class Provider extends IlluminateServiceProvider {
+class Provider extends ServiceProvider {
 
 	/**
 	 * Indicates if loading of the provider is deferred.
 	 *
 	 * @var bool
 	 */
-	protected $defer = false;
+	protected $defer = true;
 
 	/**
 	 * Register the service provider.
@@ -24,6 +24,16 @@ class Provider extends IlluminateServiceProvider {
 		{
 			return new File;
 		});
+	}
+
+	/**
+	 * Get the services provided by the provider.
+	 *
+	 * @return array
+	 */
+	public function provides()
+	{
+		return ['pragmarx.files'];
 	}
 
 }
