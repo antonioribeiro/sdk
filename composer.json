@@ -18,7 +18,6 @@
     "require": {
         "php": ">=5.5.0",
         "laravel/framework": "*",
-        "illuminate/html": "dev-master",
         "pragmarx/support": "0.2.*",
 		"pragmarx/tracker": "dev-master",
         "pragmarx/firewall": "0.2.*",
