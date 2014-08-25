@@ -8,9 +8,20 @@ use Hash;
 use Input;
 use Flash;
 use PragmaRX\SDK\Core\Redirect;
+use PragmaRX\SDK\Services\Passwords\Validators\ReminderToken as ReminderTokenValidator;
 use View;
 
 class Passwords extends BaseController {
+
+	/**
+	 * @var ReminderToken
+	 */
+	private $reminderTokenValidator;
+
+	public function __construct(ReminderTokenValidator $reminderTokenValidator)
+	{
+		$this->reminderTokenValidator = $reminderTokenValidator;
+	}
 
 	/**
 	 * Display the password reminder view.
@@ -50,11 +61,11 @@ class Passwords extends BaseController {
 	 * @param  string  $token
 	 * @return Response
 	 */
-	public function reset($token = null)
+	public function reset($token)
 	{
-		if (is_null($token)) App::abort(404);
-
 		Input::merge(['token' => $token]);
+
+		$this->reminderTokenValidator->validate(['password_token' => $token]);
 
 		return View::make('passwords.reset')->with('token', $token);
 	}
