@@ -237,7 +237,7 @@ class UserRepository {
          ]);
 	}
 
-	public function update($user, $first_name, $last_name, $username, $email, $bio)
+	public function update($user, $first_name, $last_name, $username, $email, $bio, $avatar_id)
 	{
 		if ($user->email != $email)
 		{
@@ -251,6 +251,8 @@ class UserRepository {
 		$user->username = $username;
 
 		$user->bio = $bio;
+
+		$user->avatar_id = $avatar_id;
 
 		$user->save();
 

@@ -21,7 +21,7 @@ class Avatar {
 			return $this->getGravatarUrl($user->email, $size);
 		}
 
-		return $this->getFileUrl($user->avatar_id, $size);
+		return $user->avatar->getUrl();
 	}
 
 	/**
@@ -36,18 +36,6 @@ class Avatar {
 		$email = md5($email);
 
 		return "//www.gravatar.com/avatar/{$email}?s={$size}&d=identicon";
-	}
-
-	/**
-	 * Get file URL.
-	 *
-	 * @param $file_id
-	 * @param int $size|null
-	 * @return mixed
-	 */
-	private function getFileUrl($file_id, $size = null)
-	{
-		return File::getImageUrl($file_id, $size);
 	}
 
 }

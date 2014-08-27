@@ -15,12 +15,15 @@ class EditProfileCommand {
 
 	public $bio;
 
+	public $avatar_id;
+
 	function __construct(
 		$username,
 		$email,
 		$first_name,
 		$last_name,
-		$bio
+		$bio,
+		$avatar_id
 	)
 	{
 		$this->username = $username;
@@ -32,6 +35,8 @@ class EditProfileCommand {
 		$this->last_name = $last_name;
 
 		$this->bio = $bio;
+
+		$this->avatar_id = $avatar_id;
 	}
 
 } 

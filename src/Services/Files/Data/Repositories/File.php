@@ -17,24 +17,27 @@ class File {
 
 	public function upload(UploadedFile $uploaded, User $user)
 	{
-		$hash = Filesystem::hash($uploaded->getPath());
+		$hash = Filesystem::hash($uploaded->getPathname());
 
-		if ($instance = FileModel::where('hash', $hash)->first())
+		if ($fileModel = FileModel::where('hash', $hash)->first())
 		{
-			return $instance;
+			return $fileModel;
 		}
 
 		$originalName = $uploaded->getClientOriginalName();
 
-		$uploadFullPath = $this->getRootPath().'/'.$this->getUploadPath();
+		$uploadFullPath = $this->getRootPath().'/'.$this->getRelativePath();
 
 		list($uploaded, $deepPath) = Filesystem::moveUploadedFile($uploaded, $uploadFullPath, $hash);
 
-		$directory = DirectoryModel::firstOrCreate(['path' => $this->getRootPath()]);
+		$directory = DirectoryModel::firstOrCreate([
+			'path' => $this->getRootPath(),
+			'relative_path' => $this->getRelativePath()
+		]);
 
 		$file = FileModel::create([
 			'directory_id' => $directory->id,
-			'relative_path' => $this->getUploadPath() . $deepPath,
+			'deep_path' => $deepPath,
 			'hash' => $hash,
 		    'extension' => $uploaded->getExtension(),
 		    'image' => starts_with($uploaded->getMimeType(), 'image/'),
@@ -53,9 +56,9 @@ class File {
 		return $file;
 	}
 
-	private function getUploadPath()
+	private function getRelativePath()
 	{
-		if ( ! $path = Config::get('app.upload_path'))
+		if ( ! $path = Config::get('app.upload_relative_path'))
 		{
 			throw new UploadPathNotSet('You must set the upload path in config/app.php.');
 		}

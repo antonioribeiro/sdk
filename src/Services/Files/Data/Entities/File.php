@@ -11,7 +11,7 @@ class File extends Model {
 
 	protected $fillable = [
 		'directory_id',
-		'relative_path',
+		'deep_path',
 		'hash',
 		'extension',
 		'image',
@@ -28,8 +28,9 @@ class File extends Model {
 	public function getUrl()
 	{
 		return asset(sprintf(
-			"%s/%s.%s",
-			$this->relative_path,
+			"%s%s/%s.%s",
+			$this->directory->relative_path,
+			$this->deep_path,
 			$this->hash,
 			$this->extension
 		));

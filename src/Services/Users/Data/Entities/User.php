@@ -151,4 +151,9 @@ class User extends CartalystUser implements UserContract, RemindableContract {
 			$relation->whereNotIn($userColumn, $blocked);
 		}
 	}
+
+	public function avatar()
+	{
+		return $this->belongsTo('PragmaRX\Sdk\Services\Files\Data\Entities\File', 'avatar_id');
+	}
 }

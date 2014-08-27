@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Services\Profiles\Http\Controllers;
 
 use Laracasts\Commander\Events\DispatchableTrait;
 use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Profiles\Commands\EditProfileCommand;
 use PragmaRX\Sdk\Services\Statuses\Data\Repositories\StatusRepository;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Profiles\Forms\Edit as EditForm;

@@ -16,7 +16,8 @@ class CreateDirectoriesTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('host')->default('localhost');
-			$table->string('path');
+			$table->string('path')->index();
+			$table->string('relative_path')->index();
 			$table->timestamps();
 		});
 	}

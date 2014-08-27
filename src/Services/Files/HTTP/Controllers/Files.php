@@ -16,19 +16,19 @@ class Files extends BaseController {
 
 	public function upload()
 	{
-		$input = [];
+		Input::merge(['user' => Auth::user()]);
 
-		$input['file'] = Input::file('file');
-
-		$input['user'] = Auth::user();
-
-		$file = $this->execute(UploadFileCommand::class, $input);
-
-		$url = $file->getUrl($file);
+		$file = $this->execute(
+			UploadFileCommand::class,
+			Input::all()
+		);
 
 		if (Request::ajax())
 		{
-			return Response::json(compact('url'));
+			$url = $file->getUrl($file);
+			$id = $file->id;
+
+			return Response::json(compact('url', 'id'));
 		}
 
 		return Redirect::back();

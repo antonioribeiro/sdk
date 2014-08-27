@@ -33,8 +33,6 @@ class UploadFileCommandHandler implements CommandHandler {
 	 */
 	public function handle($command)
 	{
-		$file = $this->fileRepository->upload($command->file, $command->user);
-
-		return $file;
+		return $this->fileRepository->upload($command->file, $command->user);
 	}
 }

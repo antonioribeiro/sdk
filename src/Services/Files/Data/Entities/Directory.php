@@ -6,6 +6,10 @@ use PragmaRX\Sdk\Core\Model;
 
 class Directory extends Model {
 
-	protected $fillable = ['host', 'path'];
+	protected $fillable = [
+		'host',
+		'path',
+		'relative_path',
+	];
 
 }
