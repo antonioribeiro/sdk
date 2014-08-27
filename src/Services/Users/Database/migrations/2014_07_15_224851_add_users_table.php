@@ -16,6 +16,7 @@ class AddUsersTable extends Migration {
 		{
 			$table->string('username')->index()->nullable();
 			$table->text('bio')->nullable();
+			$table->integer('avatar_id')->unsigned()->nullable();
 		});
 
 		DB::statement(
@@ -37,6 +38,7 @@ class AddUsersTable extends Migration {
 	{
 		$this->dropColumn('users', 'username');
 		$this->dropColumn('users', 'bio');
+		$this->dropColumn('users', 'avatar_id');
 	}
 
 }

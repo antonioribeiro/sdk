@@ -15,8 +15,8 @@ class CreateDirectoriesTable extends Migration {
 		Schema::create('directories', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('host');
-			$table->string('root');
+			$table->string('host')->default('localhost');
+			$table->string('path');
 			$table->timestamps();
 		});
 	}

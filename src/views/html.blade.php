@@ -29,8 +29,6 @@
 
 		@yield('html.footer')
 
-        @yield('page-scripts')
-
 		@yield('pragmarx/sdk::partials.googleanalytics')
 
 	</body>

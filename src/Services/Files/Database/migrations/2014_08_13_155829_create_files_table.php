@@ -15,8 +15,8 @@ class CreateFilesTable extends Migration {
 		Schema::create('files', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('root_path_id')->unsigned()->index();
-			$table->string('name')->index();
+			$table->integer('directory_id')->unsigned()->index();
+			$table->string('relative_path');
 			$table->string('hash')->index();
 			$table->string('extension')->index();
 			$table->boolean('image')->default(true);
@@ -25,7 +25,7 @@ class CreateFilesTable extends Migration {
 
 		Schema::table('files', function(Blueprint $table)
 		{
-			$table->foreign('root_path_id')
+			$table->foreign('directory_id')
 					->references('id')
 					->on('directories')
 					->onUpdate('cascade')

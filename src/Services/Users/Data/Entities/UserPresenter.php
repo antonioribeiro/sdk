@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Users\Data\Entities;
 
 use PragmaRX\Sdk\Core\Presenter;
+use Avatar;
 
 class UserPresenter extends Presenter {
 
@@ -14,9 +15,7 @@ class UserPresenter extends Presenter {
 	 */
 	public function avatar($size = 30)
 	{
-		$email = md5($this->email);
-
-		return "//www.gravatar.com/avatar/{$email}?s={$size}";
+		return Avatar::getUrl($this->entity, $size);
 	}
 
 	public function followersCount()

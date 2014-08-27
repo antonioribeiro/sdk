@@ -1,11 +1,11 @@
 <?php
 
-namespace PragmaRX\Sdk\Services\Files\Entities;
+namespace PragmaRX\Sdk\Services\Files\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
 
 class Directory extends Model {
 
-	protected $fillable = ['name'];
+	protected $fillable = ['host', 'path'];
 
 }

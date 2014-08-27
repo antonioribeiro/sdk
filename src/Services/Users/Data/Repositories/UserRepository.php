@@ -309,4 +309,9 @@ class UserRepository {
 		$data['user']->raise(new EmailChangeMessageSent($data));
 	}
 
+	public function attachFile($id, $originalName, $user_id)
+	{
+		return $id;
+	}
+
 }

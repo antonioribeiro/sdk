@@ -82,3 +82,108 @@ if ( ! function_exists( 'convert_url_to_ajax' ))
 }
 
 
+if ( ! function_exists( 'var_log' ))
+{
+	function var_log(&$varInput, $var_name = '', $reference = '', $method = '=', $sub = false)
+	{
+		static $output;
+		static $depth;
+
+		if ($sub == false)
+		{
+			$output = '';
+			$depth = 0;
+			$reference = $var_name;
+			$var = serialize($varInput);
+			$var = unserialize($var);
+		}
+		else
+		{
+			++$depth;
+			$var =& $varInput;
+
+		}
+
+		// constants
+		$nl = "\n";
+		$block = 'a_big_recursion_protection_block';
+
+		$c = $depth;
+		$indent = '';
+		while ($c-- > 0)
+		{
+			$indent .= '|  ';
+		}
+
+		// if this has been parsed before
+		if (is_array($var) && isset($var[$block]))
+		{
+
+			$real =& $var[$block];
+			$name =& $var['name'];
+			$type = gettype($real);
+			$output .= $indent . $var_name . ' ' . $method . '& ' . ($type == 'array'
+					? 'Array'
+					: get_class($real)) . ' ' . $name . $nl;
+
+			// havent parsed this before
+		}
+		else
+		{
+
+			// insert recursion blocker
+			$var = Array($block => $var, 'name' => $reference);
+			$theVar =& $var[$block];
+
+			// print it out
+			$type = gettype($theVar);
+			switch ($type)
+			{
+
+				case 'array' :
+					$output .= $indent . $var_name . ' ' . $method . ' Array (' . $nl;
+					$keys = array_keys($theVar);
+					foreach ($keys
+					         as
+					         $name)
+					{
+						$value =& $theVar[$name];
+						var_log($value, $name, $reference . '["' . $name . '"]', '=', true);
+					}
+					$output .= $indent . ')' . $nl;
+					break;
+
+				case 'object' :
+					$output .= $indent . $var_name . ' = ' . get_class($theVar) . ' {' . $nl;
+					foreach ($theVar
+					         as
+					         $name
+					=>
+					         $value)
+					{
+						var_log($value, $name, $reference . '->' . $name, '->', true);
+					}
+					$output .= $indent . '}' . $nl;
+					break;
+
+				case 'string' :
+					$output .= $indent . $var_name . ' ' . $method . ' "' . $theVar . '"' . $nl;
+					break;
+
+				default :
+					$output .= $indent . $var_name . ' ' . $method . ' (' . $type . ') ' . $theVar . $nl;
+					break;
+
+			}
+
+			// $var=$var[$block];
+
+		}
+
+		--$depth;
+
+		if ($sub == false)
+			return $output;
+
+	}
+}

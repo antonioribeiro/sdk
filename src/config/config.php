@@ -55,6 +55,15 @@ return [
 	'packages' => [
 
 		[
+			'name' => 'pragmarx/avatar',
+			'enabled' => true,
+			'serviceProvider' => 'PragmaRX\Sdk\Services\Avatars\Service\Provider',
+			'facades' => [
+				'Avatar' => 'PragmaRX\Sdk\Services\Avatars\Service\Facade',
+			]
+		],
+
+		[
 			'name' => 'pragmarx/file',
 			'enabled' => true,
 			'serviceProvider' => 'PragmaRX\Sdk\Services\Files\Service\Provider',

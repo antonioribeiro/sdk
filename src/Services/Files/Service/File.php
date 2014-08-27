@@ -5,6 +5,7 @@ namespace PragmaRX\Sdk\Services\Files\Service;
 use Symfony\Component\Finder\Finder;
 use Illuminate\Filesystem\Filesystem;
 use App;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class File {
 
@@ -20,7 +21,7 @@ class File {
 
 	public function upload($file)
 	{
-		// $fileName = $this->getFileName($file);
+		return $file;
 	}
 
 	public function __call($name, $arguments)
@@ -56,6 +57,48 @@ class File {
 		mkdir($directory);
 
 		return $directory;
+	}
+
+	public function hash($file)
+	{
+		return sha1_file($file);
+	}
+
+	public function moveUploadedFile(UploadedFile $file, $path, $hash)
+	{
+		$extension = $file->getClientOriginalExtension();
+
+		$deepPath = $this->makeDeepPath($hash);
+
+		$hashPath = $path . $deepPath;
+
+		$fileName = "{$hash}.{$extension}";
+
+		$this->makeUploadDirectory($hashPath, 0775, true); // true = recursive
+
+		$file = $file->move($hashPath, $fileName);
+
+		return [$file, $deepPath];
+	}
+
+	private function makeDeepPath($string)
+	{
+		$path = '';
+
+		for ($x = 0; $x <= min(6, strlen($string)); $x++)
+		{
+			$path .= '/'.$string[$x];
+		}
+
+		return $path;
+	}
+
+	private function makeUploadDirectory($hashPath, $int, $true)
+	{
+		if ( ! $this->exists($hashPath))
+		{
+			$this->makeDirectory($hashPath, 0775, true); // true = recursive
+		}
 	}
 
 }

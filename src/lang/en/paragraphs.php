@@ -134,4 +134,6 @@ return [
     'email-change-message-sent'     => "A message, with instructions for changing your e-mail address, was sent to your inbox.",
 
     'invalid_password_token'        => "This password reminder token is not valid.",
+
+    'not-an-image'                  => "This file doesn't look like not an image.",
 ];
