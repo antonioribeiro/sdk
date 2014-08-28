@@ -33,7 +33,8 @@ class EditProfileCommandHandler implements CommandHandler {
 			$command->username,
 			$command->email,
 			$command->bio,
-			$command->avatar_id
+			$command->avatar_id,
+			$command->contact_information
 		);
 
 		$this->dispatchEventsFor($user);

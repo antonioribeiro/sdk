@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Services\Profiles\Http\Controllers;
 
 use Laracasts\Commander\Events\DispatchableTrait;
 use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Kinds\Data\Entities\Kind;
 use PragmaRX\Sdk\Services\Profiles\Commands\EditProfileCommand;
 use PragmaRX\Sdk\Services\Statuses\Data\Repositories\StatusRepository;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
@@ -65,8 +66,13 @@ class Profiles extends BaseController {
 
 	public function edit()
 	{
+		$kinds = Kind::lists('name', 'id');
+
+		$kinds = [0 => "Contact Type"] + $kinds;
+
 		return View::make('profiles.edit')
-				->with('user', Auth::user());
+				->with('user', Auth::user())
+				->with('kinds', $kinds);
 	}
 
 	public function update()

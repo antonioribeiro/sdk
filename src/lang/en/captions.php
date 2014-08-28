@@ -91,4 +91,8 @@ return [
     'bio'                   => "Bio",
 
     'save'                  => "Save",
+
+    'contact-information'   => "Contact Information",
+
+    'contact-type'          => "Contact Type",
 ];

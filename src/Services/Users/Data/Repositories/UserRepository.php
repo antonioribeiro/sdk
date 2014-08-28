@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Users\Data\Repositories;
 
+use PragmaRX\Sdk\Services\ContactInformation\Data\Entities\ContactInformation;
 use PragmaRX\Sdk\Services\EmailChanges\Data\Entities\EmailChange;
 use PragmaRX\Sdk\Services\EmailChanges\Events\EmailChangeMessageSent;
 use PragmaRX\Sdk\Services\EmailChanges\Events\EmailChangeRequested;
@@ -237,7 +238,16 @@ class UserRepository {
          ]);
 	}
 
-	public function update($user, $first_name, $last_name, $username, $email, $bio, $avatar_id)
+	public function update(
+		$user,
+		$first_name,
+		$last_name,
+		$username,
+		$email,
+		$bio,
+		$avatar_id,
+		$contact_information
+	)
 	{
 		if ($user->email != $email)
 		{
@@ -252,9 +262,27 @@ class UserRepository {
 
 		$user->bio = $bio;
 
-		$user->avatar_id = $avatar_id;
+		if ($avatar_id)
+		{
+			$user->avatar_id = $avatar_id;
+		}
 
 		$user->save();
+
+		$user->contactInformation()->delete();
+
+		foreach($contact_information as $info)
+		{
+			if ($info['text'] && $info['type_id'])
+			{
+				$ci = new ContactInformation([
+					'kind_id' => $info['type_id'],
+					'info' => $info['text']
+				]);
+
+				$user->contactInformation()->save($ci);
+			}
+		}
 
 		return $user;
 	}

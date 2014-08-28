@@ -1,6 +1,7 @@
 <?php namespace PragmaRX\Sdk\Services\Accounts\Commands;
 
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
+use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidPassword;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use Laracasts\Commander\CommandHandler;
 use Laracasts\Commander\Events\DispatchableTrait;
@@ -22,7 +23,7 @@ class SignInCommandHandler implements CommandHandler {
 	 *
 	 * @param object $command
 	 * @return mixed
-	 * @throws Exceptions\InvalidPassword
+	 * @throws InvalidPassword
 	 */
     public function handle($command)
     {
@@ -35,7 +36,7 @@ class SignInCommandHandler implements CommandHandler {
 	    {
 		    if ( ! $user = Auth::authenticate($credentials))
 		    {
-			    throw new Exceptions\InvalidPassword();
+			    throw new InvalidPassword();
 		    }
 	    }
 	    catch (NotActivatedException $exception)

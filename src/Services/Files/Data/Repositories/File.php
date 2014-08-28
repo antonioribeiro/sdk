@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Sdk\Services\Files\Repositories;
+namespace PragmaRX\Sdk\Services\Files\Data\Repositories;
 
 use Config;
 use PragmaRX\Sdk\Services\Files\Data\Entities\File as FileModel;
