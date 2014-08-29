@@ -64,7 +64,7 @@ class Profiles extends BaseController {
 		return View::make('profiles.show')->with(compact('user', 'statuses'));
 	}
 
-	public function edit()
+	public function edit($username)
 	{
 		$kinds = Kind::lists('name', 'id');
 

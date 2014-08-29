@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['namespace' => 'PragmaRX\Sdk\Services\Follow\Http\Controllers'], function()
+Route::group(['before' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Follow\Http\Controllers'], function()
 {
 	Route::group(['prefix' => 'follow'], function()
 	{

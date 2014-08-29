@@ -9,5 +9,8 @@ Route::group(['namespace' => 'PragmaRX\Sdk\Services\Login\Http\Controllers'], fu
 		Route::post('/', ['as' => 'login', 'uses' => 'Login@store']);
 	});
 
-	Route::get('/logout', ['as' => 'logout', 'uses' => 'Login@destroy']);
+	Route::group(['before' => 'auth'], function()
+	{
+		Route::get('/logout', ['as' => 'logout', 'uses' => 'Login@destroy']);
+	});
 });

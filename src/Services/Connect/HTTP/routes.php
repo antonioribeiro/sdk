@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['namespace' => 'PragmaRX\Sdk\Services\Connect\Http\Controllers'], function()
+Route::group(['before' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Connect\Http\Controllers'], function()
 {
 	Route::group(['prefix' => 'connect'], function()
 	{
