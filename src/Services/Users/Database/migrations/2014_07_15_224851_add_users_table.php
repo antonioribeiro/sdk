@@ -15,7 +15,6 @@ class AddUsersTable extends Migration {
 		Schema::table('users', function(Blueprint $table)
 		{
 			$table->string('username')->index()->nullable();
-			$table->text('bio')->nullable();
 			$table->integer('avatar_id')->unsigned()->nullable();
 		});
 
@@ -37,7 +36,6 @@ class AddUsersTable extends Migration {
 	public function migrateDown()
 	{
 		$this->dropColumn('users', 'username');
-		$this->dropColumn('users', 'bio');
 		$this->dropColumn('users', 'avatar_id');
 	}
 

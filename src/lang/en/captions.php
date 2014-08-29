@@ -1,98 +1,108 @@
 <?php
 
 return [
-	'remember-me'           => "Remember Me",
+	'remember-me'                       => "Remember Me",
 
-	'sign-in'               => "Sign In",
+	'sign-in'                           => "Sign In",
 
-	'change-password'       => "Change Password",
+	'change-password'                   => "Change Password",
 
-	'type-your-email'       => "Type Your E-mail Address",
+	'type-your-email'                   => "Type Your E-mail Address",
 
-	'name'                  => "Name",
+	'name'                              => "Name",
 
-	'username'              => "Username",
+	'username'                          => "Username",
 
-	'email-address'         => "E-mail Address",
+	'email-address'                     => "E-mail Address",
 
-	'password'              => "Password",
+	'password'                          => "Password",
 
-	'new-password'          => "New Password",
+	'new-password'                      => "New Password",
 
-	'reset-password'        => "Reset Password",
+	'reset-password'                    => "Reset Password",
 
-	'confirm-password'      => "Confirm Your Password",
+	'confirm-password'                  => "Confirm Your Password",
 
-	'register'              => "Register",
+	'register'                          => "Register",
 
-	'send'                  => "Send",
+	'send'                              => "Send",
 
-	'send-registration'     => "Send Registration",
+	'send-registration'                 => "Send Registration",
 
 
-	'realties'              => "Properties",
+	'realties'                          => "Properties",
 
-	'favorites'             => "Favorites",
+	'favorites'                         => "Favorites",
 
-	'watching'              => "Watching",
+	'watching'                          => "Watching",
 
-	'deleted'               => "Deleted",
+	'deleted'                           => "Deleted",
 
-	'activate-your-account' => "Activate Your Account",
+	'activate-your-account'             => "Activate Your Account",
 
-	'go-to-login-page'      => "Go to Login Page",
+	'go-to-login-page'                  => "Go to Login Page",
 
-	'email' 				=> "E-mail",
+	'email' 				            => "E-mail",
 
-	'first-name' 			=> "First Name",
+	'first-name' 			            => "First Name",
 
-	'last-name' 			=> "Last Name",
+	'last-name' 			            => "Last Name",
 
-    'create-account'        => "Create Account",
+    'create-account'                    => "Create Account",
 
-    'forgot-password'       => "Forgot Password",
+    'forgot-password'                   => "Forgot Password",
 
-    'your-username'         => "Your Username",
+    'your-username'                     => "Your Username",
 
-    'follow'                => "Follow",
+    'follow'                            => "Follow",
 
-    'unfollow'              => "Unfollow",
+    'unfollow'                          => "Unfollow",
 
-    'follower-count'        => "Follower|Followers",
+    'follower-count'                    => "Follower|Followers",
 
-    'following'             => "Following",
+    'following'                         => "Following",
 
-    'blocking'              => "Blocking",
+    'blocking'                          => "Blocking",
 
-    'connect'               => "Connect",
+    'connect'                           => "Connect",
 
-    'disconnect'            => "Disconnect",
+    'disconnect'                        => "Disconnect",
 
-    'dashboard'             => "Dashboard",
+    'dashboard'                         => "Dashboard",
 
-    'users'                 => "Users",
+    'users'                             => "Users",
 
-    'block'                 => "Block",
+    'block'                             => "Block",
 
-    'unblock'               => "Unblock",
+    'unblock'                           => "Unblock",
 
-    'connections'           => "Connections",
+    'connections'                       => "Connections",
 
-    'connection-count'      => "Connection|Connections",
+    'connection-count'                  => "Connection|Connections",
 
-    'profile-visit-count'   => "Visit|Visits",
+    'profile-visit-count'               => "Visit|Visits",
 
-    'statuses'              => "Statuses",
+    'statuses'                          => "Statuses",
 
-    'edit-profile'          => "Edit Profile",
+    'profile'                           => "Profile",
 
-    'edit-your-profile'     => "Edit Your Profile",
+    'edit-profile'                      => "Edit Profile",
 
-    'bio'                   => "Bio",
+    'edit-your-profile'                 => "Edit Your Profile",
 
-    'save'                  => "Save",
+    'edit-your-professional-info'       => "Edit Your Professional Information",
 
-    'contact-information'   => "Contact Information",
+    'edit-professional-info'            => "Edit Professional Info",
 
-    'contact-type'          => "Contact Type",
+    'bio'                               => "Bio",
+
+    'save'                              => "Save",
+
+    'contact-information'               => "Contact Information",
+
+    'contact-type'                      => "Contact Type",
+
+    'professional-council'              => "Professional Council",
+
+    'council-registration'              => "Registration Number",
 ];

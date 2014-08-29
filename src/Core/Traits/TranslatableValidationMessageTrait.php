@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Sdk\Core\Traits;
 
-
 use Lang;
 
 trait TranslatableValidationMessageTrait {

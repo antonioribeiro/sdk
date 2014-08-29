@@ -9,6 +9,8 @@ use File;
 
 class RollbackCommand extends IlluminateRollbackCommand {
 
+	use MigratableTrait;
+
 	/**
 	 * Execute the console command.
 	 *
@@ -25,6 +27,8 @@ class RollbackCommand extends IlluminateRollbackCommand {
 		$this->requireServiceMigrations();
 
 		$this->migrator->rollback($pretend);
+
+		$this->cleanTemporaryDirectory();
 
 		// Once the migrator has run we will grab the note output and send it out to
 		// the console screen, since the migrator itself functions without having
@@ -45,24 +49,16 @@ class RollbackCommand extends IlluminateRollbackCommand {
 		{
 			foreach($this->getMigrations($service) as $migration)
 			{
-				require $migration;
+				require_once $migration;
 			}
 		}
 
 		return $paths;
 	}
 
-	private function getMigrations($service)
+	private function getMigrations()
 	{
-		foreach(File::allDirectories(__DIR__ . "/../../$service") as $directory)
-		{
-			if ($directory->getFileName() == 'migrations')
-			{
-				return File::glob($directory->getPathName().'/*_*.php');
-			}
-		}
-
-		return [];
+		return File::glob($this->getTemporaryMigrationPath().'/*_*.php');
 	}
 
 }

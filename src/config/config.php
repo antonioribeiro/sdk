@@ -19,6 +19,8 @@
 
 return [
 
+	'application_services_path' => app_path() . '/Services/',
+
 	'files_path' => public_path() . '/files/',
 
 	'models' => [
@@ -28,23 +30,34 @@ return [
 	'services' => [
 		'Services/Accounts',
 		'Services/Addresses',
+
 		'Services/Block',
+
 		'Services/Cities',
 		'Services/Connect',
 		'Services/ContactInformation',
 		'Services/Countries',
 		'Services/Currencies',
+
 		'Services/EmailChanges',
+
 		'Services/Files',
 		'Services/Follow',
+
 		'Services/Kinds',
+
 		'Services/Login',
+
 		'Services/Messaging',
+
 		'Services/Passwords',
 		'Services/Profiles',
+
 		'Services/Registration',
+
 		'Services/States',
 		'Services/Statuses',
+
 		'Services/Users',
 	],
 

@@ -5,9 +5,14 @@ namespace PragmaRX\Sdk;
 use App;
 use PragmaRX\Sdk\Core\Migrations\MigrateCommand;
 use PragmaRX\Sdk\Core\Migrations\RollbackCommand;
+use PragmaRX\Sdk\Core\Traits\ServiceableTrait;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 
+use File;
+
 class ServiceProvider extends PragmaRXServiceProvider {
+
+	use ServiceableTrait;
 
     protected $packageVendor = 'pragmarx';
     protected $packageVendorCapitalized = 'PragmaRX';
@@ -21,11 +26,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
      * @var bool
      */
     protected $defer = false;
-
-    protected function wakeUp()
-    {
-
-    }
 
     /**
      * Register the service provider.
@@ -88,11 +88,11 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		}
 	}
 
-	private function includeServiceScripts($services = null)
+	private function includeServiceScripts($services, $path = null)
 	{
 		foreach($services as $service)
 		{
-			$this->includeSupportFiles($service);
+			$this->includeSupportFiles($service, $path);
 		}
 	}
 
@@ -126,7 +126,14 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	{
 		$services = $this->getConfig('services');
 
+		// SDK Services
 		$this->includeServiceScripts($services);
+
+		// Application Services
+		$this->includeServiceScripts(
+			$this->getApplicationServices(),
+			$this->getConfig('application_services_path')
+		);
 
 		$this->registerCommands();
 	}
@@ -144,6 +151,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	private function registerGlobalScripts()
 	{
+		$this->includeFile(__DIR__ . "/Sdk/App/bootstrap/start.php");
+
 		$this->includeFile(__DIR__ . "/Sdk/Errors/handlers.php");
 
 		$this->includeFile(__DIR__ . "/Sdk/HTTP/filters.php");
@@ -158,8 +167,10 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		$this->app['config']->set('cartalyst/sentinel::users.model', $this->getConfig('models.user'));
 	}
 
-	private function includeSupportFiles($service)
+	private function includeSupportFiles($service, $path = null)
 	{
+		$path = $path ?: __DIR__;
+
 		$loadable = [
 			'routes.php',
 			'filters.php',
@@ -168,7 +179,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 			'events.php',
 		];
 
-		$files = App::make('files')->allFiles(__DIR__ . "/$service");
+		$files = App::make('files')->allFiles("{$path}/{$service}");
 
 		foreach($files as $file)
 		{
@@ -193,4 +204,5 @@ class ServiceProvider extends PragmaRXServiceProvider {
 			return new RollbackCommand($app['migrator']);
 		});
 	}
+
 }

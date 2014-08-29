@@ -2,13 +2,12 @@
 
 namespace PragmaRX\Sdk\Core\Migrations;
 
-use App;
-use File;
 use Illuminate\Database\Console\Migrations\MigrateCommand as IlluminateMigrateCommand;
+use File;
 
 class MigrateCommand extends IlluminateMigrateCommand {
 
-	protected $paths = [];
+	use MigratableTrait;
 
 	/**
 	 * Execute the console command.
@@ -21,10 +20,7 @@ class MigrateCommand extends IlluminateMigrateCommand {
 
 		$this->prepareDatabase();
 
-		foreach($this->generateMigrationPaths() as $path)
-		{
-			$this->runMigration($path);
-		}
+		$this->runMigrations($this->getTemporaryMigrationPath());
 
 		// Finally, if the "seed" option has been given, we will re-run the database
 		// seed task to re-populate the database, which is convenient when adding
@@ -32,50 +28,6 @@ class MigrateCommand extends IlluminateMigrateCommand {
 		if ($this->input->getOption('seed'))
 		{
 			$this->call('db:seed', ['--force' => true]);
-		}
-	}
-
-	private function generateMigrationPaths()
-	{
-		$this->paths[] = $this->getMigrationPath();
-
-		if ( ! $this->input->getOption('package'))
-		{
-			$this->paths = array_merge($this->paths, $this->getServicesMigrationPaths());
-		}
-
-		$tempPath = $this->getTemporaryPath();
-
-		$this->copyMigrations($this->paths, $tempPath);
-
-		return [$tempPath];
-	}
-
-	private function getServicesMigrationPaths()
-	{
-		$services = App::make('config')->get('pragmarx/sdk::services');
-
-		$paths = [];
-
-		foreach ($services as $service)
-		{
-			if ($path = $this->getServiceMigrationsPath($service))
-			{
-				$paths[] = $path;
-			}
-		}
-
-		return $paths;
-	}
-
-	private function getServiceMigrationsPath($service)
-	{
-		foreach(File::allDirectories(__DIR__ . "/../../$service") as $directory)
-		{
-			if ($directory->getFileName() == 'migrations')
-			{
-				return $directory->getPathName();
-			}
 		}
 	}
 
@@ -97,23 +49,11 @@ class MigrateCommand extends IlluminateMigrateCommand {
 		}
 	}
 
-	private function getTemporaryPath()
+	private function runMigrations($getTempMigrationPath)
 	{
-		return File::tempDir();
-	}
+		$this->runMigration($getTempMigrationPath);
 
-	private function copyMigrations($paths, $tempPath)
-	{
-		foreach($paths as $path)
-		{
-			if (file_exists($path))
-			{
-				foreach(File::allFiles($path) as $file)
-				{
-					File::copy($file->getPathName(), $tempPath . '/' . $file->getFileName());
-				}
-			}
-		}
+		$this->cleanTemporaryDirectory();
 	}
 
 }

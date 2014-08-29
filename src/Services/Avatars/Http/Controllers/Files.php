@@ -8,6 +8,7 @@ class Avatars extends BaseController {
 
 	public function upload()
 	{
+
 	}
 
 }
