@@ -105,4 +105,6 @@ return [
     'professional-council'              => "Professional Council",
 
     'council-registration'              => "Registration Number",
+
+    'addresses'                         => "Addresses",
 ];

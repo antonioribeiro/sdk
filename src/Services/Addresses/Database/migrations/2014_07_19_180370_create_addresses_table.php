@@ -16,13 +16,11 @@ class CreateAddressesTable extends Migration {
 		{
 			$table->increments('id');
 
-			// A realty must always have at least the country, state and city
-			$table->integer('city_id')->unsigned();
-
 			$table->string('street')->nullable();
 			$table->string('number')->nullable();
 			$table->string('neighborhood')->nullable();
-			$table->string('zipcode', 9)->nullable();
+			$table->integer('city_id')->unsigned();
+			$table->string('zip_code')->nullable();
 			$table->float('latitude')->nullable();
 			$table->float('longitude')->nullable();
 
@@ -38,7 +36,6 @@ class CreateAddressesTable extends Migration {
 					->onDelete('cascade');
 		});
 	}
-
 
 	/**
 	 * Reverse the migrations.
