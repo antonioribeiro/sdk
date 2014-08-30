@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Sdk\Services\Profiles\Http\Controllers;
 
-use Laracasts\Commander\Events\DispatchableTrait;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
@@ -13,8 +12,6 @@ use Flash;
 use Redirect;
 
 class EmailChanges extends BaseController {
-
-	use DispatchableTrait;
 
 	/**
 	 * @var UserRepository

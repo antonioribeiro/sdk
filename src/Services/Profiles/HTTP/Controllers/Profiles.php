@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Sdk\Services\Profiles\Http\Controllers;
 
-use Laracasts\Commander\Events\DispatchableTrait;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Kinds\Data\Entities\Kind;
 use PragmaRX\Sdk\Services\Profiles\Commands\EditProfileCommand;
@@ -17,8 +16,6 @@ use Flash;
 use Redirect;
 
 class Profiles extends BaseController {
-
-	use DispatchableTrait;
 
 	/**
 	 * @var UserRepository
