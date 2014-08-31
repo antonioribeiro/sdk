@@ -160,6 +160,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		$this->includeFile(__DIR__ . "/Support/helpers.php");
 
 		$this->includeFile(__DIR__ . "/Support/blade.php");
+
+		$this->includeFile(__DIR__ . "/Support/validators.php");
 	}
 
 	private function configurePackages()

@@ -98,6 +98,8 @@ return [
 
     'save'                              => "Save",
 
+    'cancel'                            => "Cancel",
+
     'contact-information'               => "Contact Information",
 
     'contact-type'                      => "Contact Type",

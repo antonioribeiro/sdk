@@ -29,6 +29,7 @@ return [
 
 	'services' => [
 		'Services/Accounts',
+		'Services/Addresses',
 
 		'Services/Block',
 
