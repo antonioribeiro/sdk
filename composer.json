@@ -18,7 +18,7 @@
     "require": {
         "php": ">=5.5.0",
         "laravel/framework": "*",
-        "pragmarx/support": "0.2.*",
+        "pragmarx/support": "dev-master",
 		"pragmarx/tracker": "dev-master",
         "pragmarx/firewall": "0.2.*",
         "pragmarx/glottos": "*",
