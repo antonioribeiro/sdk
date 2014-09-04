@@ -138,4 +138,6 @@ return [
     'invalid_password_token'        => "This password reminder token is not valid.",
 
     'not-an-image'                  => "This file doesn't look like not an image.",
+
+    'forbidden'                     => "You don't have enough privileges to access to this option."
 ];

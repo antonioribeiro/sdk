@@ -3,13 +3,10 @@
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidPassword;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
-use Laracasts\Commander\CommandHandler;
-use Laracasts\Commander\Events\DispatchableTrait;
+use PragmaRX\Sdk\Core\Commanding\CommandHandler;
 use Auth;
 
-class SignInCommandHandler implements CommandHandler {
-
-	use DispatchableTrait;
+class SignInCommandHandler extends CommandHandler {
 
 	private $userRepository;
 

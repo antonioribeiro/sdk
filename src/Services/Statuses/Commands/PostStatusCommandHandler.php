@@ -2,14 +2,11 @@
 
 namespace PragmaRX\Sdk\Services\Statuses\Commands;
 
-use Laracasts\Commander\CommandHandler;
-use Laracasts\Commander\Events\DispatchableTrait;
 use PragmaRX\Sdk\Services\Statuses\Data\Entities\Status;
 use PragmaRX\Sdk\Services\Statuses\Data\Repositories\StatusRepository;
+use PragmaRX\Sdk\Core\Commanding\CommandHandler;
 
-class PostStatusCommandHandler implements CommandHandler {
-
-	use DispatchableTrait;
+class PostStatusCommandHandler extends CommandHandler {
 
 	protected $repository;
 

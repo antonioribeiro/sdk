@@ -2,10 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Connect\Commands;
 
-use Laracasts\Commander\CommandHandler;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
+use PragmaRX\Sdk\Core\Commanding\CommandHandler;
 
-class DisconnectUserCommandHandler implements CommandHandler {
+class DisconnectUserCommandHandler extends CommandHandler {
 
 	protected $userRepository;
 

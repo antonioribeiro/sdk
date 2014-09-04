@@ -44,14 +44,7 @@ if ( ! function_exists( 'get_lang_string' ))
 {
 	function get_lang_string($key, $replace = array(), $locale = null)
 	{
-		$string = \Lang::get($key, $replace, $locale);
-
-		if ($string == $key)
-		{
-			$string = Lang::get("pragmarx/sdk::$key", $replace, $locale);
-		}
-
-		return $string;
+		return \Lang::get($key, $replace, $locale);
 	}
 }
 

@@ -68,6 +68,12 @@ return [
 	'packages' => [
 
 		[
+			'name' => 'pragmarx/translator',
+			'enabled' => true,
+			'serviceProvider' => 'PragmaRX\Sdk\Services\Translator\Service\Provider',
+		],
+
+		[
 			'name' => 'pragmarx/avatar',
 			'enabled' => true,
 			'serviceProvider' => 'PragmaRX\Sdk\Services\Avatars\Service\Provider',

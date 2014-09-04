@@ -4,12 +4,8 @@ namespace PragmaRX\Sdk\Services\Statuses\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
 use PragmaRX\Sdk\Services\Statuses\Events\StatusWasPublished;
-use Laracasts\Commander\Events\EventGenerator;
-use Laracasts\Presenter\PresentableTrait;
 
 class Status extends Model {
-
-	use EventGenerator, PresentableTrait;
 
 	protected $fillable = ['body'];
 

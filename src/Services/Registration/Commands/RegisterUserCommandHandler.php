@@ -4,12 +4,9 @@ namespace PragmaRX\Sdk\Services\Registration\Commands;
 
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
-use Laracasts\Commander\CommandHandler;
-use Laracasts\Commander\Events\DispatchableTrait;
+use PragmaRX\Sdk\Core\Commanding\CommandHandler;
 
-class RegisterUserCommandHandler implements CommandHandler {
-
-	use DispatchableTrait;
+class RegisterUserCommandHandler extends CommandHandler {
 
 	protected $repository;
 

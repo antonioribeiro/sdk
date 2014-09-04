@@ -1,13 +1,9 @@
 <?php namespace PragmaRX\Sdk\Services\Accounts\Commands;
 
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
+use PragmaRX\Sdk\Core\Commanding\CommandHandler;
 
-use Laracasts\Commander\CommandHandler;
-use Laracasts\Commander\Events\DispatchableTrait;
-
-class ActivateCommandHandler implements CommandHandler {
-
-	use DispatchableTrait;
+class ActivateCommandHandler extends CommandHandler {
 
 	private $userRepository;
 

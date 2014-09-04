@@ -2,10 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Block\Commands;
 
-use Laracasts\Commander\CommandHandler;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
+use PragmaRX\Sdk\Core\Commanding\CommandHandler;
 
-class BlockUserCommandHandler implements CommandHandler{
+class BlockUserCommandHandler extends CommandHandler {
 
 	protected $userRepository;
 

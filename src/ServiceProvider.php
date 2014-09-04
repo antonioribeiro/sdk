@@ -20,12 +20,10 @@ class ServiceProvider extends PragmaRXServiceProvider {
     protected $packageName = 'sdk';
     protected $packageNameCapitalized = 'Sdk';
 
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
+	public function wakeUp()
+	{
+		$this->registerGlobalScripts();
+	}
 
     /**
      * Register the service provider.
@@ -41,8 +39,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	    $this->registerServiceProviders();
 
 	    $this->registerServices();
-
-	    $this->registerGlobalScripts();
 
 	    $this->configurePackages();
     }

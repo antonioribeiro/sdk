@@ -2,12 +2,9 @@
 
 namespace PragmaRX\Sdk\Services\Files\Data\Entities;
 
-use Laracasts\Commander\Events\EventGenerator;
 use PragmaRX\Sdk\Core\Model;
 
 class File extends Model {
-
-	use EventGenerator;
 
 	protected $fillable = [
 		'directory_id',

@@ -3,12 +3,8 @@
 namespace PragmaRX\Sdk\Services\ContactInformation\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
-use Laracasts\Commander\Events\EventGenerator;
-use Laracasts\Presenter\PresentableTrait;
 
 class ContactInformation extends Model {
-
-	use EventGenerator, PresentableTrait;
 
 	protected $table = 'contact_information';
 

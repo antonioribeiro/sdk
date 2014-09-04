@@ -2,14 +2,11 @@
 
 namespace PragmaRX\Sdk\Services\Files\Commands;
 
-use Laracasts\Commander\CommandHandler;
-use Laracasts\Commander\Events\DispatchableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Files\Data\Repositories\File as FileRepository;
+use PragmaRX\Sdk\Core\Commanding\CommandHandler;
 
-class UploadFileCommandHandler implements CommandHandler {
-
-	use DispatchableTrait;
+class UploadFileCommandHandler extends CommandHandler {
 
 	protected $repository;
 

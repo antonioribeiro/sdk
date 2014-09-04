@@ -1,17 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: AntonioCarlos
- * Date: 29/07/2014
- * Time: 20:13
- */
 
 namespace PragmaRX\Sdk\Services\Follow\Commands;
 
-use Laracasts\Commander\CommandHandler;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
+use PragmaRX\Sdk\Core\Commanding\CommandHandler;
 
-class FollowUserCommandHandler implements CommandHandler{
+class FollowUserCommandHandler extends CommandHandler {
 
 	protected $userRepository;
 
