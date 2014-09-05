@@ -19,7 +19,7 @@
         "php": ">=5.5.0",
         "laravel/framework": "*",
         "pragmarx/support": "0.2.*",
-		"pragmarx/tracker": "dev-master",
+		"pragmarx/tracker": "0.6.*",
         "pragmarx/firewall": "0.2.*",
         "pragmarx/glottos": "*",
         "pragmarx/zipcode": "1.0.*",
