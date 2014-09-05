@@ -74,6 +74,12 @@ return [
 		],
 
 		[
+			'name' => 'pragmarx/zipcode',
+			'enabled' => true,
+			'serviceProvider' => 'PragmaRX\ZIPcode\Vendor\Laravel\ServiceProvider',
+		],
+
+		[
 			'name' => 'pragmarx/avatar',
 			'enabled' => true,
 			'serviceProvider' => 'PragmaRX\Sdk\Services\Avatars\Service\Provider',
