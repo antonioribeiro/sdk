@@ -1,6 +1,8 @@
 <?php
 
 return [
+	'zip' => 'Invalid zip code',
+
 	'custom' =>
 	[
 		'telephones' =>

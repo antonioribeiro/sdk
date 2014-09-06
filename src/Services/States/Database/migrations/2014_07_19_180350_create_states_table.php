@@ -16,7 +16,7 @@ class CreateStatesTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('code', 5);
-			$table->string('name');
+			$table->string('name')->nullable();
 			$table->integer('country_id')->unsigned();
 			$table->float('latitude')->nullable();
 			$table->float('longitude')->nullable();

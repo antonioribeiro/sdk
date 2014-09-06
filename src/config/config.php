@@ -59,6 +59,8 @@ return [
 		'Services/Statuses',
 
 		'Services/Users',
+
+		'Services/Zip',
 	],
 
 	'disabled.packages' => [
@@ -77,6 +79,10 @@ return [
 			'name' => 'pragmarx/zipcode',
 			'enabled' => true,
 			'serviceProvider' => 'PragmaRX\ZIPcode\Vendor\Laravel\ServiceProvider',
+			'facades' => [
+				'ZipCode' => 'PragmaRX\ZIPcode\Vendor\Laravel\Facade',
+				'ZIPCode' => 'PragmaRX\ZIPcode\Vendor\Laravel\Facade',
+			]
 		],
 
 		[

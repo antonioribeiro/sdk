@@ -6,6 +6,10 @@ use PragmaRX\Sdk\Core\Model;
 
 class City extends Model {
 
-	protected $fillable = ['name'];
+	protected $fillable = [
+		'name',
+		'abbreviation',
+		'state_id',
+	];
 
 }

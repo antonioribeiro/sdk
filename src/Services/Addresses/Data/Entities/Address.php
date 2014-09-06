@@ -6,6 +6,11 @@ use PragmaRX\Sdk\Core\Model;
 
 class Address extends Model {
 
-	protected $fillable = ['name'];
+	protected $fillable = [
+		'city_id',
+		'street',
+		'neighborhood',
+		'zip_code',
+	];
 
 }
