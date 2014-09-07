@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest as IlluminateFormRequest;
 
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Input;
+use Flash;
 
 class FormRequest extends IlluminateFormRequest {
 
@@ -34,6 +36,23 @@ class FormRequest extends IlluminateFormRequest {
 		}
 
 		return false;
+	}
+
+	protected function getRedirectUrl()
+	{
+		if ($url = Input::get('referer-url'))
+		{
+			return $url;
+		}
+
+		return parent::getRedirectUrl();
+	}
+
+	public function response(array $errors)
+	{
+		Flash::errors($errors);
+
+		return parent::response($errors);
 	}
 
 }

@@ -13,4 +13,9 @@ class Address extends Model {
 		'zip_code',
 	];
 
+	public function city()
+	{
+		return $this->belongsTo('PragmaRX\Sdk\Services\Cities\Data\Entities\City');
+	}
+
 }

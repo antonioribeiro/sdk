@@ -12,4 +12,9 @@ class City extends Model {
 		'state_id',
 	];
 
+	public function state()
+	{
+		return $this->belongsTo('PragmaRX\Sdk\Services\States\Data\Entities\State');
+	}
+
 }

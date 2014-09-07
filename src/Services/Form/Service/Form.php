@@ -40,7 +40,7 @@ class Form {
 
 	private function makeReferer()
 	{
-		return $this->form->input('hidden', 'referer-url', '', ['id' => 'referer-url']);
+		return $this->form->input('hidden', 'referer-url', '', ['class' => 'referer-url']);
 	}
 
 	private function addToken()

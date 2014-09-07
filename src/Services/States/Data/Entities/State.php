@@ -12,4 +12,9 @@ class State extends Model {
 		'country_id',
 	];
 
+	public function country()
+	{
+		return $this->belongsTo('PragmaRX\Sdk\Services\Countries\Data\Entities\Country');
+	}
+
 }
