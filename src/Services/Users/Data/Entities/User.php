@@ -156,4 +156,5 @@ class User extends CartalystUser implements UserContract, RemindableContract {
 	{
 		return $this->belongsTo('PragmaRX\Sdk\Services\Files\Data\Entities\File', 'avatar_id');
 	}
+
 }

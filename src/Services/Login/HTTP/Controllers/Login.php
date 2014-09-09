@@ -41,9 +41,12 @@ class Login extends BaseController {
 	/**
 	 * @return mixed
 	 */
-	public function store()
+	public function store($email = null, $password = null)
 	{
-		$input = Input::only('email', 'password');
+		$input = [
+			'email' => $email ?: Input::get('email'),
+		    'password' => $password ?: Input::get('password'),
+		];
 
 		$this->signInForm->validate($input);
 
