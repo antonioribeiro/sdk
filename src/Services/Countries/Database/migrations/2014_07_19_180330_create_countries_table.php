@@ -14,10 +14,10 @@ class CreateCountriesTable extends Migration {
 	{
 		Schema::create('countries', function(Blueprint $table)
 		{
-			$table->increments('id');
+			$table->string('id', 64)->unique();
 			$table->string('code', 5);
 			$table->string('name');
-			$table->integer('currency_id')->unsigned();
+			$table->string('currency_id', 64);
 			$table->float('latitude')->nullable();
 			$table->float('longitude')->nullable();
 			$table->timestamps();

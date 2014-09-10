@@ -6,6 +6,10 @@ use PragmaRX\Sdk\Core\Model;
 
 class Country extends Model {
 
-	protected $fillable = ['name'];
+	protected $fillable = [
+		'code',
+		'name',
+		'currency_id',
+	];
 
 }

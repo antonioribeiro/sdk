@@ -10,6 +10,7 @@ use Illuminate\Contracts\Auth\Remindable as RemindableContract;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Support\Facades\Hash;
 
+use PragmaRX\Sdk\Core\Traits\IdentifiableTrait;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidActivationToken;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserActivationNotFound;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
@@ -20,6 +21,11 @@ use Laracasts\Presenter\PresentableTrait;
 
 use Activation;
 use Auth;
+use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\BlockableTrait;
+use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\ConnectableTrait;
+use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\FollowableTrait;
+use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\VisitableTrait;
+use Rhumsaa\Uuid\Uuid;
 
 class User extends CartalystUser implements UserContract, RemindableContract {
 
@@ -31,9 +37,10 @@ class User extends CartalystUser implements UserContract, RemindableContract {
 		UserTrait,
 		RemindableTrait,
 		EventGenerator,
-		PresentableTrait;
+		PresentableTrait,
+		IdentifiableTrait;
 
-	protected $fillable = ['username', 'email', 'password', 'first_name', 'last_name'];
+	protected $fillable = ['id', 'username', 'email', 'password', 'first_name', 'last_name'];
 
 	protected $presenter = 'PragmaRX\Sdk\Services\Users\Data\Entities\UserPresenter';
 
@@ -59,9 +66,10 @@ class User extends CartalystUser implements UserContract, RemindableContract {
 	 * @param $password
 	 * @return static
 	 */
-	public static function register($username, $email, $password, $first_name, $last_name)
+	public static function register($id, $username, $email, $password, $first_name, $last_name)
 	{
 		$credentials = [
+			'id'    => $id,
 		    'email'    => $email,
 		    'password' => $password,
 		    'first_name' => $first_name,

@@ -14,9 +14,8 @@ class CreateUsersFilesTable extends Migration {
 	{
 		Schema::create('users_files', function(Blueprint $table)
 		{
-			$table->increments('id');
-			$table->integer('file_name_id')->unsigned()->index();
-			$table->integer('user_id')->unsigned()->index();
+			$table->string('file_name_id', 64)->index();
+			$table->string('user_id', 64)->index();
 			$table->timestamps();
 		});
 

@@ -14,9 +14,9 @@ class CreateFollowsTable extends Migration {
 	{
 		Schema::create('follows', function(Blueprint $table)
 		{
-			$table->increments('id');
-			$table->integer('follower_id')->unsigned()->index();
-			$table->integer('followed_id')->unsigned()->index();
+			$table->string('follower_id', 64)->index();
+			$table->string('followed_id', 64)->index();
+
 			$table->timestamps();
 		});
 

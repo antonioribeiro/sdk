@@ -14,10 +14,8 @@ class CreateConnectionsTable extends Migration {
 	{
 		Schema::create('connections', function(Blueprint $table)
 		{
-			$table->increments('id');
-
-			$table->integer('requestor_id')->unsigned()->index();
-			$table->integer('requested_id')->unsigned()->index();
+			$table->string('requestor_id', 64)->index();
+			$table->string('requested_id', 64)->index();
 
 			$table->boolean('authorized')->index()->default(false);
 			$table->timestamp('authorized_at')->nullable();

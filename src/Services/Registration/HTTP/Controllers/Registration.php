@@ -6,6 +6,7 @@ use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Core\Redirect;
 use PragmaRX\Sdk\Services\Registration\Commands\RegisterUserCommand;
 use PragmaRX\Sdk\Services\Registration\Forms\Registration as RegistrationForm;
+use Rhumsaa\Uuid\Uuid;
 use View;
 use Input;
 
@@ -41,7 +42,9 @@ class Registration extends BaseController {
 	{
 		$this->registrationForm->validate(Input::all());
 
-		$this->execute(RegisterUserCommand::class);
+		$input = ['id' => (string) Uuid::uuid4()] + Input::all();
+
+		$this->execute(RegisterUserCommand::class, $input);
 
 		return Redirect::route('message')
 			->with('title', t('titles.welcome'))

@@ -5,6 +5,8 @@ namespace PragmaRX\Sdk\Services\Registration\Commands;
 
 class RegisterUserCommand {
 
+	public $id;
+
 	public $username;
 
 	public $email;
@@ -15,8 +17,10 @@ class RegisterUserCommand {
 
 	public $last_name;
 
-	function __construct($username, $email, $password, $first_name, $last_name)
+	function __construct($id, $username, $email, $password, $first_name, $last_name)
 	{
+		$this->id = $id;
+
 		$this->username = $username;
 
 		$this->email = $email;

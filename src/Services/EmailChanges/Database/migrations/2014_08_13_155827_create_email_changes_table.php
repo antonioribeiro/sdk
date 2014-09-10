@@ -14,8 +14,8 @@ class CreateEmailChangesTable extends Migration {
 	{
 		Schema::create('email_changes', function(Blueprint $table)
 		{
-			$table->increments('id');
-			$table->integer('user_id')->unsigned()->index();
+			$table->string('id', 64)->unique();
+			$table->string('user_id', 64)->index();
 			$table->string('email');
 			$table->string('token')->index();
 			$table->timestamp('old_confirmed_at')->nullable();

@@ -7,6 +7,8 @@ use Session;
 
 class ProfileVisit extends Model {
 
+	public static $hasIdColumn = false;
+
 	protected $table = 'profiles_visits';
 
 	protected $fillable = ['visitor_id', 'visited_id', 'session_id'];

@@ -14,10 +14,10 @@ class CreateProfilesVisitsTable extends Migration {
 	{
 		Schema::create('profiles_visits', function(Blueprint $table)
 		{
-			$table->increments('id');
-			$table->integer('visitor_id')->unsigned()->index();
-			$table->integer('visited_id')->unsigned()->index();
+			$table->string('visitor_id', 64)->index();
+			$table->string('visited_id', 64)->index();
 			$table->string('session_id')->index();
+
 			$table->timestamps();
 		});
 

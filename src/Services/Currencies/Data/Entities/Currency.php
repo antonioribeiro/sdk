@@ -6,6 +6,13 @@ use PragmaRX\Sdk\Core\Model;
 
 class Currency extends Model {
 
-	protected $fillable = [];
+	protected $fillable = [
+		'name',
+		'code',
+		'symbol',
+		'decimals',
+		'decimal_point',
+		'thousands_separator',
+	];
 
 }

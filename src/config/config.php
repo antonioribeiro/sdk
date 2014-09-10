@@ -24,7 +24,12 @@ return [
 	'files_path' => public_path() . '/files/',
 
 	'models' => [
-		'user' => 'PragmaRX\Sdk\Services\Users\Data\Entities\User',
+		'activation'    => 'PragmaRX\Sdk\Services\Users\Data\Entities\Activation',
+	    'persistence'   => 'PragmaRX\Sdk\Services\Users\Data\Entities\Persistence',
+	    'reminder'      => 'PragmaRX\Sdk\Services\Users\Data\Entities\Reminder',
+	    'role'          => 'PragmaRX\Sdk\Services\Users\Data\Entities\Role',
+	    'throttle'      => 'PragmaRX\Sdk\Services\Users\Data\Entities\Throttle',
+	    'user'          => 'PragmaRX\Sdk\Services\Users\Data\Entities\User',
 	],
 
 	'services' => [

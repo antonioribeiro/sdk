@@ -6,6 +6,8 @@ use PragmaRX\Sdk\Core\Model;
 
 class UserFile extends Model {
 
+	public static $hasIdColumn = false;
+
 	protected $table = 'users_files';
 
 	protected $fillable = [

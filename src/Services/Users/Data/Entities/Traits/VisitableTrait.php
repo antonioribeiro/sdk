@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Sdk\Services\Users\Data\Entities;
+namespace PragmaRX\Sdk\Services\Users\Data\Entities\Traits;
 
 use DB;
 
