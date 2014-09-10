@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Core\Validation;
 
 use Illuminate\Foundation\Http\FormRequest as IlluminateFormRequest;
+use Illuminate\Validation\Factory as ValidationFactory;
 
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
@@ -23,21 +24,6 @@ class FormRequest extends IlluminateFormRequest {
 		}
 	}
 
-	/**
-	 * Deteremine if the request fails the authorization check.
-	 *
-	 * @return bool
-	 */
-	protected function failsAuthorization()
-	{
-		if (method_exists($this, 'authorize'))
-		{
-			return ! $this->container->call([$this, 'authorize']);
-		}
-
-		return false;
-	}
-
 	protected function getRedirectUrl()
 	{
 		if ($url = Input::get('referer-url'))
@@ -53,6 +39,38 @@ class FormRequest extends IlluminateFormRequest {
 		Flash::errors($errors);
 
 		return parent::response($errors);
+	}
+
+	public function validate(ValidationFactory $factory)
+	{
+		$this->mergeRulesAndRouteParameters();
+
+		return parent::validate($factory);
+	}
+
+	private function mergeRulesAndRouteParameters()
+	{
+		foreach($this->route->parameters() as $key => $value)
+		{
+			Input::merge([$key => $value]);
+		}
+
+		$this->replace(Input::all());
+	}
+
+	/**
+	 * Deteremine if the request fails the authorization check.
+	 *
+	 * @return bool
+	 */
+	protected function failsAuthorization()
+	{
+		if (method_exists($this, 'authorize'))
+		{
+			return ! $this->container->call([$this, 'authorize']);
+		}
+
+		return false;
 	}
 
 }
