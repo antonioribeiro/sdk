@@ -149,8 +149,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	{
 		$this->includeFile(__DIR__ . "/Sdk/App/bootstrap/start.php");
 
-		$this->includeFile(__DIR__ . "/Sdk/Errors/handlers.php");
-
 		$this->includeFile(__DIR__ . "/Sdk/HTTP/filters.php");
 
 		$this->includeFile(__DIR__ . "/Support/helpers.php");
@@ -160,6 +158,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		$this->includeFile(__DIR__ . "/Support/zip.php");
 
 		$this->includeFile(__DIR__ . "/Support/validators.php");
+
+		$this->includeFile(__DIR__ . "/Sdk/Errors/handlers.php");
 	}
 
 	private function configurePackages()

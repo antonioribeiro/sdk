@@ -6,3 +6,4 @@ App::error(function(Laracasts\Validation\FormValidationException $exception, $co
 
 	return \PragmaRX\Sdk\Core\Redirect::back()->withInput();
 });
+
