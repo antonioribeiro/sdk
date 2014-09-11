@@ -64,6 +64,11 @@ class Flash {
 
 	public function errors($errors)
 	{
+		if ( ! is_array($errors))
+		{
+			$errors = [$errors];
+		}
+
 		if ($errors instanceof \Illuminate\Support\MessageBag)
 		{
 			$errors = $errors->all();
