@@ -139,5 +139,7 @@ return [
 
     'not-an-image'                  => "This file doesn't look like not an image.",
 
-    'forbidden'                     => "You don't have enough privileges to access to this option."
+    'forbidden'                     => "You don't have enough privileges to access to this option.",
+
+    'token-mismatch'                => "Invalid form token. Please try again.",
 ];
