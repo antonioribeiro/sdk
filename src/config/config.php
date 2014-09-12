@@ -65,6 +65,8 @@ return [
 
 		'Services/Users',
 
+		'Services/View',
+
 		'Services/Zip',
 	],
 
@@ -73,6 +75,12 @@ return [
 	],
 
 	'packages' => [
+
+		[
+			'name' => 'pragmarx/view',
+			'enabled' => true,
+			'serviceProvider' => 'PragmaRX\Sdk\Services\View\Service\Provider',
+		],
 
 		[
 			'name' => 'pragmarx/translator',
