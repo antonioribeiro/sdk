@@ -47,6 +47,7 @@ return [
 		'Services/EmailChanges',
 
 		'Services/Files',
+		'Services/Firewall',
 		'Services/Follow',
 
 		'Services/Kinds',
