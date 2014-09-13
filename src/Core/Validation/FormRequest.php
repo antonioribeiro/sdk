@@ -41,11 +41,11 @@ class FormRequest extends IlluminateFormRequest {
 		return parent::response($errors);
 	}
 
-	public function validate(ValidationFactory $factory)
+	public function validate()
 	{
 		$this->mergeRulesAndRouteParameters();
 
-		return parent::validate($factory);
+		return parent::validate();
 	}
 
 	private function mergeRulesAndRouteParameters()
@@ -59,18 +59,18 @@ class FormRequest extends IlluminateFormRequest {
 	}
 
 	/**
-	 * Deteremine if the request fails the authorization check.
+	 * Deteremine if the request passes the authorization check.
 	 *
 	 * @return bool
 	 */
-	protected function failsAuthorization()
+	protected function passesAuthorization()
 	{
 		if (method_exists($this, 'authorize'))
 		{
-			return ! $this->container->call([$this, 'authorize']);
+			return $this->container->call([$this, 'authorize']);
 		}
 
-		return false;
+		return true;
 	}
 
 }
