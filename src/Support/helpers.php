@@ -62,7 +62,7 @@ if ( ! function_exists( 'convert_url_to_ajax' ))
 {
 	function convert_url_to_ajax($url)
 	{
-		$domain = getenv('DOMAIN');
+		$domain = env('DOMAIN');
 
 		$pos = strpos($url, $domain);
 
