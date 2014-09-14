@@ -3,12 +3,15 @@
 namespace PragmaRX\Sdk;
 
 use App;
+use Auth;
 use PragmaRX\Sdk\Core\Migrations\MigrateCommand;
 use PragmaRX\Sdk\Core\Migrations\RollbackCommand;
 use PragmaRX\Sdk\Core\Traits\ServiceableTrait;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 
 use File;
+use Session;
+use Language;
 
 class ServiceProvider extends PragmaRXServiceProvider {
 
@@ -23,6 +26,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	public function wakeUp()
 	{
 		$this->registerGlobalScripts();
+
+		$this->configureLocale();
 	}
 
     /**
@@ -210,6 +215,11 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		{
 			return new RollbackCommand($app['migrator']);
 		});
+	}
+
+	private function configureLocale()
+	{
+		Language::configureLocale();
 	}
 
 }

@@ -52,6 +52,7 @@ return [
 
 		'Services/Kinds',
 
+		'Services/Language',
 		'Services/Login',
 
 		'Services/Mailer',
@@ -78,6 +79,15 @@ return [
 	],
 
 	'packages' => [
+
+		[
+			'name' => 'pragmarx/language',
+			'enabled' => true,
+			'serviceProvider' => 'PragmaRX\Sdk\Services\Language\Service\Provider',
+			'facades' => [
+				'Language' => 'PragmaRX\Sdk\Services\Language\Service\Facade',
+			]
+		],
 
 		[
 			'name' => 'pragmarx/view',

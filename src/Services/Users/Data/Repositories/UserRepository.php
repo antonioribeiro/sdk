@@ -344,4 +344,11 @@ class UserRepository {
 		return $id;
 	}
 
+	public function changeLocale($user, $locale)
+	{
+		$user->locale = $locale;
+
+		$user->save();
+	}
+
 }
