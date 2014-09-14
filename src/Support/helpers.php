@@ -64,8 +64,6 @@ if ( ! function_exists( 'convert_url_to_ajax' ))
 	{
 		$domain = \Request::getHost();
 
-		dd($domain);
-
 		$pos = strpos($url, $domain);
 
 		$url = substr($url, 0, $pos + strlen($domain) + 1) .
