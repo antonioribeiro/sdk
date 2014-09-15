@@ -1,6 +1,10 @@
 <?php
 
 return array (
+  'collapse-menu' => 'Abrir/Fechar Menu',
+  'full-screen' => 'Tela Cheia',
+  'sign-out' => 'Sair',
+  'voice-command' => 'Comandos de Voz',
   'change-password' => 'Trocar Senha',
   'statuses' => 'Estados',
   'type-your-email' => 'Digite Seu Endereço de E-mail',

@@ -1,6 +1,10 @@
 <?php
 
 return array (
+  'sign-out' => 'Sign Out',
+  'full-screen' => 'Full Screen',
+  'voice-command' => 'Voice Command',
+  'collapse-menu' => 'Collapse Menu',
   'unblock' => 'Unblock',
   'connections' => 'Connections',
   'connection-count' => 'Connection|Connections',
