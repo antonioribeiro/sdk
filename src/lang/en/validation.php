@@ -1,13 +1,12 @@
 <?php
 
-return [
-	'zip' => 'Invalid zip code',
-
-	'custom' =>
-	[
-		'telephones' =>
-		[
-			'phone' => "Invalid phone number",
-		]
-	]
-];
+return array (
+  'zip' => 'Invalid zip code',
+  'custom' => 
+  array (
+    'telephones' => 
+    array (
+      'phone' => 'Invalid phone number',
+    ),
+  ),
+);
