@@ -379,7 +379,7 @@ class UserRepository {
 		{
 			Auth::authenticate($user);
 
-			$next = $user->two_factor ? 'two-factor' : false;
+			$next = $user->two_factor_type_id ? 'two-factor' : false;
 
 			$user->raise(new UserWasAuthenticated($user));
 		}
@@ -415,7 +415,7 @@ class UserRepository {
 			return;
 		}
 
-
+		return 'two-factor';
 	}
 
 	public function createGoogleAuthenticatorSecret($user)

@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Sdk\Services\Login\Http\Controllers;
 
-use Illuminate\Support\Facades\Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Accounts\Commands\SignInCommand;
 use PragmaRX\Sdk\Services\Login\Forms\SignIn as SignInForm;
@@ -12,6 +11,7 @@ use Input;
 use Auth;
 use Sentinel;
 use Flash;
+use Redirect;
 
 class Login extends BaseController {
 
@@ -55,13 +55,12 @@ class Login extends BaseController {
 
 		if ($result['next'] == 'two-factor')
 		{
-			return Redirect::route('login.twofactor');
+			return Redirect::route('login.twofactor')->with('user', $result['user']);
 		}
 
 		Flash::message(t('paragraphs.welcome-back'));
 
 		return Redirect::intended('/');
-
 	}
 
 	public function destroy()

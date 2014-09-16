@@ -165,4 +165,9 @@ class User extends CartalystUser implements UserContract, RemindableContract {
 		return $this->belongsTo('PragmaRX\Sdk\Services\Files\Data\Entities\File', 'avatar_id');
 	}
 
+	public function twoFactorType()
+	{
+		return $this->belongsTo('PragmaRX\Sdk\Services\TwoFactor\Data\Entities\TwoFactorType', 'two_factor_type_id');
+	}
+
 }

@@ -14,7 +14,7 @@ class AddTwoFactorToUsersTable extends Migration {
 	{
 		Schema::table('users', function(Blueprint $table)
 		{
-			$table->string('two_factor_id', 64)->nullable();
+			$table->string('two_factor_type_id', 64)->nullable();
 
 			$table->string('google_2fa_secret_key',32)->nullable();
 		});

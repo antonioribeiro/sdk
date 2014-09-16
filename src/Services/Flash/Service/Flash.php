@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Flash\Service;
 
+use Illuminate\Support\MessageBag;
 use Session;
 
 class Flash {
@@ -19,16 +20,28 @@ class Flash {
 
 	private function addMessage($kind, $message, $title = null)
 	{
-		$messages = Session::get($this->arrayName) ?: [];
+		$result = Session::get($this->arrayName) ?: [];
 
-		$messages[$kind.$message] = [
-			'kind' => $this->getKind($kind),
-			'icon' => $this->getIcon($kind),
-		    'message' => $message,
-		    'title' => $title,
-		];
+		if ($message instanceof MessageBag)
+		{
+			$messages = $message->all();
+		}
+		else
+		{
+			$messages = [$message];
+		}
 
-		Session::put($this->arrayName, $messages);
+		foreach($messages as $message)
+		{
+			$result[$kind.$message] = [
+				'kind' => $this->getKind($kind),
+				'icon' => $this->getIcon($kind),
+				'message' => $message,
+				'title' => $title,
+			];
+		}
+
+		Session::put($this->arrayName, $result);
 	}
 
 	public function popMessages()

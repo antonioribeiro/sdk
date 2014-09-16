@@ -6,12 +6,12 @@ return array (
   'after' => '":attribute" precisa vir depois de ":date".',
   'alpha' => '":attribute" só pode conter letras.',
   'alpha_dash' => '":attribute" só pode conter letras números e traços.',
-  'required' => 'O campo ":attribute" é imprescindível.',
+  'required' => 'O campo ":attribute" não pode ficar em branco.',
   'required_if' => 'É necessário digitar o campo ":attribute" quando :other for :value.',
-  'required_with' => 'O campo ":attribute" é imprescindível quando :values está presente.',
-  'required_with_all' => 'O campo ":attribute" é imprescindível quando :values está presente.',
-  'required_without' => 'O campo ":attribute" é imprescindível quando :values não está presente.',
-  'required_without_all' => 'O campo ":attribute" é imprescindível quando :values não estão presentes.',
+  'required_with' => 'O campo ":attribute" não pode ficar em branco quando :values está presente.',
+  'required_with_all' => 'O campo ":attribute" não pode ficar em branco quando :values está presente.',
+  'required_without' => 'O campo ":attribute" não pode ficar em branco quando :values não está presente.',
+  'required_without_all' => 'O campo ":attribute" não pode ficar em branco quando :values não estão presentes.',
   'same' => '":attribute" e ":other" precisam ser iguais.',
   'size' => 
   array (
@@ -39,7 +39,7 @@ return array (
   'digits_between' => '":attribute" precisa ter entre :min e :max dígitos.',
   'email' => '":attribute" precisa ser um e-mail válido.',
   'exists' => '":attribute" selecionado é inválido.',
-  'filled' => '":attribute" é imprescindível.',
+  'filled' => '":attribute" não pode ficar em branco.',
   'image' => '":attribute" precisa ser uma imagem.',
   'in' => '":attribute" selecionado é inválido.',
   'integer' => '":attribute" precisa ser um número inteiro.',
@@ -73,4 +73,12 @@ return array (
     ),
   ),
   'zip' => 'CEP inválido.',
+
+  'attributes' => [
+	  'first_name' => 'nome',
+	  'last_name' => 'sobrenome',
+	  'username' => 'nome de usuário',
+	  'password' => 'senha',
+      'body' => 'corpo da mensagem',
+  ],
 );
