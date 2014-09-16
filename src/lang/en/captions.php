@@ -59,4 +59,6 @@ return array (
   'go-to-login-page' => 'Go to Login Page',
   'email' => 'E-mail',
   'first-name' => 'First Name',
+  'two-factor-authentication' => 'Two Factor Authentication',
+  'authentication-code' => 'Authentication Code',
 );

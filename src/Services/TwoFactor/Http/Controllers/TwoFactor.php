@@ -1,0 +1,34 @@
+<?php
+
+namespace PragmaRX\Sdk\Services\TwoFactor\Http\Controllers;
+
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\TwoFactor\Commands\SignInCommand;
+use PragmaRX\Sdk\Services\TwoFactor\Http\Requests\CreateRequest;
+use PragmaRX\Sdk\Services\TwoFactor\Http\Requests\LoginRequest;
+
+use Session;
+use View;
+use Flash;
+use Redirect;
+
+class TwoFactor extends BaseController {
+
+	/**
+	 * @return mixed
+	 */
+	public function create(CreateRequest $request)
+	{
+		return View::make('twoFactor.create')->with('user', Session::get('user'));
+	}
+
+	public function store(LoginRequest $request)
+	{
+		$this->execute(SignInCommand::class);
+
+		Flash::message(t('paragraphs.welcome-back'));
+
+		return Redirect::intended('/');
+	}
+
+}

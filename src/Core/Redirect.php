@@ -70,6 +70,13 @@ class Redirect {
 	 */
 	private static function call($name, $parameters)
 	{
+		\Log::info([$name] + $parameters);
+
+
+
+
+
+
 		return call_user_func_array(
 			'Illuminate\Support\Facades\Redirect::' . $name,
 			$parameters
@@ -112,4 +119,5 @@ class Redirect {
 
 		return "$origin/";
 	}
+
 }

@@ -24,7 +24,7 @@ return [
 	'files_path' => public_path() . '/files/',
 
 	'models' => [
-		'activation'    => 'PragmaRX\Sdk\Services\Users\Data\Entities\Activation',
+		'activation'    => 'PragmaRX\Sdk\Services\Users\Data\Entities\UserActivation',
 	    'persistence'   => 'PragmaRX\Sdk\Services\Users\Data\Entities\Persistence',
 	    'reminder'      => 'PragmaRX\Sdk\Services\Users\Data\Entities\Reminder',
 	    'role'          => 'PragmaRX\Sdk\Services\Users\Data\Entities\Role',

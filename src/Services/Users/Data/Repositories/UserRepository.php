@@ -18,10 +18,15 @@ use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use Activation;
 use Flash;
 use Auth;
+use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidAuthenticationCode;
+use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidRequest;
+use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidToken;
+use PragmaRX\Sdk\Services\TwoFactor\Exceptions\TokenExpired;
 use PragmaRX\Sdk\Services\TwoFactor\Google2FA;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 use Rhumsaa\Uuid\Uuid;
 use Sentinel;
+use Carbon;
 
 class UserRepository {
 
@@ -377,9 +382,15 @@ class UserRepository {
 
 		try
 		{
-			Auth::authenticate($user);
-
 			$next = $user->two_factor_type_id ? 'two-factor' : false;
+
+			// Will only login if there is no two factor auth involved
+
+			Auth::authenticate(
+				$user,
+				$credentials['remember'],
+				! $user->two_factor_type_id
+			);
 
 			$user->raise(new UserWasAuthenticated($user));
 		}
@@ -410,10 +421,12 @@ class UserRepository {
 
 	public function checkTwoFactorAuthentication($user)
 	{
-		if ( ! $user->two_factor_id)
+		if ( ! $user->two_factor_type_id)
 		{
 			return;
 		}
+
+		$this->createTwoFactorTokenForuser($user);
 
 		return 'two-factor';
 	}
@@ -423,6 +436,52 @@ class UserRepository {
 		$user->google_2fa_secret_key = Google2FA::generateSecretKey(32);
 
 		$user->save();
+	}
+
+	private function createTwoFactorTokenForuser($user)
+	{
+		$user->two_factor_token = (string) Uuid::uuid4();
+
+		$user->two_factor_token_created_at = \Carbon\Carbon::now();
+
+		$user->save();
+	}
+
+	public function authenticateViaTwoFactor($user_id, $two_factor_token, $authentication_code)
+	{
+		$user = $this->findById($user_id);
+
+		$this->validateTwoFactorToken($user, $two_factor_token);
+
+		$this->checkAuthenticationCode($user, $authentication_code);
+
+		Sentinel::login($user);
+	}
+
+	public function validateTwoFactorToken($user, $two_factor_token)
+	{
+		if ( ! $user)
+		{
+			throw new InvalidRequest();
+		}
+
+		if ($user->two_factor_token !== $two_factor_token)
+		{
+			throw new InvalidToken();
+		}
+
+		if (Carbon::now()->diffInMinutes(Carbon::parse($user->two_factor_token_created_at)) > 10)
+		{
+			throw new TokenExpired();
+		}
+	}
+
+	private function checkAuthenticationCode($user, $authentication_code)
+	{
+		if ( ! Google2FA::verifyKey($user->google_2fa_secret_key, $authentication_code))
+		{
+			throw new InvalidAuthenticationCode();
+		}
 	}
 
 }

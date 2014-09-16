@@ -64,4 +64,10 @@ return array (
   'forbidden' => 'You don\'t have enough privileges to access to this option.',
   'token-mismatch' => 'Invalid form token. Please try again.',
   'registration-is-free' => 'Registration is fast, easy, and free!',
+  'invalid-request' => 'Invalid request.',
+  'two-factor-token-expired' => 'Your authentication token has expired.',
+  'two-factor-token-invalid' => 'This authentication token is invalid.',
+  'we-sent-a-security-code' => 'Your account is protected with Two-Factor Authentication. To complete your login, please select the phone number where we should send your security code.',
+  'two-factor-invalid-auth-code' => 'This authentication code is not valid, please try again.',
 );
+

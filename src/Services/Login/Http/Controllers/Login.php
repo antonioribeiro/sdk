@@ -71,4 +71,9 @@ class Login extends BaseController {
 
 		return Redirect::home();
 	}
+
+	public function showTwoFactor()
+	{
+		dd('shown');
+	}
 }

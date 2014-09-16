@@ -16,6 +16,10 @@ class AddTwoFactorToUsersTable extends Migration {
 		{
 			$table->string('two_factor_type_id', 64)->nullable();
 
+			$table->string('two_factor_token', 64)->nullable()->index();
+
+			$table->timestamp('two_factor_token_created_at')->nullable();
+
 			$table->string('google_2fa_secret_key',32)->nullable();
 		});
 	}
