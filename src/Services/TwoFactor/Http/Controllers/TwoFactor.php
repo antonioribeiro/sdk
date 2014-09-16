@@ -7,6 +7,7 @@ use PragmaRX\Sdk\Services\TwoFactor\Commands\SignInCommand;
 use PragmaRX\Sdk\Services\TwoFactor\Http\Requests\CreateRequest;
 use PragmaRX\Sdk\Services\TwoFactor\Http\Requests\LoginRequest;
 
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use Session;
 use View;
 use Flash;
@@ -17,9 +18,11 @@ class TwoFactor extends BaseController {
 	/**
 	 * @return mixed
 	 */
-	public function create(CreateRequest $request)
+	public function create(CreateRequest $request, UserRepository $repository)
 	{
-		return View::make('twoFactor.create')->with('user', Session::get('user'));
+		$user = $repository->getUserFromTwoFactorRequest($repository);
+
+		return View::make('twoFactor.create')->with('user', $user);
 	}
 
 	public function store(LoginRequest $request)

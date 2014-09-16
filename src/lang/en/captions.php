@@ -61,4 +61,7 @@ return array (
   'first-name' => 'First Name',
   'two-factor-authentication' => 'Two Factor Authentication',
   'authentication-code' => 'Authentication Code',
+  'logout' => 'Logout',
+  'security' => 'Security',
+  'disabled' => 'Disabled',
 );

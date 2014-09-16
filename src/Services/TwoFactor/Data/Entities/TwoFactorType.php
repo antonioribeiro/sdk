@@ -6,7 +6,7 @@ use PragmaRX\Sdk\Core\Model;
 
 class TwoFactorType extends Model {
 
-	protected $fillable = ['code', 'type'];
+	protected $fillable = ['code', 'name'];
 
 	protected $table = 'two_factor_types';
 

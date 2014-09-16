@@ -66,6 +66,7 @@ return [
 
 		'Services/States',
 		'Services/Statuses',
+		'Services/Security',
 
 		'Services/TwoFactor',
 

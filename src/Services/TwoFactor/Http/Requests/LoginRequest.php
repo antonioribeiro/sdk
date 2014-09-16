@@ -2,8 +2,6 @@
 
 use Carbon\Carbon;
 use PragmaRX\Sdk\Core\Validation\FormRequest;
-use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidToken;
-use PragmaRX\Sdk\Services\TwoFactor\Exceptions\TokenExpired;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 use Input;

@@ -17,6 +17,5 @@ App::error(function(PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidToken $exc
 
 App::error(function(PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidAuthenticationCode $exception, $code)
 {
-	return Redirect::home()->withErrors(t('paragraphs.two-factor-invalid-auth-code'));
+	return Redirect::back()->withInput()->withErrors(t('paragraphs.two-factor-invalid-auth-code'));
 });
-

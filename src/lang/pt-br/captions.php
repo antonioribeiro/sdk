@@ -59,4 +59,6 @@ return array (
   'bio' => 'Perfil',
   'block' => 'Bloquear',
   'forgot-password' => 'Esqueci a Senha',
+  'logout' => 'Logout',
+  'security' => 'Segurança',
 );

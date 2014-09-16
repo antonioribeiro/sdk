@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Users\Data\Repositories;
 
+use Input;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidEmail;
 use PragmaRX\Sdk\Services\ContactInformation\Data\Entities\ContactInformation;
 use PragmaRX\Sdk\Services\EmailChanges\Data\Entities\EmailChange;
@@ -27,6 +28,7 @@ use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 use Rhumsaa\Uuid\Uuid;
 use Sentinel;
 use Carbon;
+use Session;
 
 class UserRepository {
 
@@ -482,6 +484,19 @@ class UserRepository {
 		{
 			throw new InvalidAuthenticationCode();
 		}
+	}
+
+	public function getUserFromTwoFactorRequest()
+	{
+		if ( ! $user = Session::get('user'))
+		{
+			if ($user_id = Input::old('user_id'))
+			{
+				$user = $this->findById($user_id);
+			}
+		}
+
+		return $user;
 	}
 
 }

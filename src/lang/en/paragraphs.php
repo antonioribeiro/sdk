@@ -69,5 +69,6 @@ return array (
   'two-factor-token-invalid' => 'This authentication token is invalid.',
   'we-sent-a-security-code' => 'Your account is protected with Two-Factor Authentication. To complete your login, please select the phone number where we should send your security code.',
   'two-factor-invalid-auth-code' => 'This authentication code is not valid, please try again.',
+  'select-a-two-factor' => 'Select a two factor authentication type',
 );
 

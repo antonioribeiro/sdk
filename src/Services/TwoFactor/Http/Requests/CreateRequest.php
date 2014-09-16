@@ -1,15 +1,15 @@
-<?php namespace PragmaRX\Sdk\Services\TwoFactor\Http\Requests;
+<?php
+
+namespace PragmaRX\Sdk\Services\TwoFactor\Http\Requests;
 
 use Carbon\Carbon;
 use PragmaRX\Sdk\Core\Validation\FormRequest;
 
 use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidRequest;
-use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidToken;
-use PragmaRX\Sdk\Services\TwoFactor\Exceptions\TokenExpired;
-
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
+
 use Session;
-use Flash;
+use Input;
 
 class CreateRequest extends FormRequest {
 
@@ -20,11 +20,12 @@ class CreateRequest extends FormRequest {
 
 	public function authorize(UserRepository $repository)
 	{
-		if ( ! $user = Session::get('user'))
+		if ( ! $user = $repository->getUserFromTwoFactorRequest($repository))
 		{
 			throw new InvalidRequest();
 		}
 
+		// Check against database to prevent spoof
 		$databaseUser = $repository->findById($user->id);
 
 		$repository->validateTwoFactorToken($databaseUser, $user->two_factor_token);

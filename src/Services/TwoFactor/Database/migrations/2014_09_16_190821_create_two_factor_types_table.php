@@ -18,24 +18,24 @@ class CreateTwoFactorTypesTable extends Migration {
 			$table->string('id', 64)->primary();
 
 			$table->string('code', 32);
-			$table->string('type', 64)->index();
+			$table->string('name', 64)->index();
 
 			$table->timestamps();
 		});
 
 		TwoFactorType::create([
 			'code' => 'email',
-			'type' => 'E-mail',
+			'name' => 'E-mail',
 		]);
 
 		TwoFactorType::create([
 			'code' => 'sms',
-			'type' => 'SMS',
+			'name' => 'SMS',
 		]);
 
 		TwoFactorType::create([
             'code' => 'g2fa',
-	        'type' => 'Google Authenticator',
+	        'name' => 'Google Authenticator',
         ]);
 	}
 
