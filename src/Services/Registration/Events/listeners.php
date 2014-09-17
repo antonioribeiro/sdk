@@ -7,4 +7,6 @@ Event::listen('PragmaRX.Sdk.Services.Registration.Events.UserRegistered', functi
 	$repo = new UserRepository();
 
 	$repo->checkAndCreateActivation($event->user);
+
+	$repo->createGoogleAuthenticatorSecret($event->user);
 });

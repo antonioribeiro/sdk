@@ -2,19 +2,26 @@
 
 namespace PragmaRX\Sdk\Services\Users\Data\Repositories;
 
+use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidEmail;
 use PragmaRX\Sdk\Services\ContactInformation\Data\Entities\ContactInformation;
 use PragmaRX\Sdk\Services\EmailChanges\Data\Entities\EmailChange;
 use PragmaRX\Sdk\Services\EmailChanges\Events\EmailChangeMessageSent;
 use PragmaRX\Sdk\Services\EmailChanges\Events\EmailChangeRequested;
+use PragmaRX\Sdk\Services\Login\Events\UserWasAuthenticated;
 use PragmaRX\Sdk\Services\Mailer\Service\Mailer;
 use PragmaRX\Sdk\Services\Profiles\Events\ProfileVisited;
 use PragmaRX\Sdk\Services\ProfilesVisits\Data\Entities\ProfileVisit;
+use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidPassword;
+
+use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 
 use Activation;
 use Flash;
 use Auth;
+use PragmaRX\Sdk\Services\TwoFactor\Google2FA;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 use Rhumsaa\Uuid\Uuid;
+use Sentinel;
 
 class UserRepository {
 
@@ -347,6 +354,73 @@ class UserRepository {
 	public function changeLocale($user, $locale)
 	{
 		$user->locale = $locale;
+
+		$user->save();
+	}
+
+	public function findByCredentials($credentials)
+	{
+		if ($user = Sentinel::findByCredentials($credentials))
+		{
+			if ( ! Sentinel::getUserRepository()->validateCredentials($user, $credentials))
+			{
+				$user = false;
+			}
+		}
+
+		return $user;
+	}
+
+	public function authenticate($credentials)
+	{
+		$user = $this->findAuthenticatableByCredentials($credentials);
+
+		try
+		{
+			Auth::authenticate($user);
+
+			$next = $user->two_factor ? 'two-factor' : false;
+
+			$user->raise(new UserWasAuthenticated($user));
+		}
+		catch (NotActivatedException $exception)
+		{
+			$this->checkActivationByEmail($credentials['email']);
+
+			throw new NotActivatedException();
+		}
+
+		return ['user' => $user, 'next' => $next];
+	}
+
+	private function findAuthenticatableByCredentials($credentials)
+	{
+		if ( ! $user = $this->findByCredentials($credentials))
+		{
+			if ($this->findByEmail($credentials['email']))
+			{
+				throw new InvalidPassword();
+			}
+
+			throw new InvalidEmail();
+		}
+
+		return $user;
+	}
+
+	public function checkTwoFactorAuthentication($user)
+	{
+		if ( ! $user->two_factor)
+		{
+			return;
+		}
+
+		dd('do whatever!');
+	}
+
+	public function createGoogleAuthenticatorSecret($user)
+	{
+		$user->google_2fa_secret_key = Google2FA::generateSecretKey(32);
 
 		$user->save();
 	}

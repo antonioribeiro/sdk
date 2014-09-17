@@ -1,5 +1,6 @@
 <?php
 
+use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidEmail;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidPassword;
 
@@ -18,4 +19,9 @@ App::error(function(UserAlreadyActivated $exception, $code)
 App::error(function(InvalidPassword $exception, $code)
 {
 	return Redirect::back()->withInput()->withErrors(t('paragraphs.invalid-password'));
+});
+
+App::error(function(InvalidEmail $exception, $code)
+{
+	return Redirect::back()->withInput()->withErrors(t('paragraphs.invalid-email'));
 });

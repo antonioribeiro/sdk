@@ -41,20 +41,27 @@ class Login extends BaseController {
 	/**
 	 * @return mixed
 	 */
-	public function store($email = null, $password = null)
+	public function store($email = null, $password = null, $remember = null)
 	{
 		$input = [
 			'email' => $email ?: Input::get('email'),
-		    'password' => $password ?: Input::get('password'),
+			'password' => $password ?: Input::get('password'),
+			'remember' => $remember ?: Input::get('remember') === 'on',
 		];
 
 		$this->signInForm->validate($input);
 
-		$this->execute(SignInCommand::class, $input);
+		$result = $this->execute(SignInCommand::class, $input);
+
+		if ($result['next'] == 'two-factor')
+		{
+			return Redirect::route('login.twofactor');
+		}
 
 		Flash::message(t('paragraphs.welcome-back'));
 
 		return Redirect::intended('/');
+
 	}
 
 	public function destroy()

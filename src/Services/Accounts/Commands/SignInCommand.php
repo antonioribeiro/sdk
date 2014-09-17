@@ -2,26 +2,19 @@
 
 class SignInCommand {
 
-	/**
-	 * @var
-	 */
 	public $email;
 
-	/**
-	 * @var
-	 */
 	public $password;
 
+	public $remember;
 
-	/**
-	 * @param $email
-	 * @param $password
-	 */
-	function __construct($email, $password)
+	function __construct($email, $password, $remember)
 	{
 		$this->email = $email;
 
 		$this->password = $password;
+
+		$this->remember = $remember;
 	}
 
 }

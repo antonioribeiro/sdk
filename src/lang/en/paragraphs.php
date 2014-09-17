@@ -14,6 +14,7 @@ return array (
   'to-reset-your-password' => 'To reset your password, complete this form',
   'reset-password-sent' => 'A reset password link was sent to your inbox. Please click that link to change your password.',
   'invalid-password' => 'This password is invalid',
+  'invalid-email' => 'User not found with this e-mail address.',
   'this-link-will-expire' => 'This link will expire in :time minutes.',
   'account-activated' => 'Your email address has been confirmed and your account activated!',
   'forgot-password' => 'If you forgot your password or want to change the current one, please type your e-mail address below and click the send button. A link to change your password will be sent to your inbox.',

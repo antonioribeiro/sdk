@@ -5,6 +5,7 @@ return array (
   'click-to-sign-in' => 'Clique para entrar.',
   'end-of-internet' => 'Este é o Fim',
   'invalid-password' => 'Esta senha é inválida.',
+  'invalid-email' => 'Nenhum usuário encontrado para este endereço de e-mail.',
   'not-an-image' => 'Este arquivo não se parece com uma imagem.',
   'profile-updated' => 'Seu perfil foi atualizado.',
   'terms-and-conditions' => 'Termos e Condições',
