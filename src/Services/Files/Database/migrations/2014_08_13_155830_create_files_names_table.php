@@ -14,7 +14,7 @@ class CreateFilesNamesTable extends Migration {
 	{
 		Schema::create('files_names', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique();
+			$table->string('id', 64)->primary();
 			$table->string('file_id', 64)->index();
 			$table->string('name')->index();
 			$table->timestamps();

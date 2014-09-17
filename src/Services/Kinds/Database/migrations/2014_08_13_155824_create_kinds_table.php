@@ -14,7 +14,7 @@ class CreateKindsTable extends Migration {
 	{
 		Schema::create('kinds', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique();
+			$table->string('id', 64)->primary();
 			$table->string('name');
 			$table->string('icon');
 			$table->timestamps();

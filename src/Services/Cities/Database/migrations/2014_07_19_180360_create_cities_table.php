@@ -14,7 +14,7 @@ class CreateCitiesTable extends Migration {
 	{
 		Schema::create('cities', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique();
+			$table->string('id', 64)->primary();
 			$table->string('name');
 			$table->string('abbreviation');
 			$table->string('state_id', 64);

@@ -14,7 +14,7 @@ class CreateContactInformationTable extends Migration {
 	{
 		Schema::create('contact_information', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique();
+			$table->string('id', 64)->primary();
 
 			$table->string('user_id', 64);
 			$table->string('kind_id', 64);

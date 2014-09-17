@@ -410,12 +410,12 @@ class UserRepository {
 
 	public function checkTwoFactorAuthentication($user)
 	{
-		if ( ! $user->two_factor)
+		if ( ! $user->two_factor_id)
 		{
 			return;
 		}
 
-		dd('do whatever!');
+
 	}
 
 	public function createGoogleAuthenticatorSecret($user)

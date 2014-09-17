@@ -24,7 +24,7 @@ class ChangeIdOnUsersTable extends Migration {
 
 		Schema::create('users', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique();
+			$table->string('id', 64)->primary();
 
 			$table->string('email');
 			$table->string('password');
@@ -38,7 +38,7 @@ class ChangeIdOnUsersTable extends Migration {
 
 		Schema::create('activations', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique();
+			$table->string('id', 64)->primary();
 
 			$table->string('user_id', 64);
 			$table->string('code');
@@ -50,7 +50,7 @@ class ChangeIdOnUsersTable extends Migration {
 
 		Schema::create('persistences', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique();
+			$table->string('id', 64)->primary();
 
 			$table->string('user_id', 64);
 			$table->string('code');
@@ -60,7 +60,7 @@ class ChangeIdOnUsersTable extends Migration {
 
 		Schema::create('reminders', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique();
+			$table->string('id', 64)->primary();
 
 			$table->string('user_id', 64);
 			$table->string('code');
@@ -72,7 +72,7 @@ class ChangeIdOnUsersTable extends Migration {
 
 		Schema::create('roles', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique();
+			$table->string('id', 64)->primary();
 
 			$table->string('slug');
 			$table->string('name');
@@ -91,7 +91,7 @@ class ChangeIdOnUsersTable extends Migration {
 
 		Schema::create('throttle', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique();
+			$table->string('id', 64)->primary();
 
 			$table->string('user_id', 64);
 			$table->string('type');

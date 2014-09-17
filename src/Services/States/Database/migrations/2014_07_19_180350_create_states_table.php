@@ -14,7 +14,7 @@ class CreateStatesTable extends Migration {
 	{
 		Schema::create('states', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique();
+			$table->string('id', 64)->primary();
 			$table->string('code', 5);
 			$table->string('name')->nullable();
 			$table->string('country_id', 64);

@@ -14,7 +14,7 @@ class CreateEmailChangesTable extends Migration {
 	{
 		Schema::create('email_changes', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique();
+			$table->string('id', 64)->primary();
 			$table->string('user_id', 64)->index();
 			$table->string('email');
 			$table->string('token')->index();

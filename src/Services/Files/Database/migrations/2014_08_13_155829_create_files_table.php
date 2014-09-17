@@ -14,7 +14,7 @@ class CreateFilesTable extends Migration {
 	{
 		Schema::create('files', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique();
+			$table->string('id', 64)->primary();
 			$table->string('directory_id', 64)->index();
 			$table->string('deep_path')->nullable();
 			$table->string('hash')->index();
