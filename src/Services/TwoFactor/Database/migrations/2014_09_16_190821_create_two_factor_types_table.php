@@ -24,9 +24,9 @@ class CreateTwoFactorTypesTable extends Migration {
 		});
 
 		TwoFactorType::create([
-			'code' => 'email',
-			'name' => 'E-mail',
-		]);
+            'code' => 'g2fa',
+	        'name' => 'Google Authenticator',
+        ]);
 
 		TwoFactorType::create([
 			'code' => 'sms',
@@ -34,9 +34,9 @@ class CreateTwoFactorTypesTable extends Migration {
 		]);
 
 		TwoFactorType::create([
-            'code' => 'g2fa',
-	        'name' => 'Google Authenticator',
-        ]);
+			'code' => 'email',
+			'name' => 'E-mail',
+		]);
 	}
 
 	/**

@@ -18,10 +18,14 @@ App::error(function(UserAlreadyActivated $exception, $code)
 
 App::error(function(InvalidPassword $exception, $code)
 {
-	return Redirect::back()->withInput()->withErrors(t('paragraphs.invalid-password'));
+	Flash::error(t('paragraphs.invalid-password'));
+
+	return Redirect::back()->withInput();
 });
 
 App::error(function(InvalidEmail $exception, $code)
 {
-	return Redirect::back()->withInput()->withErrors(t('paragraphs.invalid-email'));
+	Flash::error(t('paragraphs.invalid-email'));
+
+	return Redirect::back()->withInput();
 });

@@ -1,9 +1,9 @@
-<?php namespace PragmaRX\Sdk\Services\Accounts\Commands;
+<?php namespace PragmaRX\Sdk\Services\Security\Commands;
 
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Core\Commanding\CommandHandler;
 
-class ActivateCommandHandler extends CommandHandler {
+class ToggleGoogleCodeCommandHandler extends CommandHandler {
 
 	private $userRepository;
 
@@ -16,12 +16,11 @@ class ActivateCommandHandler extends CommandHandler {
 	 * Handle the command.
 	 *
 	 * @param object $command
-	 * @throws Exceptions\InvalidActivationToken
-	 * @return void
+	 * @return mixed
 	 */
     public function handle($command)
     {
-		$user = $this->userRepository->activate($command->email, $command->token);
+	    $user = $this->userRepository->toggleTwoFactorGoogle($command->user);
 
 	    $this->dispatchEventsFor($user);
 

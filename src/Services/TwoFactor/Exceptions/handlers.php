@@ -2,20 +2,28 @@
 
 App::error(function(PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidRequest $exception, $code)
 {
-	return Redirect::home()->withErrors(t('paragraphs.invalid-request'));
+	Flash::error(t('paragraphs.invalid-request'));
+
+	return Redirect::home();
 });
 
 App::error(function(PragmaRX\Sdk\Services\TwoFactor\Exceptions\TokenExpired $exception, $code)
 {
-	return Redirect::home()->withErrors(t('paragraphs.two-factor-token-expired'));
+	Flash::error(t('paragraphs.two-factor-token-expired'));
+
+	return Redirect::home();
 });
 
 App::error(function(PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidToken $exception, $code)
 {
-	return Redirect::home()->withErrors(t('paragraphs.two-factor-token-invalid'));
+	Flash::error(t('paragraphs.two-factor-token-invalid'));
+
+	return Redirect::home();
 });
 
 App::error(function(PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidAuthenticationCode $exception, $code)
 {
-	return Redirect::back()->withInput()->withErrors(t('paragraphs.two-factor-invalid-auth-code'));
+	Flash::error(t('paragraphs.two-factor-invalid-auth-code'));
+
+	return Redirect::back()->withInput();
 });

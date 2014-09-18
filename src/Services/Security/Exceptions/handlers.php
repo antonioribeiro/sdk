@@ -1,27 +1,10 @@
 <?php
 
-use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidEmail;
-use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
-use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidPassword;
+use PragmaRX\Sdk\Services\Security\Exceptions\InvalidCode;
 
-App::error(function(UserAlreadyActivated $exception, $code)
+App::error(function(InvalidCode $exception, $code)
 {
-	return Redirect::route('message')
-		->with('title', t('titles.account-already-activated'))
-		->with('message', t('paragraphs.account-already-activated'))
-		->with('buttons', [[
-			                   'caption' => t('captions.go-to-login-page'),
-			                   'url' => route('login')
-		                   ]])
-		->withInput();
-});
+	Flash::error(t('paragraphs.invalid-code'));
 
-App::error(function(InvalidPassword $exception, $code)
-{
-	return Redirect::back()->withInput()->withErrors(t('paragraphs.invalid-password'));
-});
-
-App::error(function(InvalidEmail $exception, $code)
-{
-	return Redirect::back()->withInput()->withErrors(t('paragraphs.invalid-email'));
+	return Redirect::back()->withInput();
 });

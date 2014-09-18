@@ -14,13 +14,23 @@ class AddTwoFactorToUsersTable extends Migration {
 	{
 		Schema::table('users', function(Blueprint $table)
 		{
-			$table->string('two_factor_type_id', 64)->nullable();
+			$table->string('two_factor_recovery_code_a', 64)->nullable()->index();
+			$table->string('two_factor_recovery_code_b', 64)->nullable()->index();
 
-			$table->string('two_factor_token', 64)->nullable()->index();
+			$table->boolean('two_factor_google_enabled')->default(false);
+			$table->string('two_factor_google_token', 64)->nullable()->index();
+			$table->timestamp('two_factor_google_token_created_at')->nullable();
+			$table->string('two_factor_google_secret_key',32)->nullable();
 
-			$table->timestamp('two_factor_token_created_at')->nullable();
+			$table->boolean('two_factor_sms_enabled')->default(false);
+			$table->string('two_factor_sms_token', 16)->nullable()->index();
+			$table->timestamp('two_factor_sms_token_created_at')->nullable();
+			$table->string('two_factor_sms_secret_key',32)->nullable();
 
-			$table->string('google_2fa_secret_key',32)->nullable();
+			$table->boolean('two_factor_email_enabled')->default(false);
+			$table->string('two_factor_email_token', 16)->nullable()->index();
+			$table->timestamp('two_factor_email_token_created_at')->nullable();
+			$table->string('two_factor_email_secret_key',32)->nullable();
 		});
 	}
 

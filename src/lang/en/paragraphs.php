@@ -70,5 +70,8 @@ return array (
   'we-sent-a-security-code' => 'Your account is protected with Two-Factor Authentication. To complete your login, please select the phone number where we should send your security code.',
   'two-factor-invalid-auth-code' => 'This authentication code is not valid, please try again.',
   'select-a-two-factor' => 'Select a two factor authentication type',
+  'two-factor-use-your-mobile-app' => 'Open your mobile app and use it to read this QR Code, then you just have to type a code in the box below to enable/disable Two Factor Authentication using Google Authenticator.',
+  'invalid-code' => 'Invalid code.',
+  'two-factor-google-disabled' => 'Your Google Two-Factor Authentication was disabled',
+  'two-factor-google-enabled' => 'Your Google Two-Factor Authentication was enabled',
 );
-

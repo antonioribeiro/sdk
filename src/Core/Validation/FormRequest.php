@@ -45,7 +45,19 @@ class FormRequest extends IlluminateFormRequest {
 	{
 		$this->mergeRulesAndRouteParameters();
 
-		return parent::validate();
+		if (method_exists($this, 'beforeValidate'))
+		{
+			$this->container->call([$this, 'beforeValidate']);
+		}
+
+		$result = parent::validate();
+
+		if (method_exists($this, 'afterValidate'))
+		{
+			$this->container->call([$this, 'afterValidate']);
+		}
+
+		return $result;
 	}
 
 	private function mergeRulesAndRouteParameters()

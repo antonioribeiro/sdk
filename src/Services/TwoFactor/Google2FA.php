@@ -174,11 +174,11 @@ class Google2FA {
 		return preg_replace('/[^'.static::VALID_FOR_B32.']/', '', $string);
 	}
 
-	public function getQRCodeGoogleUrl($name, $secret)
+	public static function getQRCodeGoogleUrl($company, $holder, $secret)
 	{
-		$urlencoded = urlencode('otpauth://totp/'.$name.'?secret='.$secret.'');
+		$url = 'otpauth://totp/'.$company.':'.$holder.'?secret='.$secret.'&issuer='.$company.'';
 
-		return 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl='.$urlencoded.'';
+		return 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl='.urlencode($url).'';
 	}
 
 }

@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Users\Data\Entities;
 
+use Config;
 use PragmaRX\Sdk\Core\Presenter;
 use Avatar;
+use PragmaRX\Sdk\Services\TwoFactor\Google2FA;
 
 class UserPresenter extends Presenter {
 
@@ -91,5 +93,10 @@ class UserPresenter extends Presenter {
 	public function position()
 	{
 		return 'CEO, PragmaRX';
+	}
+
+	public function google2faimage()
+	{
+		return Google2FA::getQRCodeGoogleUrl(Config::get('app.name'), $this->email, $this->two_factor_google_secret_key);
 	}
 }

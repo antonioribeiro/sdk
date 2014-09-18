@@ -384,7 +384,7 @@ class UserRepository {
 
 		try
 		{
-			$next = $user->two_factor_type_id ? 'two-factor' : false;
+			$next = $this->isTwoFactorEnabled($user) ? 'two-factor' : false;
 
 			// Will only login if there is no two factor auth involved
 
@@ -433,9 +433,16 @@ class UserRepository {
 		return 'two-factor';
 	}
 
-	public function createGoogleAuthenticatorSecret($user)
+	public function create2FASecrets($user)
 	{
-		$user->google_2fa_secret_key = Google2FA::generateSecretKey(32);
+		$user->two_factor_recovery_code_a = Uuid::uuid4();
+		$user->two_factor_recovery_code_b = Uuid::uuid4();
+
+		$user->google_two_factor_secret_key = Google2FA::generateSecretKey(32);
+
+		$user->two_factor_sms_secret_key = Uuid::uuid4();
+
+		$user->two_factor_email_secret_key = Uuid::uuid4();
 
 		$user->save();
 	}
@@ -480,7 +487,7 @@ class UserRepository {
 
 	private function checkAuthenticationCode($user, $authentication_code)
 	{
-		if ( ! Google2FA::verifyKey($user->google_2fa_secret_key, $authentication_code))
+		if ( ! Google2FA::verifyKey($user->two_factor_google_secret_key, $authentication_code))
 		{
 			throw new InvalidAuthenticationCode();
 		}
@@ -497,6 +504,27 @@ class UserRepository {
 		}
 
 		return $user;
+	}
+
+	public function verifyGoogle2FA($user, $code)
+	{
+		return Google2FA::verifyKey($user->two_factor_google_secret_key, $code);
+	}
+
+	public function toggleTwoFactorGoogle($user)
+	{
+		$user->two_factor_google_enabled = ! $user->two_factor_google_enabled;
+
+		$user->save();
+
+		return $user;
+	}
+
+	private function isTwoFactorEnabled($user)
+	{
+		return $user->two_factor_google_enabled ||
+				$user->two_factor_sms_enabled   ||
+				$user->two_factor_email_enabled;
 	}
 
 }

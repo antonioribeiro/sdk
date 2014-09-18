@@ -64,4 +64,8 @@ return array (
   'logout' => 'Logout',
   'security' => 'Security',
   'disabled' => 'Disabled',
+  'google-authenticator' => 'Google Authenticator',
+  'turn-on' => 'Turn On',
+  'turn-off' => 'Turn Off',
+  'code' => 'Code',
 );
