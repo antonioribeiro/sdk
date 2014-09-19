@@ -72,6 +72,6 @@ return array (
   'select-a-two-factor' => 'Select a two factor authentication type',
   'two-factor-use-your-mobile-app' => 'Open your mobile app and use it to read this QR Code, then you just have to type a code in the box below to enable/disable Two Factor Authentication using Google Authenticator.',
   'invalid-code' => 'Invalid code.',
-  'two-factor-google-disabled' => 'Your Google Two-Factor Authentication was disabled',
-  'two-factor-google-enabled' => 'Your Google Two-Factor Authentication was enabled',
+  'two-factor-google-disabled' => 'Your Google Two-Factor Authentication was disabled.',
+  'two-factor-google-enabled' => 'Your Google Two-Factor Authentication was enabled.',
 );

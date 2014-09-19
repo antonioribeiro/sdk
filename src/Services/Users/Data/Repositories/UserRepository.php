@@ -438,7 +438,7 @@ class UserRepository {
 		$user->two_factor_recovery_code_a = Uuid::uuid4();
 		$user->two_factor_recovery_code_b = Uuid::uuid4();
 
-		$user->google_two_factor_secret_key = Google2FA::generateSecretKey(32);
+		$user->two_factor_google_secret_key = Google2FA::generateSecretKey(32);
 
 		$user->two_factor_sms_secret_key = Uuid::uuid4();
 

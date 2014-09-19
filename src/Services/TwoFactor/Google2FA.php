@@ -126,6 +126,15 @@ class Google2FA {
 		return str_pad(self::oathTruncate($hash), self::otpLength, '0', STR_PAD_LEFT);
 	}
 
+	public static function getCurrentOtp($initalizationKey)
+	{
+		$timestamp = Google2FA::getTimestamp();
+
+		$secretKey = Google2FA::base32Decode($initalizationKey);
+
+		return Google2FA::oathHotp($secretKey, $timestamp);
+	}
+
 	/**
 	 * Verifys a user inputted key against the current timestamp. Checks $window
 	 * keys either side of the timestamp.
