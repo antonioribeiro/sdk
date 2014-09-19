@@ -20,7 +20,7 @@ class LoginRequest extends FormRequest {
 	{
 		$user = $repository->findById(Input::get('user_id'));
 
-		$repository->validateTwoFactorToken($user, Input::get('two_factor_token'));
+		$repository->validateTwoFactorToken($user, 'google', Input::get('two_factor_google_token'));
 
 		return true;
 	}

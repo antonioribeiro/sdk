@@ -4,13 +4,21 @@ App::error(function(Laracasts\Validation\FormValidationException $exception, $co
 {
 	Flash::errors($exception->getErrors());
 
-	return \PragmaRX\Sdk\Core\Redirect::back()->withInput();
+	return Redirect::back()->withInput();
 });
 
 App::error(function(Illuminate\Session\TokenMismatchException $exception, $code)
 {
 	Flash::errors(t('paragraphs.token-mismatch'));
 
-	return \PragmaRX\Sdk\Core\Redirect::back()->withInput();
+	return Redirect::back()->withInput();
 });
 
+App::error(function(Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException $exception, $code)
+{
+	// Should this be a 404?
+
+	Flash::errors(t('paragraphs.invalid-request'));
+
+	return Redirect::home();
+});

@@ -391,7 +391,7 @@ class UserRepository {
 			Auth::authenticate(
 				$user,
 				$credentials['remember'],
-				! $user->two_factor_type_id
+				! $this->isTwoFactorEnabled($user)
 			);
 
 			$user->raise(new UserWasAuthenticated($user));
@@ -423,7 +423,7 @@ class UserRepository {
 
 	public function checkTwoFactorAuthentication($user)
 	{
-		if ( ! $user->two_factor_type_id)
+		if ( ! $this->isTwoFactorEnabled($user))
 		{
 			return;
 		}
@@ -449,40 +449,58 @@ class UserRepository {
 
 	private function createTwoFactorTokenForuser($user)
 	{
-		$user->two_factor_token = (string) Uuid::uuid4();
+		$user->two_factor_google_token = (string) Uuid::uuid4();
+		$user->two_factor_google_token_created_at = \Carbon\Carbon::now();
 
-		$user->two_factor_token_created_at = \Carbon\Carbon::now();
+		$user->two_factor_sms_token = (string) Uuid::uuid4();
+		$user->two_factor_sms_token_created_at = \Carbon\Carbon::now();
+
+		$user->two_factor_email_token = (string) Uuid::uuid4();
+		$user->two_factor_email_token_created_at = \Carbon\Carbon::now();
 
 		$user->save();
 	}
 
-	public function authenticateViaTwoFactor($user_id, $two_factor_token, $authentication_code)
+	public function authenticateViaTwoFactor(
+		$user_id,
+		$two_factor_google_token,
+		$two_factor_sms_token,
+		$two_factor_email_token,
+		$authentication_code
+	)
 	{
 		$user = $this->findById($user_id);
 
-		$this->validateTwoFactorToken($user, $two_factor_token);
+		$this->validateTwoFactorToken($user, 'google', $two_factor_google_token);
 
 		$this->checkAuthenticationCode($user, $authentication_code);
 
 		Sentinel::login($user);
+
+		return $user;
 	}
 
-	public function validateTwoFactorToken($user, $two_factor_token)
+	public function validateTwoFactorToken($user, $kind, $two_factor_token)
 	{
+		$tokenName = sprintf('two_factor_%s_token', $kind);
+		$tokenDate = $tokenName . '_created_at';
+
 		if ( ! $user)
 		{
 			throw new InvalidRequest();
 		}
 
-		if ($user->two_factor_token !== $two_factor_token)
+		if ($user->{$tokenName} !== $two_factor_token)
 		{
 			throw new InvalidToken();
 		}
 
-		if (Carbon::now()->diffInMinutes(Carbon::parse($user->two_factor_token_created_at)) > 10)
+		if (Carbon::now()->diffInMinutes(Carbon::parse($user->{$tokenDate})) > 10)
 		{
 			throw new TokenExpired();
 		}
+
+		return true;
 	}
 
 	private function checkAuthenticationCode($user, $authentication_code)
@@ -491,6 +509,8 @@ class UserRepository {
 		{
 			throw new InvalidAuthenticationCode();
 		}
+
+		return true;
 	}
 
 	public function getUserFromTwoFactorRequest()

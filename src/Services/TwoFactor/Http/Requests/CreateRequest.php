@@ -28,7 +28,7 @@ class CreateRequest extends FormRequest {
 		// Check against database to prevent spoof
 		$databaseUser = $repository->findById($user->id);
 
-		$repository->validateTwoFactorToken($databaseUser, $user->two_factor_token);
+		$repository->validateTwoFactorToken($databaseUser, 'google', $user->two_factor_google_token);
 
 		return true;
 	}

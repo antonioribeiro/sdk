@@ -22,7 +22,9 @@ class SignInCommandHandler extends CommandHandler {
     {
 	    $user = $this->userRepository->authenticateViaTwoFactor(
 		    $command->user_id,
-		    $command->two_factor_token,
+		    $command->two_factor_google_token,
+		    $command->two_factor_sms_token,
+		    $command->two_factor_email_token,
 		    $command->authentication_code
 	    );
 

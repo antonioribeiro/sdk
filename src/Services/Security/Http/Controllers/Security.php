@@ -15,11 +15,7 @@ class Security extends BaseController {
 
 	public function edit()
 	{
-		$selectTwoFactor = TwoFactorType::lists('name', 'id');
-
-		return View::make('security.edit')
-				->with('user', Auth::user())
-				->with('selectTwoFactor', $selectTwoFactor);
+		return View::make('security.edit')->with('user', Auth::user());
 	}
 
 	public function google(GoogleCodeRequest $request)
