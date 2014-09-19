@@ -463,10 +463,11 @@ class UserRepository {
 
 	public function authenticateViaTwoFactor(
 		$user_id,
+		$remember,
+		$authentication_code,
 		$two_factor_google_token,
 		$two_factor_sms_token,
-		$two_factor_email_token,
-		$authentication_code
+		$two_factor_email_token
 	)
 	{
 		$user = $this->findById($user_id);
@@ -475,7 +476,7 @@ class UserRepository {
 
 		$this->checkAuthenticationCode($user, $authentication_code);
 
-		Sentinel::login($user);
+		Sentinel::login($user, $remember);
 
 		return $user;
 	}

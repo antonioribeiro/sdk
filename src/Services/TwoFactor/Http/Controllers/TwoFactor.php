@@ -12,6 +12,7 @@ use Session;
 use View;
 use Flash;
 use Redirect;
+use Input;
 
 class TwoFactor extends BaseController {
 
@@ -22,7 +23,9 @@ class TwoFactor extends BaseController {
 	{
 		$user = $repository->getUserFromTwoFactorRequest($repository);
 
-		return View::make('twoFactor.create')->with('user', $user);
+		return View::make('twoFactor.create')
+				->with('user', $user)
+				->with('remember', Input::old('remember'));
 	}
 
 	public function store(LoginRequest $request)

@@ -55,7 +55,7 @@ class Login extends BaseController {
 
 		if ($result['next'] == 'two-factor')
 		{
-			return Redirect::route('login.twofactor')->with('user', $result['user']);
+			return Redirect::route('login.twofactor')->with('user', $result['user'])->withInput();
 		}
 
 		Flash::message(t('paragraphs.welcome-back'));
