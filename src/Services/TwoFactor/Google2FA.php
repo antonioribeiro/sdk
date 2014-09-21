@@ -28,40 +28,48 @@ use Exception;
 
 class Google2FA {
 
-	const keyRegeneration 	= 30;	// Interval between key regeneration
-	const otpLength		= 6;	// Length of the Token generated
+	// Interval between key regeneration
+	const keyRegeneration = 30;
+
+	// Length of the Token generated
+	const otpLength	= 6;
+
 	const VALID_FOR_B32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 
-	private static $lut = array(	// Lookup needed for Base32 encoding
-	                                "A" => 0,	"B" => 1,
-	                                "C" => 2,	"D" => 3,
-	                                "E" => 4,	"F" => 5,
-	                                "G" => 6,	"H" => 7,
-	                                "I" => 8,	"J" => 9,
-	                                "K" => 10,	"L" => 11,
-	                                "M" => 12,	"N" => 13,
-	                                "O" => 14,	"P" => 15,
-	                                "Q" => 16,	"R" => 17,
-	                                "S" => 18,	"T" => 19,
-	                                "U" => 20,	"V" => 21,
-	                                "W" => 22,	"X" => 23,
-	                                "Y" => 24,	"Z" => 25,
-	                                "2" => 26,	"3" => 27,
-	                                "4" => 28,	"5" => 29,
-	                                "6" => 30,	"7" => 31
+	// Lookup needed for Base32 encoding
+	private static $lut = array(
+        "A" => 0,	"B" => 1,
+        "C" => 2,	"D" => 3,
+        "E" => 4,	"F" => 5,
+        "G" => 6,	"H" => 7,
+        "I" => 8,	"J" => 9,
+        "K" => 10,	"L" => 11,
+        "M" => 12,	"N" => 13,
+        "O" => 14,	"P" => 15,
+        "Q" => 16,	"R" => 17,
+        "S" => 18,	"T" => 19,
+        "U" => 20,	"V" => 21,
+        "W" => 22,	"X" => 23,
+        "Y" => 24,	"Z" => 25,
+        "2" => 26,	"3" => 27,
+        "4" => 28,	"5" => 29,
+        "6" => 30,	"7" => 31
 	);
 
 	/**
 	 * Generates a 16 digit secret key in base32 format
 	 * @return string
 	 **/
-	public static function generateSecretKey($length = 16)
+	public function generateSecretKey($length = 16)
 	{
 		$b32 = "234567QWERTYUIOPASDFGHJKLZXCVBNM";
+
 		$s = "";
 
 		for ($i = 0; $i < $length; $i++)
+		{
 			$s .= $b32[rand(0,31)];
+		}
 
 		return $s;
 	}
@@ -71,34 +79,38 @@ class Google2FA {
 	 * period.
 	 * @return integer
 	 **/
-	public static function getTimestamp() {
+	public function getTimestamp()
+	{
 		return floor(microtime(true)/self::keyRegeneration);
 	}
 
 	/**
 	 * Decodes a base32 string into a binary string.
 	 **/
-	public static function base32Decode($b32)
+	public function base32Decode($b32)
 	{
 		$b32 = strtoupper($b32);
 
 		$b32 = static::removeInvalidChars($b32);
 
 		if (!preg_match('/^['.static::VALID_FOR_B32.']+$/', $b32, $match))
+		{
 			throw new Exception('Invalid characters in the base32 string.');
+		}
 
 		$l 	= strlen($b32);
 		$n	= 0;
 		$j	= 0;
 		$binary = "";
 
-		for ($i = 0; $i < $l; $i++) {
-
+		for ($i = 0; $i < $l; $i++)
+		{
 			$n = $n << 5; 				// Move buffer left by 5 to make room
 			$n = $n + self::$lut[$b32[$i]]; 	// Add value into buffer
 			$j = $j + 5;				// Keep track of number of bits in buffer
 
-			if ($j >= 8) {
+			if ($j >= 8)
+			{
 				$j = $j - 8;
 				$binary .= chr(($n & (0xFF << $j)) >> $j);
 			}
@@ -113,20 +125,25 @@ class Google2FA {
 	 *
 	 * @param binary $key - Secret key in binary form.
 	 * @param integer $counter - Timestamp as returned by getTimestamp.
+	 * @throws Exception
 	 * @return string
-	 **/
-	public static function oathHotp($key, $counter)
+	 */
+	public function oathHotp($key, $counter)
 	{
 		if (strlen($key) < 8)
+		{
 			throw new Exception('Secret key is too short. Must be at least 16 base 32 characters');
+		}
 
-		$bin_counter = pack('N*', 0) . pack('N*', $counter);		// Counter must be 64-bit int
-		$hash 	 = hash_hmac ('sha1', $bin_counter, $key, true);
+		// Counter must be 64-bit int
+		$bin_counter = pack('N*', 0) . pack('N*', $counter);
+
+		$hash = hash_hmac ('sha1', $bin_counter, $key, true);
 
 		return str_pad(self::oathTruncate($hash), self::otpLength, '0', STR_PAD_LEFT);
 	}
 
-	public static function getCurrentOtp($initalizationKey)
+	public function getCurrentOtp($initalizationKey)
 	{
 		$timestamp = Google2FA::getTimestamp();
 
@@ -136,7 +153,7 @@ class Google2FA {
 	}
 
 	/**
-	 * Verifys a user inputted key against the current timestamp. Checks $window
+	 * Verifies a user inputted key against the current timestamp. Checks $window
 	 * keys either side of the timestamp.
 	 *
 	 * @param string $b32seed
@@ -145,8 +162,8 @@ class Google2FA {
 	 * @param boolean $useTimeStamp
 	 * @return boolean
 	 **/
-	public static function verifyKey($b32seed, $key, $window = 4, $useTimeStamp = true) {
-
+	public function verifyKey($b32seed, $key, $window = 4, $useTimeStamp = true)
+	{
 		$timeStamp = self::getTimestamp();
 
 		if ($useTimeStamp !== true) $timeStamp = (int)$useTimeStamp;
@@ -154,11 +171,14 @@ class Google2FA {
 		$binarySeed = self::base32Decode($b32seed);
 
 		for ($ts = $timeStamp - $window; $ts <= $timeStamp + $window; $ts++)
+		{
 			if (self::oathHotp($binarySeed, $ts) == $key)
+			{
 				return true;
+			}
+		}
 
 		return false;
-
 	}
 
 	/**
@@ -166,7 +186,7 @@ class Google2FA {
 	 * @param binary $hash
 	 * @return integer
 	 **/
-	public static function oathTruncate($hash)
+	public function oathTruncate($hash)
 	{
 		$offset = ord($hash[19]) & 0xf;
 
@@ -178,12 +198,26 @@ class Google2FA {
 		) % pow(10, self::otpLength);
 	}
 
+	/**
+	 * Remove invalid chars from a base 32 string.
+	 *
+	 * @param $string
+	 * @return mixed
+	 */
 	private static function removeInvalidChars($string)
 	{
 		return preg_replace('/[^'.static::VALID_FOR_B32.']/', '', $string);
 	}
 
-	public static function getQRCodeGoogleUrl($company, $holder, $secret)
+	/**
+	 * Creates a Google QR code url.
+	 *
+	 * @param $company
+	 * @param $holder
+	 * @param $secret
+	 * @return string
+	 */
+	public function getQRCodeGoogleUrl($company, $holder, $secret)
 	{
 		$url = 'otpauth://totp/'.$company.':'.$holder.'?secret='.$secret.'&issuer='.$company.'';
 
@@ -191,7 +225,7 @@ class Google2FA {
 	}
 
 }
-//
+
 //$InitalizationKey = "PEHMPSDNLXIOG65U";					        // Set the inital key
 //
 //$TimeStamp	  = Google2FA::getTimestamp();

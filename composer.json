@@ -23,6 +23,7 @@
         "pragmarx/firewall": "0.2.*|dev-master",
         "pragmarx/glottos": "*|dev-master",
         "pragmarx/zipcode": "1.0.*|dev-master",
+        "pragmarx/google2fa": "dev-master",
         "guzzlehttp/guzzle": "~4.0",
         "cartalyst/sentinel": "*",
         "cartalyst/support": "*",
@@ -32,7 +33,8 @@
         "laracasts/commander": "1.*",
         "laracasts/presenter": "0.*",
         "jenssegers/date": "2.0.*",
-        "pda/pheanstalk": "*"
+        "pda/pheanstalk": "*",
+        "aloha/twilio": "1.0.*"
     },
 
     "require-dev": {

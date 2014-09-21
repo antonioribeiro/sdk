@@ -64,6 +64,7 @@ return [
 
 		'Services/Registration',
 
+		'Services/Sms',
 		'Services/States',
 		'Services/Statuses',
 		'Services/Security',
@@ -82,6 +83,24 @@ return [
 	],
 
 	'packages' => [
+
+		[
+			'name' => 'pragmarx/google2fa',
+			'enabled' => true,
+			'serviceProvider' => 'PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider',
+			'facades' => [
+				'Google2FA' => 'PragmaRX\Google2FA\Services\Sms\Service\Facade',
+			]
+		],
+
+		[
+			'name' => 'pragmarx/sms',
+			'enabled' => true,
+			'serviceProvider' => 'PragmaRX\Sdk\Services\Sms\Service\Provider',
+			'facades' => [
+				'Sms' => 'PragmaRX\Sdk\Services\Sms\Service\Facade',
+			]
+		],
 
 		[
 			'name' => 'pragmarx/language',
@@ -243,6 +262,15 @@ return [
 		    'facades' => [
 			    'Carbon' => 'Jenssegers\Date\Date',
 		    ]
+		],
+
+		[
+			'name' => 'aloha/twilio',
+			'enabled' => true,
+			'serviceProvider' => 'Aloha\Twilio\TwilioServiceProvider',
+			'facades' => [
+				'Twilio' => 'Aloha\Twilio\Facades\Twilio',
+			]
 		],
 
 	]
