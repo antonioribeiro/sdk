@@ -2,7 +2,9 @@
 
 namespace PragmaRX\Sdk\Services\Users\Data\Repositories;
 
-use Input;
+use Rhumsaa\Uuid\Uuid;
+use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
+
 use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidEmail;
 use PragmaRX\Sdk\Services\ContactInformation\Data\Entities\ContactInformation;
 use PragmaRX\Sdk\Services\EmailChanges\Data\Entities\EmailChange;
@@ -14,21 +16,20 @@ use PragmaRX\Sdk\Services\Profiles\Events\ProfileVisited;
 use PragmaRX\Sdk\Services\ProfilesVisits\Data\Entities\ProfileVisit;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidPassword;
 
-use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
-
-use Activation;
-use Flash;
-use Auth;
 use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidAuthenticationCode;
 use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidRequest;
 use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidToken;
 use PragmaRX\Sdk\Services\TwoFactor\Exceptions\TokenExpired;
-use PragmaRX\Sdk\Services\TwoFactor\Google2FA;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
-use Rhumsaa\Uuid\Uuid;
+
+use Input;
+use Activation;
+use Flash;
+use Auth;
 use Sentinel;
 use Carbon;
 use Session;
+use Google2FA;
 
 class UserRepository {
 

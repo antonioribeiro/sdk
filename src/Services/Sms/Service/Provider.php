@@ -29,9 +29,9 @@ class Provider extends ServiceProvider {
 
 	public function boot()
 	{
-		$this->app['config']->package('aloha/twilio', base_path().'/config/packages/aloha/twilio', 'aloha/twilio');
-
-		$this->app['config']->set('aloha/twilio::twilio.sid', env())
+//		$this->app['config']->package('aloha/twilio', base_path().'/config/packages/aloha/twilio', 'aloha/twilio');
+//
+//		$this->app['config']->set('aloha/twilio::twilio.sid', env());
 	}
 
 	/**

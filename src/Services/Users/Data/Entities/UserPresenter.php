@@ -5,7 +5,7 @@ namespace PragmaRX\Sdk\Services\Users\Data\Entities;
 use Config;
 use PragmaRX\Sdk\Core\Presenter;
 use Avatar;
-use PragmaRX\Sdk\Services\TwoFactor\Google2FA;
+use Google2FA;
 
 class UserPresenter extends Presenter {
 

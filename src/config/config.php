@@ -89,7 +89,7 @@ return [
 			'enabled' => true,
 			'serviceProvider' => 'PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider',
 			'facades' => [
-				'Google2FA' => 'PragmaRX\Google2FA\Services\Sms\Service\Facade',
+				'Google2FA' => 'PragmaRX\Google2FA\Vendor\Laravel\Facade',
 			]
 		],
 
