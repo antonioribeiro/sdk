@@ -17,10 +17,7 @@ class GoogleCodeRequest extends FormRequest {
 
 	public function afterValidate(UserRepository $repository)
 	{
-		if ( ! $repository->verifyGoogle2FA(Auth::user(), $this->get('google_authenticator_code')))
-		{
-			throw new InvalidCode();
-		}
+		$repository->verifyGoogleCode(Auth::user(), $this->get('google_authenticator_code'));
 	}
 
 }

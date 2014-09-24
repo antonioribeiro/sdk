@@ -514,7 +514,7 @@ class UserRepository {
 		return $this->checkTwoFactorToken($user, $kind, $token, true, false);
 	}
 
-	private function verifyGoogleCode($user, $authentication_code, $throwException = true)
+	public function verifyGoogleCode($user, $authentication_code, $throwException = true)
 	{
 		if ( ! Google2FA::verifyKey($user->two_factor_google_secret_key, $authentication_code))
 		{

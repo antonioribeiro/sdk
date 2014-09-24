@@ -3,7 +3,6 @@
 namespace PragmaRX\Sdk\Core\Validation;
 
 use Illuminate\Foundation\Http\FormRequest as IlluminateFormRequest;
-use Illuminate\Validation\Factory as ValidationFactory;
 
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
@@ -36,9 +35,18 @@ class FormRequest extends IlluminateFormRequest {
 
 	public function response(array $errors)
 	{
-		Flash::errors($errors);
+		if ($this->ajax())
+		{
+			return new JsonResponse($errors, 422);
+		}
+		else
+		{
+			Flash::errors($errors);
 
-		return parent::response($errors);
+			return $this->redirector->to($this->getRedirectUrl())
+					->withInput($this->except($this->dontFlash))
+					->withErrors($errors);
+		}
 	}
 
 	public function validate()
