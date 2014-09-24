@@ -33,12 +33,20 @@ class Flash {
 
 		foreach($messages as $message)
 		{
-			$result[$kind.$message] = [
-				'kind' => $this->getKind($kind),
-				'icon' => $this->getIcon($kind),
-				'message' => $message,
-				'title' => $title,
-			];
+			if ( ! is_array($message))
+			{
+				$message = [$message];
+			}
+
+			foreach($message as $item)
+			{
+				$result[$kind.$item] = [
+					'kind' => $this->getKind($kind),
+					'icon' => $this->getIcon($kind),
+					'message' => $item,
+					'title' => $title,
+				];
+			}
 		}
 
 		Session::put($this->arrayName, $result);

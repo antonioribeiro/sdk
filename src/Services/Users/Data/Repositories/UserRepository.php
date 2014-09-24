@@ -2,6 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Users\Data\Repositories;
 
+use PragmaRX\Sdk\Services\Security\Events\TwoFactorEmailDisableRequested;
+use PragmaRX\Sdk\Services\Security\Events\TwoFactorEmailEnableRequested;
+use PragmaRX\Sdk\Services\Security\Exceptions\ExpiredToken;
+use PragmaRX\Sdk\Services\Security\Exceptions\InvalidCode;
 use Rhumsaa\Uuid\Uuid;
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 
@@ -32,6 +36,12 @@ use Session;
 use Google2FA;
 
 class UserRepository {
+
+	const TOKEN_LIFETIME = 10;
+
+	private $secretCodes = [];
+
+	private $twoFactorTypes = ['google', 'email', 'sms'];
 
 	/**
 	 * Save a user.
@@ -345,7 +355,7 @@ class UserRepository {
 		Mailer::send(
 			'emails.users.change-email-current-address',
 			$data['user'],
-			t('captions.authorize-email-change'),
+			t('paragraphs.authorize-email-change'),
 			$data
 		);
 
@@ -431,6 +441,10 @@ class UserRepository {
 
 		$this->createTwoFactorTokenForuser($user);
 
+		$this->sendTwoFactorEmailToken($user);
+
+		$this->sendTwoFactorSmsToken($user);
+
 		return 'two-factor';
 	}
 
@@ -441,10 +455,6 @@ class UserRepository {
 
 		$user->two_factor_google_secret_key = Google2FA::generateSecretKey(32);
 
-		$user->two_factor_sms_secret_key = Uuid::uuid4();
-
-		$user->two_factor_email_secret_key = Uuid::uuid4();
-
 		$user->save();
 	}
 
@@ -453,9 +463,11 @@ class UserRepository {
 		$user->two_factor_google_token = (string) Uuid::uuid4();
 		$user->two_factor_google_token_created_at = \Carbon\Carbon::now();
 
+		$user->two_factor_sms_secret_key = $this->createTypableSecret();
 		$user->two_factor_sms_token = (string) Uuid::uuid4();
 		$user->two_factor_sms_token_created_at = \Carbon\Carbon::now();
 
+		$user->two_factor_email_secret_key = $this->createTypableSecret();
 		$user->two_factor_email_token = (string) Uuid::uuid4();
 		$user->two_factor_email_token_created_at = \Carbon\Carbon::now();
 
@@ -473,43 +485,45 @@ class UserRepository {
 	{
 		$user = $this->findById($user_id);
 
-		$this->validateTwoFactorToken($user, 'google', $two_factor_google_token);
+		$this->validateTwoFactorTokens(
+			$user,
+			$two_factor_google_token,
+			$two_factor_sms_token,
+			$two_factor_email_token
+		);
 
-		$this->checkAuthenticationCode($user, $authentication_code);
+		if ( ! $this->validateTwoFactorCode($user, $authentication_code))
+		{
+			throw new InvalidCode();
+		}
+
+		$this->invalidateTwoFactorTokens($user);
 
 		Sentinel::login($user, $remember);
 
 		return $user;
 	}
 
-	public function validateTwoFactorToken($user, $kind, $two_factor_token)
+	public function validateTwoFactorToken($user, $kind, $token)
 	{
-		$tokenName = sprintf('two_factor_%s_token', $kind);
-		$tokenDate = $tokenName . '_created_at';
-
 		if ( ! $user)
 		{
 			throw new InvalidRequest();
 		}
 
-		if ($user->{$tokenName} !== $two_factor_token)
-		{
-			throw new InvalidToken();
-		}
-
-		if (Carbon::now()->diffInMinutes(Carbon::parse($user->{$tokenDate})) > 10)
-		{
-			throw new TokenExpired();
-		}
-
-		return true;
+		return $this->checkTwoFactorToken($user, $kind, $token, true, false);
 	}
 
-	private function checkAuthenticationCode($user, $authentication_code)
+	private function verifyGoogleCode($user, $authentication_code, $throwException = true)
 	{
 		if ( ! Google2FA::verifyKey($user->two_factor_google_secret_key, $authentication_code))
 		{
-			throw new InvalidAuthenticationCode();
+			if ($throwException)
+			{
+				throw new InvalidAuthenticationCode();
+			}
+
+			return false;
 		}
 
 		return true;
@@ -528,11 +542,6 @@ class UserRepository {
 		return $user;
 	}
 
-	public function verifyGoogle2FA($user, $code)
-	{
-		return Google2FA::verifyKey($user->two_factor_google_secret_key, $code);
-	}
-
 	public function toggleTwoFactorGoogle($user)
 	{
 		$user->two_factor_google_enabled = ! $user->two_factor_google_enabled;
@@ -547,6 +556,149 @@ class UserRepository {
 		return $user->two_factor_google_enabled ||
 				$user->two_factor_sms_enabled   ||
 				$user->two_factor_email_enabled;
+	}
+
+	public function requestToggleTwoFactorEmail($user)
+	{
+		$user = $this->createTwoFactorEmailToken($user);
+
+		if ($user->two_factor_email_enabled)
+		{
+			$user->raise(new TwoFactorEmailEnableRequested($user));
+		}
+		else
+		{
+			$user->raise(new TwoFactorEmailDisableRequested($user));
+		}
+
+		return $user;
+	}
+
+	private function createTwoFactorEmailToken($user)
+	{
+		$token = $this->createTypableSecret();
+
+		$user->two_factor_email_secret_key = $token;
+
+		$user->save();
+
+		return $user;
+	}
+
+	public function sendEmailToggleTwoFactorEmail($user)
+	{
+		$data = [
+			'link' => route('security.email.toggle', [$user->two_factor_email_token]),
+		];
+
+		Mailer::send(
+			'emails.users.authorize-two-factor-email',
+			$user,
+			t('paragraphs.authorize-two-factor-email'),
+			$data
+		);
+
+		Flash::message(t('paragraphs.autorization-link-sent'));
+	}
+
+	public function toggleTwoFactorEmail($user, $code)
+	{
+		$this->checkTwoFactorToken($user, 'email', $code);
+
+		$user->two_factor_email_enabled = ! $user->two_factor_email_enabled;
+
+		$user->save();
+
+		return $user;
+	}
+
+	public function checkTwoFactorToken($user, $type, $code, $checkEnabled = false, $throwException = true)
+	{
+		if ($checkEnabled)
+		{
+			if ( ! $user->{'two_factor_'.$type.'_enabled'})
+			{
+				return false;
+			}
+		}
+
+		if ($user->{'two_factor_'.$type.'_token'} !== $code)
+		{
+			if ($throwException)
+			{
+				throw new InvalidToken();
+			}
+
+			return false;
+		}
+
+		if (Carbon::now()->diffInMinutes(Carbon::parse($user->{'two_factor_'.$type.'_token_created_at'})) > static::TOKEN_LIFETIME)
+		{
+			throw new ExpiredToken();
+		}
+
+		return true;
+	}
+
+	private function createTypableSecret()
+	{
+		do
+		{
+			$secret = substr(strtoupper(str_replace('-', '', Uuid::uuid4())), 0, 6);
+		} while (in_array($secret, $this->secretCodes));
+
+		return $secret;
+	}
+
+	private function sendTwoFactorEmailToken($user)
+	{
+		if ( ! $user->two_factor_email_enabled)
+		{
+			return;
+		}
+
+		Mailer::send(
+			'emails.users.two-factor-token',
+			$user,
+			t('paragraphs.here-is-your-code') . ' ' . $user->two_factor_email_secret_key
+		);
+
+		Flash::message(t('paragraphs.authentication-code-sent'));
+	}
+
+	private function sendTwoFactorSmsToken($user)
+	{
+		// there is no sms yet
+	}
+
+	private function validateTwoFactorTokens($user, $two_factor_google_token, $two_factor_sms_token, $two_factor_email_token)
+	{
+		foreach ($this->twoFactorTypes as $type)
+		{
+			$this->checkTwoFactorToken($user, $type, ${'two_factor_'.$type.'_token'}, true);
+		}
+	}
+
+	private function validateTwoFactorCode($user, $authentication_code)
+	{
+		return
+				($user->two_factor_google_enabled && $this->verifyGoogleCode($user, $authentication_code, false))
+				||
+				($user->two_factor_email_enabled && $user->two_factor_email_secret_key == strtoupper($authentication_code))
+				||
+				($user->two_factor_sms_enabled && $user->two_factor_sms_secret_key == strtoupper($authentication_code))
+				;
+	}
+
+	private function invalidateTwoFactorTokens($user)
+	{
+		foreach ($this->twoFactorTypes as $type)
+		{
+			$user->{'two_factor_'.$type.'_token'} = null;
+			$user->{'two_factor_'.$type.'_token_created_at'} = null;
+		}
+
+		$user->save();
 	}
 
 }

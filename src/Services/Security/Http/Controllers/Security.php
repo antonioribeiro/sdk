@@ -3,13 +3,15 @@
 namespace PragmaRX\Sdk\Services\Security\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Core\Redirect;
+use PragmaRX\Sdk\Services\Security\Commands\RequestToggleEmailCommand;
+use PragmaRX\Sdk\Services\Security\Commands\ToggleEmailCommand;
 use PragmaRX\Sdk\Services\Security\Commands\ToggleGoogleCodeCommand;
-use PragmaRX\Sdk\Services\TwoFactor\Data\Entities\TwoFactorType;
 use PragmaRX\Sdk\Services\Security\Http\Requests\GoogleCodeRequest;
+
 use View;
 use Auth;
 use Flash;
+use Redirect;
 
 class Security extends BaseController {
 
@@ -29,6 +31,35 @@ class Security extends BaseController {
 		else
 		{
 			Flash::message(t('paragraphs.two-factor-google-disabled'));
+		}
+
+		return Redirect::back();
+	}
+
+	public function email()
+	{
+		$this->execute(RequestToggleEmailCommand::class, ['user' => Auth::user()]);
+
+		return Redirect::back();
+	}
+
+	public function emailToggle($code)
+	{
+		$user = $this->execute(
+			ToggleEmailCommand::class,
+			[
+				'code' => $code,
+				'user' => Auth::user()
+			]
+		);
+
+		if ($user->two_factor_email_enabled)
+		{
+			Flash::message(t('paragraphs.two-factor-email-enabled'));
+		}
+		else
+		{
+			Flash::message(t('paragraphs.two-factor-email-disabled'));
 		}
 
 		return Redirect::back();

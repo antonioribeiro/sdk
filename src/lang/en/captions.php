@@ -68,4 +68,5 @@ return array (
   'turn-on' => 'Turn On',
   'turn-off' => 'Turn Off',
   'code' => 'Code',
+
 );
