@@ -2,23 +2,16 @@
 
 namespace PragmaRX\Sdk\Services\Connect\Http\Controllers;
 
-use Auth;
-use Flash;
-use PragmaRX\Sdk\Core\Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Connect\Commands\ConnectActionCommand;
 use PragmaRX\Sdk\Services\Connect\Commands\ConnectUserCommand;
 use PragmaRX\Sdk\Services\Connect\Commands\DisconnectUserCommand;
 
-class Connect extends BaseController {
+use Auth;
+use Flash;
+use Redirect;
 
-	/**
-	 * Create a Connect instance.
-	 *
-	 */
-	public function __construct()
-	{
-		$this->beforeFilter('auth');
-	}
+class Connect extends BaseController {
 
 	/**
 	 * Connect a user.
@@ -32,7 +25,7 @@ class Connect extends BaseController {
 
 		$this->execute(ConnectUserCommand::class, $input);
 
-		Flash::message('You are now connected to this user.');
+		Flash::message(t('paragraphs.connection-request-sent'));
 
 		return Redirect::route('profile', ['username' => $user_to_connect]);
 	}
@@ -52,8 +45,26 @@ class Connect extends BaseController {
 
 		$this->execute(DisconnectUserCommand::class, $input);
 
-		Flash::message('You are not connected to this user anymore.');
+		Flash::message(t('paragraphs.disconnected-from-user'));
 
 		return Redirect::route('profile', ['username' => $user_to_disconnect]);
 	}
+
+	public function takeAction($connection_id, $action)
+	{
+		dd(Auth::user()->pendingConnectionTo($connection_id)->pivot);
+
+		$input = [
+			'user' => Auth::user(),
+			'connection_id' => $connection_id,
+			'action' => $action,
+		];
+
+		$this->execute(ConnectActionCommand::class, $input);
+
+		Flash::message(t('paragraphs.disconnected-from-user'));
+
+		return Redirect::back();
+	}
+
 }

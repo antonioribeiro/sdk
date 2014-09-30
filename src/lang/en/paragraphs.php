@@ -83,4 +83,7 @@ return array (
   'token-expired' => 'This token has expired.',
   'here-is-your-code' => 'Here is your code:',
   'authentication-code-sent' => 'Your authentication code was sent.',
+  'connection-request-sent' => 'A connection request was sent to the user.',
+  'disconnected-from-user' => 'You are not connected to this user anymore.',
+  'people-want-to-connect' => 'Those people want to connect with you',
 );

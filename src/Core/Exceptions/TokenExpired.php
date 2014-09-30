@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Sdk\Services\TwoFactor\Exceptions;
+namespace PragmaRX\Sdk\Core\Exceptions;
 
 use Exception;
 

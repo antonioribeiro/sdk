@@ -68,5 +68,8 @@ return array (
   'turn-on' => 'Turn On',
   'turn-off' => 'Turn Off',
   'code' => 'Code',
-
+  'pending-connections' => 'Pending Connections',
+  'accept' => 'Accept',
+  'deny' => 'Deny',
+  'postpone' => 'Postpone',
 );

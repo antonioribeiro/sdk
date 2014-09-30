@@ -11,6 +11,7 @@ use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Support\Facades\Hash;
 
 use PragmaRX\Sdk\Core\Traits\IdentifiableTrait;
+use PragmaRX\Sdk\Core\Traits\ReloadableTrait;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidActivationToken;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserActivationNotFound;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
@@ -38,6 +39,7 @@ class User extends CartalystUser implements UserContract, RemindableContract {
 		RemindableTrait,
 		EventGenerator,
 		PresentableTrait,
+		ReloadableTrait,
 		IdentifiableTrait;
 
 	protected $fillable = ['id', 'username', 'email', 'password', 'first_name', 'last_name'];

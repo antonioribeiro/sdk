@@ -5,6 +5,7 @@ namespace PragmaRX\Sdk;
 use App;
 use Auth;
 use PragmaRX\Sdk\Core\Migrations\MigrateCommand;
+use PragmaRX\Sdk\Core\Migrations\ResetCommand;
 use PragmaRX\Sdk\Core\Migrations\RollbackCommand;
 use PragmaRX\Sdk\Core\Traits\ServiceableTrait;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
@@ -41,7 +42,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	    $this->registerConfig();
 
-	    $this->registerServiceProviders();
+	    $this->registerPackageServiceProviders();
 
 	    $this->registerServices();
 
@@ -66,13 +67,13 @@ class ServiceProvider extends PragmaRXServiceProvider {
         });
     }
 
-	private function registerServiceProviders()
+	private function registerPackageServiceProviders()
 	{
 		$disabled_packages = $this->getConfig('disabled.packages') ?: [];
 
 		foreach($this->getConfig('packages') as $package)
 		{
-			$this->registerServiceProvider($package, $disabled_packages);
+			$this->registerPackageServiceProvider($package, $disabled_packages);
 		}
 	}
 
@@ -94,6 +95,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		foreach($services as $service)
 		{
 			$this->includeSupportFiles($service, $path);
+
+			$this->loadServiceProviders($service, $path);
 		}
 	}
 
@@ -110,7 +113,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	/**
 	 * @param $package
 	 */
-	private function registerServiceProvider($package, $disabled_packages = [])
+	private function registerPackageServiceProvider($package, $disabled_packages = [])
 	{
 		if (isset($package['serviceProvider'])
 			&& class_exists($class = $package['serviceProvider'])
@@ -152,6 +155,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	private function registerGlobalScripts()
 	{
+		$this->includeFile(__DIR__ . "/Core/Exceptions/handlers.php");
+
 		$this->includeFile(__DIR__ . "/Sdk/App/bootstrap/start.php");
 
 		$this->includeFile(__DIR__ . "/Sdk/Http/routes.php");
@@ -202,6 +207,26 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		}
 	}
 
+	private function loadServiceProviders($service, $path = null)
+	{
+		$path = $path ?: __DIR__;
+
+		if (file_exists("$path/{$service}/Providers"))
+		{
+			$files = App::make('files')->allFiles("$path/{$service}/Providers");
+
+			foreach($files as $file)
+			{
+				$class = get_class_name_from_file($file, __DIR__, 'PragmaRX\Sdk');
+
+				if (class_exists($class))
+				{
+					App::register($class);
+				}
+			}
+		}
+	}
+
 	private function registerCommands()
 	{
 		$this->app->bindShared('command.migrate', function($app)
@@ -214,6 +239,11 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		$this->app->bindShared('command.migrate.rollback', function($app)
 		{
 			return new RollbackCommand($app['migrator']);
+		});
+
+		$this->app->bindShared('command.migrate.reset', function($app)
+		{
+			return new ResetCommand($app['migrator']);
 		});
 	}
 

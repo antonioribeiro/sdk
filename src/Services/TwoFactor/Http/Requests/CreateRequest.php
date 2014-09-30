@@ -5,7 +5,7 @@ namespace PragmaRX\Sdk\Services\TwoFactor\Http\Requests;
 use Carbon\Carbon;
 use PragmaRX\Sdk\Core\Validation\FormRequest;
 
-use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidRequest;
+use PragmaRX\Sdk\Core\Exceptions\InvalidRequest;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 use Session;

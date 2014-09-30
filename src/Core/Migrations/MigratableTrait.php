@@ -152,4 +152,26 @@ trait MigratableTrait {
 		}
 	}
 
+	private function requireServiceMigrations()
+	{
+		$services = App::make('config')->get('pragmarx/sdk::services');
+
+		$paths = [];
+
+		foreach ($services as $service)
+		{
+			foreach($this->getMigrations($service) as $migration)
+			{
+				require_once $migration;
+			}
+		}
+
+		return $paths;
+	}
+
+	private function getMigrations()
+	{
+		return File::glob($this->getTemporaryMigrationPath().'/*_*.php');
+	}
+
 } 

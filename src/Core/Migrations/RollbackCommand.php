@@ -4,9 +4,6 @@ namespace PragmaRX\Sdk\Core\Migrations;
 
 use Illuminate\Database\Console\Migrations\RollbackCommand as IlluminateRollbackCommand;
 
-use App;
-use File;
-
 class RollbackCommand extends IlluminateRollbackCommand {
 
 	use MigratableTrait;
@@ -37,28 +34,6 @@ class RollbackCommand extends IlluminateRollbackCommand {
 		{
 			$this->output->writeln($note);
 		}
-	}
-
-	private function requireServiceMigrations()
-	{
-		$services = App::make('config')->get('pragmarx/sdk::services');
-
-		$paths = [];
-
-		foreach ($services as $service)
-		{
-			foreach($this->getMigrations($service) as $migration)
-			{
-				require_once $migration;
-			}
-		}
-
-		return $paths;
-	}
-
-	private function getMigrations()
-	{
-		return File::glob($this->getTemporaryMigrationPath().'/*_*.php');
 	}
 
 }

@@ -12,8 +12,15 @@ trait ConnectableTrait {
 	public function allConnections()
 	{
 		$relation = $this
-			->belongsToMany(static::class, 'connections', 'requestor_id', 'requested_id')
+			->belongsToMany(
+				'PragmaRX\Sdk\Services\Connect\Data\Entities\Connection',
+				'connections',
+				'requestor_id',
+				'requested_id'
+			)
 			->withTimestamps();
+
+		return $relation;
 
 		// Delete the already built "inner join".
 		$relation
@@ -34,10 +41,10 @@ trait ConnectableTrait {
 			->setBindings([]);
 
 		// Create a new inner join with the needed or condition.
-		$relation->getQuery()->getQuery()->join('connections', function($join)
+		$relation->getQuery()->getQuery()->join('connections as requestor_connections', function($join)
 		{
-			$join->on('users.id','=','connections.requestor_id');
-			$join->orOn('users.id','=','connections.requested_id');
+			$join->on('users.id','=','requestor_connections.requestor_id');
+			$join->orOn('users.id','=','requestor_connections.requested_id');
 		});
 
 		// Create a new where with both conditions
@@ -51,7 +58,7 @@ trait ConnectableTrait {
 		$relation->where('users.id', '!=', $this->id);
 
 		// Add a distinct on specific column
-		$relation->selectRaw('distinct on ("users"."id") "users"."id"');
+		$relation->selectRaw('distinct on ("users"."id") *');
 
 		$this->filterRelationBlockages($relation, 'requested_id', 'requestor_id');
 
@@ -71,7 +78,9 @@ trait ConnectableTrait {
 	 */
 	public function pendingConnections()
 	{
-		return $this->allConnections()->where('authorized', false);
+		return $this->allConnections()
+				->where('authorized', false)
+				->where('connections.requestor_id', '!=', $this->id);
 	}
 
 	/**
@@ -133,6 +142,15 @@ trait ConnectableTrait {
 		}
 
 		return in_array($this->id, $idsWhoOtherUserIsConnected);
+	}
+
+	public function pendingConnectionTo($user_id)
+	{
+		return $this->allConnections()
+			->where('authorized', false)
+			->where('connections.requested_id', '=', $this->id)
+			->where('connections.requestor_id', '=', $user_id)
+			->first();
 	}
 
 }

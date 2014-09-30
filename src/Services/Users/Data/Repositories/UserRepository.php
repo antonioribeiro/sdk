@@ -21,9 +21,8 @@ use PragmaRX\Sdk\Services\ProfilesVisits\Data\Entities\ProfileVisit;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidPassword;
 
 use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidAuthenticationCode;
-use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidRequest;
-use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidToken;
-use PragmaRX\Sdk\Services\TwoFactor\Exceptions\TokenExpired;
+use PragmaRX\Sdk\Core\Exceptions\InvalidRequest;
+use PragmaRX\Sdk\Core\Exceptions\InvalidToken;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 
 use Input;
@@ -492,10 +491,7 @@ class UserRepository {
 			$two_factor_email_token
 		);
 
-		if ( ! $this->validateTwoFactorCode($user, $authentication_code))
-		{
-			throw new InvalidCode();
-		}
+		$this->validateTwoFactorCode($user, $authentication_code);
 
 		$this->invalidateTwoFactorTokens($user);
 
@@ -588,7 +584,7 @@ class UserRepository {
 	public function sendEmailToggleTwoFactorEmail($user)
 	{
 		$data = [
-			'link' => route('security.email.toggle', [$user->two_factor_email_token]),
+			'link' => route('security.email.toggle', [$user->two_factor_email_secret_key]),
 		];
 
 		Mailer::send(
@@ -603,7 +599,7 @@ class UserRepository {
 
 	public function toggleTwoFactorEmail($user, $code)
 	{
-		$this->checkTwoFactorToken($user, 'email', $code);
+		$this->checkTwoFactorCode($user, 'email', $code);
 
 		$user->two_factor_email_enabled = ! $user->two_factor_email_enabled;
 
@@ -679,15 +675,31 @@ class UserRepository {
 		}
 	}
 
-	private function validateTwoFactorCode($user, $authentication_code)
+	private function validateTwoFactorCode($user, $code, $throwException = true)
 	{
-		return
-				($user->two_factor_google_enabled && $this->verifyGoogleCode($user, $authentication_code, false))
-				||
-				($user->two_factor_email_enabled && $user->two_factor_email_secret_key == strtoupper($authentication_code))
-				||
-				($user->two_factor_sms_enabled && $user->two_factor_sms_secret_key == strtoupper($authentication_code))
-				;
+		$valid = false;
+
+		foreach ($this->twoFactorTypes as $type)
+		{
+			$valid = $valid || $this->checkTwoFactorCode($user, $type, $code);
+		}
+
+		if ( ! $valid && $throwException)
+		{
+			throw new InvalidCode();
+		}
+
+		return $valid;
+	}
+
+	public function checkTwoFactorCode($user, $type, $code)
+	{
+		if ($type == 'google')
+		{
+			return $this->verifyGoogleCode($user, $code, false);
+		}
+
+		return $user->{'two_factor_'.$type.'_secret_key'} == $code;
 	}
 
 	private function invalidateTwoFactorTokens($user)
@@ -699,6 +711,21 @@ class UserRepository {
 		}
 
 		$user->save();
+	}
+
+	public function connectAction($user, $connection_id, $action)
+	{
+		$connection = User::find($connection_id);
+
+		if ( ! $connection->hasPendingConnectionTo($user))
+		{
+			throw new InvalidRequest();
+		}
+
+		if ($action == 'accept')
+		{
+			// $connection->
+		}
 	}
 
 }
