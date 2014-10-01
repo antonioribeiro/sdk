@@ -182,7 +182,13 @@ class UserRepository {
 
 		if ( ! $user->isConnectedOrIsPendingTo($user_to_connect))
 		{
-			$user = $user->connections()->attach($user_to_connect->id);
+			$connection = new Connection();
+
+			$connection->requestor_id = $user->id;
+
+			$connection->requested_id = $user_to_connect->id;
+
+			$connection->save();
 		}
 
 		return $user;
@@ -201,7 +207,11 @@ class UserRepository {
 
 		$user_to_disconnect = $this->findByUsername($user_to_disconnect);
 
-		return $user->connections()->detach($user_to_disconnect->id);
+		$connection = $user->getConnectionTo($user_to_disconnect->id);
+
+		$connection->delete();
+
+		return $user;
 	}
 
 	/**

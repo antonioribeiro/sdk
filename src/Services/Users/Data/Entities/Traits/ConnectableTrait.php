@@ -158,4 +158,27 @@ trait ConnectableTrait {
 			->first();
 	}
 
+	public function getConnectionTo($user_id)
+	{
+		$user = $this;
+
+		return $this->allConnections()
+			->where('authorized', true)
+			->where(function($query) use ($user, $user_id)
+			{
+				$query->where(function($query) use ($user, $user_id)
+				{
+					$query->where('connections.requestor_id', '=', $this->id);
+					$query->Where('connections.requested_id', '=', $user_id);
+				});
+
+				$query->orWhere(function($query) use ($user, $user_id)
+				{
+					$query->where('connections.requestor_id', '=', $user_id);
+					$query->Where('connections.requested_id', '=', $this->id);
+				});
+			})
+			->first();
+	}
+
 }
