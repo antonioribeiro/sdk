@@ -6,7 +6,7 @@ Route::group(['before' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Connect\
 	{
 		Route::get('{username}', ['as' => 'connect', 'uses' => 'Connect@store']);
 
-		Route::get('{user_id}/{action}', ['as' => 'connect.action', 'uses' => 'Connect@takeAction']);
+		Route::post('{user_id}/{action}', ['as' => 'connect.action', 'uses' => 'Connect@takeAction']);
 	});
 
 	Route::group(['prefix' => 'disconnect'], function()

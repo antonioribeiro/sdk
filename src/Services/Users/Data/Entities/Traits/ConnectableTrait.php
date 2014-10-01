@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Users\Data\Entities\Traits;
 
+use Carbon\Carbon;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 
 trait ConnectableTrait {
@@ -85,6 +86,12 @@ trait ConnectableTrait {
 	{
 		return $this->allConnections()
 				->where('authorized', false)
+				->whereNull('denied_at')
+				->where(function($query)
+				{
+					$query->whereNull('postponed_at');
+					$query->orWhere('postponed_at', '<', Carbon::now()->subDays(10)); // postpone for 10 days
+				})
 				->where('connections.requestor_id', '!=', $this->id);
 	}
 
