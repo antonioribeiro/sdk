@@ -32,7 +32,7 @@ class Block extends BaseController {
 
 		$this->execute(BlockUserCommand::class, $input);
 
-		Flash::message('You are now blocked to this user.');
+		Flash::message(t('paragraphs.you-are-blocking'));
 
 		return Redirect::route('profile', ['username' => $user_to_block]);
 	}
@@ -52,7 +52,7 @@ class Block extends BaseController {
 
 		$this->execute(UnblockUserCommand::class, $input);
 
-		Flash::message('You are not blocked to this user anymore.');
+		Flash::message(t('paragraphs.you-are-not-blocking'));
 
 		return Redirect::route('profile', ['username' => $user_to_unblock]);
 	}

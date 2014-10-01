@@ -60,8 +60,6 @@ class Connect extends BaseController {
 
 		$this->execute(ConnectActionCommand::class, $input);
 
-		Flash::message(t('paragraphs.disconnected-from-user'));
-
 		return Redirect::back();
 	}
 

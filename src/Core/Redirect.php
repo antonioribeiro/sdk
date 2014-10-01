@@ -15,6 +15,11 @@ class Redirect {
 	 */
 	public static function __callstatic($name, array $parameters = [])
 	{
+		if ($name == 'back')
+		{
+			return static::back($parameters);
+		}
+
 		if (Request::ajax())
 		{
 			if ($name == 'route')
@@ -35,11 +40,6 @@ class Redirect {
 			}
 
 			return Response::json($response);
-		}
-
-		if ($name == 'back')
-		{
-			return static::back($parameters);
 		}
 
 		return static::call($name, $parameters);

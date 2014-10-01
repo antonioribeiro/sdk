@@ -58,7 +58,7 @@ class Statuses extends BaseController {
 
 		$this->execute(PostStatusCommand::class, $input);
 
-		Flash::message('Your status has been posted!');
+		Flash::message(t('paragraphs.status-posted'));
 
 		return Redirect::back();
 	}

@@ -86,4 +86,12 @@ return array (
   'connection-request-sent' => 'A connection request was sent to the user.',
   'disconnected-from-user' => 'You are not connected to this user anymore.',
   'people-want-to-connect' => 'Those people want to connect with you',
+  'you-are-now-connected' => 'The connection was accepted and you are now connected to the person.',
+  'conection-denied' => 'Connection successfully denied.',
+  'conection-postponed' => 'The connection request was postponed.',
+  'you-are-blocking' => 'You are now blocking to this user.',
+  'you-are-not-blocking' => 'You are not blocking this user anymore.',
+  'you-are-following' => 'You are now following this user.',
+  'you-are-not-following' => 'You are not following this user anymore.',
+  'status-posted' => 'Your status has been posted!',
 );

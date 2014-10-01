@@ -737,16 +737,22 @@ class UserRepository {
 		{
 			$authorized = true;
 			$column = 'authorized_at';
+
+			Flash::message(t('paragraphs.connection-accepted'));
 		}
 
 		if ($action == 'deny')
 		{
 			$column = 'denied_at';
+
+			Flash::message(t('paragraphs.conection-denied'));
 		}
 
 		if ($action == 'postpone')
 		{
 			$column = 'postponed_at';
+
+			Flash::message(t('paragraphs.conection-postponed'));
 		}
 
 		Connection::where('requestor_id', $connection->requestor_id)

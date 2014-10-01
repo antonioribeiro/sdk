@@ -32,7 +32,7 @@ class Follow extends BaseController {
 
 		$this->execute(FollowUserCommand::class, $input);
 
-		Flash::message('You are now following this user.');
+		Flash::message(t('paragraphs.you-are-following'));
 
 		return Redirect::route('profile', ['username' => $user_to_follow]);
 	}
@@ -52,7 +52,7 @@ class Follow extends BaseController {
 
 		$this->execute(UnfollowUserCommand::class, $input);
 
-		Flash::message('You are not following this user anymore.');
+		Flash::message(t('paragraphs.you-are-not-following'));
 
 		return Redirect::route('profile', ['username' => $user_to_unfollow]);
 	}
