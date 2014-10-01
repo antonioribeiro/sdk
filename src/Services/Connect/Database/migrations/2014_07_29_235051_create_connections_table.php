@@ -19,7 +19,7 @@ class CreateConnectionsTable extends Migration {
 
 			$table->boolean('authorized')->index()->default(false);
 			$table->timestamp('authorized_at')->nullable();
-
+			$table->timestamp('denied_at')->nullable();
 			$table->timestamp('postponed_at')->nullable();
 
 			$table->timestamps();

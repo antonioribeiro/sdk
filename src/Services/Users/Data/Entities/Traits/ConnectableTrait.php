@@ -12,21 +12,18 @@ trait ConnectableTrait {
 	public function allConnections()
 	{
 		$relation = $this
-			->belongsToMany(
+			->hasMany(
 				'PragmaRX\Sdk\Services\Connect\Data\Entities\Connection',
-				'connections',
 				'requestor_id',
-				'requested_id'
+				'id'
 			)
-			->withTimestamps();
+			->orWhere('requested_id', $this->id);
 
-		return $relation;
-
-		// Delete the already built "inner join".
-		$relation
-			->getQuery() // Eloquent\Builder
-			->getQuery() // Query\Builder
-			->joins = [];
+//		// Delete the already built "inner join".
+//		$relation
+//			->getQuery() // Eloquent\Builder
+//			->getQuery() // Query\Builder
+//			->joins = [];
 
 		// Delete the already built "where".
 		$relation
@@ -40,12 +37,19 @@ trait ConnectableTrait {
 			->getQuery()
 			->setBindings([]);
 
-		// Create a new inner join with the needed or condition.
-		$relation->getQuery()->getQuery()->join('connections as requestor_connections', function($join)
-		{
-			$join->on('users.id','=','requestor_connections.requestor_id');
-			$join->orOn('users.id','=','requestor_connections.requested_id');
-		});
+//		// Create a new inner join with the needed or condition.
+//		$relation->getQuery()->getQuery()->join('connections as requestor_connections', function($join)
+//		{
+//			$join->on('users.id','=','requestor_connections.requestor_id');
+//			$join->orOn('users.id','=','requestor_connections.requested_id');
+//		});
+//
+//		// Create a new where with both conditions
+//		$relation->where(function($query)
+//		{
+//			$query->where('connections.requestor_id', $this->id);
+//			$query->orWhere('connections.requested_id', $this->id);
+//		});
 
 		// Create a new where with both conditions
 		$relation->where(function($query)
@@ -54,11 +58,12 @@ trait ConnectableTrait {
 			$query->orWhere('connections.requested_id', $this->id);
 		});
 
-		// A user is not connected to itself
-		$relation->where('users.id', '!=', $this->id);
 
-		// Add a distinct on specific column
-		$relation->selectRaw('distinct on ("users"."id") *');
+//		// A user is not connected to itself
+//		$relation->where('users.id', '!=', $this->id);
+//
+//		// Add a distinct on specific column
+//		$relation->selectRaw('distinct on ("users"."id") *');
 
 		$this->filterRelationBlockages($relation, 'requested_id', 'requestor_id');
 
@@ -138,7 +143,7 @@ trait ConnectableTrait {
 
 		foreach ($users as $user)
 		{
-			$idsWhoOtherUserIsConnected[] = $user->id;
+			$idsWhoOtherUserIsConnected[] = $user->requestor_id == $this->id ? $user->requestor_id : $user->requested_id;
 		}
 
 		return in_array($this->id, $idsWhoOtherUserIsConnected);

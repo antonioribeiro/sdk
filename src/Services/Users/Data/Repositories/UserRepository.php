@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Users\Data\Repositories;
 
+use PragmaRX\Sdk\Services\Connect\Data\Entities\Connection;
 use PragmaRX\Sdk\Services\Security\Events\TwoFactorEmailDisableRequested;
 use PragmaRX\Sdk\Services\Security\Events\TwoFactorEmailEnableRequested;
 use PragmaRX\Sdk\Services\Security\Exceptions\ExpiredToken;
@@ -715,17 +716,34 @@ class UserRepository {
 
 	public function connectAction($user, $connection_id, $action)
 	{
-		$connection = User::find($connection_id);
-
-		if ( ! $connection->hasPendingConnectionTo($user))
+		if ( ! $connection = $user->pendingConnectionTo($connection_id))
 		{
 			throw new InvalidRequest();
 		}
 
+		$authorized = false;
+
 		if ($action == 'accept')
 		{
-			// $connection->
+			$authorized = true;
+			$column = 'authorized_at';
 		}
+
+		if ($action == 'deny')
+		{
+			$column = 'denied_at';
+		}
+
+		if ($action == 'postpone')
+		{
+			$column = 'postponed_at';
+		}
+
+		Connection::where('requestor_id', $connection->requestor_id)
+					->where('requested_id', $connection->requested_id)
+					->update(['authorized' => $authorized, $column => Carbon::now()]);
+
+		return $user;
 	}
 
 }

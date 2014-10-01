@@ -52,8 +52,6 @@ class Connect extends BaseController {
 
 	public function takeAction($connection_id, $action)
 	{
-		dd(Auth::user()->pendingConnectionTo($connection_id)->pivot);
-
 		$input = [
 			'user' => Auth::user(),
 			'connection_id' => $connection_id,

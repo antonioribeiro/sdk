@@ -18,5 +18,4 @@ class Connections extends BaseController {
 		return View::make('connections.index')->with('connections', $connetions);
 	}
 
-
 }
