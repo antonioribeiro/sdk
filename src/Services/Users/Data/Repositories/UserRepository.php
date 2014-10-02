@@ -762,4 +762,19 @@ class UserRepository {
 		return $user;
 	}
 
+	public function inviteUsers($user, $emails)
+	{
+		foreach ($emails as $email)
+		{
+			$this->inviteUser($user, $email);
+		}
+
+		return $user;
+	}
+
+	private function inviteUser($user, $email)
+	{
+		$invited =  
+	}
+
 }

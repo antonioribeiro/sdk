@@ -4,9 +4,13 @@ Route::group(['before' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Connect\
 {
 	Route::group(['prefix' => 'connect'], function()
 	{
-		Route::get('{username}', ['as' => 'connect', 'uses' => 'Connect@store']);
+		Route::post('invite', ['as' => 'connect.invite', 'uses' => 'Connect@invite']);
+
+		Route::post('invite/validate', ['as' => 'connect.invite.validate', 'uses' => 'Connect@inviteValidate']);
 
 		Route::post('{user_id}/{action}', ['as' => 'connect.action', 'uses' => 'Connect@takeAction']);
+
+		Route::get('{username}', ['as' => 'connect', 'uses' => 'Connect@store']);
 	});
 
 	Route::group(['prefix' => 'disconnect'], function()

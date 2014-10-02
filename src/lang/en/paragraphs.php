@@ -94,4 +94,7 @@ return array (
   'you-are-following' => 'You are now following this user.',
   'you-are-not-following' => 'You are not following this user anymore.',
   'status-posted' => 'Your status has been posted!',
+  'invite-someone' => 'Click here to invite someone',
+  'email-addresses-to-invite' => 'E-mail addresses of the people you want to invite',
+  'already-a-user' => 'is already a user.'
 );

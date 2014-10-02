@@ -72,4 +72,6 @@ return array (
   'accept' => 'Accept',
   'deny' => 'Deny',
   'postpone' => 'Postpone',
+  'invite-someone' => 'Invite Someone',
+  'send-invitation' => 'Send Invitation',
 );

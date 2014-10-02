@@ -6,10 +6,13 @@ use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Connect\Commands\ConnectActionCommand;
 use PragmaRX\Sdk\Services\Connect\Commands\ConnectUserCommand;
 use PragmaRX\Sdk\Services\Connect\Commands\DisconnectUserCommand;
+use PragmaRX\Sdk\Services\Connect\Commands\InviteCommand;
+use PragmaRX\Sdk\Services\Connect\Http\Requests\Invite as InviteRequest;
 
 use Auth;
 use Flash;
 use Redirect;
+use Response;
 
 class Connect extends BaseController {
 
@@ -61,6 +64,23 @@ class Connect extends BaseController {
 		$this->execute(ConnectActionCommand::class, $input);
 
 		return Redirect::back();
+	}
+
+	public function invite(InviteRequest $request)
+	{
+		$input = [
+			'user' => Auth::user(),
+			'emails' => $request->get('emails'),
+		];
+
+		$this->execute(InviteCommand::class, $input);
+
+		return Redirect::back();
+	}
+
+	public function inviteValidate(InviteRequest $request)
+	{
+		return Response::json(['success' => true]);
 	}
 
 }
