@@ -79,7 +79,7 @@ return [
 	],
 
 	'disabled.packages' => [
-
+		'pragmarx/tracker'
 	],
 
 	'packages' => [
@@ -196,11 +196,11 @@ return [
 			]
 		],
 
-//		[
-//			'name' => 'pragmarx/tracker',
-//			'enabled' => true,
-//		    'serviceProvider' => 'PragmaRX\Tracker\Vendor\Laravel\ServiceProvider',
-//		],
+		[
+			'name' => 'pragmarx/tracker',
+			'enabled' => true,
+		    'serviceProvider' => 'PragmaRX\Tracker\Vendor\Laravel\ServiceProvider',
+		],
 
 		[
 			'name' => 'pragmarx/firewall',
@@ -272,6 +272,30 @@ return [
 				'Twilio' => 'Aloha\Twilio\Facades\Twilio',
 			]
 		],
+
+		[
+			'name' => 'way/generators',
+			'enabled' => true,
+			'serviceProvider' => 'Way\Generators\GeneratorsServiceProvider',
+		],
+
+		[
+			'name' => 'pragmarx/sqli',
+			'enabled' => true,
+			'serviceProvider' => 'PragmaRX\SqlI\Vendor\Laravel\ServiceProvider',
+		],
+
+		[
+			'name' => 'illuminate/html',
+			'enabled' => true,
+			'serviceProvider' => 'Illuminate\Html\HtmlServiceProvider',
+		],
+
+//		[
+//			'name' => 'barryvdh/translationmanager',
+//			'enabled' => true,
+//			'serviceProvider' => 'Barryvdh\TranslationManager\ManagerServiceProvider',
+//		],
 
 	]
 ];

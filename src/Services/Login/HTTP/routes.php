@@ -2,7 +2,7 @@
 
 Route::group(['namespace' => 'PragmaRX\Sdk\Services\Login\Http\Controllers'], function()
 {
-	Route::group(['before' => 'guestx', 'prefix' => 'auth/login'], function()
+	Route::group(['before' => 'guest', 'prefix' => 'auth/login'], function()
 	{
 		Route::get('/', ['as' => 'login', 'uses' => 'Login@create']);
 

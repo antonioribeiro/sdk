@@ -90,8 +90,9 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		}
 	}
 
-	private function includeServiceScripts($services, $path = null)
+	private function includeServiceScripts(array $services, $path = null)
 	{
+
 		foreach($services as $service)
 		{
 			$this->includeSupportFiles($service, $path);

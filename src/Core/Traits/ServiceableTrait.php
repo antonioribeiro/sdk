@@ -10,14 +10,19 @@ trait ServiceableTrait {
 	{
 		$path = $path ?: $this->getConfig('application_services_path');
 
-		$services = [];
-
-		foreach (File::directories($path) as $dir)
+		if (file_exists($path))
 		{
-			$services[] = basename($dir);
+			$services = [];
+
+			foreach (File::directories($path) as $dir)
+			{
+				$services[] = basename($dir);
+			}
+
+			return $services;
 		}
 
-		return $services;
+		return [];
 	}
 
 }
