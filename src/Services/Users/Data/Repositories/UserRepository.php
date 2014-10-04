@@ -333,7 +333,7 @@ class UserRepository {
 
 		$user->contactInformation()->delete();
 
-		foreach($contact_information as $info)
+		foreach ($contact_information as $info)
 		{
 			if ($info['text'] && $info['type_id'])
 			{

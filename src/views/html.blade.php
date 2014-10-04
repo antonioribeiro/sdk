@@ -10,7 +10,7 @@
 		<meta name="Author" content="{{ $html_author or '' }}" />
 
 		@if (isset($html_meta_tags))
-		    @foreach($html_meta_tags as $meta)
+		    @foreach ($html_meta_tags as $meta)
 		        {{ $meta }}
 		    @endforeach
 		@endif

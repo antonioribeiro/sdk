@@ -119,7 +119,7 @@ class ChangeIdOnUsersTable extends Migration {
 			'activations',
 		];
 
-		foreach($tables as $tableName)
+		foreach ($tables as $tableName)
 		{
 			$this->dropColumn($tableName, 'id');
 

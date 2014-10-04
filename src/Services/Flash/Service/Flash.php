@@ -31,14 +31,14 @@ class Flash {
 			$messages = [$message];
 		}
 
-		foreach($messages as $message)
+		foreach ($messages as $message)
 		{
 			if ( ! is_array($message))
 			{
 				$message = [$message];
 			}
 
-			foreach($message as $item)
+			foreach ($message as $item)
 			{
 				$result[$kind.$item] = [
 					'kind' => $this->getKind($kind),
@@ -95,7 +95,7 @@ class Flash {
 			$errors = $errors->all();
 		}
 
-		foreach($errors as $error)
+		foreach ($errors as $error)
 		{
 			$this->error($error);
 		}

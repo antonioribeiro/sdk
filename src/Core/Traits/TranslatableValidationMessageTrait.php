@@ -27,7 +27,7 @@ trait TranslatableValidationMessageTrait {
 	 */
 	public function translateMessages()
 	{
-		foreach($this->messages as $key => $message)
+		foreach ($this->messages as $key => $message)
 		{
 			$this->messages[$key] = Lang::trans($message);
 		}

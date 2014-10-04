@@ -132,11 +132,11 @@ trait MigratableTrait {
 
 	private function copyMigrations($paths, $tempPath)
 	{
-		foreach($paths as $path)
+		foreach ($paths as $path)
 		{
 			if (file_exists($path))
 			{
-				foreach(File::allFiles($path) as $file)
+				foreach (File::allFiles($path) as $file)
 				{
 					File::copy($file->getPathName(), $tempPath . '/' . $file->getFileName());
 				}
@@ -160,7 +160,7 @@ trait MigratableTrait {
 
 		foreach ($services as $service)
 		{
-			foreach($this->getMigrations($service) as $migration)
+			foreach ($this->getMigrations($service) as $migration)
 			{
 				require_once $migration;
 			}
