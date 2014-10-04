@@ -24,7 +24,6 @@ class RegisterUserCommandHandler extends CommandHandler {
 	public function handle($command)
 	{
 		$user = User::register(
-			$command->id,
 			$command->username,
 			$command->email,
 			$command->password,

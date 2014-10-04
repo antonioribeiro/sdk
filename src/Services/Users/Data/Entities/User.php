@@ -68,11 +68,11 @@ class User extends CartalystUser implements UserContract, RemindableContract {
 	 * @param $password
 	 * @return static
 	 */
-	public static function register($id, $username, $email, $password, $first_name, $last_name)
+	public static function register($username, $email, $password, $first_name, $last_name)
 	{
 		$credentials = [
-			'id'    => $id,
-		    'email'    => $email,
+			'id' => (string) Uuid::uuid4(),
+		    'email' => $email,
 		    'password' => $password,
 		    'first_name' => $first_name,
 		    'last_name' => $last_name,
@@ -170,6 +170,18 @@ class User extends CartalystUser implements UserContract, RemindableContract {
 	public function twoFactorType()
 	{
 		return $this->belongsTo('PragmaRX\Sdk\Services\TwoFactor\Data\Entities\TwoFactorType', 'two_factor_type_id');
+	}
+
+	public function inviter()
+	{
+		return $this->belongsTo(static::class, 'inviter_id');
+	}
+
+	public function isConnectedByInvitation(User $user)
+	{
+		return
+			($this->inviter_id && $this->inviter_id == $user->id) ||
+			($user->inviter_id && $user->inviter_id == $this->id);
 	}
 
 }

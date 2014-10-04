@@ -23,8 +23,6 @@ class Registration extends BaseController {
 	public function __construct(RegistrationForm $registrationForm)
 	{
 		$this->registrationForm = $registrationForm;
-
-		$this->beforeFilter('guest');
 	}
 
 	/**
@@ -42,7 +40,7 @@ class Registration extends BaseController {
 	{
 		$this->registrationForm->validate(Input::all());
 
-		$input = ['id' => (string) Uuid::uuid4()] + Input::all();
+		$input = Input::all();
 
 		$this->execute(RegisterUserCommand::class, $input);
 

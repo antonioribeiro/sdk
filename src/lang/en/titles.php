@@ -15,5 +15,8 @@ return array (
   'account-already-activated' => 'Account <strong class="styleColor">Already Activated</strong>',
   'welcome' => '<strong>Welcome</strong>!',
   'need-to-type-your-username' => 'You need to type a username.',
-  'you-are-connected-to' => 'You Are Connected to Those <strong class="styleColor">People</strong>'
+  'you-are-connected-to' => 'You Are Connected to Those <strong class="styleColor">People</strong>',
+  'join-us' => 'Join Us',
+  'invitation-accepted' => 'Thanks For <strong class="styleColor">Joining Us</strong>!',
+  'password-updated' => 'Password <strong class="styleColor">Updated</strong>!',
 );

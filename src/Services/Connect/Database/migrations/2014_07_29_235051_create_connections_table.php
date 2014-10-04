@@ -14,6 +14,8 @@ class CreateConnectionsTable extends Migration {
 	{
 		Schema::create('connections', function(Blueprint $table)
 		{
+			$table->string('id', 64)->unique()->primary()->index();
+
 			$table->string('requestor_id', 64)->index();
 			$table->string('requested_id', 64)->index();
 

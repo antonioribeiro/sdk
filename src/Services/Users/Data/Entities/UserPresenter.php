@@ -85,9 +85,12 @@ class UserPresenter extends Presenter {
 
 	public function fullName()
 	{
-		return $this->first_name .
-				($this->last_name ? ' ' : '') .
-			    $this->last_name;
+		$name = $this->first_name .
+					($this->last_name ? ' ' : '') .
+					$this->last_name;
+
+
+		return $name ?: $this->username;
 	}
 
 	public function position()

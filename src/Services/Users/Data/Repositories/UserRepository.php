@@ -2,7 +2,17 @@
 
 namespace PragmaRX\Sdk\Services\Users\Data\Repositories;
 
+use Laracasts\Commander\Events\DispatchableTrait;
 use PragmaRX\Sdk\Services\Connect\Data\Entities\Connection;
+use PragmaRX\Sdk\Services\Connect\Events\UserAcceptedInvitation;
+use PragmaRX\Sdk\Services\Connect\Events\UserWasInvited;
+use PragmaRX\Sdk\Services\Connect\Exceptions\DisconnectionIsForbidden;
+use PragmaRX\Sdk\Services\Connect\Exceptions\InvalidInvitationCode;
+use PragmaRX\Sdk\Services\Connect\Exceptions\InvitationAlreadyAccepted;
+use PragmaRX\Sdk\Services\Passwords\Events\PasswordReminderCreated;
+use PragmaRX\Sdk\Services\Passwords\Events\PasswordWasUpdated;
+use PragmaRX\Sdk\Services\Passwords\Exceptions\EmailAndUsernameNotFound;
+use PragmaRX\Sdk\Services\Passwords\Exceptions\InvalidPasswordUpdateRequest;
 use PragmaRX\Sdk\Services\Security\Events\TwoFactorEmailDisableRequested;
 use PragmaRX\Sdk\Services\Security\Events\TwoFactorEmailEnableRequested;
 use PragmaRX\Sdk\Services\Security\Exceptions\ExpiredToken;
@@ -26,16 +36,23 @@ use PragmaRX\Sdk\Core\Exceptions\InvalidRequest;
 use PragmaRX\Sdk\Core\Exceptions\InvalidToken;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 use Input;
-use Activation;
+use Session;
+
+use Carbon;
+use Sentinel;
+
 use Flash;
 use Auth;
-use Sentinel;
-use Carbon;
-use Session;
+use Activation;
 use Google2FA;
+use Password;
 
 class UserRepository {
+
+	use DispatchableTrait;
 
 	const TOKEN_LIFETIME = 10;
 
@@ -115,10 +132,8 @@ class UserRepository {
 
 	public function checkAndCreateActivation($user)
 	{
-		if ( ! Activation::exists($user))
+		if (Auth::checkAndCreateActivation($user))
 		{
-			Activation::create($user);
-
 			$this->sendUserActivationEmail($user);
 		}
 	}
@@ -174,7 +189,7 @@ class UserRepository {
 	 * @param $user_id
 	 * @return mixed
 	 */
-	public function connect($user_to_connect, $user_id)
+	public function connect($user_to_connect, $user_id, $authorize = false)
 	{
 		$user = $this->findById($user_id);
 
@@ -187,6 +202,13 @@ class UserRepository {
 			$connection->requestor_id = $user->id;
 
 			$connection->requested_id = $user_to_connect->id;
+
+			if ($authorize)
+			{
+				$connection->authorized = true;
+
+				$connection->authorized_at = Carbon::now();
+			}
 
 			$connection->save();
 		}
@@ -206,6 +228,11 @@ class UserRepository {
 		$user = $this->findById($user_id);
 
 		$user_to_disconnect = $this->findByUsername($user_to_disconnect);
+
+		if ($user_to_disconnect->isConnectedByInvitation($user))
+		{
+			throw new DisconnectionIsForbidden();
+		}
 
 		$connection = $user->getConnectionTo($user_to_disconnect->id);
 
@@ -388,9 +415,9 @@ class UserRepository {
 
 	public function findByCredentials($credentials)
 	{
-		if ($user = Sentinel::findByCredentials($credentials))
+		if ($user = Auth::findByCredentials($credentials))
 		{
-			if ( ! Sentinel::getUserRepository()->validateCredentials($user, $credentials))
+			if ( ! Auth::getUserRepository()->validateCredentials($user, $credentials))
 			{
 				$user = false;
 			}
@@ -506,7 +533,7 @@ class UserRepository {
 
 		$this->invalidateTwoFactorTokens($user);
 
-		Sentinel::login($user, $remember);
+		Auth::login($user, $remember);
 
 		return $user;
 	}
@@ -772,9 +799,134 @@ class UserRepository {
 		return $user;
 	}
 
-	private function inviteUser($user, $email)
+	private function inviteUser($inviter, $email)
 	{
-		$invited =  
+		$invited = User::register(
+			$this->makeUsernameFromEmail($email),
+			$email,
+			Uuid::uuid4(), /// password can't be blank
+			'', // First name and last name blank in this case
+			''
+		);
+
+		$invited->inviter_id = $inviter->id;
+
+		$invited->invited_at = Carbon::now();
+
+		$invited->save();
+
+		$inviter->raise(new UserWasInvited($invited));
+	}
+
+	public function sendInvitationEmail($user)
+	{
+		Mailer::send(
+			'emails.register.invite',
+			$user,
+			t('paragraphs.you-have-been-invited-by') . ' '. $user->inviter->present()->fullName
+		);
+
+		Flash::message(t('paragraphs.invitation-email-sent-to').' '.$user->email);
+	}
+
+	private function makeUsernameFromEmail($email)
+	{
+		list($name, $domain) = explode('@', $email);
+
+		$username = $name;
+
+		$i = 1;
+
+		while (User::where('username', $username)->first())
+		{
+			$username = $name.$i;
+
+			$i++;
+		}
+
+		return $username;
+	}
+
+	public function acceptInvitation($user_id)
+	{
+		if ( ! $user = User::find($user_id))
+		{
+			throw new InvalidInvitationCode();
+		}
+
+		if ($user->invitation_accepted_at)
+		{
+			throw new InvitationAlreadyAccepted();
+		}
+
+		$user->invitation_accepted_at = Carbon::now();
+
+		$user->save();
+
+		Auth::forceActivation($user);
+
+		$user->raise(new UserAcceptedInvitation($user));
+
+		return $user;
+	}
+
+	public function sendPasswordReminder($user)
+	{
+		return $this->resetPassword($user->email);
+	}
+
+	public function resetPassword($email, $username = null)
+	{
+		if ( ! $email || ! $user = User::where('email', $email)->first())
+		{
+			if ( ! $user = User::where('username', $username)->first())
+			{
+				throw new EmailAndUsernameNotFound();
+			}
+		}
+
+		$reminder = Auth::createReminder($user);
+
+		$user->raise(new PasswordReminderCreated($user, $reminder->code));
+
+		return $user;
+	}
+
+	public function sendPasswordReminderEmail($user, $token)
+	{
+		Mailer::send(
+			'emails.password.reminder',
+			$user,
+			t('captions.change-your-password'),
+			['token' => $token]
+		);
+
+		Flash::message(t('paragraphs.reset-password-sent'));
+	}
+
+	public function updatePassword($email, $password, $token)
+	{
+		$user = User::where('email', $email)->first();
+
+		if ( ! Auth::updatePasswordViaReminder($user, $token, $password))
+		{
+			throw new InvalidPasswordUpdateRequest();
+		}
+
+		$user->raise(new PasswordWasUpdated($user));
+
+		Flash::message(t('paragraphs.password-was-changed'));
+
+		return $user;
+	}
+
+	public function sendPasswordUpdatedEmail($user)
+	{
+		Mailer::send(
+			'emails.password.updated',
+			$user,
+			t('captions.your-password-was-updated')
+		);
 	}
 
 }

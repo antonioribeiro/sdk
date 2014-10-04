@@ -39,8 +39,6 @@ class Profiles extends BaseController {
 		$this->statusRepository = $statusRepository;
 
 		$this->editForm = $editForm;
-
-		$this->beforeFilter('auth');
 	}
 
 	public function show($username)

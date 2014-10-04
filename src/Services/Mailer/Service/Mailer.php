@@ -13,7 +13,7 @@ class Mailer {
 			$data
 		);
 
-        Mail::send($view, ['data' => $data], function($message) use ($user, $subject)
+        Mail::send($view, $data, function($message) use ($user, $subject)
         {
             $message->to($user->email);
 

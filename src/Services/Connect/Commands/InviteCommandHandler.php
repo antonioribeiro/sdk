@@ -22,10 +22,12 @@ class InviteCommandHandler extends CommandHandler {
 	 */
 	public function handle($command)
 	{
-		return $this->userRepository->inviteUsers(
+		$user = $this->userRepository->inviteUsers(
 			$command->user,
 			$command->emails
 		);
+
+		$this->dispatchEventsFor($user);
 	}
 
 }

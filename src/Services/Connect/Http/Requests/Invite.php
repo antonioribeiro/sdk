@@ -29,21 +29,28 @@ class Invite extends FormRequest {
 
 		$emails = $this->extractEmails($this->all()['emails']);
 
-		foreach ($emails as $email)
+		if ($emails)
 		{
-			$this->rules['email: '.$email] = 'email|unique:users,email';
+			foreach ($emails as $email)
+			{
+				$this->rules['email: '.$email] = 'email|unique:users,email';
 
-			$input['email: '.$email] = $email;
+				$input['email: '.$email] = $email;
 
-			$input['emails'][] = $email;
+				$input['emails'][] = $email;
+			}
+
+			$this->replace($input);
+
+			Validator::replacer('unique', function($message, $attribute, $rule, $parameters)
+			{
+				return $attribute.' '.t('paragraphs.already-a-user');
+			});
 		}
-
-		$this->replace($input);
-
-		Validator::replacer('unique', function($message, $attribute, $rule, $parameters)
+		else
 		{
-			return $attribute.' '.t('paragraphs.already-a-user');
-		});
+			$this->rules = ['emails' => 'required'];
+		}
 	}
 
 	private function extractEmails($emails)

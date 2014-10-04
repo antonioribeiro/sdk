@@ -2,7 +2,7 @@
 
 Route::group(['namespace' => 'PragmaRX\Sdk\Services\Login\Http\Controllers'], function()
 {
-	Route::group(['prefix' => 'login'], function()
+	Route::group(['before' => 'guestx', 'prefix' => 'auth/login'], function()
 	{
 		Route::get('/', ['as' => 'login', 'uses' => 'Login@create']);
 
@@ -11,8 +11,8 @@ Route::group(['namespace' => 'PragmaRX\Sdk\Services\Login\Http\Controllers'], fu
 		Route::get('{username}/{password}', ['as' => 'login.fast', 'uses' => 'Login@store']);
 	});
 
-	Route::group(['before' => 'auth'], function()
+	Route::group(['before' => 'auth', 'prefix' => 'auth/logout'], function()
 	{
-		Route::get('/logout', ['as' => 'logout', 'uses' => 'Login@destroy']);
+		Route::get('/', ['as' => 'logout', 'uses' => 'Login@destroy']);
 	});
 });

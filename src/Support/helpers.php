@@ -66,9 +66,16 @@ if ( ! function_exists( 'convert_url_to_ajax' ))
 
 		$pos = strpos($url, $domain);
 
-		$url = substr($url, 0, $pos + strlen($domain) + 1) .
-			'#' . /// add the ajax url handler
-			substr($url, $pos + strlen($domain));
+		$parsed = parse_url($url);
+
+		$path = isset($parsed['path']) ? $parsed['path'] : '/';
+
+		if ($path !== '/')
+		{
+			$url = substr($url, 0, $pos + strlen($domain) + 1) .
+					'#' . /// add the ajax url handler
+					substr($url, $pos + strlen($domain));
+		}
 
 		return $url;
 	}

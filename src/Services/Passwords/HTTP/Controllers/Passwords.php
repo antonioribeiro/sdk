@@ -4,23 +4,30 @@ namespace PragmaRX\Sdk\Services\Passwords\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use Password as PasswordReminder;
-use Hash;
-use Input;
-use Flash;
 use PragmaRX\Sdk\Core\Redirect;
-use PragmaRX\Sdk\Services\Passwords\Validators\ReminderToken as ReminderTokenValidator;
+use PragmaRX\Sdk\Services\Passwords\Commands\ResetPasswordCommand;
+use PragmaRX\Sdk\Services\Passwords\Commands\UpdatePasswordCommand;
+use PragmaRX\Sdk\Services\Passwords\Http\Requests\RemindPassword as RemindPasswordRequest;
+use PragmaRX\Sdk\Services\Passwords\Http\Requests\ResetPassword as ResetPasswordRequest;
+use PragmaRX\Sdk\Services\Passwords\Http\Requests\UpdatePassword as UpdatePasswordRequest;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
+
+use Input;
 use View;
+use Hash;
+
+use Flash;
 
 class Passwords extends BaseController {
 
 	/**
-	 * @var ReminderToken
+	 * @var UserRepository
 	 */
-	private $reminderTokenValidator;
+	private $userRepository;
 
-	public function __construct(ReminderTokenValidator $reminderTokenValidator)
+	public function __construct(UserRepository $userRepository)
 	{
-		$this->reminderTokenValidator = $reminderTokenValidator;
+		$this->userRepository = $userRepository;
 	}
 
 	/**
@@ -38,21 +45,14 @@ class Passwords extends BaseController {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(RemindPasswordRequest $request)
 	{
-		switch ($response = PasswordReminder::remind(Input::only('email')))
-		{
-			case PasswordReminder::INVALID_USER:
-				return Redirect::route('password')
-						->with('error', t($response))
-						->withInput();
+		$this->execute(ResetPasswordCommand::class);
 
-			case PasswordReminder::REMINDER_SENT:
-				return Redirect::route('message')
-					->with('title', t('titles.reset-your-password'))
-					->with('message', t('paragraphs.reset-password-sent'))
-					->withInput();
-		}
+		return Redirect::route('message')
+			->with('title', t('titles.reset-your-password'))
+			->with('message', t('paragraphs.reset-password-sent'))
+			->withInput();
 	}
 
 	/**
@@ -61,11 +61,9 @@ class Passwords extends BaseController {
 	 * @param  string  $token
 	 * @return Response
 	 */
-	public function reset($token)
+	public function reset($token, ResetPasswordRequest $request)
 	{
-		Input::merge(['token' => $token]);
-
-		$this->reminderTokenValidator->validate(['password_token' => $token]);
+		$request->merge(['token' => $token]);
 
 		return View::make('passwords.reset')->with('token', $token);
 	}
@@ -75,7 +73,7 @@ class Passwords extends BaseController {
 	 *
 	 * @return Response
 	 */
-	public function update()
+	public function update(UpdatePasswordRequest $request)
 	{
 		$credentials = Input::only(
 			'email',
@@ -84,26 +82,9 @@ class Passwords extends BaseController {
 			'token'
 		);
 
-		$response = PasswordReminder::reset($credentials, function($user, $password)
-		{
-			$user->password = Hash::make($password);
+		$this->execute(UpdatePasswordCommand::class, $credentials);
 
-			$user->save();
-		});
-
-		switch ($response)
-		{
-			case PasswordReminder::INVALID_PASSWORD:
-			case PasswordReminder::INVALID_TOKEN:
-			case PasswordReminder::INVALID_USER:
-				return Redirect::back()
-						->with('error', t($response))
-						->withInput();
-
-			case PasswordReminder::PASSWORD_RESET:
-				Flash::message(t('paragraphs.password-was-changed'));
-				return Redirect::to('/');
-		}
+		return Redirect::route('login');
 	}
 
 }

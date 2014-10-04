@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Connect\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Connect\Commands\AcceptInvitationCommand;
 use PragmaRX\Sdk\Services\Connect\Commands\ConnectActionCommand;
 use PragmaRX\Sdk\Services\Connect\Commands\ConnectUserCommand;
 use PragmaRX\Sdk\Services\Connect\Commands\DisconnectUserCommand;
@@ -83,4 +84,17 @@ class Connect extends BaseController {
 		return Response::json(['success' => true]);
 	}
 
+	public function acceptInvitation($user_id)
+	{
+		$input = [
+			'user_id' => $user_id,
+		];
+
+		$this->execute(AcceptInvitationCommand::class, $input);
+
+		return Redirect::route('message')
+				->with('title', t('titles.invitation-accepted'))
+				->with('message', t('paragraphs.invitation-accepted'))
+				->withInput();
+	}
 }

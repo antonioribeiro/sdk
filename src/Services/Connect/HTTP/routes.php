@@ -23,3 +23,13 @@ Route::group(['before' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Connect\
 		Route::get('/', ['as' => 'connections', 'uses' => 'Connections@index']);
 	});
 });
+
+// Not athenticated routes
+
+Route::group(['namespace' => 'PragmaRX\Sdk\Services\Connect\Http\Controllers'], function()
+{
+	Route::group(['prefix' => 'connect'], function()
+	{
+		Route::get('invite/accept/{id}', ['as' => 'connect.invite.accept', 'uses' => 'Connect@acceptInvitation']);
+	});
+});

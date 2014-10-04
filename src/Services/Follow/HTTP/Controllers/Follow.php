@@ -12,15 +12,6 @@ use PragmaRX\Sdk\Services\Follow\Commands\UnfollowUserCommand;
 class Follow extends BaseController {
 
 	/**
-	 * Create a Follow instance.
-	 *
-	 */
-	public function __construct()
-	{
-		$this->beforeFilter('auth');
-	}
-
-	/**
 	 * Follow a user.
 	 *
 	 * @param $username

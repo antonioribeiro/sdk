@@ -40,6 +40,7 @@ return array (
   'remember-me' => 'Remember Me',
   'sign-in' => 'Sign In',
   'change-password' => 'Change Password',
+  'change-your-password' => 'Change your password',
   'type-your-email' => 'Type Your E-mail Address',
   'name' => 'Name',
   'username' => 'Username',
@@ -74,4 +75,6 @@ return array (
   'postpone' => 'Postpone',
   'invite-someone' => 'Invite Someone',
   'send-invitation' => 'Send Invitation',
+  'you-have-been-invited-by' => 'You have been invited by',
+  'your-password-was-updated' => 'Your password was changed',
 );

@@ -27,8 +27,6 @@ class Statuses extends BaseController {
 	 */
 	public function __construct(PostStatus $postStatusForm, StatusRepository $statusRepository)
 	{
-		$this->beforeFilter('auth');
-
 		$this->postStatusForm = $postStatusForm;
 
 		$this->statusRepository = $statusRepository;

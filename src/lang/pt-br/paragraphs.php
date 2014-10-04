@@ -49,7 +49,7 @@ return array (
   'i-agree-with' => 'Eu concordo com o',
   'need-to-type-your-password' => 'Você precisa digitar a sua senha.',
   'please-enter-your-email-for-password-reset' => 'Por favor digite o endereço de e-mail para o qual deseja trocar a senha.',
-  'reset-password-sent' => 'Um link para troca da sua senha foi enviado para a sua caixa postal. Por favor clique naquele link para trocar a sua senha.',
+  'reset-password-sent' => 'Um link para troca de senha foi enviado para a sua caixa postal.',
   'to-reset-your-password' => 'Para trocar a sua senha, complete este formulário.',
   'want-to-receive-news' => 'Eu quero receber notícias.',
   'account-not-yet-activated' => 'Sua conta ainda não foi ativada.',

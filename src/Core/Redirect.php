@@ -26,6 +26,12 @@ class Redirect {
 					)
 			    ];
 			}
+			elseif ($name == 'back')
+			{
+				$response = [
+					'redirect' => convert_url_to_ajax(static::__getReferer())
+			    ];
+			}
 			else
 			{
 				$response = [
@@ -52,11 +58,6 @@ class Redirect {
 	private static function back($parameters)
 	{
 		$referer = static::__getReferer();
-
-		if ( ! $referer || static::__isBadReferer($referer))
-		{
-			return static::call('home', $parameters);
-		}
 
 		array_unshift($parameters, $referer);
 
@@ -88,7 +89,12 @@ class Redirect {
 
 		if (static::__isBadReferer($referer))
 		{
-			$referer = convert_url_to_ajax(Request::getUri());
+			$referer = Request::getUri();
+		}
+
+		if ( ! $referer || static::__isBadReferer($referer))
+		{
+			$referer = route('home');
 		}
 
 		return $referer;
