@@ -2,28 +2,50 @@
 
 namespace PragmaRX\Sdk;
 
-use App;
-use Auth;
 use PragmaRX\Sdk\Core\Migrations\MigrateCommand;
 use PragmaRX\Sdk\Core\Migrations\ResetCommand;
 use PragmaRX\Sdk\Core\Migrations\RollbackCommand;
 use PragmaRX\Sdk\Core\Traits\ServiceableTrait;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 
-use File;
-use Session;
 use Language;
 
 class ServiceProvider extends PragmaRXServiceProvider {
 
 	use ServiceableTrait;
 
-    protected $packageVendor = 'pragmarx';
-    protected $packageVendorCapitalized = 'PragmaRX';
+	/**
+	 * Vendor name.
+	 *
+	 * @var string
+	 */
+	protected $packageVendor = 'pragmarx';
 
-    protected $packageName = 'sdk';
-    protected $packageNameCapitalized = 'Sdk';
+	/**
+	 * Vendor name capitalized.
+	 *
+	 * @var string
+	 */
+	protected $packageVendorCapitalized = 'PragmaRX';
 
+	/**
+	 * Package name.
+	 *
+	 * @var string
+	 */
+	protected $packageName = 'sdk';
+
+	/**
+	 * Package name capitalized.
+	 *
+	 * @var string
+	 */
+	protected $packageNameCapitalized = 'Sdk';
+
+	/**
+	 * Internal boot method.
+	 *
+	 */
 	public function wakeUp()
 	{
 		$this->registerGlobalScripts();
@@ -32,51 +54,40 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	}
 
     /**
-     * Register the service provider.
+     * Register all the things.
      *
      * @return void
      */
     public function register()
     {
-	    $this->preRegister();
+	    parent::register();
 
-	    $this->registerConfig();
-
-	    $this->registerPackageServiceProviders();
+	    $this->registerPackages();
 
 	    $this->registerServices();
 
 	    $this->configurePackages();
     }
 
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array('pragmarx.sdk');
-    }
-
-    public function registerConfig()
-    {
-        $this->app['pragmarx.config'] = $this->app->share(function($app)
-        {
-            return new Config($app['config'], self::PACKAGE_NAMESPACE);
-        });
-    }
-
-	private function registerPackageServiceProviders()
+	/**
+	 * Register all packages service providers.
+	 *
+	 */
+	private function registerPackages()
 	{
 		$disabled_packages = $this->getConfig('disabled.packages') ?: [];
 
-		foreach($this->getConfig('packages') as $package)
+		foreach ($this->getConfig('packages') as $package)
 		{
 			$this->registerPackageServiceProvider($package, $disabled_packages);
 		}
 	}
 
+	/**
+	 * Load a package Facade.
+	 *
+	 * @param $package
+	 */
 	private function loadFacades($package)
 	{
 		if ( ! isset($package['facades']))
@@ -84,34 +95,31 @@ class ServiceProvider extends PragmaRXServiceProvider {
 			return;
 		}
 
-		foreach($package['facades'] as $name => $class)
+		foreach ($package['facades'] as $name => $class)
 		{
 			$this->loadFacade($name, $class);
 		}
 	}
 
+	/**
+	 * Include service scripts.
+	 *
+	 * @param array $services
+	 * @param null $path
+	 */
 	private function includeServiceScripts(array $services, $path = null)
 	{
-
-		foreach($services as $service)
+		foreach ($services as $service)
 		{
-			$this->includeSupportFiles($service, $path);
+			$this->includeServiceSupportFiles($service, $path);
 
 			$this->loadServiceProviders($service, $path);
 		}
 	}
 
 	/**
-	 * Gets the root directory of the child ServiceProvider
+	 * Register a package service provider.
 	 *
-	 * @return string
-	 */
-	protected function getRootDirectory()
-	{
-		return __DIR__;
-	}
-
-	/**
 	 * @param $package
 	 */
 	private function registerPackageServiceProvider($package, $disabled_packages = [])
@@ -121,12 +129,16 @@ class ServiceProvider extends PragmaRXServiceProvider {
 			&& $package['enabled']
 			&& ! in_array($package['name'], $disabled_packages))
 		{
-			App::register($class);
+			$this->app->register($class);
 		}
 
 		$this->loadFacades($package);
 	}
 
+	/**
+	 * Register SDK and Application services.
+	 *
+	 */
 	private function registerServices()
 	{
 		$services = $this->getConfig('services');
@@ -144,6 +156,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	}
 
 	/**
+	 * Include a .php file.
+	 *
 	 * @param $file
 	 */
 	private function includeFile($file)
@@ -154,6 +168,10 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		}
 	}
 
+	/**
+	 * Register global scripts.
+	 *
+	 */
 	private function registerGlobalScripts()
 	{
 		$this->includeFile(__DIR__ . "/Core/Exceptions/handlers.php");
@@ -175,17 +193,42 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		$this->includeFile(__DIR__ . "/Support/validators.php");
 	}
 
+	/**
+	 * Configure all packages.
+	 *
+	 */
 	private function configurePackages()
 	{
+		$this->configureSentinel();
+	}
+
+	/**
+	 * Configure Cartalyst Sentinel models.
+	 *
+	 * ***** THIS MUST BE EXTRACTED!
+	 */
+	private function configureSentinel()
+	{
 		$this->app['config']->set('cartalyst/sentinel::users.model', $this->getConfig('models.user'));
+
 		$this->app['config']->set('cartalyst/sentinel::roles.model', $this->getConfig('models.role'));
+
 	    $this->app['config']->set('cartalyst/sentinel::persistences.model', $this->getConfig('models.persistence'));
+
 	    $this->app['config']->set('cartalyst/sentinel::activations.model', $this->getConfig('models.activation'));
+
 	    $this->app['config']->set('cartalyst/sentinel::reminders.model', $this->getConfig('models.reminder'));
+
 	    $this->app['config']->set('cartalyst/sentinel::throttling.model', $this->getConfig('models.throttle'));
 	}
 
-	private function includeSupportFiles($service, $path = null)
+	/**
+	 * Include all service support files.
+	 *
+	 * @param $service
+	 * @param null $path
+	 */
+	private function includeServiceSupportFiles($service, $path = null)
 	{
 		$path = $path ?: __DIR__;
 
@@ -197,9 +240,9 @@ class ServiceProvider extends PragmaRXServiceProvider {
 			'events.php',
 		];
 
-		$files = App::make('files')->allFiles("{$path}/{$service}");
+		$files = $this->app->make('files')->allFiles("{$path}/{$service}");
 
-		foreach($files as $file)
+		foreach ($files as $file)
 		{
 			if (in_array($file->getFileName(), $loadable))
 			{
@@ -208,26 +251,36 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		}
 	}
 
+	/**
+	 * Load Service Services Providers.
+	 *
+	 * @param $service
+	 * @param null $path
+	 */
 	private function loadServiceProviders($service, $path = null)
 	{
 		$path = $path ?: __DIR__;
 
 		if (file_exists("$path/{$service}/Providers"))
 		{
-			$files = App::make('files')->allFiles("$path/{$service}/Providers");
+			$files = $this->app->make('files')->allFiles("$path/{$service}/Providers");
 
-			foreach($files as $file)
+			foreach ($files as $file)
 			{
 				$class = get_class_name_from_file($file, __DIR__, 'PragmaRX\Sdk');
 
 				if (class_exists($class))
 				{
-					App::register($class);
+					$this->app->register($class);
 				}
 			}
 		}
 	}
 
+	/**
+	 * Register Artisan commands.
+	 *
+	 */
 	private function registerCommands()
 	{
 		$this->app->bindShared('command.migrate', function($app)
@@ -248,9 +301,33 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		});
 	}
 
+	/**
+	 * Configure the current Locale.
+	 *
+	 */
 	private function configureLocale()
 	{
 		Language::configureLocale();
+	}
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return array('pragmarx.sdk');
+    }
+
+	/**
+	 * Provides the root directory of the child ServiceProvider.
+	 *
+	 * @return string
+	 */
+	protected function getRootDirectory()
+	{
+		return __DIR__;
 	}
 
 }
