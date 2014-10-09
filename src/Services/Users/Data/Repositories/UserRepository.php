@@ -929,4 +929,11 @@ class UserRepository {
 		);
 	}
 
+	public function updateSettings($user, $input)
+	{
+		$user->settings()->update($input);
+
+		return $user;
+	}
+
 }

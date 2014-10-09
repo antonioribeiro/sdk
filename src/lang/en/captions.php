@@ -77,4 +77,13 @@ return array (
   'send-invitation' => 'Send Invitation',
   'you-have-been-invited-by' => 'You have been invited by',
   'your-password-was-updated' => 'Your password was changed',
+  'clients' => 'Clients',
+  'settings' => 'Settings',
+  'your-settings' => 'Your Settings',
+  'client-field-name' => 'Client Field Name',
+  'singular' => 'Singular',
+  'plural' => 'Plural',
+  'add-client' => 'Add Client',
+  'client' => 'Client',
+  'mobile-phone' => 'Mobile Phone',
 );

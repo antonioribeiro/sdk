@@ -14,7 +14,7 @@ trait MigratableTrait {
 
 	private $paths;
 
-	private function getTemporaryMigrationPath()
+	private function getTemporaryMigrationDirectory()
 	{
 		if ( ! is_null($this->migrationPath))
 		{
@@ -30,7 +30,7 @@ trait MigratableTrait {
 			$this->paths = array_merge($this->paths, $this->getServicesMigrationPaths());
 		}
 
-		$this->migrationPath = $this->getTemporaryPath();
+		$this->migrationPath = $this->createTemporaryDirectory();
 
 		$this->copyMigrations($this->paths, $this->migrationPath);
 
@@ -125,7 +125,7 @@ trait MigratableTrait {
 				: null;
 	}
 
-	private function getTemporaryPath()
+	private function createTemporaryDirectory()
 	{
 		return File::tempDir();
 	}
@@ -171,7 +171,7 @@ trait MigratableTrait {
 
 	private function getMigrations()
 	{
-		return File::glob($this->getTemporaryMigrationPath().'/*_*.php');
+		return File::glob($this->getTemporaryMigrationDirectory().'/*_*.php');
 	}
 
 } 

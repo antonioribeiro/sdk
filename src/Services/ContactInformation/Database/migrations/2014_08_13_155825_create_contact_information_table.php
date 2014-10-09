@@ -16,7 +16,8 @@ class CreateContactInformationTable extends Migration {
 		{
 			$table->string('id', 64)->primary();
 
-			$table->string('user_id', 64);
+			$table->string('user_id', 64)->nullable();
+			$table->string('client_id', 64)->nullable();
 			$table->string('kind_id', 64);
 			$table->string('info');
 
@@ -28,6 +29,15 @@ class CreateContactInformationTable extends Migration {
 			$table->foreign('user_id')
 					->references('id')
 					->on('users')
+					->onUpdate('cascade')
+					->onDelete('cascade');
+		});
+
+		Schema::table('contact_information', function(Blueprint $table)
+		{
+			$table->foreign('client_id')
+					->references('id')
+					->on('clients')
 					->onUpdate('cascade')
 					->onDelete('cascade');
 		});

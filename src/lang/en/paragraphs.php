@@ -109,4 +109,6 @@ return array (
   'invalid-password-update-request' => 'This password update request was invalid. Please try to ask for a new password again.',
   'your-password-was-updated' => 'This just remind you that you changed your password.',
   'connected-by-invitation-cannot-disconnect' => 'You are connected to this user by invitation and cannot disconnect.',
+  'your-settings-were-updated' => 'Your settings have been updated.',
+  'you-have-no-clients' => 'You have no clients yet.',
 );

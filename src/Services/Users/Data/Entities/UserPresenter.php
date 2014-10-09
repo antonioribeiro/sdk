@@ -102,4 +102,11 @@ class UserPresenter extends Presenter {
 	{
 		return Google2FA::getQRCodeGoogleUrl(Config::get('app.name'), $this->email, $this->two_factor_google_secret_key);
 	}
+
+	public function clientFieldName()
+	{
+		return $this->settings->client_field_name
+				? $this->settings->client_field_name
+				: t("captions.clients");
+	}
 }

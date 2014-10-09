@@ -20,7 +20,7 @@ class MigrateCommand extends IlluminateMigrateCommand {
 
 		$this->prepareDatabase();
 
-		$this->runMigrations($this->getTemporaryMigrationPath());
+		$this->runMigrations($this->getTemporaryMigrationDirectory());
 
 		// Finally, if the "seed" option has been given, we will re-run the database
 		// seed task to re-populate the database, which is convenient when adding
@@ -29,6 +29,13 @@ class MigrateCommand extends IlluminateMigrateCommand {
 		{
 			$this->call('db:seed', ['--force' => true]);
 		}
+	}
+
+	private function runMigrations($getTempMigrationPath)
+	{
+		$this->runMigration($getTempMigrationPath);
+
+		$this->cleanTemporaryDirectory();
 	}
 
 	private function runMigration($path)
@@ -47,13 +54,6 @@ class MigrateCommand extends IlluminateMigrateCommand {
 		{
 			$this->output->writeln($note);
 		}
-	}
-
-	private function runMigrations($getTempMigrationPath)
-	{
-		$this->runMigration($getTempMigrationPath);
-
-		$this->cleanTemporaryDirectory();
 	}
 
 }

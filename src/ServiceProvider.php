@@ -66,6 +66,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	    $this->registerServices();
 
+	    $this->registerCommands();
+
 	    $this->configurePackages();
     }
 
@@ -79,7 +81,12 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 		foreach ($this->getConfig('packages') as $package)
 		{
-			$this->registerPackageServiceProvider($package, $disabled_packages);
+			if ( ! in_array($package['name'], $disabled_packages))
+			{
+				$this->registerPackageServiceProviders($package);
+
+				$this->registerPackageFacades($package);
+			}
 		}
 	}
 
@@ -88,14 +95,13 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 *
 	 * @param $package
 	 */
-	private function loadFacades($package)
+	private function registerPackageFacades($package)
 	{
-		if ( ! isset($package['facades']))
-		{
-			return;
-		}
+		$facades = ! isset($package['facades'])
+					? []
+					: $package['facades'];
 
-		foreach ($package['facades'] as $name => $class)
+		foreach ($facades as $name => $class)
 		{
 			$this->loadFacade($name, $class);
 		}
@@ -111,9 +117,9 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	{
 		foreach ($services as $service)
 		{
-			$this->includeServiceSupportFiles($service, $path);
+			$this->registerServiceScripts($service, $path);
 
-			$this->loadServiceProviders($service, $path);
+			$this->registerServiceServiceProviders($service, $path);
 		}
 	}
 
@@ -122,17 +128,19 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 *
 	 * @param $package
 	 */
-	private function registerPackageServiceProvider($package, $disabled_packages = [])
+	private function registerPackageServiceProviders($package)
 	{
-		if (isset($package['serviceProvider'])
-			&& class_exists($class = $package['serviceProvider'])
-			&& $package['enabled']
-			&& ! in_array($package['name'], $disabled_packages))
-		{
-			$this->app->register($class);
-		}
+		$serviceProviders = ! isset($package['serviceProviders'])
+								? []
+								: $package['serviceProviders'];
 
-		$this->loadFacades($package);
+		foreach ($serviceProviders as $serviceProvider)
+		{
+			if (class_exists($serviceProvider) && $package['enabled'])
+			{
+				$this->app->register($serviceProvider);
+			}
+		}
 	}
 
 	/**
@@ -141,18 +149,14 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 */
 	private function registerServices()
 	{
-		$services = $this->getConfig('services');
-
 		// SDK Services
-		$this->includeServiceScripts($services);
+		$this->includeServiceScripts($this->getConfig('services'));
 
 		// Application Services
 		$this->includeServiceScripts(
 			$this->getApplicationServices(),
 			$this->getConfig('application_services_path')
 		);
-
-		$this->registerCommands();
 	}
 
 	/**
@@ -228,7 +232,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 * @param $service
 	 * @param null $path
 	 */
-	private function includeServiceSupportFiles($service, $path = null)
+	private function registerServiceScripts($service, $path = null)
 	{
 		$path = $path ?: __DIR__;
 
@@ -257,13 +261,13 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 * @param $service
 	 * @param null $path
 	 */
-	private function loadServiceProviders($service, $path = null)
+	private function registerServiceServiceProviders($service, $path = null)
 	{
 		$path = $path ?: __DIR__;
 
-		if (file_exists("$path/{$service}/Providers"))
+		if (file_exists($providersPath = "$path/{$service}/Providers"))
 		{
-			$files = $this->app->make('files')->allFiles("$path/{$service}/Providers");
+			$files = $this->app->make('files')->allFiles($providersPath);
 
 			foreach ($files as $file)
 			{

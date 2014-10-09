@@ -39,6 +39,7 @@ return [
 		'Services/Block',
 
 		'Services/Cities',
+		'Services/Clients',
 		'Services/Connect',
 		'Services/ContactInformation',
 		'Services/Countries',
@@ -64,6 +65,7 @@ return [
 
 		'Services/Registration',
 
+		'Services/Settings',
 		'Services/Sms',
 		'Services/States',
 		'Services/Statuses',
@@ -87,7 +89,7 @@ return [
 		[
 			'name' => 'pragmarx/google2fa',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider',
+			'serviceProviders' => ['PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider'],
 			'facades' => [
 				'Google2FA' => 'PragmaRX\Google2FA\Vendor\Laravel\Facade',
 			]
@@ -96,7 +98,7 @@ return [
 		[
 			'name' => 'pragmarx/sms',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\Sdk\Services\Sms\Service\Provider',
+			'serviceProviders' => ['PragmaRX\Sdk\Services\Sms\Service\Provider'],
 			'facades' => [
 				'Sms' => 'PragmaRX\Sdk\Services\Sms\Service\Facade',
 			]
@@ -105,7 +107,7 @@ return [
 		[
 			'name' => 'pragmarx/language',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\Sdk\Services\Language\Service\Provider',
+			'serviceProviders' => ['PragmaRX\Sdk\Services\Language\Service\Provider'],
 			'facades' => [
 				'Language' => 'PragmaRX\Sdk\Services\Language\Service\Facade',
 			]
@@ -114,19 +116,19 @@ return [
 		[
 			'name' => 'pragmarx/view',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\Sdk\Services\View\Service\Provider',
+			'serviceProviders' => ['PragmaRX\Sdk\Services\View\Service\Provider'],
 		],
 
 		[
 			'name' => 'pragmarx/translator',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\Sdk\Services\Translator\Service\Provider',
+			'serviceProviders' => ['PragmaRX\Sdk\Services\Translator\Service\Provider'],
 		],
 
 		[
 			'name' => 'pragmarx/zipcode',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\ZIPcode\Vendor\Laravel\ServiceProvider',
+			'serviceProviders' => ['PragmaRX\ZIPcode\Vendor\Laravel\ServiceProvider'],
 			'facades' => [
 				'ZipCode' => 'PragmaRX\ZIPcode\Vendor\Laravel\Facade',
 				'ZIPCode' => 'PragmaRX\ZIPcode\Vendor\Laravel\Facade',
@@ -136,7 +138,7 @@ return [
 		[
 			'name' => 'pragmarx/avatar',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\Sdk\Services\Avatars\Service\Provider',
+			'serviceProviders' => ['PragmaRX\Sdk\Services\Avatars\Service\Provider'],
 			'facades' => [
 				'Avatar' => 'PragmaRX\Sdk\Services\Avatars\Service\Facade',
 			]
@@ -145,7 +147,7 @@ return [
 		[
 			'name' => 'pragmarx/file',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\Sdk\Services\Files\Service\Provider',
+			'serviceProviders' => ['PragmaRX\Sdk\Services\Files\Service\Provider'],
 			'facades' => [
 				'File' => 'PragmaRX\Sdk\Services\Files\Service\Facade', /// overrides the Laravel Facade
 			]
@@ -154,7 +156,7 @@ return [
 		[
 			'name' => 'pragmarx/auth',
 			'enabled' => true,
-		    'serviceProvider' => 'PragmaRX\Sdk\Services\Auth\Service\Provider',
+		    'serviceProviders' => ['PragmaRX\Sdk\Services\Auth\Service\Provider'],
 			'facades' => [
 				'Authentication' => 'PragmaRX\Sdk\Services\Auth\Service\Facade',
 				'Auth'           => 'PragmaRX\Sdk\Services\Auth\Service\Facade', /// overrides the Laravel Facade
@@ -172,7 +174,7 @@ return [
 		[
 			'name' => 'pragmarx/form',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\Sdk\Services\Form\Service\Provider',
+			'serviceProviders' => ['PragmaRX\Sdk\Services\Form\Service\Provider'],
 			'facades' => [
 				'Form' => 'PragmaRX\Sdk\Services\Form\Service\Facade', /// overrides the Laravel Facade
 			]
@@ -190,7 +192,7 @@ return [
 		[
 			'name' => 'pragmarx/flash',
 			'enabled' => true,
-		    'serviceProvider' => 'PragmaRX\Sdk\Services\Flash\Service\Provider',
+		    'serviceProviders' => ['PragmaRX\Sdk\Services\Flash\Service\Provider'],
 			'facades' => [
 				'Flash' => 'PragmaRX\Sdk\Services\Flash\Service\Facade',
 			]
@@ -199,55 +201,55 @@ return [
 		[
 			'name' => 'pragmarx/tracker',
 			'enabled' => true,
-		    'serviceProvider' => 'PragmaRX\Tracker\Vendor\Laravel\ServiceProvider',
+		    'serviceProviders' => ['PragmaRX\Tracker\Vendor\Laravel\ServiceProvider'],
 		],
 
 		[
 			'name' => 'pragmarx/firewall',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\Firewall\Vendor\Laravel\ServiceProvider',
+			'serviceProviders' => ['PragmaRX\Firewall\Vendor\Laravel\ServiceProvider'],
 		],
 
 		[
 			'name' => 'pragmarx/sqli',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\SqlI\Vendor\Laravel\ServiceProvider',
+			'serviceProviders' => ['PragmaRX\SqlI\Vendor\Laravel\ServiceProvider'],
 		],
 
 		[
 			'name' => 'pragmarx/glottos',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\Glottos\Vendor\Laravel\ServiceProvider',
+			'serviceProviders' => ['PragmaRX\Glottos\Vendor\Laravel\ServiceProvider'],
 		],
 
 		[
 			'name' => 'way/generators',
 			'enabled' => true,
-			'serviceProvider' => 'Way\Generators\GeneratorsServiceProvider',
+			'serviceProviders' => ['Way\Generators\GeneratorsServiceProvider'],
 		],
 
 		[
 			'name' => 'laracasts/commander',
 			'enabled' => true,
-			'serviceProvider' => 'Laracasts\Commander\CommanderServiceProvider',
+			'serviceProviders' => ['Laracasts\Commander\CommanderServiceProvider'],
 		],
 
 		[
 			'name' => 'laracasts/validation',
 			'enabled' => true,
-			'serviceProvider' => 'Laracasts\Validation\ValidationServiceProvider',
+			'serviceProviders' => ['Laracasts\Validation\ValidationServiceProvider'],
 		],
 
 		[
 			'name' => 'laracasts/utilities',
 			'enabled' => true,
-			'serviceProvider' => 'Laracasts\Utilities\UtilitiesServiceProvider',
+			'serviceProviders' => ['Laracasts\Utilities\UtilitiesServiceProvider'],
 		],
 
 		[
 			'name' => 'cartalyst/sentinel',
 			'enabled' => true,
-			'serviceProvider' => 'Cartalyst\Sentinel\Laravel\SentinelServiceProvider',
+			'serviceProviders' => ['Cartalyst\Sentinel\Laravel\SentinelServiceProvider'],
 		    'facades' => [
 				'Activation' => 'Cartalyst\Sentinel\Laravel\Facades\Activation',
 				'Reminder'   => 'Cartalyst\Sentinel\Laravel\Facades\Reminder',
@@ -258,7 +260,7 @@ return [
 		[
 			'name' => 'jenssegers/date',
 			'enabled' => true,
-			'serviceProvider' => 'Jenssegers\Date\DateServiceProvider',
+			'serviceProviders' => ['Jenssegers\Date\DateServiceProvider'],
 		    'facades' => [
 			    'Carbon' => 'Jenssegers\Date\Date',
 		    ]
@@ -267,7 +269,7 @@ return [
 		[
 			'name' => 'aloha/twilio',
 			'enabled' => true,
-			'serviceProvider' => 'Aloha\Twilio\TwilioServiceProvider',
+			'serviceProviders' => ['Aloha\Twilio\TwilioServiceProvider'],
 			'facades' => [
 				'Twilio' => 'Aloha\Twilio\Facades\Twilio',
 			]
@@ -276,25 +278,25 @@ return [
 		[
 			'name' => 'way/generators',
 			'enabled' => true,
-			'serviceProvider' => 'Way\Generators\GeneratorsServiceProvider',
+			'serviceProviders' => ['Way\Generators\GeneratorsServiceProvider'],
 		],
 
 		[
 			'name' => 'pragmarx/sqli',
 			'enabled' => true,
-			'serviceProvider' => 'PragmaRX\SqlI\Vendor\Laravel\ServiceProvider',
+			'serviceProviders' => ['PragmaRX\SqlI\Vendor\Laravel\ServiceProvider'],
 		],
 
 		[
 			'name' => 'illuminate/html',
 			'enabled' => true,
-			'serviceProvider' => 'Illuminate\Html\HtmlServiceProvider',
+			'serviceProviders' => ['Illuminate\Html\HtmlServiceProvider'],
 		],
 
 //		[
 //			'name' => 'barryvdh/translationmanager',
 //			'enabled' => true,
-//			'serviceProvider' => 'Barryvdh\TranslationManager\ManagerServiceProvider',
+//			'serviceProviders' => ['Barryvdh\TranslationManager\ManagerServiceProvider'],
 //		],
 
 	]

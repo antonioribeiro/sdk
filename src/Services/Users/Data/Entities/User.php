@@ -22,6 +22,7 @@ use Laracasts\Presenter\PresentableTrait;
 
 use Activation;
 use Auth;
+use PragmaRX\Sdk\Services\Settings\Data\Entities\Setting;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\BlockableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\ConnectableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\FollowableTrait;
@@ -184,4 +185,20 @@ class User extends CartalystUser implements UserContract, RemindableContract {
 			($user->inviter_id && $user->inviter_id == $this->id);
 	}
 
+	public function settings()
+	{
+		$this->checkUserSettings();
+
+		return $this->hasOne('PragmaRX\Sdk\Services\Settings\Data\Entities\Setting', 'user_id');
+	}
+
+	private function checkUserSettings()
+	{
+		if ( ! $this->hasOne(Setting::class, 'user_id')->first())
+		{
+			$settings = new Setting();
+
+			$this->hasOne(Setting::class, 'user_id')->save($settings);
+		}
+	}
 }
