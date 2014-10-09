@@ -4,7 +4,7 @@ use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidEmail;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidPassword;
 
-App::error(function(UserAlreadyActivated $exception, $code)
+App::make('exception')->error(function(UserAlreadyActivated $exception, $code)
 {
 	return Redirect::route('message')
 		->with('title', t('titles.account-already-activated'))
@@ -16,14 +16,14 @@ App::error(function(UserAlreadyActivated $exception, $code)
 		->withInput();
 });
 
-App::error(function(InvalidPassword $exception, $code)
+App::make('exception')->error(function(InvalidPassword $exception, $code)
 {
 	Flash::error(t('paragraphs.invalid-password'));
 
 	return Redirect::back()->withInput();
 });
 
-App::error(function(InvalidEmail $exception, $code)
+App::make('exception')->error(function(InvalidEmail $exception, $code)
 {
 	Flash::error(t('paragraphs.invalid-email'));
 

@@ -25,8 +25,6 @@ class Login extends BaseController {
 	 */
 	public function __construct(SignInForm $signInForm)
 	{
-		$this->beforeFilter('guest', ['except' => 'destroy']);
-
 		$this->signInForm = $signInForm;
 	}
 

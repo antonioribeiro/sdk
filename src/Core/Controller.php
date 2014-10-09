@@ -2,11 +2,10 @@
 
 namespace PragmaRX\Sdk\Core;
 
-use Illuminate\Routing\Controller as IlluminateController;
 use Laracasts\Commander\CommanderTrait;
 use Laracasts\Commander\Events\DispatchableTrait;
 
-class Controller extends IlluminateController {
+class Controller {
 
 	use CommanderTrait;
 	use DispatchableTrait;
