@@ -6,6 +6,8 @@ use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Accounts\Commands\SignInCommand;
 use PragmaRX\Sdk\Services\Login\Forms\SignIn as SignInForm;
 
+use PragmaRX\Sdk\Services\Login\Http\Requests\Login as LoginRequest;
+
 use View;
 use Input;
 use Auth;
@@ -14,19 +16,6 @@ use Flash;
 use Redirect;
 
 class Login extends BaseController {
-
-	/**
-	 * @var SignInForm
-	 */
-	private $signInForm;
-
-	/**
-	 * @param SignInForm $signInForm
-	 */
-	public function __construct(SignInForm $signInForm)
-	{
-		$this->signInForm = $signInForm;
-	}
 
 	/**
 	 * @return mixed
@@ -39,15 +28,13 @@ class Login extends BaseController {
 	/**
 	 * @return mixed
 	 */
-	public function store($email = null, $password = null, $remember = null)
+	public function store(LoginRequest $request, $email = null, $password = null, $remember = null)
 	{
 		$input = [
 			'email' => $email ?: Input::get('email'),
 			'password' => $password ?: Input::get('password'),
 			'remember' => $remember ?: Input::get('remember') === 'on',
 		];
-
-		$this->signInForm->validate($input);
 
 		$result = $this->execute(SignInCommand::class, $input);
 

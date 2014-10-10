@@ -20,6 +20,11 @@ class Flash {
 
 	private function addMessage($kind, $message, $title = null)
 	{
+		if (env('DEBUG_MODE'))
+		{
+			\Log::info('FLASH MESSAGE - $kind: $message');
+		}
+
 		$result = Session::get($this->arrayName) ?: [];
 
 		if ($message instanceof MessageBag)
