@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Connect\Exceptions;
 
-use Exception;
+use PragmaRX\Sdk\Core\HttpResponseException;
 
-class InvitationAlreadyAccepted extends Exception {
+class InvitationAlreadyAccepted extends HttpResponseException {
 
-} 
+	protected $message = 'paragraphs.invitation-already-accepted';
+
+}

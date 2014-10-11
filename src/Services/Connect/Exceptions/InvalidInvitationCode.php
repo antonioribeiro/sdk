@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Connect\Exceptions;
 
-use Exception;
+use PragmaRX\Sdk\Core\HttpResponseException;
 
-class InvalidInvitationCode extends Exception {
+class InvalidInvitationCode extends HttpResponseException {
 
-} 
+	protected $message = 'paragraphs.invalid-invitation-code';
+
+}

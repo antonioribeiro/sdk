@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: AntonioCarlos
- * Date: 29/07/2014
- * Time: 20:12
- */
 
 namespace PragmaRX\Sdk\Services\Follow\Commands;
 

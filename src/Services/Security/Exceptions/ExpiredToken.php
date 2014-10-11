@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Security\Exceptions;
 
-use Exception;
+use PragmaRX\Sdk\Core\HttpResponseException;
 
-class ExpiredToken extends Exception {
+class ExpiredToken extends HttpResponseException {
 
-} 
+	protected $message = 'paragraphs.token-expired';
+
+}

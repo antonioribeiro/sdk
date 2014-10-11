@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Passwords\Exceptions;
 
-use Exception;
+use PragmaRX\Sdk\Core\HttpResponseException;
 
-class EmailAndUsernameNotFound extends Exception {
+class EmailAndUsernameNotFound extends HttpResponseException {
 
-} 
+	protected $message = 'paragraphs.user-not-found';
+
+}

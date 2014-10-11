@@ -87,6 +87,13 @@ return [
 	'packages' => [
 
 		[
+			'name' => 'pragmarx/redirect',
+			'enabled' => true,
+			'serviceProviders' => ['PragmaRX\Sdk\Services\Redirect\Service\Provider'],
+			'facades' => []
+		],
+
+		[
 			'name' => 'pragmarx/google2fa',
 			'enabled' => true,
 			'serviceProviders' => ['PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider'],
@@ -160,14 +167,6 @@ return [
 			'facades' => [
 				'Authentication' => 'PragmaRX\Sdk\Services\Auth\Service\Facade',
 				'Auth'           => 'PragmaRX\Sdk\Services\Auth\Service\Facade', /// overrides the Laravel Facade
-			]
-		],
-
-		[
-			'name' => 'pragmarx/redirect',
-			'enabled' => true,
-			'facades' => [
-				'Redirect' => 'PragmaRX\Sdk\Core\Redirect', /// overrides the Laravel Facade
 			]
 		],
 

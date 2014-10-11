@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: AntonioCarlos
- * Date: 15/07/2014
- * Time: 12:31
- */
 
 namespace PragmaRX\Sdk\Services\Registration\Forms;
 

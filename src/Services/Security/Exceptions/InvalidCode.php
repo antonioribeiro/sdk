@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Security\Exceptions;
 
-use Exception;
+use PragmaRX\Sdk\Core\HttpResponseException;
 
-class InvalidCode extends Exception {
+class InvalidCode extends HttpResponseException {
 
-} 
+	protected $message = 'paragraphs.invalid-code';
+
+}

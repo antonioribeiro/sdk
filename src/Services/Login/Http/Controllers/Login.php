@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Services\Login\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Accounts\Commands\SignInCommand;
+use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidPassword;
 use PragmaRX\Sdk\Services\Login\Forms\SignIn as SignInForm;
 
 use PragmaRX\Sdk\Services\Login\Http\Requests\Login as LoginRequest;

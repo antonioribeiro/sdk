@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\TwoFactor\Exceptions;
 
-use Exception;
+use PragmaRX\Sdk\Core\HttpResponseException;
 
-class InvalidAuthenticationCode extends Exception {
+class InvalidAuthenticationCode extends HttpResponseException {
 
-} 
+	protected $message = 'paragraphs.two-factor-invalid-auth-code';
+
+}

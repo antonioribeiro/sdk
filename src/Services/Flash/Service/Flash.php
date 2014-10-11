@@ -20,11 +20,6 @@ class Flash {
 
 	private function addMessage($kind, $message, $title = null)
 	{
-		if (env('DEBUG_MODE'))
-		{
-			\Log::info('FLASH MESSAGE - $kind: $message');
-		}
-
 		$result = Session::get($this->arrayName) ?: [];
 
 		if ($message instanceof MessageBag)
@@ -51,6 +46,11 @@ class Flash {
 					'message' => $item,
 					'title' => $title,
 				];
+
+				if (env('DEBUG_MODE'))
+				{
+					\Log::info("FLASH MESSAGE - $kind: $item");
+				}
 			}
 		}
 
@@ -59,6 +59,8 @@ class Flash {
 
 	public function popMessages()
 	{
+		$this->mergeSessionErrors();
+
 		$messages = Session::get($this->arrayName) ?: [];
 
 		Session::forget($this->arrayName);
@@ -105,4 +107,15 @@ class Flash {
 			$this->error($error);
 		}
 	}
+
+	private function mergeSessionErrors()
+	{
+		if ( ! $errors = Session::get('errors'))
+		{
+			return [];
+		}
+
+		$this->errors($errors->getBag('default'));
+	}
+
 }

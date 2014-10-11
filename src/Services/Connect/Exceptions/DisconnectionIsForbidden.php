@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Connect\Exceptions;
 
-use Exception;
+use PragmaRX\Sdk\Core\HttpResponseException;
 
-class DisconnectionIsForbidden extends Exception {
+class DisconnectionIsForbidden extends HttpResponseException {
+
+	protected $message = 'paragraphs.connected-by-invitation-cannot-disconnect';
 
 } 

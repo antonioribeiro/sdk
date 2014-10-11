@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Files\Exceptions;
 
-use Exception;
+use PragmaRX\Sdk\Core\HttpResponseException;
 
-class UploadPathNotSet extends Exception {
+class UploadPathNotSet extends HttpResponseException {
 
-} 
+	protected $message = 'paragraphs.upload-path-not-set';
+
+}

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: AntonioCarlos
- * Date: 23/07/2014
- * Time: 20:29
- */
 
 namespace PragmaRX\Sdk\Core;
 

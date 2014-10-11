@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Passwords\Exceptions;
 
-use Exception;
+use PragmaRX\Sdk\Core\HttpResponseException;
 
-class InvalidPasswordUpdateRequest extends Exception {
+class InvalidPasswordUpdateRequest extends HttpResponseException {
 
-} 
+	protected $message = 'paragraphs.invalid-password-update-request';
+
+}

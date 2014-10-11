@@ -2,7 +2,9 @@
 
 namespace PragmaRX\Sdk\Services\Users\Data\Repositories;
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use Laracasts\Commander\Events\DispatchableTrait;
+use PragmaRX\Sdk\Services\Accounts\Exceptions\UserNotActivated;
 use PragmaRX\Sdk\Services\Connect\Data\Entities\Connection;
 use PragmaRX\Sdk\Services\Connect\Events\UserAcceptedInvitation;
 use PragmaRX\Sdk\Services\Connect\Events\UserWasInvited;
@@ -79,7 +81,11 @@ class UserRepository {
 	 */
 	public function getPaginated($howMany = 25)
 	{
-		return User::orderBy('first_name')->simplePaginate($howMany);
+		$users = User::orderBy('first_name')->get();
+
+		$paginated = new LengthAwarePaginator($users, count($users), $howMany);
+
+		return $paginated;
 	}
 
 	/**
@@ -448,7 +454,7 @@ class UserRepository {
 		{
 			$this->checkActivationByEmail($credentials['email']);
 
-			throw new NotActivatedException();
+			throw new UserNotActivated();
 		}
 
 		return ['user' => $user, 'next' => $next];

@@ -1,15 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: afaria
- * Date: 01/08/2014
- * Time: 18:58
- */
 
 namespace PragmaRX\Sdk\Services\Accounts\Exceptions;
 
-use Exception;
+use PragmaRX\Sdk\Core\HttpResponseException;
 
-class InvalidActivationToken extends Exception {
+class InvalidActivationToken extends HttpResponseException {
+
+	protected $message = 'paragraphs.invalid-activation-token';
 
 }

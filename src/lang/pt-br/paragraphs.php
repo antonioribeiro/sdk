@@ -52,7 +52,7 @@ return array (
   'reset-password-sent' => 'Um link para troca de senha foi enviado para a sua caixa postal.',
   'to-reset-your-password' => 'Para trocar a sua senha, complete este formulário.',
   'want-to-receive-news' => 'Eu quero receber notícias.',
-  'account-not-yet-activated' => 'Sua conta ainda não foi ativada.',
+  'account-not-yet-activated' => 'Conta ainda não foi ativada. Por favor verifique a sua caixa postal.',
   'click-to-create-one' => 'Clique para criar um.',
   'activation-email-sent' => 'Um novo código de ativação da conta foi enviado por e-mail.',
   'click-to-remove' => 'Clique para remover.',

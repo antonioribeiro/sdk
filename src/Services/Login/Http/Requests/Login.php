@@ -3,7 +3,6 @@
 namespace PragmaRX\Sdk\Services\Login\Http\Requests;
 
 use PragmaRX\Sdk\Core\Validation\FormRequest;
-use Validator;
 
 class Login extends FormRequest {
 
