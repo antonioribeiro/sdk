@@ -3,8 +3,9 @@
 namespace PragmaRX\Sdk\Services\Accounts\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Core\Redirect;
 use PragmaRX\Sdk\Services\Accounts\Commands\ActivateCommand;
+
+use Redirect;
 
 class Accounts extends BaseController {
 

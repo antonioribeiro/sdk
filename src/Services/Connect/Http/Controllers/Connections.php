@@ -3,8 +3,6 @@
 namespace PragmaRX\Sdk\Services\Connect\Http\Controllers;
 
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
-use PragmaRX\Sdk\Core\Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 
 use Auth;

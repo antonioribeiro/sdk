@@ -4,7 +4,7 @@ namespace PragmaRX\Sdk\Services\Passwords\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use Password as PasswordReminder;
-use PragmaRX\Sdk\Core\Redirect;
+use Redirect;
 use PragmaRX\Sdk\Services\Passwords\Commands\ResetPasswordCommand;
 use PragmaRX\Sdk\Services\Passwords\Commands\UpdatePasswordCommand;
 use PragmaRX\Sdk\Services\Passwords\Http\Requests\RemindPassword as RemindPasswordRequest;

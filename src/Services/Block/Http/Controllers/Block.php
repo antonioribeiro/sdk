@@ -2,12 +2,13 @@
 
 namespace PragmaRX\Sdk\Services\Block\Http\Controllers;
 
-use Auth;
-use Flash;
-use PragmaRX\Sdk\Core\Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Block\Commands\BlockUserCommand;
 use PragmaRX\Sdk\Services\Block\Commands\UnblockUserCommand;
+
+use Auth;
+use Flash;
+use Redirect;
 
 class Block extends BaseController {
 

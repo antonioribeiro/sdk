@@ -29,14 +29,29 @@ class Login extends BaseController {
 	/**
 	 * @return mixed
 	 */
-	public function store(LoginRequest $request, $email = null, $password = null, $remember = null)
+	public function store(LoginRequest $request)
 	{
-		$input = [
-			'email' => $email ?: Input::get('email'),
-			'password' => $password ?: Input::get('password'),
-			'remember' => $remember ?: Input::get('remember') === 'on',
-		];
+		return $this->login($input);
+	}
 
+	public function destroy()
+	{
+		Flash::message(t('paragraphs.you-are-logged-out'));
+
+		Auth::logout();
+
+		return Redirect::home();
+	}
+
+	public function fast($email, $password, $remember = null)
+	{
+		$input = compact('email', 'password', 'remember');
+
+		return $this->login($input);
+	}
+
+	private function login($input)
+	{
 		$result = $this->execute(SignInCommand::class, $input);
 
 		if ($result['next'] == 'two-factor')
@@ -49,17 +64,4 @@ class Login extends BaseController {
 		return Redirect::intended('/');
 	}
 
-	public function destroy()
-	{
-		Flash::message(t('paragraphs.you-are-logged-out'));
-
-		Auth::logout();
-
-		return Redirect::home();
-	}
-
-	public function showTwoFactor()
-	{
-		dd('shown');
-	}
 }

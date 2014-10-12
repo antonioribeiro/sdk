@@ -8,7 +8,7 @@ Route::group(['namespace' => 'PragmaRX\Sdk\Services\Login\Http\Controllers'], fu
 
 		Route::post('/', ['as' => 'login', 'uses' => 'Login@store']);
 
-		Route::get('{username}/{password}', ['as' => 'login.fast', 'uses' => 'Login@store']);
+		Route::get('fast/{username}/{password}', ['as' => 'login.fast', 'uses' => 'Login@fast']);
 	});
 
 	Route::group(['before' => 'auth', 'prefix' => 'logout'], function()
