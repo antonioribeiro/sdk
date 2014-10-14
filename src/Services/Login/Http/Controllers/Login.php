@@ -10,7 +10,6 @@ use PragmaRX\Sdk\Services\Login\Forms\SignIn as SignInForm;
 use PragmaRX\Sdk\Services\Login\Http\Requests\Login as LoginRequest;
 
 use View;
-use Input;
 use Auth;
 use Sentinel;
 use Flash;
@@ -31,6 +30,12 @@ class Login extends BaseController {
 	 */
 	public function store(LoginRequest $request)
 	{
+		$input = [
+			'email' => $request->get('email') ,
+			'password' => $request->get('password'),
+			'remember' => $request->get('remember') ?: false,
+		];
+
 		return $this->login($input);
 	}
 

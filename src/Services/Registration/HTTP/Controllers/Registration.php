@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Sdk\Services\Registration\Http\Controllers;
 
-use Laracasts\Validation\FormValidationException;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Registration\Commands\RegisterUserCommand;
 use PragmaRX\Sdk\Services\Registration\Forms\Registration as RegistrationForm;
@@ -30,10 +29,6 @@ class Registration extends BaseController {
 	 */
 	public function create()
 	{
-		\Session::put('whatever', 'vvvvvv 2 vvvvv');
-
-//		throw new FormValidationException('whatever error', []);
-
 		return View::make('registration.create');
 	}
 
@@ -42,24 +37,20 @@ class Registration extends BaseController {
 	 */
 	public function store()
 	{
-		Session::put('whatever', 'value!');
+		$this->registrationForm->validate(Input::all());
 
-		throw new FormValidationException('whatever error', []);
+		$input = Input::all();
 
-//		$this->registrationForm->validate(Input::all());
-//
-//		$input = Input::all();
-//
-//		$this->execute(RegisterUserCommand::class, $input);
-//
-//		return Redirect::route('message')
-//			->with('title', t('titles.welcome'))
-//			->with('message', t('paragraphs.welcome-message'))
-//			->with('buttons', [[
-//								'caption' => t('captions.go-to-login-page'),
-//			                    'url' => route('login')
-//			                   ]])
-//			->withInput();
+		$this->execute(RegisterUserCommand::class, $input);
+
+		return Redirect::route('message')
+				->with('title', t('titles.welcome'))
+				->with('message', t('paragraphs.welcome-message'))
+				->with('buttons', [[
+									'caption' => t('captions.go-to-login-page'),
+				                    'url' => route('login')
+				                   ]])
+				->withInput();
 	}
 
 }

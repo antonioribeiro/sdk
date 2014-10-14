@@ -6,8 +6,6 @@ use Cartalyst\Sentinel\Users\EloquentUser as CartalystUser;
 
 use Illuminate\Auth\UserTrait;
 use Illuminate\Contracts\Auth\User as UserContract;
-use Illuminate\Contracts\Auth\Remindable as RemindableContract;
-use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Support\Facades\Hash;
 
 use PragmaRX\Sdk\Core\Traits\IdentifiableTrait;
@@ -29,7 +27,7 @@ use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\FollowableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\VisitableTrait;
 use Rhumsaa\Uuid\Uuid;
 
-class User extends CartalystUser implements UserContract, RemindableContract {
+class User extends CartalystUser implements UserContract {
 
 	use
 		FollowableTrait,
@@ -37,7 +35,6 @@ class User extends CartalystUser implements UserContract, RemindableContract {
 		BlockableTrait,
 		VisitableTrait,
 		UserTrait,
-		RemindableTrait,
 		EventGenerator,
 		PresentableTrait,
 		ReloadableTrait,
