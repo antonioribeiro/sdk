@@ -44,7 +44,7 @@ class Invite extends FormRequest {
 
 			Validator::replacer('unique', function($message, $attribute, $rule, $parameters)
 			{
-				return $attribute.' '.t('paragraphs.already-a-user');
+				return $attribute.' '.t('paragraphs.already-an-user');
 			});
 		}
 		else

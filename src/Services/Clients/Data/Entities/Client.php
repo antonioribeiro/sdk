@@ -4,30 +4,20 @@ namespace PragmaRX\Sdk\Services\Clients\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
 
-class Connection extends Model {
+class Client extends Model {
 
-	protected $fillable = ['requested_id', 'requestor_id'];
+	protected $presenter = 'PragmaRX\Sdk\Services\Clients\Data\Entities\ClientPresenter';
 
-	public function requestor()
+	protected $fillable = [
+		'provider_id',
+		'first_name',
+		'last_name'
+	];
+
+	public function provider()
 	{
-		return $this->belongsTo('PragmaRX\Sdk\Services\Users\Data\Entities\User', 'requestor_id');
-	}
-
-	public function requested()
-	{
-		return $this->belongsTo('PragmaRX\Sdk\Services\Users\Data\Entities\User', 'requested_id');
-	}
-
-	public function connectedTo($user)
-	{
-		$requestor = $this->requestor;
-
-		if ($requestor->id == $user->id)
-		{
-			return $this->requested;
-		}
-
-		return $this->requestor;
+		return $this
+				->belongsTo('PragmaRX\Sdk\Services\Users\Data\Entities\User', 'provider_id');
 	}
 
 }

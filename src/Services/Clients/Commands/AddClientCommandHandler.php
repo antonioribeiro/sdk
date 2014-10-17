@@ -38,7 +38,7 @@ class AddClientCommandHandler extends CommandHandler {
 			$command->mobile_phone
 		);
 
-		$this->dispatchEventsFor($client->user);
+		$this->dispatchEventsFor($client);
 	}
 
 }

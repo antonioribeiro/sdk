@@ -198,4 +198,18 @@ class User extends CartalystUser implements UserContract {
 			$this->hasOne(Setting::class, 'user_id')->save($settings);
 		}
 	}
+
+	public function clients()
+	{
+		return $this->hasMany('PragmaRX\Sdk\Services\Clients\Data\Entities\Client', 'provider_id');
+	}
+
+	public function clientsByName()
+	{
+		return $this
+				->clients()
+				->orderBy('first_name')
+				->orderBy('last_name');
+	}
+
 }

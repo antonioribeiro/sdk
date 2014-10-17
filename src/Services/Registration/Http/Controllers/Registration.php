@@ -4,25 +4,11 @@ namespace PragmaRX\Sdk\Services\Registration\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Registration\Commands\RegisterUserCommand;
-use PragmaRX\Sdk\Services\Registration\Forms\Registration as RegistrationForm;
+use PragmaRX\Sdk\Services\Registration\Http\Requests\Register as RegisterRequest;
 use View;
-use Input;
 use Redirect;
 
 class Registration extends BaseController {
-
-	/**
-	 * @var RegistrationForm
-	 */
-	private $registrationForm;
-
-	/**
-	 * @param RegistrationForm $registrationForm
-	 */
-	public function __construct(RegistrationForm $registrationForm)
-	{
-		$this->registrationForm = $registrationForm;
-	}
 
 	/**
 	 * @return mixed
@@ -35,13 +21,9 @@ class Registration extends BaseController {
 	/**
 	 * @return mixed
 	 */
-	public function store()
+	public function store(RegisterRequest $request)
 	{
-		$this->registrationForm->validate(Input::all());
-
-		$input = Input::all();
-
-		$this->execute(RegisterUserCommand::class, $input);
+		$this->execute(RegisterUserCommand::class);
 
 		return Redirect::route('message')
 				->with('title', t('titles.welcome'))

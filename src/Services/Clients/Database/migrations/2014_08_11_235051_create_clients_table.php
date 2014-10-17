@@ -16,9 +16,10 @@ class CreateClientsTable extends Migration {
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
+			$table->string('provider_id', 64);
 			$table->string('first_name');
 			$table->string('last_name');
-			$table->text('notes');
+			$table->text('notes')->nullable();
 
 			$table->timestamps();
 		});

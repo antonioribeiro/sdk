@@ -6,6 +6,7 @@ use PragmaRX\Sdk\Core\Controller as BaseController;
 
 use Auth;
 use Flash;
+use PragmaRX\Sdk\Services\Clients\Commands\AddClientCommand;
 use PragmaRX\Sdk\Services\Clients\Http\Requests\AddClient as AddClientRequest;
 use Redirect;
 use View;
@@ -15,21 +16,20 @@ class Clients extends BaseController {
 
 	public function index()
 	{
-		$clients = Auth::user()->clients;
+		$clients = Auth::user()->clientsByName;
 
 		return View::make('clients.index')->with('clients', $clients);
 	}
 
-	public function post()
+	public function post(AddClientRequest $request)
 	{
-		dd('request');
 		$input = array_merge(['user' => Auth::user()], $request->all());
 
 		$this->execute(AddClientCommand::class, $input);
 
-		Flash::message(t('paragraphs.disconnected-from-user'));
+		Flash::message(t('paragraphs.client-created'));
 
-		return Redirect::route('profile', ['username' => $user_to_disconnect]);
+		return Redirect::back();
 	}
 
 	public function validate(AddClientRequest $request)

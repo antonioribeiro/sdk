@@ -6,7 +6,8 @@ Route::group(['before' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Clients\
 	{
 		Route::get('/', ['as' => 'clients', 'uses' => 'Clients@index']);
 
-		Route::get('validate', ['as' => 'clients.validate', 'uses' => 'Clients@validate']);
+		Route::post('/', ['as' => 'clients', 'uses' => 'Clients@post']);
+
+		Route::post('validate', ['as' => 'clients.validate', 'uses' => 'Clients@validate']);
 	});
 });
-
