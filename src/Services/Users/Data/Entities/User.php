@@ -120,7 +120,7 @@ class User extends CartalystUser implements UserContract {
 
 	public function contactInformation()
 	{
-		return $this->hasMany('PragmaRX\Sdk\Services\ContactInformation\Data\Entities\ContactInformation');
+		return $this->hasMany('PragmaRX\Sdk\Services\ContactInformation\Data\Entities\ContactInformation', 'user_id');
 	}
 
 	/**
@@ -201,15 +201,16 @@ class User extends CartalystUser implements UserContract {
 
 	public function clients()
 	{
-		return $this->hasMany('PragmaRX\Sdk\Services\Clients\Data\Entities\Client', 'provider_id');
+		return $this
+				->belongsToMany('PragmaRX\Sdk\Services\Users\Data\Entities\User', 'providers_clients', 'provider_id', 'client_id')
+				->withPivot(['notes']);
 	}
 
-	public function clientsByName()
+	public function isProviderOf($id)
 	{
-		return $this
-				->clients()
-				->orderBy('first_name')
-				->orderBy('last_name');
+		$clients = $this->clients()->lists('client_id');
+
+		return in_array($id, $clients);
 	}
 
 }

@@ -6,7 +6,7 @@ use PragmaRX\Sdk\Services\Clients\Data\Repositories\ClientRepository;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Core\Commanding\CommandHandler;
 
-class AddClientCommandHandler extends CommandHandler {
+class UpdateClientCommandHandler extends CommandHandler {
 
 	protected $userRepository;
 
@@ -30,11 +30,13 @@ class AddClientCommandHandler extends CommandHandler {
 	 */
 	public function handle($command)
 	{
-		$client = $this->clientRepository->create(
+		$client = $this->clientRepository->update(
 			$command->user,
+			$command->id,
 			$command->first_name,
 			$command->last_name,
-			$command->email
+			$command->email,
+			$command->notes
 		);
 
 		$this->dispatchEventsFor($client);

@@ -2,15 +2,8 @@
 
 namespace PragmaRX\Sdk\Services\Clients\Data\Entities;
 
-use PragmaRX\Sdk\Core\Presenter;
+use PragmaRX\Sdk\Services\Users\Data\Entities\UserPresenter;
 
-class ClientPresenter extends Presenter {
-
-	public function fullName()
-	{
-		return $this->first_name .
-					($this->last_name ? ' ' : '') .
-					$this->last_name;
-	}
+class ClientPresenter extends UserPresenter {
 
 }

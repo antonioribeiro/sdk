@@ -9,5 +9,9 @@ Route::group(['before' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Clients\
 		Route::post('/', ['as' => 'clients', 'uses' => 'Clients@post']);
 
 		Route::post('validate', ['as' => 'clients.validate', 'uses' => 'Clients@validate']);
+
+		Route::get('edit/{id}', ['as' => 'clients.edit', 'uses' => 'Clients@edit']);
+
+		Route::patch('edit/{id}', ['as' => 'clients.edit', 'uses' => 'Clients@update']);
 	});
 });

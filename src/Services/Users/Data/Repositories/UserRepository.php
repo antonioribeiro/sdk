@@ -942,4 +942,26 @@ class UserRepository {
 		return $user;
 	}
 
+	public function createNonAccount($email, $first_name, $last_name)
+	{
+		if ( ! $email)
+		{
+			$email = $this->createDummyEmail();
+		}
+
+		$user = User::create([
+			'email' => $email,
+			'password' => Uuid::uuid4(),
+			'first_name' => $first_name,
+			'last_name' => $last_name,
+		]);
+
+		return $user;
+	}
+
+	private function createDummyEmail()
+	{
+		return Uuid::uuid4() . '@' . env('DOMAIN');
+	}
+
 }

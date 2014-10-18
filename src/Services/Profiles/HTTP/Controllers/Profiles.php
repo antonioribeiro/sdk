@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Services\Profiles\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Kinds\Data\Entities\Kind;
+use PragmaRX\Sdk\Services\Kinds\Data\Repositories\KindRepository;
 use PragmaRX\Sdk\Services\Profiles\Commands\EditProfileCommand;
 use PragmaRX\Sdk\Services\Statuses\Data\Repositories\StatusRepository;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
@@ -59,15 +60,11 @@ class Profiles extends BaseController {
 		return View::make('profiles.show')->with(compact('user', 'statuses'));
 	}
 
-	public function edit($username)
+	public function edit(KindRepository $kindRespository, $username)
 	{
-		$kinds = Kind::lists('name', 'id');
-
-		$kinds = [0 => "Contact Type"] + $kinds;
-
 		return View::make('profiles.edit')
 				->with('user', Auth::user())
-				->with('kinds', $kinds);
+				->with('kinds', $kindRespository->allForSelect());
 	}
 
 	public function update()

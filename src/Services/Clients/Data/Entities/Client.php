@@ -2,22 +2,29 @@
 
 namespace PragmaRX\Sdk\Services\Clients\Data\Entities;
 
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 
-class Client extends Model {
+class Client extends User {
+
+	protected $table = 'users';
 
 	protected $presenter = 'PragmaRX\Sdk\Services\Clients\Data\Entities\ClientPresenter';
 
-	protected $fillable = [
-		'provider_id',
-		'first_name',
-		'last_name'
-	];
-
-	public function provider()
+	protected static function boot()
 	{
-		return $this
-				->belongsTo('PragmaRX\Sdk\Services\Users\Data\Entities\User', 'provider_id');
+		static::addGlobalScope(new ClientScope);
+
+		parent::boot();
 	}
+
+	public function scopeHavingAsProvider($query, $provider)
+    {
+	    if ($provider instanceof User)
+	    {
+		    $provider = $provider->id;
+	    }
+
+        return $query->where('provider_id', $provider);
+    }
 
 }

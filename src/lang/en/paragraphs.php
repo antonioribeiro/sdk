@@ -115,4 +115,5 @@ return array (
   'connected-by-invitation-cannot-disconnect' => 'You are connected to this user by invitation and cannot disconnect.',
   'your-settings-were-updated' => 'Your settings have been updated.',
   'you-have-no-clients' => 'You have no clients yet.',
+  'client-updated' => 'Client was updated successfully.',
 );
