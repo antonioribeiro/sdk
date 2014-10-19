@@ -14,7 +14,7 @@ class Redirect extends Redirector {
 	 */
 	public function __call($name, array $parameters = [])
 	{
-		if ($this->generator->getRequest()->ajax())
+		if ($this->wantsJson())
 		{
 			if ($name == 'route')
 			{
@@ -48,6 +48,16 @@ class Redirect extends Redirector {
 		}
 
 		return $this->call($name, $parameters);
+	}
+
+	public function route($route, $parameters = array(), $status = 302, $headers = array())
+	{
+		if ($this->wantsJson())
+		{
+			return new JsonResponse(['redirect' => route_ajax($route, $parameters)]);
+		}
+
+		return parent::to(route_ajax($route, $parameters));
 	}
 
 	public function back($status = 302, $headers = array())
@@ -97,6 +107,11 @@ class Redirect extends Redirector {
 		$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
 
 		return "$origin/";
+	}
+
+	private function wantsJson()
+	{
+		return $this->generator->getRequest()->ajax();
 	}
 
 }

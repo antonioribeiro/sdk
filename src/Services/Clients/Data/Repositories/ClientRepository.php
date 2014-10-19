@@ -44,14 +44,12 @@ class ClientRepository {
 	{
 		$client = $this->userRepository->findById($client_id);
 
-		if ( ! $client->is_account)
+		if ( ! $client->isActivated)
 		{
 			$client = $this->updateClientUser($client, $first_name, $last_name, $email);
 		}
 
-		$this->updateClientData($user, $client_id, $notes);
-
-		return $client;
+		return $this->updateClientData($user, $client_id, $notes);
 	}
 
 	private function updateClientUser($client, $first_name, $last_name, $email)
@@ -82,9 +80,15 @@ class ClientRepository {
 	{
 		$providerClient = ProviderClient::where('provider_id', $user->id)->where('client_id', $client_id)->first();
 
+		/// We may be changing the current user to an activated user
+
+		$providerClient->client_id = $user->id;
+
 		$providerClient->notes = $notes;
 
 		$providerClient->save();
+
+		return $user;
 	}
 
 	public function clientsFromProvider($user)

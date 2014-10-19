@@ -18,14 +18,16 @@ use PragmaRX\Sdk\Services\Registration\Events\UserRegistered;
 use Laracasts\Commander\Events\EventGenerator;
 use Laracasts\Presenter\PresentableTrait;
 
-use Activation;
-use Auth;
 use PragmaRX\Sdk\Services\Settings\Data\Entities\Setting;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\BlockableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\ConnectableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\FollowableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\VisitableTrait;
 use Rhumsaa\Uuid\Uuid;
+
+use Activation;
+use Auth;
+use DB;
 
 class User extends CartalystUser implements UserContract {
 
@@ -211,6 +213,25 @@ class User extends CartalystUser implements UserContract {
 		$clients = $this->clients()->lists('client_id');
 
 		return in_array($id, $clients);
+	}
+
+	public function getIsActivatedAtrribute()
+	{
+		return Activation::completed($this);
+	}
+
+	public function scopeActivated($query)
+	{
+		return $query->whereExists(function($query)
+				{
+					$query
+						->select(DB::raw(1))
+						->from('activations')
+						->whereRaw(
+							'activations.user_id = users.id' .
+							' and activations.completed = true'
+						);
+				});
 	}
 
 }

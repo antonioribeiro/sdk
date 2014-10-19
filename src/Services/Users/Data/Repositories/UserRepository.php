@@ -81,7 +81,7 @@ class UserRepository {
 	 */
 	public function getPaginated($howMany = 25)
 	{
-		$users = User::orderBy('first_name')->get();
+		$users = User::orderBy('first_name')->activated()->get();
 
 		$paginated = new LengthAwarePaginator($users, count($users), $howMany);
 
@@ -962,6 +962,23 @@ class UserRepository {
 	private function createDummyEmail()
 	{
 		return Uuid::uuid4() . '@' . env('DOMAIN');
+	}
+
+	public function isActivated($user)
+	{
+		$user = $this->find($user);
+
+		return $user->isActivated;
+	}
+
+	private function find($user)
+	{
+		if ( ! $user instanceof User)
+		{
+			$user = User::find($user);
+		}
+
+		return $user;
 	}
 
 }

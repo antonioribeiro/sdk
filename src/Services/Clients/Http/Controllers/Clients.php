@@ -46,7 +46,8 @@ class Clients extends BaseController {
 		UpdateClientRequest $request,
 		ClientRepository $clientRepository,
 		KindRepository $kindRespository,
-		$id)
+		$id
+	)
 	{
 		$client = $clientRepository->findClientById(Auth::user()->id, $id);
 
@@ -65,11 +66,11 @@ class Clients extends BaseController {
 		    $request->all()
 		);
 
-		$this->execute(UpdateClientCommand::class, $input);
+		$client = $this->execute(UpdateClientCommand::class, $input);
 
 		Flash::message(t('paragraphs.client-updated'));
 
-		return Redirect::back();
+		return Redirect::route('clients.edit', ['id' => $client->id]);
 	}
 
 }

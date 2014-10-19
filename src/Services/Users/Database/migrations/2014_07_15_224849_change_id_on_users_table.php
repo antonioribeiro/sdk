@@ -32,7 +32,6 @@ class ChangeIdOnUsersTable extends Migration {
 			$table->timestamp('last_login')->nullable();
 			$table->string('first_name')->nullable();
 			$table->string('last_name')->nullable();
-			$table->boolean('is_account')->index()->default(false);
 
 			$table->timestamps();
 		});

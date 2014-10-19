@@ -40,6 +40,8 @@ class UpdateClientCommandHandler extends CommandHandler {
 		);
 
 		$this->dispatchEventsFor($client);
+
+		return $client;
 	}
 
 }
