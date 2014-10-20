@@ -8,6 +8,7 @@ use PragmaRX\Sdk\Core\Controller as BaseController;
 use Auth;
 use Flash;
 use PragmaRX\Sdk\Services\Clients\Commands\AddClientCommand;
+use PragmaRX\Sdk\Services\Clients\Commands\DeleteClientCommand;
 use PragmaRX\Sdk\Services\Clients\Commands\UpdateClientCommand;
 use PragmaRX\Sdk\Services\Clients\Data\Repositories\ClientRepository;
 use PragmaRX\Sdk\Services\Clients\Http\Requests\AddClient as AddClientRequest;
@@ -58,19 +59,35 @@ class Clients extends BaseController {
 
 	public function update(UpdateClientRequest $request, $id)
 	{
-		$input = array_merge(
-			[
-				'user' => Auth::user(),
-				'client_id' => $id
-			],
-		    $request->all()
-		);
+		$input = [
+			'user' => Auth::user(),
+			'client_id' => $id,
+			'id' => $request->get('id'),
+			'first_name' => $request->get('first_name'),
+			'last_name' => $request->get('last_name'),
+			'email' => $request->get('email'),
+			'notes' => $request->get('notes'),
+		];
 
 		$client = $this->execute(UpdateClientCommand::class, $input);
 
 		Flash::message(t('paragraphs.client-updated'));
 
 		return Redirect::route('clients.edit', ['id' => $client->id]);
+	}
+
+	public function delete(UpdateClientRequest $request, $id)
+	{
+		$input = [
+			'user' => Auth::user(),
+			'id' => $id,
+		];
+
+		$this->execute(DeleteClientCommand::class, $input);
+
+		Flash::message(t('paragraphs.client-deleted'));
+
+		return Redirect::route('clients');
 	}
 
 }

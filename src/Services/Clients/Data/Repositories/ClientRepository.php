@@ -99,7 +99,24 @@ class ClientRepository {
 	public function findClientById($provider_id, $client_id)
 	{
 		return Client::where('users.id', $client_id)
-				->where('providers_clients.provider_id', $provider_id)->first();
+				->where('providers_clients.provider_id', $provider_id)
+				->first();
+	}
+
+	public function delete($provider, $client_id)
+	{
+		$providerClient = ProviderClient::where('provider_id', $provider->id)->where('client_id', $client_id)->first();
+
+		$user = $this->userRepository->findById($client_id);
+
+		if ( ! $user->isActivated)
+		{
+			$user->delete();
+		}
+
+		$providerClient->delete();
+
+		return $provider;
 	}
 
 }

@@ -16,9 +16,9 @@ class CreateProvidersClientsTable extends Migration {
 		{
 			$table->string('id', 64)->primary();
 
-			$table->string('provider_id', 64)->unique()->index();
+			$table->string('provider_id', 64)->index();
 
-			$table->string('client_id', 64)->unique()->index();
+			$table->string('client_id', 64)->index();
 
 			$table->timestamps();
 		});

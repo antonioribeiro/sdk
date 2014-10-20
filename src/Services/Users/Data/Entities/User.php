@@ -215,7 +215,7 @@ class User extends CartalystUser implements UserContract {
 		return in_array($id, $clients);
 	}
 
-	public function getIsActivatedAtrribute()
+	public function getIsActivatedAttribute()
 	{
 		return Activation::completed($this);
 	}

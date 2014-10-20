@@ -13,5 +13,7 @@ Route::group(['before' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Clients\
 		Route::get('edit/{id}', ['as' => 'clients.edit', 'uses' => 'Clients@edit']);
 
 		Route::patch('edit/{id}', ['as' => 'clients.edit', 'uses' => 'Clients@update']);
+
+		Route::delete('delete/{id}', ['as' => 'clients.delete', 'uses' => 'Clients@delete']);
 	});
 });

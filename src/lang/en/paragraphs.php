@@ -116,4 +116,5 @@ return array (
   'your-settings-were-updated' => 'Your settings have been updated.',
   'you-have-no-clients' => 'You have no clients yet.',
   'client-updated' => 'Client was updated successfully.',
+  'confirm-delete-client' => 'Do you really want to delete this Client?',
 );

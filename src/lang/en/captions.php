@@ -95,4 +95,5 @@ return array (
   'kind-linkedin' => 'Linkedin',
   'edit-your-client' => 'Edit Your Client',
   'notes-about-person' => 'Your Notes About This Person',
+  'delete-client' => 'Delete Client',
 );
