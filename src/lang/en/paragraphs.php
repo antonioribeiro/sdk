@@ -117,4 +117,7 @@ return array (
   'you-have-no-clients' => 'You have no clients yet.',
   'client-updated' => 'Client was updated successfully.',
   'confirm-delete-client' => 'Do you really want to delete this Client?',
+  'use-control-to-multiselect' => 'Use CTRL to select more than one',
+  'group-added' => 'A group was added.',
+  'you-already-have-this-group' => 'You already have a group with this name',
 );

@@ -51,6 +51,8 @@ return [
 		'Services/Firewall',
 		'Services/Follow',
 
+		'Services/Groups',
+
 		'Services/Kinds',
 
 		'Services/Language',

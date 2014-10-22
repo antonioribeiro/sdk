@@ -234,4 +234,9 @@ class User extends CartalystUser implements UserContract {
 				});
 	}
 
+	public function groups()
+	{
+		return $this->hasMany('PragmaRX\Sdk\Services\Groups\Data\Entities\Group');
+	}
+
 }

@@ -79,6 +79,7 @@ return array (
   'you-have-been-invited-by' => 'You have been invited by',
   'your-password-was-updated' => 'Your password was changed',
   'clients' => 'Clients',
+  'your-clients' => 'Your Clients',
   'settings' => 'Settings',
   'your-settings' => 'Your Settings',
   'client-field-name' => 'Client Field Name',
@@ -96,4 +97,10 @@ return array (
   'edit-your-client' => 'Edit Your Client',
   'notes-about-person' => 'Your Notes About This Person',
   'delete-client' => 'Delete Client',
+  'groups' => 'Groups',
+  'group' => 'Group',
+  'add-group' => 'Add Group',
+  'members' => 'Members',
+  'owner' => 'Owner',
+  'group-name' => 'Group Name',
 );
