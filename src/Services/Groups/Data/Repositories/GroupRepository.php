@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Groups\Data\Repositories;
 
+use Illuminate\Database\Eloquent\Collection;
 use PragmaRX\Sdk\Core\Exceptions\ForbiddenRequest;
 use PragmaRX\Sdk\Services\Groups\Data\Entities\Group;
 use PragmaRX\Sdk\Services\Groups\Data\Entities\GroupMember;
@@ -72,7 +73,9 @@ class GroupRepository {
 
 	public function isGroupManager($group_id, $user)
 	{
-		return true;
+		$managers = $this->getManagers($group_id)->lists('id');
+
+		return in_array($user->id, $managers);
 	}
 
 	public function deleteGroup($group_id, $user)
@@ -195,6 +198,33 @@ class GroupRepository {
 							->where('membership_id', $member_id)
 							->delete();
 		}
+	}
+
+	private function getManagers($group)
+	{
+		if ( ! $group instanceof Group)
+		{
+			$group = $this->findById($group);
+		}
+
+		$associations = $group
+							->associations()
+							->where(function($query)
+							{
+								$query->where('group_role_id', GroupRole::ownerId());
+								$query->orWhere('group_role_id', GroupRole::administratorId());
+
+							})
+							->get();
+
+		$members = [];
+
+		foreach ($associations as $association)
+		{
+			$members[] = $association->membership;
+		}
+
+		return new Collection($members);
 	}
 
 }

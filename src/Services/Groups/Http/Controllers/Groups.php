@@ -105,7 +105,7 @@ class Groups extends BaseController {
 			'administrators' => $request->get('administrators'),
 		];
 
-		$members = $this->execute(UpdateGroupCommand::class, $input);
+		$this->execute(UpdateGroupCommand::class, $input);
 
 		Flash::message(t('paragraphs.group-was-updated'));
 
@@ -121,7 +121,7 @@ class Groups extends BaseController {
 			'administrators' => $request->get('administrators', []),
 		];
 
-		$members = $this->execute(DeleteGroupMembersCommand::class, $input);
+		$this->execute(DeleteGroupMembersCommand::class, $input);
 
 		Flash::message(t('paragraphs.group-was-updated'));
 
