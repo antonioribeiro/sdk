@@ -2,56 +2,198 @@
 
 namespace PragmaRX\Sdk\Services\Groups\Data\Repositories;
 
+use PragmaRX\Sdk\Core\Exceptions\ForbiddenRequest;
 use PragmaRX\Sdk\Services\Groups\Data\Entities\Group;
 use PragmaRX\Sdk\Services\Groups\Data\Entities\GroupMember;
 use PragmaRX\Sdk\Services\Groups\Data\Entities\GroupRole;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 class GroupRepository {
 
-	public function getAllFrom($user)
+	/**
+	 * @var UserRepository
+	 */
+	private $userRepository;
+
+	public function __construct(UserRepository $userRepository)
 	{
-		return $user->groups();
+		$this->userRepository = $userRepository;
+	}
+
+	public function getGroupsFrom($subject)
+	{
+		$groups = [];
+
+		foreach($subject->memberships as $membership)
+		{
+			$groups = array_merge($groups, [$membership->group]);
+		}
+
+		return $groups;
 	}
 
 	public function getConnectionsAndGroups($user)
 	{
-		return [
-			'user#id1' => 'Aline Amorim',
-			'user#id2' => 'Hugo Elídio',
-			'user#id3' => 'Graça Gouvea',
-			'group#id3' => 'Administradores',
-		];
+		$connections = $this->getUserConnectionsForSelect($user);
+
+		return $connections;
 	}
 
 	public function addGroup($user, $name, $members)
 	{
-		$group = Group::create([
-			'name' => $name,
-	        'owner_id' => $user->id,
-		]);
+		$group = Group::create(['name' => $name]);
 
-		$this->addMembersToGroup($group, $members);
+		// Owner
+		$role = GroupRole::where('name', 'owner')->first();
+
+		$this->addMember($group, 'user', $user->id, $role);
+
+		// Members
+		$role = GroupRole::where('name', 'member')->first();
+
+		$this->addMembers($group, $members, $role);
 
 		return $user;
 	}
 
-	private function addMembersToGroup($group, $members)
+	private function addMembers($group, $members, $role)
 	{
-		$roleMember = GroupRole::where('name', 'member')->first();
+		$result = [];
 
 		foreach($members as $member)
 		{
-			list($kind, $id) = explode('#', $member);
+			list($kind, $member_id) = explode('#', $member);
 
-			$groupMember = new GroupMember;
+			$result[] = $this->addMember($group, $kind, $member_id, $role);
+		}
 
-			$groupMember->group_id = $group->id;
+		return $result;
+	}
 
-			$groupMember->{"member_{$kind}_id"} = $id;
+	public function isGroupManager($group_id, $user)
+	{
+		return true;
+	}
 
-			$groupMember->group_role_id = $roleMember->id;
+	public function deleteGroup($group_id, $user)
+	{
+		if ( ! $this->isGroupManager($group_id, $user))
+		{
+			throw new ForbiddenRequest(t('paragraphs.forbidden'));
+		}
 
-			$groupMember->save();
+		$group = Group::find($group_id);
+
+		$group->delete();
+
+		return $group;
+	}
+
+	private function getUserConnectionsForSelect($user)
+	{
+		$connections = [];
+
+		foreach($this->userRepository->getUserConnections($user) as $connection)
+		{
+			$connections['user#'.$connection->id] = $connection->present()->fullName;
+		}
+
+		return $connections;
+	}
+
+	/**
+	 * @param $group
+	 * @param $member_id
+	 * @param $kind
+	 * @param $role
+	 */
+	private function addMember($group, $kind, $member_id, $role)
+	{
+		$membership = new GroupMember;
+
+		$membership->group_id = $group->id;
+		$membership->group_role_id = $role->id;
+
+		if ($kind == 'user')
+		{
+			$subject = $this->userRepository->findById($member_id);
+		}
+		else
+		{
+			$subject = Group::find($member_id);
+		}
+
+		return $subject->memberships()->save($membership);
+	}
+
+	public function addMembersToGroup($group_id, $members)
+	{
+		$group = $this->findById($group_id);
+
+		$members = $this->addMembers($group, $members, GroupRole::member());
+
+		return $members;
+	}
+
+	private function findById($group_id)
+	{
+		return Group::find($group_id);
+	}
+
+	public function updateGroup($user, $name, $group_id, $members, $administrators)
+	{
+		$group = $this->findById($group_id);
+
+		$group->name = $name;
+
+		$group->save();
+
+		$this->updateMembers($group, $members, $administrators);
+
+		return $group;
+	}
+
+	private function updateMembers($group, $members, $administrators)
+	{
+		foreach($members as $member_id => $value)
+		{
+			$this->updateGroupMember($group, $member_id, GroupRole::memberId());
+		}
+
+		foreach($administrators as $member_id => $value)
+		{
+			$this->updateGroupMember($group, $member_id, GroupRole::administratorId());
+		}
+	}
+
+	private function updateGroupMember($group, $member_id, $role_id)
+	{
+		GroupMember::where('group_id', $group->id)
+						->where('membership_id', $member_id)
+						->update(['group_role_id' => $role_id]);
+	}
+
+	public function deleteGroupMembers($group_id, $user, $members, $administrators)
+	{
+		$this->deleteMembers($group_id, $members);
+
+		$this->deleteMembers($group_id, $administrators);
+
+		return $this->findById($group_id);
+	}
+
+	/**
+	 * @param $group_id
+	 * @param $members
+	 * @return int|string
+	 */
+	private function deleteMembers($group_id, $members)
+	{
+		foreach ($members as $member_id => $value)
+		{
+			GroupMember::where('group_id', $group_id)
+							->where('membership_id', $member_id)
+							->delete();
 		}
 	}
 

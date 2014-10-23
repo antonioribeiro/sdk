@@ -2,15 +2,85 @@
 
 namespace PragmaRX\Sdk\Services\Groups\Data\Entities;
 
+use Illuminate\Support\Collection;
 use PragmaRX\Sdk\Core\Model;
 
 class Group extends Model {
 
-	protected $fillable = ['name', 'owner_id'];
+	protected $fillable = ['name'];
 
-	public function owner()
+	protected $presenter = 'PragmaRX\Sdk\Services\Groups\Data\Entities\GroupPresenter';
+
+	public function associations()
 	{
-		return $this->belongsTo('PragmaRX\Sdk\Services\Users\Data\Entities\User', 'owner_id');
+		return $this->hasMany('PragmaRX\Sdk\Services\Groups\Data\Entities\GroupMember', 'group_id');
+	}
+
+	public function memberships()
+	{
+		return $this->morphMany('PragmaRX\Sdk\Services\Groups\Data\Entities\GroupMember', 'membership');
+	}
+
+	public function getMembersAttribute()
+	{
+		$members = $this
+					->getAssociations(
+						$this->associations()
+							->where('group_role_id', GroupRole::memberId())->get()
+					);
+
+		return new Collection($members);
+	}
+
+	public function getAdministratorsAttribute()
+	{
+		$members = $this
+					->getAssociations(
+						$this->associations()
+							->where('group_role_id', GroupRole::administratorId())->get()
+					);
+
+		return new Collection($members);
+	}
+
+	public function getOwnerAttribute()
+	{
+		$owner = $this
+					->associations()
+					->where('group_role_id', GroupRole::ownerId())->first();
+
+		return $owner->membership;
+	}
+
+	private function getAssociations($associations)
+	{
+		$members = [];
+
+		foreach($associations as $association)
+		{
+			if ($association->membership instanceof Group)
+			{
+				$members = $members + $this->getAssociations($association->membership->associations);
+			}
+			else
+			{
+				$members = array_merge($members, [$association->membership]);
+			}
+		}
+
+		return $members;
+	}
+
+	public function selectAvailableUsersAndGroupsFor($user)
+	{
+		$subjects = [];
+
+		foreach($user->getUsersConnectedToMe()->diff($this->members) as $subject)
+		{
+			$subjects['user#'.$subject->id] = $subject->present()->fullName;
+		}
+
+		return $subjects;
 	}
 
 }

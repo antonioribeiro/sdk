@@ -1,5 +1,6 @@
 <?php
 
+use PragmaRX\Sdk\Services\Groups\Data\Entities\GroupRole;
 use PragmaRX\Support\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -20,6 +21,8 @@ class CreateGroupsRolesTable extends Migration {
 
 			$table->timestamps();
 		});
+
+		$this->seedTable();
 	}
 
 	/**
@@ -30,6 +33,13 @@ class CreateGroupsRolesTable extends Migration {
 	public function migrateDown()
 	{
 		Schema::drop('groups_roles');
+	}
+
+	private function seedTable()
+	{
+		GroupRole::create(['name' => 'owner']);
+		GroupRole::create(['name' => 'administrator']);
+		GroupRole::create(['name' => 'member']);
 	}
 
 }

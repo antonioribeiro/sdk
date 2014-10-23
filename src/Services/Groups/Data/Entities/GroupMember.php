@@ -8,8 +8,17 @@ class GroupMember extends Model {
 
 	protected $table = 'groups_members';
 
-	protected $fillable = ['name', 'owner_id'];
+	protected $fillable = ['name', 'group_id', 'group_role_id', 'member_id', 'member_type'];
 
-	public static $hasIdColumn = false;
+	public function membership()
+	{
+		return $this->morphTo();
+	}
+
+	public function group()
+	{
+		return $this->belongsTo('PragmaRX\Sdk\Services\Groups\Data\Entities\Group');
+	}
 
 }
+

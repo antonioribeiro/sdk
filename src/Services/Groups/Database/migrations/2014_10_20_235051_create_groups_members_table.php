@@ -14,10 +14,11 @@ class CreateGroupsMembersTable extends Migration {
 	{
 		Schema::create('groups_members', function(Blueprint $table)
 		{
+			$table->string('id', 64)->index();
 			$table->string('group_id', 64)->index();
-			$table->string('member_user_id', 64)->index()->nullable();
-			$table->string('member_group_id', 64)->index()->nullable();
-			$table->string('group_role_id', 64);
+			$table->string('group_role_id', 64)->index();
+			$table->string('membership_id', 64)->index();
+			$table->string('membership_type')->index();
 
 			$table->timestamps();
 		});

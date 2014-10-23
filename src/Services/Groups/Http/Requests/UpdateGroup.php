@@ -3,8 +3,9 @@
 namespace PragmaRX\Sdk\Services\Groups\Http\Requests;
 
 use PragmaRX\Sdk\Core\Validation\FormRequest;
+use PragmaRX\Sdk\Services\Groups\Data\Repositories\GroupRepository;
 
-class AddGroup extends FormRequest {
+class UpdateGroup extends FormRequest {
 
 	/**
 	 * Get the validation rules that apply to the request.
@@ -15,15 +16,12 @@ class AddGroup extends FormRequest {
 	{
 		return [
 			'name' => 'required',
-			'members' => 'required',
 		];
 	}
 
-	public function messages()
+	public function authorize(GroupRepository $repository)
 	{
-		return [
-			'members.required' => t('paragraphs.you-need-to-select-members')
-		];
+		return $repository->isGroupManager($this->get('id'), Auth::user());
 	}
 
 }

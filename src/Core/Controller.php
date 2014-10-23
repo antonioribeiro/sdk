@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Core;
 
 use Laracasts\Commander\CommanderTrait;
 use Laracasts\Commander\Events\DispatchableTrait;
+use Response;
 
 class Controller {
 
@@ -21,6 +22,11 @@ class Controller {
 		{
 			$this->layout = View::make($this->layout);
 		}
+	}
+
+	public function success()
+	{
+		return Response::json(['success' => true]);
 	}
 
 }

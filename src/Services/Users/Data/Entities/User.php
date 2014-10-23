@@ -6,6 +6,7 @@ use Cartalyst\Sentinel\Users\EloquentUser as CartalystUser;
 
 use Illuminate\Auth\UserTrait;
 use Illuminate\Contracts\Auth\User as UserContract;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Hash;
 
 use PragmaRX\Sdk\Core\Traits\IdentifiableTrait;
@@ -234,9 +235,21 @@ class User extends CartalystUser implements UserContract {
 				});
 	}
 
-	public function groups()
+	public function memberships()
 	{
-		return $this->hasMany('PragmaRX\Sdk\Services\Groups\Data\Entities\Group');
+		return $this->morphMany('PragmaRX\Sdk\Services\Groups\Data\Entities\GroupMember', 'membership');
+	}
+
+	public function getUsersConnectedToMe()
+	{
+		$connections = [];
+
+		foreach($this->connections as $connection)
+		{
+			$connections[] = $connection->connectedTo($this);
+		}
+
+		return new Collection($connections);
 	}
 
 }

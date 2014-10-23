@@ -981,4 +981,18 @@ class UserRepository {
 		return $user;
 	}
 
+	public function getUserConnections($user)
+	{
+		$connections = [];
+
+		foreach($user->connections as $connection)
+		{
+			$connections[] = $connection->requestor->id == $user->id
+								? $connection->requested
+								: $connection->requestor;
+		}
+
+		return $connections;
+	}
+
 }

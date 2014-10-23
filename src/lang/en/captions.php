@@ -101,6 +101,10 @@ return array (
   'group' => 'Group',
   'add-group' => 'Add Group',
   'members' => 'Members',
+  'member' => 'Member',
   'owner' => 'Owner',
   'group-name' => 'Group Name',
+  'administrators' => 'Administrators',
+  'add-member' => 'Add Member',
+  'delete-selected-members' => 'Delete Selected Members',
 );
