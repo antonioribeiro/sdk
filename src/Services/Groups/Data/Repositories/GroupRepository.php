@@ -30,7 +30,7 @@ class GroupRepository {
 			$groups = array_merge($groups, [$membership->group]);
 		}
 
-		return $groups;
+		return new Collection($groups);
 	}
 
 	public function getConnectionsAndGroups($user)
@@ -103,12 +103,17 @@ class GroupRepository {
 	 * @param $kind
 	 * @param $role
 	 */
-	private function addMember($group, $kind, $member_id, $role)
+	public function addMember($group, $kind, $member_id, $role)
 	{
+		if ($role instanceof GroupRole)
+		{
+			$role = $role->id;
+		}
+
 		$membership = new GroupMember;
 
 		$membership->group_id = $group->id;
-		$membership->group_role_id = $role->id;
+		$membership->group_role_id = $role;
 
 		if ($kind == 'user')
 		{

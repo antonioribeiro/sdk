@@ -107,4 +107,6 @@ return array (
   'administrators' => 'Administrators',
   'add-member' => 'Add Member',
   'delete-selected-members' => 'Delete Selected Members',
+  'members-group' => 'Members (group)',
+  'administrators-group' => 'Administrators (group)',
 );

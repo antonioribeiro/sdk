@@ -136,4 +136,5 @@ return array (
   'send-to-administrators' => 'Send to administrators group',
   'one-or-more-members-deleted' => 'One or more members have been deleted.',
   'you-are-not-authorized' => 'You are not authorized to perform this operation.',
+  'select-a-group' => 'Select a group',
 );
