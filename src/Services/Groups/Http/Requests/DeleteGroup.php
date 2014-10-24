@@ -16,7 +16,7 @@ class DeleteGroup extends FormRequest {
 
 	public function authorize(GroupRepository $repository)
 	{
-		return $repository->isGroupManager($this->get('id'), Auth::user());
+		return $repository->isGroupOwner($this->get('id'), Auth::user());
 	}
 
 }

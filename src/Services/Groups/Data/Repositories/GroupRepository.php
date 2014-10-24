@@ -71,13 +71,6 @@ class GroupRepository {
 		return $result;
 	}
 
-	public function isGroupManager($group_id, $user)
-	{
-		$managers = $this->getManagers($group_id)->lists('id');
-
-		return in_array($user->id, $managers);
-	}
-
 	public function deleteGroup($group_id, $user)
 	{
 		if ( ! $this->isGroupManager($group_id, $user))
@@ -200,7 +193,7 @@ class GroupRepository {
 		}
 	}
 
-	private function getManagers($group)
+	private function getManagers($group, $only = null)
 	{
 		if ( ! $group instanceof Group)
 		{
@@ -209,11 +202,17 @@ class GroupRepository {
 
 		$associations = $group
 							->associations()
-							->where(function($query)
+							->where(function($query) use ($only)
 							{
-								$query->where('group_role_id', GroupRole::ownerId());
-								$query->orWhere('group_role_id', GroupRole::administratorId());
+								if ($only !== 'administrator')
+								{
+									$query->where('group_role_id', GroupRole::ownerId());
+								}
 
+								if ($only !== 'owner')
+								{
+									$query->orWhere('group_role_id', GroupRole::administratorId());
+								}
 							})
 							->get();
 
@@ -225,6 +224,20 @@ class GroupRepository {
 		}
 
 		return new Collection($members);
+	}
+
+	public function isGroupManager($group_id, $user)
+	{
+		$managers = $this->getManagers($group_id)->lists('id');
+
+		return in_array($user->id, $managers);
+	}
+
+	public function isGroupOwner($group_id, $user)
+	{
+		$managers = $this->getManagers($group_id, 'owner')->lists('id');
+
+		return in_array($user->id, $managers);
 	}
 
 }

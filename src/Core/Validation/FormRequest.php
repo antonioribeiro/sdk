@@ -4,10 +4,10 @@ namespace PragmaRX\Sdk\Core\Validation;
 
 use Illuminate\Foundation\Http\FormRequest as IlluminateFormRequest;
 
-use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Input;
 use Flash;
+use Redirect;
 
 class FormRequest extends IlluminateFormRequest {
 
@@ -19,7 +19,9 @@ class FormRequest extends IlluminateFormRequest {
 		}
 		else
 		{
-			return new Response('Forbidden', 403);
+			Flash::error(t('paragraphs.you-are-not-authorized'));
+
+			return Redirect::back();
 		}
 	}
 
