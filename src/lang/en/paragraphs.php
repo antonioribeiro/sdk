@@ -134,4 +134,5 @@ return array (
   'delete-this-group' => 'Delete this group.',
   'send-to-members' => 'Send to members group',
   'send-to-administrators' => 'Send to administrators group',
+  'one-or-more-members-deleted' => 'One or more members have been deleted.'
 );

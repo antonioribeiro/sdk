@@ -83,4 +83,16 @@ class Group extends Model {
 		return $subjects;
 	}
 
+	public function isManagedBy($user_id)
+	{
+		return $this->associations()
+				->where('membership_id', $user_id)
+				->where(function($query) use ($user_id)
+					{
+						$query->where('group_role_id', GroupRole::ownerId());
+						$query->orWhere('group_role_id', GroupRole::administratorId());
+					})
+				->first();
+	}
+
 }

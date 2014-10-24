@@ -50,6 +50,8 @@ class Login extends BaseController {
 
 	public function fast($email, $password, $remember = null)
 	{
+		Auth::logout();
+
 		$input = compact('email', 'password', 'remember');
 
 		return $this->login($input);

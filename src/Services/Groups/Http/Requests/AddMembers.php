@@ -5,6 +5,8 @@ namespace PragmaRX\Sdk\Services\Groups\Http\Requests;
 use PragmaRX\Sdk\Core\Validation\FormRequest;
 use PragmaRX\Sdk\Services\Groups\Data\Repositories\GroupRepository;
 
+use Auth;
+
 class AddMembers extends FormRequest {
 
 	/**

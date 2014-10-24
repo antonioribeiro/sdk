@@ -101,8 +101,8 @@ class Groups extends BaseController {
 			'user' => Auth::user(),
 			'name' => $request->get('name'),
 			'group_id' => $request->get('id'),
-			'members' => $request->get('members'),
-			'administrators' => $request->get('administrators'),
+			'members' => $request->get('members', []),
+			'administrators' => $request->get('administrators', []),
 		];
 
 		$this->execute(UpdateGroupCommand::class, $input);
@@ -123,7 +123,7 @@ class Groups extends BaseController {
 
 		$this->execute(DeleteGroupMembersCommand::class, $input);
 
-		Flash::message(t('paragraphs.group-was-updated'));
+		Flash::message(t('paragraphs.one-or-more-members-deleted'));
 
 		return Redirect::back();
 	}
