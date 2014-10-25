@@ -15,4 +15,8 @@ return array (
   'view-offer' => '<strong>Ver</strong> Oferta',
   'welcome' => '<strong>Bem-Vindo</strong>!',
   'why-register?' => 'Por Que<strong>Registrar</strong>?',
+  'invitation-accepted' => 'Obrigado Por <strong class="styleColor">Se Juntar a Nós</strong>!',
+  'join-us' => 'Junte-se A Nós',
+  'password-updated' => 'Senha <strong class="styleColor">Atualizada</strong>!',
+  'you-are-connected-to' => 'Você Está Conectado A Estas <strong class="styleColor">Pessoas</strong>',
 );

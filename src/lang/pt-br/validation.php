@@ -1,6 +1,43 @@
 <?php
 
 return array (
+  'max' => 
+  array (
+    'string' => '":attribute" não pode ter mais do que :max characteres.',
+    'numeric' => '":attribute" não pode ser maior que :max.',
+    'array' => '":attribute" não pode ter mais do que :max itens.',
+    'file' => '":attribute" não pode ser maior que :max kilobytes.',
+  ),
+  'mimes' => '":attribute" precisa ser um arquivo do tipo :values.',
+  'min' => 
+  array (
+    'array' => '":attribute" precisa ter pelo menos :min itens.',
+    'file' => '":attribute" precisa ter no mínimo :min kilobytes.',
+    'numeric' => '":attribute" precisa ser pelo menos :min.',
+    'string' => '":attribute" precisa ter pelo menos :min caracteres.',
+  ),
+  'not_in' => '":attribute" selecionado é inválido.',
+  'numeric' => '":attribute" precisa ser um número.',
+  'regex' => 'O formato de ":attribute" é inválido.',
+  'timezone' => '":attribute" precisa ser um fuso horário válido.',
+  'unique' => '":attribute" já foi usado.',
+  'url' => 'O formato de ":attribute" é inválido.',
+  'custom' => 
+  array (
+    'telephones' => 
+    array (
+      'phone' => 'Número de telefone inválido.',
+    ),
+  ),
+  'zip' => 'CEP inválido.',
+  'attributes' => 
+  array (
+    'first_name' => 'nome',
+    'last_name' => 'sobrenome',
+    'username' => 'nome de usuário',
+    'password' => 'senha',
+    'body' => 'corpo da mensagem',
+  ),
   'active_url' => '":attribute" não é uma URL válida.',
   'accepted' => '":attribute" precisa ser aceito.',
   'after' => '":attribute" precisa vir depois de ":date".',
@@ -44,41 +81,4 @@ return array (
   'in' => '":attribute" selecionado é inválido.',
   'integer' => '":attribute" precisa ser um número inteiro.',
   'ip' => '":attribute" precisa ser um endereço IP válido.',
-  'max' => 
-  array (
-    'array' => '":attribute" não pode ter mais do que :max itens.',
-    'file' => '":attribute" não pode ser maior que :max kilobytes.',
-    'string' => '":attribute" não pode ter mais do que :max characteres.',
-    'numeric' => '":attribute" não pode ser maior que :max.',
-  ),
-  'mimes' => '":attribute" precisa ser um arquivo do tipo :values.',
-  'min' => 
-  array (
-    'array' => '":attribute" precisa ter pelo menos :min itens.',
-    'file' => '":attribute" precisa ter no mínimo :min kilobytes.',
-    'numeric' => '":attribute" precisa ser pelo menos :min.',
-    'string' => '":attribute" precisa ter pelo menos :min caracteres.',
-  ),
-  'not_in' => '":attribute" selecionado é inválido.',
-  'numeric' => '":attribute" precisa ser um número.',
-  'regex' => 'O formato de ":attribute" é inválido.',
-  'timezone' => '":attribute" precisa ser um fuso horário válido.',
-  'unique' => '":attribute" já foi usado.',
-  'url' => 'O formato de ":attribute" é inválido.',
-  'custom' => 
-  array (
-    'telephones' => 
-    array (
-      'phone' => 'Número de telefone inválido.',
-    ),
-  ),
-  'zip' => 'CEP inválido.',
-
-  'attributes' => [
-	  'first_name' => 'nome',
-	  'last_name' => 'sobrenome',
-	  'username' => 'nome de usuário',
-	  'password' => 'senha',
-      'body' => 'corpo da mensagem',
-  ],
 );

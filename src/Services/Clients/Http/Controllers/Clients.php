@@ -33,7 +33,12 @@ class Clients extends BaseController {
 
 		$this->execute(AddClientCommand::class, $input);
 
-		Flash::message(t('paragraphs.client-created'));
+		Flash::message(
+			t(
+				'paragraphs.client-created',
+				['client' => strtolower(Auth::check() ? Inflector::singular(Auth::user()->present()->clientFieldName) : 'client')]
+			)
+		);
 
 		return Redirect::back();
 	}
@@ -72,7 +77,12 @@ class Clients extends BaseController {
 
 		$client = $this->execute(UpdateClientCommand::class, $input);
 
-		Flash::message(t('paragraphs.client-updated'));
+		Flash::message(
+			t(
+				'paragraphs.client-updated',
+				['client' => Auth::check() ? Inflector::singular(Auth::user()->present()->clientFieldName) : 'client']
+			)
+		);
 
 		return Redirect::route('clients.edit', ['id' => $client->id]);
 	}
@@ -86,7 +96,12 @@ class Clients extends BaseController {
 
 		$this->execute(DeleteClientCommand::class, $input);
 
-		Flash::message(t('paragraphs.client-deleted'));
+		Flash::message(
+			t(
+				'paragraphs.client-deleted',
+				['client' => Auth::check() ? Inflector::singular(Auth::user()->present()->clientFieldName) : 'client']
+			)
+		);
 
 		return Redirect::route('clients');
 	}
