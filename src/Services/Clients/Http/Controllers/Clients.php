@@ -67,6 +67,7 @@ class Clients extends BaseController {
 			'last_name' => $request->get('last_name'),
 			'email' => $request->get('email'),
 			'notes' => $request->get('notes'),
+			'color' => $request->get('color'),
 		];
 
 		$client = $this->execute(UpdateClientCommand::class, $input);

@@ -109,4 +109,5 @@ return array (
   'delete-selected-members' => 'Delete Selected Members',
   'members-group' => 'Members (group)',
   'administrators-group' => 'Administrators (group)',
+  'color' => 'Color',
 );

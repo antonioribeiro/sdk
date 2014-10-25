@@ -13,7 +13,8 @@ class BaseScope implements ScopeInterface {
 
 		$builder->select([
 			"{$tableName}.*",
-			'providers_clients.notes'
+			'providers_clients.notes',
+			'providers_clients.color'
 		]);
 	}
 

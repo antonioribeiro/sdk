@@ -20,6 +20,8 @@ class CreateProvidersClientsTable extends Migration {
 
 			$table->string('client_id', 64)->index();
 
+			$table->string('color', 64)->default('#a30f0f');
+
 			$table->timestamps();
 		});
 	}

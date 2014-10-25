@@ -40,7 +40,7 @@ class ClientRepository {
 		return $user;
 	}
 
-	public function update($user, $client_id, $first_name, $last_name, $email, $notes)
+	public function update($user, $client_id, $first_name, $last_name, $email, $notes, $color)
 	{
 		$client = $this->userRepository->findById($client_id);
 
@@ -49,7 +49,7 @@ class ClientRepository {
 			$client = $this->updateClientUser($client, $first_name, $last_name, $email);
 		}
 
-		return $this->updateClientData($user, $client_id, $notes);
+		return $this->updateClientData($user, $client_id, $notes, $color);
 	}
 
 	private function updateClientUser($client, $first_name, $last_name, $email)
@@ -76,7 +76,7 @@ class ClientRepository {
 	 * @param $client_id
 	 * @param $notes
 	 */
-	private function updateClientData($user, $client_id, $notes)
+	private function updateClientData($user, $client_id, $notes, $color)
 	{
 		$providerClient = ProviderClient::where('provider_id', $user->id)->where('client_id', $client_id)->first();
 
@@ -85,6 +85,8 @@ class ClientRepository {
 		$providerClient->client_id = $user->id;
 
 		$providerClient->notes = $notes;
+
+		$providerClient->color = $color;
 
 		$providerClient->save();
 
