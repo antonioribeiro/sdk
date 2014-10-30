@@ -22,6 +22,8 @@ class CreateProvidersClientsTable extends Migration {
 
 			$table->string('color', 64)->default('#a30f0f');
 
+			$table->date('birthdate')->nullable();
+
 			$table->timestamps();
 		});
 	}

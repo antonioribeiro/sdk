@@ -24,9 +24,9 @@ class Controller {
 		}
 	}
 
-	public function success()
+	public function success($additional = [])
 	{
-		return Response::json(['success' => true]);
+		return Response::json(array_merge(['success' => true], $additional));
 	}
 
 }

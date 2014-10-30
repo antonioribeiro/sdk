@@ -14,6 +14,7 @@ use PragmaRX\Sdk\Core\Traits\ReloadableTrait;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidActivationToken;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserActivationNotFound;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
+use PragmaRX\Sdk\Services\Clients\Data\Entities\Client;
 use PragmaRX\Sdk\Services\Registration\Events\UserRegistered;
 
 use Laracasts\Commander\Events\EventGenerator;
@@ -202,18 +203,22 @@ class User extends CartalystUser implements UserContract {
 		}
 	}
 
-	public function clients()
+	public function getClients()
 	{
-		return $this
-				->belongsToMany('PragmaRX\Sdk\Services\Users\Data\Entities\User', 'providers_clients', 'provider_id', 'client_id')
-				->withPivot(['notes']);
+		return Client::where('providers_clients.provider_id', $this->id);
+
+//		return	$this
+//				->belongsToMany('PragmaRX\Sdk\Services\Clients\Data\Entities\Client', 'providers_clients', 'providers_client.provider_id', 'providers_client.client_id');
+	}
+
+	public function getAllClients()
+	{
+		return $this->getClients()->get();
 	}
 
 	public function isProviderOf($id)
 	{
-		$clients = $this->clients()->lists('client_id');
-
-		return in_array($id, $clients);
+		return $this->getClients()->where('providers_clients.client_id', $id)->first();
 	}
 
 	public function getIsActivatedAttribute()

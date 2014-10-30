@@ -2,11 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Clients\Http\Controllers;
 
-use ConsultorioDigital\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Core\Controller as BaseController;
-
-use Auth;
-use Flash;
 use PragmaRX\Sdk\Services\Clients\Commands\AddClientCommand;
 use PragmaRX\Sdk\Services\Clients\Commands\DeleteClientCommand;
 use PragmaRX\Sdk\Services\Clients\Commands\UpdateClientCommand;
@@ -14,6 +10,10 @@ use PragmaRX\Sdk\Services\Clients\Data\Repositories\ClientRepository;
 use PragmaRX\Sdk\Services\Clients\Http\Requests\AddClient as AddClientRequest;
 use PragmaRX\Sdk\Services\Clients\Http\Requests\UpdateClient as UpdateClientRequest;
 use PragmaRX\Sdk\Services\Kinds\Data\Repositories\KindRepository;
+use PragmaRX\Support\Inflectors\Inflector;
+
+use Auth;
+use Flash;
 use Redirect;
 use View;
 use Response;
@@ -29,7 +29,13 @@ class Clients extends BaseController {
 
 	public function post(AddClientRequest $request)
 	{
-		$input = array_merge(['user' => Auth::user()], $request->all());
+		$input = [
+			'user' => Auth::user(),
+			'first_name' => $request->get('first_name'),
+			'last_name' => $request->get('last_name')  ?: null,
+			'email' => $request->get('email')  ?: null,
+			'birthdate' => $request->get('birthdate') ?: null,
+		];
 
 		$this->execute(AddClientCommand::class, $input);
 
@@ -73,6 +79,7 @@ class Clients extends BaseController {
 			'email' => $request->get('email'),
 			'notes' => $request->get('notes'),
 			'color' => $request->get('color'),
+			'birthdate' => $request->get('birthdate') ?: null,
 		];
 
 		$client = $this->execute(UpdateClientCommand::class, $input);

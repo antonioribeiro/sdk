@@ -4,6 +4,9 @@ namespace PragmaRX\Sdk\Services\Clients\Data\Entities;
 
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 
+use Carbon;
+use Language;
+
 class Client extends User {
 
 	protected $table = 'users';
@@ -24,7 +27,16 @@ class Client extends User {
 		    $provider = $provider->id;
 	    }
 
-        return $query->where('provider_id', $provider);
+        return $query
+	            ->where('provider_id', $provider);
     }
+
+	public function getBirthdateAttribute($value)
+	{
+		return ! $value
+				? null
+				: Carbon::createFromFormat('Y-m-d', $value)
+					->format(Language::getCarbonDateFormat());
+	}
 
 }

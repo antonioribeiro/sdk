@@ -81,7 +81,6 @@ if ( ! function_exists( 'convert_url_to_ajax' ))
 	}
 }
 
-
 if ( ! function_exists( 'var_log' ))
 {
 	function var_log(&$varInput, $var_name = '', $reference = '', $method = '=', $sub = false)
@@ -185,5 +184,24 @@ if ( ! function_exists( 'var_log' ))
 		if ($sub == false)
 			return $output;
 
+	}
+}
+
+if ( ! function_exists( 'getContrastYIQ' ))
+{
+	function getContrastYIQ($hexcolor)
+	{
+		if ($hexcolor[0] == '#')
+		{
+			$hexcolor = substr($hexcolor, 1);
+		}
+
+		$r = hexdec(substr($hexcolor, 0, 2));
+		$g = hexdec(substr($hexcolor, 2, 2));
+		$b = hexdec(substr($hexcolor, 4, 2));
+		$yiq = (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
+		return ($yiq >= 128)
+			? 'black'
+			: 'white';
 	}
 }

@@ -14,7 +14,7 @@ class CreateUserLocaleInfo extends Migration {
 	{
 		Schema::table('users', function(Blueprint $table)
 		{
-			$table->string('locale')->nullable()->default('pt-br');
+			$table->string('locale')->nullable()->default('pt_BR');
 		});
 	}
 

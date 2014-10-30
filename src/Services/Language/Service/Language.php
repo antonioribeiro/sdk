@@ -63,7 +63,7 @@ class Language {
 
 		$locale = ($locale ?: ( Session::has('locale') ? Session::get('locale') : null ));
 
-		$locale = $locale ?: 'pt-br';
+		$locale = $locale ?: 'pt_BR';
 
 		Session::set('locale', $locale);
 
@@ -80,6 +80,20 @@ class Language {
 		Session::put('locale', $locale);
 
 		return $locale;
+	}
+
+	public function getDateFormat($year = 'yyyy')
+	{
+		return $this->getLocale() == 'en'
+				? 'mm/dd/'.$year
+				: 'dd/mm/'.$year;
+	}
+
+	public function getCarbonDateFormat()
+	{
+		return $this->getLocale() == 'en'
+				? 'm/d/Y'
+				: 'd/m/Y';
 	}
 
 }

@@ -11,6 +11,7 @@ class ProviderClient extends Model {
 	protected $fillable = [
 		'provider_id',
 		'client_id',
+	    'birthdate',
 	];
 
 	public function provider()

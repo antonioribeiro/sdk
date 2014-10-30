@@ -37,7 +37,8 @@ class UpdateClientCommandHandler extends CommandHandler {
 			$command->last_name,
 			$command->email,
 			$command->notes,
-			$command->color
+			$command->color,
+			$command->birthdate
 		);
 
 		$this->dispatchEventsFor($client);

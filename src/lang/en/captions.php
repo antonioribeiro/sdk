@@ -110,4 +110,5 @@ return array (
   'edit-your-client' => 'Edit Your :Client',
   'your-clients' => 'Your :Clients',
   'add-client' => 'Add :Client',
+  'birthdate' => 'Birth Date',
 );

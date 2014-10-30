@@ -34,7 +34,8 @@ class AddClientCommandHandler extends CommandHandler {
 			$command->user,
 			$command->first_name,
 			$command->last_name,
-			$command->email
+			$command->email,
+			$command->birthdate
 		);
 
 		$this->dispatchEventsFor($client);

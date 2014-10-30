@@ -18,13 +18,14 @@ class ClientRepository {
 		$this->userRepository = $userRepository;
 	}
 
-	public function create($provider, $first_name, $last_name, $email)
+	public function create($provider, $first_name, $last_name, $email, $birthdate)
 	{
 		$user = $this->findOrCreateUser($first_name, $last_name, $email);
 
 		$client = ProviderClient::create([
 			'provider_id' => $provider->id,
 			'client_id' => $user->id,
+		    'birthdate' => $birthdate
 		]);
 
 		return $client;
@@ -40,7 +41,7 @@ class ClientRepository {
 		return $user;
 	}
 
-	public function update($user, $client_id, $first_name, $last_name, $email, $notes, $color)
+	public function update($user, $client_id, $first_name, $last_name, $email, $notes, $color, $birthdate)
 	{
 		$client = $this->userRepository->findById($client_id);
 
@@ -49,7 +50,7 @@ class ClientRepository {
 			$client = $this->updateClientUser($client, $first_name, $last_name, $email);
 		}
 
-		return $this->updateClientData($user, $client_id, $notes, $color);
+		return $this->updateClientData($user, $client, $client_id, $notes, $color, $birthdate);
 	}
 
 	private function updateClientUser($client, $first_name, $last_name, $email)
@@ -76,21 +77,23 @@ class ClientRepository {
 	 * @param $client_id
 	 * @param $notes
 	 */
-	private function updateClientData($user, $client_id, $notes, $color)
+	private function updateClientData($user, $client, $client_id, $notes, $color, $birthdate)
 	{
 		$providerClient = ProviderClient::where('provider_id', $user->id)->where('client_id', $client_id)->first();
 
 		/// We may be changing the current user to an activated user
 
-		$providerClient->client_id = $user->id;
+		$providerClient->client_id = $client->id;
 
 		$providerClient->notes = $notes;
 
 		$providerClient->color = $color;
 
+		$providerClient->birthdate = $birthdate;
+
 		$providerClient->save();
 
-		return $user;
+		return $client;
 	}
 
 	public function clientsFromProvider($user)
@@ -98,22 +101,23 @@ class ClientRepository {
 		return Client::havingAsProvider($user)->get();
 	}
 
-	public function findClientById($provider_id, $client_id)
+	public function findClientById($provider_id, $provider_client_id)
 	{
-		return Client::where('users.id', $client_id)
+		return Client::where('providers_clients.client_id', $provider_client_id)
 				->where('providers_clients.provider_id', $provider_id)
 				->first();
 	}
 
-	public function delete($provider, $client_id)
+	public function delete($provider, $provider_client_id)
 	{
-		$providerClient = ProviderClient::where('provider_id', $provider->id)->where('client_id', $client_id)->first();
+		$providerClient = ProviderClient::where('provider_id', $provider->id)
+							->where('id', $provider_client_id)->first();
 
-		$user = $this->userRepository->findById($client_id);
+		$client = $this->userRepository->findById($providerClient->client_id);
 
-		if ( ! $user->isActivated)
+		if ( ! $client->isActivated)
 		{
-			$user->delete();
+			$client->delete();
 		}
 
 		$providerClient->delete();

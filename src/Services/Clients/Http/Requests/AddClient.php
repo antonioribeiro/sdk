@@ -15,6 +15,8 @@ class AddClient extends FormRequest {
 	{
 		return [
 			'first_name' => 'required',
+			'email' => 'email',
+//			'birthdate' => 'date',
 		];
 	}
 

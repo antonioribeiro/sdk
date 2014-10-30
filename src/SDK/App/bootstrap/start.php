@@ -8,6 +8,5 @@ App::booted(function()
 
 		Sentinel::removeCheckpoint('throttle');
 	}
-
 });
 

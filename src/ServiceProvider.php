@@ -14,6 +14,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	use ServiceableTrait;
 
+	protected $sdk;
+
 	/**
 	 * Vendor name.
 	 *
@@ -49,27 +51,29 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	public function wakeUp()
 	{
 		$this->registerGlobalScripts();
-
-		$this->configureLocale();
 	}
 
-    /**
-     * Register all the things.
-     *
-     * @return void
-     */
-    public function register()
-    {
-	    parent::register();
+	/**
+	 * Register all the things.
+	 *
+	 * @return void
+	 */
+	public function register()
+	{
+		parent::register();
 
-	    $this->registerPackages();
+		$this->registerSdk();
 
-	    $this->registerServices();
+		$this->registerPackages();
 
-	    $this->registerCommands();
+		$this->registerServices();
 
-	    $this->configurePackages();
-    }
+		$this->registerCommands();
+
+		$this->configurePackages();
+
+		$this->registerAfterBootCalls();
+	}
 
 	/**
 	 * Register all packages service providers.
@@ -98,8 +102,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	private function registerPackageFacades($package)
 	{
 		$facades = ! isset($package['facades'])
-					? []
-					: $package['facades'];
+			? []
+			: $package['facades'];
 
 		foreach ($facades as $name => $class)
 		{
@@ -131,8 +135,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	private function registerPackageServiceProviders($package)
 	{
 		$serviceProviders = ! isset($package['serviceProviders'])
-								? []
-								: $package['serviceProviders'];
+			? []
+			: $package['serviceProviders'];
 
 		foreach ($serviceProviders as $serviceProvider)
 		{
@@ -217,13 +221,13 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 		$this->app['config']->set('cartalyst/sentinel::roles.model', $this->getConfig('models.role'));
 
-	    $this->app['config']->set('cartalyst/sentinel::persistences.model', $this->getConfig('models.persistence'));
+		$this->app['config']->set('cartalyst/sentinel::persistences.model', $this->getConfig('models.persistence'));
 
-	    $this->app['config']->set('cartalyst/sentinel::activations.model', $this->getConfig('models.activation'));
+		$this->app['config']->set('cartalyst/sentinel::activations.model', $this->getConfig('models.activation'));
 
-	    $this->app['config']->set('cartalyst/sentinel::reminders.model', $this->getConfig('models.reminder'));
+		$this->app['config']->set('cartalyst/sentinel::reminders.model', $this->getConfig('models.reminder'));
 
-	    $this->app['config']->set('cartalyst/sentinel::throttling.model', $this->getConfig('models.throttle'));
+		$this->app['config']->set('cartalyst/sentinel::throttling.model', $this->getConfig('models.throttle'));
 	}
 
 	/**
@@ -288,21 +292,21 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	private function registerCommands()
 	{
 		$this->app->bindShared('command.migrate', function($app)
-		{
-			$packagePath = $app['path.base'].'/vendor';
+			{
+				$packagePath = $app['path.base'].'/vendor';
 
-			return new MigrateCommand($app['migrator'], $packagePath);
-		});
+				return new MigrateCommand($app['migrator'], $packagePath);
+			});
 
 		$this->app->bindShared('command.migrate.rollback', function($app)
-		{
-			return new RollbackCommand($app['migrator']);
-		});
+			{
+				return new RollbackCommand($app['migrator']);
+			});
 
 		$this->app->bindShared('command.migrate.reset', function($app)
-		{
-			return new ResetCommand($app['migrator']);
-		});
+			{
+				return new ResetCommand($app['migrator']);
+			});
 	}
 
 	/**
@@ -314,15 +318,15 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		Language::configureLocale();
 	}
 
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array('pragmarx.sdk');
-    }
+	/**
+	 * Get the services provided by the provider.
+	 *
+	 * @return array
+	 */
+	public function provides()
+	{
+		return array('pragmarx.sdk');
+	}
 
 	/**
 	 * Provides the root directory of the child ServiceProvider.
@@ -332,6 +336,28 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	protected function getRootDirectory()
 	{
 		return __DIR__;
+	}
+
+	private function registerAfterBootCalls()
+	{
+		$me = $this;
+
+		$this->sdk->booted(function() use ($me)
+		{
+			$me->configureLocale();
+		});
+	}
+
+	private function registerSdk()
+	{
+		$sdk = new Sdk();
+
+		$this->sdk = $sdk;
+
+		$this->app->bindShared('pragmarx.sdk', function($app) use ($sdk)
+		{
+			return $sdk;
+		});
 	}
 
 }

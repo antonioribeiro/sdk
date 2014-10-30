@@ -19,7 +19,9 @@ class UpdateClientCommand {
 
 	public $color;
 
-	function __construct($email, $first_name, $id, $last_name, $user, $notes, $color)
+	public $birthdate;
+
+	function __construct($email, $first_name, $id, $last_name, $user, $notes, $color, $birthdate)
 	{
 		$this->email = $email;
 
@@ -34,6 +36,8 @@ class UpdateClientCommand {
 		$this->notes = $notes;
 
 		$this->color = $color;
+
+		$this->birthdate = $birthdate;
 	}
 
 }
