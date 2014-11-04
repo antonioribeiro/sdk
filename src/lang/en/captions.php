@@ -111,4 +111,8 @@ return array (
   'your-clients' => 'Your :Clients',
   'add-client' => 'Add :Client',
   'birthdate' => 'Birth Date',
+  'business-days' => 'Business Days',
+  'business-hours' => 'Business Hours',
+  'from-time' => 'From',
+  'to-time' => 'To',
 );
