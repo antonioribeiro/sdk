@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Clients\Data\Repositories;
 
+use Config;
 use PragmaRX\Sdk\Services\Clients\Data\Entities\Client;
 use PragmaRX\Sdk\Services\Clients\Data\Entities\ProviderClient;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
@@ -18,14 +19,17 @@ class ClientRepository {
 		$this->userRepository = $userRepository;
 	}
 
-	public function create($provider, $first_name, $last_name, $email, $birthdate)
+	public function create($provider, $first_name, $last_name, $email, $birthdate, $color = null)
 	{
+		$color = $color ?: Config::get('app.event_color');
+
 		$user = $this->findOrCreateUser($first_name, $last_name, $email);
 
 		$client = ProviderClient::create([
 			'provider_id' => $provider->id,
 			'client_id' => $user->id,
-		    'birthdate' => $birthdate
+		    'birthdate' => $birthdate,
+		    'color' => $color,
 		]);
 
 		return $client;

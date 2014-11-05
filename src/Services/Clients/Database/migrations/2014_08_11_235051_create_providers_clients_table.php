@@ -20,11 +20,29 @@ class CreateProvidersClientsTable extends Migration {
 
 			$table->string('client_id', 64)->index();
 
-			$table->string('color', 64)->default('#a30f0f');
+			$table->string('color', 64)->default(Config::get('app.event_color'));
 
 			$table->date('birthdate')->nullable();
 
 			$table->timestamps();
+		});
+
+		Schema::table('providers_clients', function(Blueprint $table)
+		{
+			$table->foreign('provider_id')
+				->references('id')
+				->on('users')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		Schema::table('providers_clients', function(Blueprint $table)
+		{
+			$table->foreign('client_id')
+				->references('id')
+				->on('users')
+				->onUpdate('cascade')
+				->onDelete('cascade');
 		});
 	}
 
