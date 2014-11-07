@@ -2,7 +2,14 @@
 
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
 
-App::make('exception')->error(function(UserAlreadyActivated $exception, $code)
+ExceptionHandler::addHandler(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception)
+{
+	Flash::error('page not found');
+
+	return Redirect::home();
+});
+
+ExceptionHandler::addHandler(function(UserAlreadyActivated $exception, $code)
 {
 	return Redirect::route('message')
 			->with('title', t('titles.account-already-activated'))

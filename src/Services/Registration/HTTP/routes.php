@@ -4,7 +4,7 @@ Route::group(['namespace' => 'PragmaRX\Sdk\Services\Registration\Http\Controller
 {
 	Route::group(['before' => 'guest', 'prefix' => 'register'], function()
 	{
-		Route::get('/', ['as' => 'register', 'uses' => 'Registration@create']);
+		Route::get('/{invite_code?}', ['as' => 'register', 'uses' => 'Registration@create']);
 
 		Route::post('/', ['as' => 'register', 'uses' => 'Registration@store']);
 	});

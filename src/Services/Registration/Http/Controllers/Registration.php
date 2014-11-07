@@ -13,9 +13,12 @@ class Registration extends BaseController {
 	/**
 	 * @return mixed
 	 */
-	public function create()
+	public function create($invite_code = null)
 	{
-		return View::make('registration.create');
+		$invite_only = env('INVITE.ONLY') &&
+						$invite_code !== env('INVITE.ONLY.FREEPASS');
+
+		return View::make('registration.create', compact('invite_only'));
 	}
 
 	/**

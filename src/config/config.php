@@ -89,6 +89,13 @@ return [
 	'packages' => [
 
 		[
+			'name' => 'pragmarx/exception',
+			'enabled' => true,
+			'serviceProviders' => ['PragmaRX\Sdk\Services\ExceptionHandler\Service\Provider'],
+			'facades' => ['ExceptionHandler' => 'PragmaRX\Sdk\Services\ExceptionHandler\Service\Facade']
+		],
+
+		[
 			'name' => 'pragmarx/redirect',
 			'enabled' => true,
 			'serviceProviders' => ['PragmaRX\Sdk\Services\Redirect\Service\Provider'],

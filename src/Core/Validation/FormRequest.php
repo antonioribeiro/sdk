@@ -11,6 +11,11 @@ use Redirect;
 
 class FormRequest extends IlluminateFormRequest {
 
+	public function rules()
+	{
+		return [];
+	}
+
 	public function forbiddenResponse()
 	{
 		if ($this->ajax())

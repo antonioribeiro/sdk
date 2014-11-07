@@ -9,6 +9,7 @@ use PragmaRX\Sdk\Services\Profiles\Commands\EditProfileCommand;
 use PragmaRX\Sdk\Services\Statuses\Data\Repositories\StatusRepository;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Profiles\Forms\Edit as EditForm;
+use PragmaRX\Sdk\Services\Profiles\Http\Requests\UpdateProfile;
 
 use View;
 use Auth;
@@ -67,10 +68,8 @@ class Profiles extends BaseController {
 				->with('kinds', $kindRespository->allForSelect());
 	}
 
-	public function update()
+	public function update(UpdateProfile $request)
 	{
-		$this->validateForUpdate();
-
 		$this->execute(EditProfileCommand::class);
 
 		Flash::message(t('paragraphs.profile-updated'));
@@ -78,11 +77,4 @@ class Profiles extends BaseController {
 		return Redirect::back();
 	}
 
-	private function validateForUpdate()
-	{
-		$this->editForm->validate(
-			Input::all(),
-			['username' => 'unique:users,username,'.Auth::user()->id]
-		);
-	}
 }

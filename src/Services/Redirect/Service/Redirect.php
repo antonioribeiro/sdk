@@ -28,7 +28,7 @@ class Redirect extends Redirector {
 			elseif ($name == 'back')
 			{
 				$response = [
-					'redirect' => convert_url_to_ajax($this->__getReferer())
+					'redirect' => $this->__getReferer()
 			    ];
 			}
 			else
@@ -57,7 +57,12 @@ class Redirect extends Redirector {
 			return new JsonResponse(['redirect' => route_ajax($route, $parameters)]);
 		}
 
-		return parent::to(route_ajax($route, $parameters));
+		if ($this->wantsAjax())
+		{
+			return parent::to(route_ajax($route, $parameters));
+		}
+
+		return parent::to(route($route, $parameters));
 	}
 
 	public function back($status = 302, $headers = array())
@@ -87,6 +92,11 @@ class Redirect extends Redirector {
 			$referer = route('home');
 		}
 
+		if ($this->wantsJson() || $this->wantsAjax())
+		{
+			$referer = convert_url_to_ajax($referer);
+		}
+
 		return $referer;
 	}
 
@@ -112,6 +122,11 @@ class Redirect extends Redirector {
 	private function wantsJson()
 	{
 		return $this->generator->getRequest()->ajax();
+	}
+
+	private function wantsAjax()
+	{
+		return $this->generator->getRequest()->get('return-ajax-url');
 	}
 
 }
