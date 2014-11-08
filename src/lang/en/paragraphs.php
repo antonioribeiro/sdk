@@ -138,4 +138,5 @@ return array (
   'client-updated' => ':client was updated successfully.',
   'two-factor-use-your-email' => 'Every time you sign in the system will send. to your inbox, a message with a security code.',
   'error-loading-events' => 'There was an error while fetching events.',
+  'client-deleted' => 'A client has been deleted.',
 );

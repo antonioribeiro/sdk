@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Clients\Data\Repositories;
 
 use Config;
+use PragmaRX\Sdk\Core\Exceptions\InvalidRequest;
 use PragmaRX\Sdk\Services\Clients\Data\Entities\Client;
 use PragmaRX\Sdk\Services\Clients\Data\Entities\ProviderClient;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
@@ -115,7 +116,12 @@ class ClientRepository {
 	public function delete($provider, $provider_client_id)
 	{
 		$providerClient = ProviderClient::where('provider_id', $provider->id)
-							->where('id', $provider_client_id)->first();
+							->where('client_id', $provider_client_id)->first();
+
+		if ( ! $providerClient)
+		{
+			throw new InvalidRequest();
+		}
 
 		$client = $this->userRepository->findById($providerClient->client_id);
 

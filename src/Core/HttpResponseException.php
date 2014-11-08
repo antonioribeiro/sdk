@@ -2,9 +2,11 @@
 
 namespace PragmaRX\Sdk\Core;
 
-use Redirect;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Exception\HttpResponseException as IlluminateHttpResponseException;
+
+use Redirect;
+use Flash;
 
 class HttpResponseException extends IlluminateHttpResponseException {
 
@@ -30,7 +32,9 @@ class HttpResponseException extends IlluminateHttpResponseException {
 				$response = $response ? [$response] : $this->getDefaultMessages();
 			}
 
-			$response = Redirect::back()->withInput()->withErrors($response);
+			Flash::errors($response);
+
+			$response = Redirect::back()->withInput();
 		}
 
 		return $response;

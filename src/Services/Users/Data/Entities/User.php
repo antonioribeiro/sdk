@@ -4,7 +4,7 @@ namespace PragmaRX\Sdk\Services\Users\Data\Entities;
 
 use Cartalyst\Sentinel\Users\EloquentUser as CartalystUser;
 
-use Illuminate\Auth\UserTrait;
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\User as UserContract;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Hash;
@@ -38,7 +38,7 @@ class User extends CartalystUser implements UserContract {
 		ConnectableTrait,
 		BlockableTrait,
 		VisitableTrait,
-		UserTrait,
+		Authenticatable,
 		EventGenerator,
 		PresentableTrait,
 		ReloadableTrait,
