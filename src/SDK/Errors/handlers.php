@@ -9,9 +9,16 @@ ExceptionHandler::addHandler(function(Laracasts\Validation\FormValidationExcepti
 
 ExceptionHandler::addHandler(function(Illuminate\Session\TokenMismatchException $exception, $code)
 {
-	return Redirect::back()
-			->withInput()
-			->withErrors([t('paragraphs.token-mismatch')]);
+	Flash::error(t('paragraphs.token-mismatch'));
+
+	return Redirect::back()->withInput();
+});
+
+ExceptionHandler::addHandler(function(PragmaRX\Sdk\Core\Exceptions\TokenMismatch $exception, $code)
+{
+	Flash::error(t('paragraphs.token-mismatch'));
+
+	return Redirect::back()->withInput();
 });
 
 ExceptionHandler::addHandler(function(Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException $exception, $code)

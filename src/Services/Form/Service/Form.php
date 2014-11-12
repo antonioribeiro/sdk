@@ -23,6 +23,27 @@ class Form {
 			$params1 = $params1['model'];
 		}
 
+		$returnAjaxUrl = true;
+
+		if(is_array($params2) && isset($params2['no-return-ajax-url']))
+		{
+			$params = &$params2;
+
+			unset($params2['no-return-ajax-url']);
+		}
+		elseif(is_array($params1) && isset($params1['no-return-ajax-url']))
+		{
+			$params = &$params1;
+
+			unset($params1['no-return-ajax-url']);
+		}
+		else
+		{
+			$params = [];
+
+			$returnAjaxUrl = false;
+		}
+
 		if (is_object($params1))
 		{
 			$method = 'model';
@@ -32,10 +53,17 @@ class Form {
 			$method = 'open';
 		}
 
-		return
+		$form =
 			$this->form->{$method}($params1, $params2) .
 			$this->makeReferer() .
 			$this->addToken();
+
+		if ($returnAjaxUrl)
+		{
+			$form .= Form::hidden('no-return-ajax-url', 'true');
+		}
+
+		return $form;
 	}
 
 	private function makeReferer()

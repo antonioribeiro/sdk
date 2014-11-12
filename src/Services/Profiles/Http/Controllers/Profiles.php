@@ -70,11 +70,11 @@ class Profiles extends BaseController {
 
 	public function update(UpdateProfile $request)
 	{
-		$this->execute(EditProfileCommand::class);
+		$user = $this->execute(EditProfileCommand::class);
 
 		Flash::message(t('paragraphs.profile-updated'));
 
-		return Redirect::back();
+		return Redirect::route('profile.edit', [$user->username]);
 	}
 
 }

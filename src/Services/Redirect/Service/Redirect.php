@@ -69,6 +69,11 @@ class Redirect extends Redirector {
 	{
 		$back = $this->__getReferer();
 
+		if ($this->wantsJson())
+		{
+			return new JsonResponse(['redirect' => $back]);
+		}
+
 		return $this->createRedirect($back, $status, $headers);
 	}
 
@@ -77,7 +82,7 @@ class Redirect extends Redirector {
 	 */
 	public function __getReferer()
 	{
-		if ( ! $referer = $this->generator->getRequest()->get('referer-url'))
+		if ( ! $referer = $this->getRefererFromRequest())
 		{
 			$referer = $this->generator->getRequest()->instance()->headers->get('referer');
 		}
@@ -126,7 +131,20 @@ class Redirect extends Redirector {
 
 	private function wantsAjax()
 	{
-		return $this->generator->getRequest()->get('return-ajax-url');
+		return ! $this->generator->getRequest()->get('no-return-ajax-url');
+	}
+
+	private function getRefererFromRequest()
+	{
+		if ( ! $referrer = $this->generator->getRequest()->get('referer-url'))
+		{
+			if ($referrer = $this->generator->getRequest()->get('referer-href-url'))
+			{
+				$referrer = route('home') . '/#' . $referrer;
+			}
+		}
+
+		return $referrer;
 	}
 
 }

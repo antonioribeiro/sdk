@@ -34,7 +34,12 @@ class HttpResponseException extends IlluminateHttpResponseException {
 
 			Flash::errors($response);
 
-			$response = Redirect::back()->withInput();
+			$response = Redirect::back();
+
+			if ( ! $response instanceof \Illuminate\Http\JsonResponse)
+			{
+				$response->withInput();
+			}
 		}
 
 		return $response;
