@@ -49,7 +49,7 @@ class Passwords extends BaseController {
 	{
 		$this->execute(ResetPasswordCommand::class);
 
-		return Redirect::route('message')
+		return Redirect::route_no_ajax('message')
 			->with('title', t('titles.reset-your-password'))
 			->with('message', t('paragraphs.reset-password-sent'))
 			->withInput();

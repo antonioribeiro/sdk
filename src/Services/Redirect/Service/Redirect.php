@@ -50,14 +50,19 @@ class Redirect extends Redirector {
 		return $this->call($name, $parameters);
 	}
 
-	public function route($route, $parameters = array(), $status = 302, $headers = array())
+	public function route_no_ajax($route, $parameters = array(), $status = 302, $headers = array())
+	{
+		return $this->route($route, $parameters = array(), $status = 302, $headers = array(), false);
+	}
+
+	public function route($route, $parameters = array(), $status = 302, $headers = array(), $ajax = true)
 	{
 		if ($this->wantsJson())
 		{
 			return new JsonResponse(['redirect' => route_ajax($route, $parameters)]);
 		}
 
-		if ($this->wantsAjax())
+		if ($this->wantsAjax($ajax))
 		{
 			return parent::to(route_ajax($route, $parameters));
 		}
@@ -129,9 +134,12 @@ class Redirect extends Redirector {
 		return $this->generator->getRequest()->ajax();
 	}
 
-	private function wantsAjax()
+	private function wantsAjax($default = true)
 	{
-		return ! $this->generator->getRequest()->get('no-return-ajax-url');
+		return
+				! $this->generator->getRequest()->get('no-return-ajax-url')
+				? $default
+				: false;
 	}
 
 	private function getRefererFromRequest()

@@ -11,7 +11,7 @@ ExceptionHandler::addHandler(function(Symfony\Component\HttpKernel\Exception\Not
 
 ExceptionHandler::addHandler(function(UserAlreadyActivated $exception, $code)
 {
-	return Redirect::route('message')
+	return Redirect::route_no_ajax('message')
 			->with('title', t('titles.account-already-activated'))
 			->with('message', t('paragraphs.account-already-activated'))
 			->with('buttons', [[

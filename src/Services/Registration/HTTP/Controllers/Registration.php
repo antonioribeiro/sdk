@@ -28,7 +28,7 @@ class Registration extends BaseController {
 	{
 		$this->execute(RegisterUserCommand::class);
 
-		return Redirect::route('message')
+		return Redirect::route_no_ajax('message')
 				->with('title', t('titles.welcome'))
 				->with('message', t('paragraphs.welcome-message'))
 				->with('buttons', [[
