@@ -76,7 +76,7 @@ class FormRequest extends IlluminateFormRequest {
 
 	private function mergeRulesAndRouteParameters()
 	{
-		foreach ($this->route->parameters() as $key => $value)
+		foreach ($this->route()->parameters() as $key => $value)
 		{
 			Input::merge([$key => $value]);
 		}

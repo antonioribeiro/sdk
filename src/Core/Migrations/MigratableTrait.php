@@ -25,7 +25,9 @@ trait MigratableTrait {
 
 		if ( ! $this->getOption('package'))
 		{
-			$this->paths[] = base_path().'/database/migrations';
+			// this is the default Laravel migrations path!
+			// DISABLED!!!!!!!!
+			// $this->paths[] = base_path().'/database/migrations';
 
 			$this->paths = array_merge($this->paths, $this->getServicesMigrationPaths());
 		}

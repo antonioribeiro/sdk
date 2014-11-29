@@ -92,7 +92,7 @@ class Connect extends BaseController {
 
 		$this->execute(AcceptInvitationCommand::class, $input);
 
-		return Redirect::route_no_ajax('message')
+		return Redirect::route_no_ajax('notification')
 				->with('title', t('titles.invitation-accepted'))
 				->with('message', t('paragraphs.invitation-accepted'))
 				->withInput();

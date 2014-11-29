@@ -19,7 +19,7 @@ class Accounts extends BaseController {
 
 		$this->execute(ActivateCommand::class, $input);
 
-		return Redirect::route_no_ajax('message', null, 302, [], ['no-return-ajax-url'])
+		return Redirect::route_no_ajax('notification', null, 302, [], ['no-return-ajax-url'])
 				->with('title', t('titles.account-activated'))
 				->with('message', t('paragraphs.account-activated'))
 				->with('buttons', [[

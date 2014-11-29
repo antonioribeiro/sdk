@@ -31,7 +31,7 @@ use Activation;
 use Auth;
 use DB;
 
-class User extends CartalystUser implements UserContract {
+class User extends CartalystUser {
 
 	use
 		FollowableTrait,

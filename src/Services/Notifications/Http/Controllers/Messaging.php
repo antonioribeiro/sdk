@@ -21,7 +21,7 @@ class Messaging extends BaseController {
 			return Redirect::home();
 		}
 
-		return View::make('messages.index')
+		return View::make('notifications.index')
 				->with('title', Session::get('title'))
 				->with('message', Session::get('message'))
 				->with('buttons', Session::get('buttons'));

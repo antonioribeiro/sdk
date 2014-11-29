@@ -11,7 +11,7 @@ ExceptionHandler::addHandler(function(Illuminate\Session\TokenMismatchException 
 {
 	Flash::error(t('paragraphs.token-mismatch'));
 
-	return Redirect::back()->withInput();
+	return Redirect::back();
 });
 
 ExceptionHandler::addHandler(function(PragmaRX\Sdk\Core\Exceptions\TokenMismatch $exception, $code)

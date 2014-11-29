@@ -60,7 +60,7 @@ return [
 
 		'Services/Mailer',
 
-		'Services/Messaging',
+		'Services/Notifications',
 
 		'Services/Passwords',
 		'Services/Profiles',
