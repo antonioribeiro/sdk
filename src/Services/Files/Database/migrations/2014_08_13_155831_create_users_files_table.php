@@ -14,8 +14,12 @@ class CreateUsersFilesTable extends Migration {
 	{
 		Schema::create('users_files', function(Blueprint $table)
 		{
+			$table->string('id', 64)->primary();
+
 			$table->string('file_name_id', 64)->index();
+
 			$table->string('user_id', 64)->index();
+
 			$table->timestamps();
 		});
 

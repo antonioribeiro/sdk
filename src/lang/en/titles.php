@@ -19,4 +19,5 @@ return array (
   'join-us' => 'Join Us',
   'invitation-accepted' => 'Thanks For <strong class="styleColor">Joining Us</strong>!',
   'password-updated' => 'Password <strong class="styleColor">Updated</strong>!',
+  'no-connections' => 'You Have No Connections!',
 );

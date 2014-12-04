@@ -140,4 +140,6 @@ return array (
   'error-loading-events' => 'There was an error while fetching events.',
   'client-deleted' => 'A client has been deleted.',
   'validation-error' => 'There was an error validating the information.',
+  'cannot-send-message-no-connections' => 'You cannot send messages because you have no connections yet and the messages are system internal only. Please connect to someone to send messages.',
+  'message-was-sent' => 'Your message was successfully sent.',
 );

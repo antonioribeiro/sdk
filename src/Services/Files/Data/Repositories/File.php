@@ -17,14 +17,21 @@ class File {
 
 	public function upload(UploadedFile $uploaded, User $user)
 	{
+		return $this->uploadUserFile($uploaded, $user, false);
+	}
+
+	public function uploadUserFile(UploadedFile $uploaded, User $user, $returnUserFile = true)
+	{
 		$hash = Filesystem::hash($uploaded->getPathname());
 
-		if ($fileModel = FileModel::where('hash', $hash)->first())
-		{
-			return $fileModel;
-		}
-
 		$originalName = $uploaded->getClientOriginalName();
+
+		if ($file = FileModel::where('hash', $hash)->first())
+		{
+			return $returnUserFile
+					? $this->findUserFile($user, $file, $originalName)
+					: $file;
+		}
 
 		$uploadFullPath = $this->getRootPath().'/'.$this->getRelativePath();
 
@@ -43,15 +50,12 @@ class File {
 		    'image' => starts_with($uploaded->getMimeType(), 'image/'),
 		]);
 
-		$fileName = FileNameModel::firstOrCreate([
-			'file_id' => $file->id,
-			'name' => $originalName
-		]);
+		$userFile = $this->findUserFile($user, $file, $originalName);
 
-		UserFileModel::firstOrCreate([
-	        'file_name_id' => $fileName->id,
-	        'user_id' => $user->id
-		]);
+		if ($returnUserFile)
+		{
+			return $userFile;
+		}
 
 		return $file;
 	}
@@ -74,6 +78,19 @@ class File {
 		}
 
 		return $path;
+	}
+
+	private function findUserFile($user, $file, $originalName)
+	{
+		$fileName = FileNameModel::firstOrCreate([
+			'file_id' => $file->id,
+			'name' => $originalName
+		]);
+
+		return UserFileModel::firstOrCreate([
+			'file_name_id' => $fileName->id,
+			'user_id' => $user->id
+		]);
 	}
 
 }

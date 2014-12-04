@@ -59,6 +59,7 @@ return [
 		'Services/Login',
 
 		'Services/Mailer',
+		'Services/Messages',
 
 		'Services/Notifications',
 

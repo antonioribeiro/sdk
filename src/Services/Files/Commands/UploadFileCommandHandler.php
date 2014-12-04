@@ -32,4 +32,5 @@ class UploadFileCommandHandler extends CommandHandler {
 	{
 		return $this->fileRepository->upload($command->file, $command->user);
 	}
+
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace PragmaRX\Sdk\Services\Messaging\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Notifications\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use Redirect;
 use Session;
 use View;
 
-class Messaging extends BaseController {
+class Notifications extends BaseController {
 
 	/**
 	 * Display the password reminder view.
