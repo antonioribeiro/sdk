@@ -4,11 +4,11 @@ namespace PragmaRX\Sdk\Services\Messages\Data\Presenters;
 
 use PragmaRX\Sdk\Core\Presenter;
 
-class Message extends Presenter {
+class Thread extends Presenter {
 
-	public function allMembersForSelect()
+	public function bodyFirstLine()
 	{
-		return [];
+		return 'this is the first line';
 	}
 
 }

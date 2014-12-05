@@ -10,6 +10,8 @@ class Thread extends Model {
 
 	protected $fillable = ['owner_id', 'subject'];
 
+	protected $presenter = 'PragmaRX\Sdk\Services\Messages\Data\Presenters\Thread';
+
 	public function participants()
 	{
 		return $this->belongsToMany(

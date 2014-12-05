@@ -8,8 +8,6 @@ class Message extends Model {
 
 	protected $table = 'messages_messages';
 
-	protected $presenter = 'PragmaRX\Sdk\Services\Messages\Data\Entities\MessagePresenter';
-
 	protected $fillable = [
 		'thread_id',
 	    'sender_id',
