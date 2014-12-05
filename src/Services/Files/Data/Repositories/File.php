@@ -46,6 +46,7 @@ class File {
 			'directory_id' => $directory->id,
 			'deep_path' => $deepPath,
 			'hash' => $hash,
+			'size' => $uploaded->getSize(),
 		    'extension' => $uploaded->getExtension(),
 		    'image' => starts_with($uploaded->getMimeType(), 'image/'),
 		]);

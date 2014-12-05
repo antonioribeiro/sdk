@@ -10,9 +10,12 @@ class File extends Model {
 		'directory_id',
 		'deep_path',
 		'hash',
+		'size',
 		'extension',
 		'image',
 	];
+
+	protected $presenter = 'PragmaRX\Sdk\Services\Files\Data\Presenters\File';
 
 	public function directory()
 	{
@@ -32,4 +35,13 @@ class File extends Model {
 			$this->extension
 		));
 	}
+
+	public function getIsImageAttribute()
+	{
+		return in_array(
+			$this->extension,
+			['jpg', 'png', 'jpeg', 'gif', 'bmp', 'webp', 'tiff']
+		);
+	}
+
 }

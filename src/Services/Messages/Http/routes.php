@@ -16,7 +16,7 @@ Route::group(['namespace' => 'PragmaRX\Sdk\Services\Messages\Http\Controllers'],
 
 	    Route::get('create', ['as' => 'messages.create', 'uses' => 'Messages@create']);
 
-	    Route::get('{id}', ['as' => 'messages.show', 'uses' => 'Messages@show']);
+	    Route::get('{id}', ['as' => 'messages.read', 'uses' => 'Messages@read']);
 
 	    Route::put('{id}', ['as' => 'messages.update', 'uses' => 'Messages@update']);
 	});

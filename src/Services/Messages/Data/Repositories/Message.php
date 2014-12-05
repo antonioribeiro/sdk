@@ -103,4 +103,30 @@ class Message {
 		return ThreadModel::orderBy('updated_at', 'desc')->get();
 	}
 
+	public function findThreadById($thread_id)
+	{
+		return ThreadModel::find($thread_id);
+	}
+
+	public function readMessage($user, $thread_id)
+	{
+		$thread = $this->findThreadById($thread_id);
+
+		$this->markasRead($user, $thread);
+
+		return $thread;
+	}
+
+	/**
+	 * @param $user
+	 * @param $thread
+	 */
+	private function markasRead($user, $thread)
+	{
+		$participant = $thread->participants()->where('user_id', $user->id)->first();
+
+		$participant->last_read = Carbon::now();
+
+		$participant->save();
+	}
 }

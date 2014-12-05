@@ -10,4 +10,9 @@ class Attachment extends Model {
 
 	protected $fillable = ['message_id', 'user_file_id'];
 
+	public function userFile()
+	{
+		return $this->belongsTo('PragmaRX\Sdk\Services\Users\Data\Entities\UserFile');
+	}
+
 }

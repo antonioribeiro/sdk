@@ -123,4 +123,6 @@ return array (
   'subject' => 'Subject',
   'email-subject' => 'Email Subject',
   'discard-draft' => 'Discard Draft',
+  'download' => 'Download',
+  'attachments' => 'Attachment|Attachments',
 );

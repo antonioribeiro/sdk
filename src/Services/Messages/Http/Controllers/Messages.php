@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Messages\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller;
+use PragmaRX\Sdk\Services\Messages\Commands\ReadMessageCommand;
 use PragmaRX\Sdk\Services\Messages\Commands\SendMessageCommand;
 use PragmaRX\Sdk\Services\Messages\Data\Repositories\Message as MessageRepository;
 use PragmaRX\Sdk\Services\Connect\Data\Repositories\Connection as ConnectionRepository;
@@ -82,6 +83,19 @@ class Messages extends Controller {
 	public function validate(SendMessage $request)
 	{
 		return $this->success();
+	}
+
+	public function read($thread_id)
+	{
+		$thread = $this->execute(
+			ReadMessageCommand::class,
+			[
+				'user' => Auth::user(),
+				'thread_id' => $thread_id
+			]
+		);
+
+		return View::make('messages.show')->with('thread', $thread);
 	}
 
 }

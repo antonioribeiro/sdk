@@ -11,4 +11,9 @@ class Thread extends Presenter {
 		return 'this is the first line';
 	}
 
+	public function currentFolder()
+	{
+		return 'Inbox';
+	}
+
 }

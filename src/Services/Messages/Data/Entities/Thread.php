@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Messages\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
+use Auth;
 
 class Thread extends Model {
 
@@ -14,17 +15,66 @@ class Thread extends Model {
 
 	public function participants()
 	{
-		return $this->belongsToMany(
+		return $this->hasMany(
 			'PragmaRX\Sdk\Services\Messages\Data\Entities\Participant',
-			'messages_participants',
-			'thread_id',
-			'user_id'
+			'thread_id'
 		);
 	}
 
 	public function owner()
 	{
 		return $this->belongsTo('PragmaRX\Sdk\Services\Users\Data\Entities\User');
+	}
+
+	public function recipients()
+	{
+		return $this->belongsTo('PragmaRX\Sdk\Services\Users\Data\Entities\User');
+	}
+
+	public function messages()
+	{
+		return $this->hasMany('PragmaRX\Sdk\Services\Messages\Data\Entities\Message');
+	}
+
+	public function getUnreadAttribute()
+	{
+		return $this->isNew || $this->hasNewReply;
+	}
+
+	public function getIsNewAttribute()
+	{
+		if ( ! $participant = $this->currentParticipant)
+		{
+			return false;
+		}
+
+		return $participant->last_read === null;
+	}
+
+	public function getHasNewReplyAttribute()
+	{
+		if ( ! $participant = $this->currentParticipant)
+		{
+			return false;
+		}
+
+		return $participant->last_read < $this->updated_at;
+	}
+
+	public function getCurrentParticipantAttribute()
+	{
+		return $this
+				->participants()
+				->where('messages_participants.user_id', Auth::user()->id)
+				->first();
+	}
+
+	public function getMessagesByDateAttribute()
+	{
+		return $this
+				->messages()
+				->orderBy('messages_messages.updated_at')
+				->get();
 	}
 
 }

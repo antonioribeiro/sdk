@@ -13,4 +13,9 @@ class UserFile extends Model {
 		'user_id',
 	];
 
+	public function fileName()
+	{
+		return $this->belongsTo('PragmaRX\Sdk\Services\Files\Data\Entities\FileName');
+	}
+
 }

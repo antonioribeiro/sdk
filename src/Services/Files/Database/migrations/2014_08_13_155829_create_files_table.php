@@ -17,6 +17,7 @@ class CreateFilesTable extends Migration {
 			$table->string('id', 64)->primary();
 			$table->string('directory_id', 64)->index();
 			$table->string('deep_path')->nullable();
+			$table->string('size')->bigInt();
 			$table->string('hash')->index();
 			$table->string('extension')->index();
 			$table->boolean('image')->default(true);
