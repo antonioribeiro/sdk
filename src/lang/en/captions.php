@@ -125,4 +125,11 @@ return array (
   'discard-draft' => 'Discard Draft',
   'download' => 'Download',
   'attachments' => 'Attachment|Attachments',
+  'archive' => 'Archive',
+  'move-to-folder' => 'Move to Folder',
+  'your-folders' => 'Your Folders',
+  'add-folder' => 'Add Folder',
+  'create-a-folder' => 'Create a Folder',
+  'create' => 'Create',
+  'folder-name' => 'Folder Name',
 );

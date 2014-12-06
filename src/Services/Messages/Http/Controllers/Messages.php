@@ -32,7 +32,10 @@ class Messages extends Controller {
 
 	public function index()
 	{
-		return View::make('messages.index');
+		$folders = $this->messageRepository->allFoldersFor(Auth::user());
+
+		return View::make('messages.index')
+				->with('folders', $folders);
 	}
 
 	public function messages($folder)
@@ -94,6 +97,8 @@ class Messages extends Controller {
 				'thread_id' => $thread_id
 			]
 		);
+
+		Flash::message(t('paragraphs.folder-was-created'));
 
 		return View::make('messages.show')->with('thread', $thread);
 	}

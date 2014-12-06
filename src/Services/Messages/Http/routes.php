@@ -2,6 +2,15 @@
 
 Route::group(['namespace' => 'PragmaRX\Sdk\Services\Messages\Http\Controllers'], function()
 {
+	Route::group(['prefix' => 'messages/folders'], function()
+	{
+		Route::get('/', ['as' => 'messages.folders', 'uses' => 'Folders@index']);
+
+		Route::post('/', ['as' => 'messages.folders', 'uses' => 'Folders@store']);
+
+		Route::post('validate', ['as' => 'messages.folders.validate', 'uses' => 'Folders@validate']);
+	});
+
 	Route::group(['prefix' => 'messages'], function()
 	{
 	    Route::get('/', ['as' => 'messages', 'uses' => 'Messages@index']);
@@ -16,7 +25,7 @@ Route::group(['namespace' => 'PragmaRX\Sdk\Services\Messages\Http\Controllers'],
 
 	    Route::get('create', ['as' => 'messages.create', 'uses' => 'Messages@create']);
 
-	    Route::get('{id}', ['as' => 'messages.read', 'uses' => 'Messages@read']);
+		Route::get('{id}', ['as' => 'messages.read', 'uses' => 'Messages@read']);
 
 	    Route::put('{id}', ['as' => 'messages.update', 'uses' => 'Messages@update']);
 	});

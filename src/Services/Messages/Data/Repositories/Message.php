@@ -7,6 +7,7 @@ use PragmaRX\Sdk\Services\Messages\Data\Entities\Attachment as AttachmentModel;
 use PragmaRX\Sdk\Services\Messages\Data\Entities\Participant as ParticipantModel;
 use PragmaRX\Sdk\Services\Messages\Data\Entities\Thread as ThreadModel;
 use PragmaRX\Sdk\Services\Messages\Data\Entities\Message as MessageModel;
+use PragmaRX\Sdk\Services\Messages\Data\Entities\Folder as FolderModel;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Files\Data\Repositories\File as FileRepository;
 
@@ -100,7 +101,14 @@ class Message {
 
 	public function allFor($user)
 	{
+		/// NOT USING USER?!?!?!!?!?!?
+
 		return ThreadModel::orderBy('updated_at', 'desc')->get();
+	}
+
+	public function allFoldersFor($user)
+	{
+		return FolderModel::where('user_id', $user->id)->get();
 	}
 
 	public function findThreadById($thread_id)
@@ -129,4 +137,13 @@ class Message {
 
 		$participant->save();
 	}
+
+	public function addFolder($user, $folder_name)
+	{
+		return FolderModel::create([
+			'name' => $folder_name,
+		    'user_id' => $user->id,
+		]);
+	}
+
 }
