@@ -13,6 +13,8 @@ use Redirect;
 use View;
 use Auth;
 use Flash;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 class Messages extends Controller {
 
@@ -101,6 +103,11 @@ class Messages extends Controller {
 		Flash::message(t('paragraphs.folder-was-created'));
 
 		return View::make('messages.show')->with('thread', $thread);
+	}
+
+	public function move()
+	{
+		return \Input::all();
 	}
 
 }
