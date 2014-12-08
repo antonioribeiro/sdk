@@ -8,13 +8,14 @@ class Thread extends Presenter {
 
 	public function bodyFirstLine()
 	{
-		$first = $this->entity
+		$message = $this->entity
 					->messages()
 					->orderBy('created_at', 'desc')
-					->first()
-					->body;
+					->first();
 
-		return $this->reduce($first);
+		$body = $message ? $message->body : null;
+
+		return $this->reduce($body);
 	}
 
 	public function currentFolder()

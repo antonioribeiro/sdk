@@ -99,11 +99,33 @@ class Message {
 		]);
 	}
 
-	public function allFor($user)
+	public function allFor($user, $folder_id)
 	{
-		/// NOT USING USER?!?!?!!?!?!?
+		$query = ThreadModel::select(['messages_threads.*', 'messages_threads.updated_at'])
+					->orderBy('messages_threads.updated_at', 'desc')
+					->distinct();
 
-		return ThreadModel::orderBy('updated_at', 'desc')->get();
+		$query->join('messages_participants', function($join) use ($user, $folder_id)
+		{
+			$join->on('messages_threads.id', '=', 'messages_participants.thread_id');
+		});
+
+		if ($folder_id !== 'all')
+		{
+			$query->where('messages_participants.user_id', '=', $user->id);
+
+			$query->where(function($query) use ($user, $folder_id)
+			{
+				$query->where('messages_participants.folder_id', '=', $folder_id);
+
+				if ($folder_id == 'inbox')
+				{
+					$query->orWhere('messages_participants.folder_id', '=', null);
+				}
+			});
+		}
+
+		return $query->get();
 	}
 
 	public function allFoldersFor($user)
@@ -144,6 +166,13 @@ class Message {
 			'name' => $folder_name,
 		    'user_id' => $user->id,
 		]);
+	}
+
+	public function moveMessages($user, $folder_id, $threads_ids)
+	{
+		return ParticipantModel::where('user_id', $user->id)
+				->whereIn('thread_id', $threads_ids)
+				->update(['folder_id' => $folder_id]);
 	}
 
 }

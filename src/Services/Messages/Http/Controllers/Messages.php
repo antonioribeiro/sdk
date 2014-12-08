@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Messages\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller;
+use PragmaRX\Sdk\Services\Messages\Commands\MoveMessagesCommand;
 use PragmaRX\Sdk\Services\Messages\Commands\ReadMessageCommand;
 use PragmaRX\Sdk\Services\Messages\Commands\SendMessageCommand;
 use PragmaRX\Sdk\Services\Messages\Data\Repositories\Message as MessageRepository;
@@ -13,6 +14,7 @@ use Redirect;
 use View;
 use Auth;
 use Flash;
+use Input;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -40,9 +42,9 @@ class Messages extends Controller {
 				->with('folders', $folders);
 	}
 
-	public function messages($folder)
+	public function messages($folder = 'inbox')
 	{
-		$threads = $this->messageRepository->allFor(Auth::user());
+		$threads = $this->messageRepository->allFor(Auth::user(), $folder);
 
 		return View::make('messages.list')
 				->with('threads', $threads);
@@ -107,7 +109,19 @@ class Messages extends Controller {
 
 	public function move()
 	{
-		return \Input::all();
+		$messages = Input::get('messages');
+
+		$messages = ! is_array($messages) ? [$messages] : $messages;
+
+		$input = [
+			'folder_id' => Input::get('folder_id'),
+			'threads_ids' => $messages,
+			'user' => Auth::user(),
+		];
+
+		$this->execute(MoveMessagesCommand::class, $input);
+
+		return Redirect::back();
 	}
 
 }
