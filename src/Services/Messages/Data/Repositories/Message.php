@@ -175,4 +175,20 @@ class Message {
 				->update(['folder_id' => $folder_id]);
 	}
 
+	public function allFolders()
+	{
+		return [
+			'system' => [
+				'all' => ['id' => 'all', 'name' => 'All', 'count' => 1209],
+				'inbox' => ['id' => 'inbox', 'name' => 'Inbox', 'count' => 8],
+				'sent' => ['id' => 'sent', 'name' => 'Sent', 'count' => 25],
+				'archive' => ['id' => 'archive', 'name' => 'Archive', 'count' => 31],
+			],
+			'user' => [
+				'gestalt' => ['id' => '11234', 'name' => 'Gestalt', 'count' => 5],
+				'gardênia' => ['id' => '332452', 'name' => 'Gardênia', 'count' => 230],
+			],
+		];
+	}
+
 }

@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\View\Service;
 
+use Illuminate\View\FileViewFinder;
 use PragmaRX\Sdk\Services\View\Compilers\BladeCompiler;
 use PragmaRX\Support\ServiceProvider;
 
@@ -29,6 +30,8 @@ class Provider extends ServiceProvider {
 
 			return new BladeCompiler($app['files'], $cache);
 		});
+
+		$this->app->make('view')->addExtension('blade.jsx', 'blade');
 	}
 
 }
