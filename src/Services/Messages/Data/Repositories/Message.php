@@ -10,6 +10,7 @@ use PragmaRX\Sdk\Services\Messages\Data\Entities\Message as MessageModel;
 use PragmaRX\Sdk\Services\Messages\Data\Entities\Folder as FolderModel;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Files\Data\Repositories\File as FileRepository;
+use DB;
 
 class Message {
 
@@ -175,20 +176,60 @@ class Message {
 				->update(['folder_id' => $folder_id]);
 	}
 
-	public function allFolders()
+	public function allFoldersCountFor($user)
 	{
-		return [
+		$folders = [
 			'system' => [
-				'all' => ['id' => 'all', 'name' => 'All', 'count' => 1209],
-				'inbox' => ['id' => 'inbox', 'name' => 'Inbox', 'count' => 8],
-				'sent' => ['id' => 'sent', 'name' => 'Sent', 'count' => 25],
-				'archive' => ['id' => 'archive', 'name' => 'Archive', 'count' => 31],
+				'all' => ['id' => 'all', 'name' => 'All', 'count' => null],
+				'inbox' => ['id' => 'inbox', 'name' => 'Inbox', 'count' => null],
+				'sent' => ['id' => 'sent', 'name' => 'Sent', 'count' => null],
+				'archive' => ['id' => 'archive', 'name' => 'Archive', 'count' => null],
 			],
+
 			'user' => [
-				'gestalt' => ['id' => '11234', 'name' => 'Gestalt', 'count' => 5],
-				'gardênia' => ['id' => '332452', 'name' => 'Gardênia', 'count' => 230],
 			],
 		];
+
+		$query = DB::select(DB::raw("select
+						  messages_folders.id
+						, messages_folders.name
+						, (select count(messages_participants.id) as total
+							from messages_participants
+							where messages_participants.user_id = '{$user->id}'
+							and messages_participants.folder_id = messages_folders.id)
+						from messages_folders
+
+					UNION
+
+					select
+						  messages_system_folders.id
+						, messages_system_folders.name
+						, (select count(messages_participants.id) as total
+							from messages_participants
+							where messages_participants.user_id = '{$user->id}'
+							and messages_participants.folder_id = messages_system_folders.id)
+						from messages_system_folders
+
+					order by name "));
+
+		foreach($query as $folder)
+		{
+			if (in_array($folder->id, array_keys($folders['system'])))
+			{
+				if ($folder->total)
+				{
+					$folders['system'][$folder->id]['count'] = $folder->total;
+				}
+			}
+			else
+			{
+				$folders['user'][$folder->id]['id'] = $folder->id;
+				$folders['user'][$folder->id]['count'] = $folder->total;
+				$folders['user'][$folder->id]['name'] = $folder->name;
+			}
+		}
+
+		return $folders;
 	}
 
 }

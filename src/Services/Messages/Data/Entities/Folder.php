@@ -10,4 +10,9 @@ class Folder extends Model {
 
 	protected $fillable = ['name', 'user_id'];
 
+	public function folder()
+	{
+		return $this->belongsTo('PragmaRX\Sdk\Services\Messages\Data\Entities\Folder');
+	}
+
 }

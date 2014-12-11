@@ -20,7 +20,7 @@ class CreateMessagesParticipantsTable extends Migration {
 
 			$table->string('user_id', 64)->index();
 
-			$table->string('folder_id', 64)->index()->nullable();
+			$table->string('folder_id', 64)->index()->nullable()->default('inbox');
 
 			$table->timestamp('last_read')->nullable();
 

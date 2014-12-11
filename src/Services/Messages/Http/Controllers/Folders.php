@@ -8,7 +8,6 @@ use PragmaRX\Sdk\Services\Messages\Commands\AddFolderCommand;
 use PragmaRX\Sdk\Services\Messages\Data\Repositories\Message as MessageRepository;
 use PragmaRX\Sdk\Services\Messages\Http\Requests\AddFolder;
 use Redirect;
-use View;
 use Auth;
 use Flash;
 
@@ -23,7 +22,7 @@ class Folders extends Controller {
 
 	public function index()
 	{
-		return $this->messageRepository->allFolders();
+		return $this->messageRepository->allFoldersCountFor(Auth::user());
 	}
 
 	public function store(AddFolder $request)
