@@ -186,31 +186,40 @@ class Message {
 				'archive' => ['id' => 'archive', 'name' => 'Archive', 'count' => null],
 			],
 
-			'user' => [
-			],
+			'user' => [],
 		];
 
-		$query = DB::select(DB::raw("select
-						  messages_folders.id
-						, messages_folders.name
-						, (select count(messages_participants.id) as total
+		$query = DB::select(DB::raw(
+			"select
+					  messages_folders.id
+					, messages_folders.name
+					, (select count(messages_participants.id) as total
+						from messages_participants
+						where messages_participants.user_id = '{$user->id}'
+						and messages_participants.folder_id = messages_folders.id)
+					from messages_folders
+
+			union
+
+			select
+				  messages_system_folders.id
+				, messages_system_folders.name
+				, case when messages_system_folders.id = 'all'
+					then
+						(select count(messages_participants.id) as total
 							from messages_participants
-							where messages_participants.user_id = '{$user->id}'
-							and messages_participants.folder_id = messages_folders.id)
-						from messages_folders
-
-					UNION
-
-					select
-						  messages_system_folders.id
-						, messages_system_folders.name
-						, (select count(messages_participants.id) as total
+							where messages_participants.user_id = '{$user->id}')
+					else
+						(select count(messages_participants.id) as total
 							from messages_participants
 							where messages_participants.user_id = '{$user->id}'
 							and messages_participants.folder_id = messages_system_folders.id)
-						from messages_system_folders
+					end
 
-					order by name "));
+				from messages_system_folders
+
+				order by name"
+		));
 
 		foreach($query as $folder)
 		{
