@@ -119,6 +119,7 @@ return array (
   'inbox' => 'Inbox',
   'go-to-connections' => 'Go To Connections',
   'compose-new-mail' => 'Compose New Email',
+  'answer-mail' => 'Answer Email',
   'to' => 'To',
   'subject' => 'Subject',
   'email-subject' => 'Email Subject',

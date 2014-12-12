@@ -3,6 +3,8 @@
 namespace PragmaRX\Sdk\Services\Messages\Data\Presenters;
 
 use PragmaRX\Sdk\Core\Presenter;
+use PragmaRX\Sdk\Services\Messages\Data\Entities\Participant;
+use Auth;
 
 class Thread extends Presenter {
 
@@ -20,7 +22,14 @@ class Thread extends Presenter {
 
 	public function currentFolder()
 	{
-		return 'Inbox';
+		$participant = Participant::
+						where('thread_id', $this->entity->id)->
+						where('user_id', Auth::user()->id)->
+						first();
+
+		return $participant
+				->folder
+				->name;
 	}
 
 	private function reduce($first)

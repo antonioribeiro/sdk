@@ -13,11 +13,22 @@ class SendMessage extends FormRequest {
 	 */
 	public function rules()
 	{
-		return [
-			'recipients' => 'required',
-			'subject' => 'required',
+		$rules = [
 			'body' => 'required',
 		];
+
+		if ( ! $this->get('answering_message_id'))
+		{
+			$rules = array_merge(
+				$rules,
+				[
+					'recipients' => 'required',
+					'subject' => 'required',
+				]
+			);
+		}
+
+		return $rules;
 	}
 
 }

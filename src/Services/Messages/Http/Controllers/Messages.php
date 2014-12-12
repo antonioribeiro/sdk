@@ -50,23 +50,36 @@ class Messages extends Controller {
 				->with('threads', $threads);
 	}
 
-	public function compose()
+	public function compose($message_id = null)
 	{
 		$users = $this->connectionRepository->usersConnectedTo(Auth::user());
 
-		if ( ! $users)
+		if (!$users)
 		{
 			return View::make('notifications.notification')
-					->with('title', t('titles.no-connections'))
-					->with('message', t('paragraphs.cannot-send-message-no-connections'))
-					->with('buttons', [[
-										'caption' => t('captions.go-to-connections'),
-					                    'url' => route_ajax('connections')
-					                   ]]);
+				->with('title', t('titles.no-connections'))
+				->with('message', t('paragraphs.cannot-send-message-no-connections'))
+				->with(
+					'buttons', [
+						[
+							'caption' => t('captions.go-to-connections'),
+							'url' => route_ajax('connections')
+						]
+					]
+				);
+		}
+
+		$thread = null;
+
+		if ($message_id)
+		{
+			$thread = $this->messageRepository->getThreadByMessageId($message_id);
 		}
 
 		return View::make('messages.compose')
-				->with('users', $users);
+				->with('users', $users)
+				->with('answering_message_id', $message_id)
+				->with('thread', $thread);
 	}
 
 	public function store(SendMessage $request)
@@ -78,6 +91,7 @@ class Messages extends Controller {
 			'subject' => $request->get('subject'),
 			'body' => $request->get('body'),
 			'attachments' => $request->get('attachments'),
+		    'answering_message_id' => $request->get('answering_message_id'),
 		];
 
 		$this->execute(SendMessageCommand::class, $input);

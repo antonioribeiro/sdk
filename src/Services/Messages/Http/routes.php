@@ -21,7 +21,7 @@ Route::group(['namespace' => 'PragmaRX\Sdk\Services\Messages\Http\Controllers'],
 
 		Route::get('list/{folder}', ['as' => 'messages.list', 'uses' => 'Messages@messages']);
 
-		Route::get('compose', ['as' => 'messages.compose', 'uses' => 'Messages@compose']);
+		Route::get('compose/{message_id?}', ['as' => 'messages.compose', 'uses' => 'Messages@compose']);
 
 	    Route::get('create', ['as' => 'messages.create', 'uses' => 'Messages@create']);
 

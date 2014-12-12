@@ -17,7 +17,9 @@ class SendMessageCommand {
 
 	public $attachments;
 
-	function __construct($attachments, $body, $subject, $recipients, $user, $thread_id)
+	public $answering_message_id;
+
+	function __construct($attachments, $body, $subject, $recipients, $user, $thread_id, $answering_message_id)
 	{
 		$this->attachments = $attachments;
 
@@ -30,6 +32,8 @@ class SendMessageCommand {
 		$this->user = $user;
 
 		$this->thread_id = $thread_id;
+
+		$this->answering_message_id = $answering_message_id;
 	}
 
 }

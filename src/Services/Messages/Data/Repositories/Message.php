@@ -31,17 +31,33 @@ class Message {
 		$this->fileRepository = $fileRepository;
 	}
 
-	public function sendMessage($user, $thread_id, $recipients, $subject, $body, $attachments)
+	public function sendMessage(
+		$user,
+		$thread_id,
+		$recipients,
+		$subject,
+		$body,
+		$attachments,
+		$answering_message_id
+	)
 	{
-		$thread = $this->findThread($thread_id, $user, $subject, $recipients);
+		if ( ! $thread_id && $answering_message_id)
+		{
+			$message = $this->getMessageById($answering_message_id);
 
-		$message = MessageModel::create(
-			[
-				'thread_id' => $thread->id,
-				'sender_id' => $user->id,
-				'body' => $body,
-			]
-		);
+			$thread = $message->thread;
+		}
+		else
+		{
+			$thread = $this->findThread($thread_id, $user, $subject, $recipients);
+		}
+
+		$message = MessageModel::create([
+			'thread_id' => $thread->id,
+			'sender_id' => $user->id,
+			'body' => $body,
+		    'answering_message_id' => $answering_message_id,
+		]);
 
 		$this->addAttachmentsToMessage($user, $message, $attachments);
 
@@ -141,9 +157,10 @@ class Message {
 
 	public function readMessage($user, $thread_id)
 	{
-		$thread = $this->findThreadById($thread_id);
-
-		$this->markasRead($user, $thread);
+		if ($thread = $this->findThreadById($thread_id))
+		{
+			$this->markasRead($user, $thread);
+		}
 
 		return $thread;
 	}
@@ -239,6 +256,25 @@ class Message {
 		}
 
 		return $folders;
+	}
+
+	public function getThreadByMessageId($message_id)
+	{
+		if ( ! $message = $this->getMessageById($message_id))
+		{
+			return null;
+		}
+
+		return $message->thread;
+	}
+
+	/**
+	 * @param $message_id
+	 * @return \Illuminate\Support\Collection|null|static
+	 */
+	private function getMessageById($message_id)
+	{
+		return MessageModel::find($message_id);
 	}
 
 }

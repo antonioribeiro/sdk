@@ -20,6 +20,8 @@ class CreateMessagesMessagesTable extends Migration {
 
             $table->string('sender_id')->index();
 
+			$table->string('answering_message_id', 64)->index()->nullable();
+
             $table->text('body');
 
 			$table->softDeletes();
@@ -32,6 +34,15 @@ class CreateMessagesMessagesTable extends Migration {
 			$table->foreign('thread_id')
 					->references('id')
 					->on('messages_threads')
+					->onDelete('cascade')
+					->onUpdate('cascade');
+		});
+
+		Schema::table('messages_messages', function(Blueprint $table)
+		{
+			$table->foreign('answering_message_id')
+					->references('id')
+					->on('messages_messages')
 					->onDelete('cascade')
 					->onUpdate('cascade');
 		});

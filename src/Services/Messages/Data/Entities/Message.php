@@ -14,6 +14,7 @@ class Message extends Model {
 		'thread_id',
 	    'sender_id',
 	    'body',
+	    'answering_message_id'
 	];
 
 	public function attachments()

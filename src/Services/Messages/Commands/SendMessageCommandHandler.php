@@ -31,7 +31,8 @@ class SendMessageCommandHandler extends CommandHandler {
 			$command->recipients,
 			$command->subject,
 			$command->body,
-			$command->attachments
+			$command->attachments,
+			$command->answering_message_id
 		);
 
 		$this->dispatchEventsFor($thread);
