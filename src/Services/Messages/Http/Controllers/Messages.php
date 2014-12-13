@@ -15,8 +15,6 @@ use View;
 use Auth;
 use Flash;
 use Input;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 
 class Messages extends Controller {
 

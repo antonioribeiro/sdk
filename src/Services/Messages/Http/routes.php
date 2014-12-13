@@ -4,7 +4,7 @@ Route::group(['namespace' => 'PragmaRX\Sdk\Services\Messages\Http\Controllers'],
 {
 	Route::group(['prefix' => 'messages/folders'], function()
 	{
-		Route::get('/', ['as' => 'messages.folders', 'uses' => 'Folders@index']);
+		Route::get('/{currentFolder?}', ['as' => 'messages.folders', 'uses' => 'Folders@index']);
 
 		Route::post('/', ['as' => 'messages.folders', 'uses' => 'Folders@store']);
 

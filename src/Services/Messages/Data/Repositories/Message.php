@@ -116,7 +116,7 @@ class Message {
 		]);
 	}
 
-	public function allFor($user, $folder_id)
+	public function allFor($user, $folder_id, $withRelations = false)
 	{
 		$query = ThreadModel::select(['messages_threads.*', 'messages_threads.updated_at'])
 					->orderBy('messages_threads.updated_at', 'desc')
@@ -142,7 +142,14 @@ class Message {
 			});
 		}
 
-		return $query->get();
+		$result = $query->get();
+
+		if ($withRelations)
+		{
+			$result = $this->addThreadRelationsToResult($result);
+		}
+
+		return $result;
 	}
 
 	public function allFoldersFor($user)
@@ -275,6 +282,29 @@ class Message {
 	private function getMessageById($message_id)
 	{
 		return MessageModel::find($message_id);
+	}
+
+	private function addThreadRelationsToResult($query)
+	{
+		$result = [];
+
+		foreach($query as $thread)
+		{
+			$result[] = [
+				'id' => $thread->id,
+				'subject' => $thread->subject,
+				'owner' => $thread->owner->present()->fullName,
+				'unread' => $thread->unread,
+			    'avatar' => $thread->owner->present()->avatar(25),
+			    'bodyFirstLine' => $thread->present()->bodyFirstLine,
+				'hasAttachments' => $thread->hasAttachments,
+			    'createdAt' => $thread->created_at->diffForHumans(),
+				'isNew' => $thread->isNew,
+				'hasNewReply' => $thread->hasNewReply,
+			];
+		}
+
+		return $result;
 	}
 
 }

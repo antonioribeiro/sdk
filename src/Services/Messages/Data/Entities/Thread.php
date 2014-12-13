@@ -33,7 +33,9 @@ class Thread extends Model {
 
 	public function messages()
 	{
-		return $this->hasMany('PragmaRX\Sdk\Services\Messages\Data\Entities\Message');
+		return $this
+				->hasMany('PragmaRX\Sdk\Services\Messages\Data\Entities\Message')
+				->with('attachments');
 	}
 
 	public function getUnreadAttribute()
@@ -75,6 +77,19 @@ class Thread extends Model {
 				->messages()
 				->orderBy('messages_messages.updated_at')
 				->get();
+	}
+
+	public function getHasAttachmentsAttribute()
+	{
+		foreach ($this->messages as $message)
+		{
+			if ($message->attachments()->count())
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 }

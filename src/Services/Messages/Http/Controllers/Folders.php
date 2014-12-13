@@ -20,9 +20,12 @@ class Folders extends Controller {
 		$this->messageRepository = $messageRepository;
 	}
 
-	public function index()
+	public function index($currentFolder = 'inbox')
 	{
-		return $this->messageRepository->allFoldersCountFor(Auth::user());
+		return [
+			'folders' => $this->messageRepository->allFoldersCountFor(Auth::user()),
+		    'messages' => $this->messageRepository->allFor(Auth::user(), $currentFolder, true)
+		];
 	}
 
 	public function store(AddFolder $request)

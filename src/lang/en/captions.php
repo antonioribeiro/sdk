@@ -133,4 +133,5 @@ return array (
   'create-a-folder' => 'Create a Folder',
   'create' => 'Create',
   'folder-name' => 'Folder Name',
+  'loading' => 'Loading',
 );
