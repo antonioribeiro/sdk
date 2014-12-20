@@ -51,8 +51,9 @@ class CreateMessagesMessagesTable extends Migration {
 		{
 			$table->foreign('sender_id')
 					->references('id')
-					->on('users')
-					->onUpdate('cascade');
+					->on('messages_participants')
+					->onUpdate('cascade')
+					->onDelete('cascade');
 		});
 	}
 

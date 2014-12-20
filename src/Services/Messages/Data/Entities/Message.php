@@ -29,7 +29,7 @@ class Message extends Model {
 
 	public function sender()
 	{
-		return $this->belongsTo('PragmaRX\Sdk\Services\Users\Data\Entities\User');
+		return $this->belongsTo('PragmaRX\Sdk\Services\Messages\Data\Entities\Participant');
 	}
 
 }

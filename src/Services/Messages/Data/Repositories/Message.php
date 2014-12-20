@@ -54,7 +54,7 @@ class Message {
 
 		$message = MessageModel::create([
 			'thread_id' => $thread->id,
-			'sender_id' => $user->id,
+			'sender_id' => $this->findParticipantByThreadAndUser($thread, $user)->id,
 			'body' => $body,
 		    'answering_message_id' => $answering_message_id,
 		]);
@@ -77,7 +77,7 @@ class Message {
 
 			$this->addParticipantsToMessage($thread, $recipients);
 
-			$this->createParticipant($thread, $user->id, Carbon::now());
+			$this->createParticipant($thread, $user, Carbon::now());
 		}
 
 		return $thread;
@@ -109,11 +109,25 @@ class Message {
 
 	private function createParticipant($thread, $recipient, $lastRead = null)
 	{
-		return ParticipantModel::create([
-			'thread_id' => $thread->id,
-			'user_id' => $this->userRepository->findById($recipient)->id,
-		    'last_read' => $lastRead,
-		]);
+		if (is_object($recipient))
+		{
+			$recipient = $recipient->id;
+		}
+
+		$participant = ParticipantModel::where('thread_id', $thread->id)
+						->where('user_id', $recipient)
+						->first();
+
+		if ( ! $participant)
+		{
+			$participant = ParticipantModel::create([
+				'thread_id' => $thread->id,
+				'user_id' => $recipient,
+			    'last_read' => $lastRead,
+			]);
+		}
+
+		return $participant;
 	}
 
 	public function allFor($user, $folder_id, $withRelations = false)
@@ -305,6 +319,11 @@ class Message {
 		}
 
 		return $result;
+	}
+
+	private function findParticipantByThreadAndUser($thread, $user)
+	{
+		return $this->createParticipant($thread, $user);
 	}
 
 }

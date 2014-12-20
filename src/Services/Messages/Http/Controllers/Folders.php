@@ -38,6 +38,8 @@ class Folders extends Controller {
 			]
 		);
 
+		Flash::message(t('paragraphs.folder-was-created'));
+
 		return Redirect::back();
 	}
 

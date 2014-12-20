@@ -141,7 +141,7 @@ return array (
   'client-deleted' => 'A client has been deleted.',
   'validation-error' => 'There was an error validating the information.',
   'cannot-send-message-no-connections' => 'You cannot send messages because you have no connections yet and the messages are system internal only. Please connect to someone to send messages.',
-  'message-was-sent' => 'Your message was successfully sent.',
+  'message-was-sent' => 'Your message was sent.',
   'you-already-have-this-folder' => 'You already have a folder with this name.',
   'folder-was-created' => 'Your folder was created.',
 );

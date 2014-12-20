@@ -114,8 +114,6 @@ class Messages extends Controller {
 			]
 		);
 
-		Flash::message(t('paragraphs.folder-was-created'));
-
 		return View::make('messages.show')->with('thread', $thread);
 	}
 
