@@ -958,12 +958,14 @@ class UserRepository extends Repository {
 			$email = $this->createDummyEmail();
 		}
 
-		return $this->call($this->modelAlias, 'create', [
+		$data = [
 			'email' => $email,
 			'password' => Uuid::uuid4(),
 			'first_name' => $first_name,
 			'last_name' => $last_name,
-		]);
+		];
+
+		return $this->call($this->modelAlias, 'create', [$data]);
 	}
 
 	private function createDummyEmail()

@@ -3,6 +3,8 @@
 namespace PragmaRX\Sdk\Services\Clients\Data\Repositories;
 
 use Config;
+use Carbon;
+use Language;
 use PragmaRX\Sdk\Core\Exceptions\InvalidRequest;
 use PragmaRX\Sdk\Services\Clients\Data\Entities\Client;
 use PragmaRX\Sdk\Services\Clients\Data\Entities\ProviderClient;
@@ -48,6 +50,8 @@ class ClientRepository {
 
 	public function update($user, $client_id, $first_name, $last_name, $email, $notes, $color, $birthdate)
 	{
+		$birthdate = $this->convertDateToDBFormat($birthdate);
+
 		$client = $this->userRepository->findById($client_id);
 
 		if ( ! $client->isActivated)
@@ -133,6 +137,11 @@ class ClientRepository {
 		$providerClient->delete();
 
 		return $provider;
+	}
+
+	private function convertDateToDBFormat($date)
+	{
+		return Carbon::createFromFormat(Language::getCarbonDateFormat(), $date);
 	}
 
 }
