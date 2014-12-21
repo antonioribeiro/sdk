@@ -23,13 +23,14 @@ return [
 
 	'files_path' => public_path() . '/files/',
 
-	'models' => [
+	'aliases' => [
 		'activation'    => 'PragmaRX\Sdk\Services\Users\Data\Entities\UserActivation',
 	    'persistence'   => 'PragmaRX\Sdk\Services\Users\Data\Entities\Persistence',
 	    'reminder'      => 'PragmaRX\Sdk\Services\Users\Data\Entities\Reminder',
 	    'role'          => 'PragmaRX\Sdk\Services\Users\Data\Entities\Role',
 	    'throttle'      => 'PragmaRX\Sdk\Services\Users\Data\Entities\Throttle',
-	    'user'          => 'PragmaRX\Sdk\Services\Users\Data\Entities\User',
+	    // 'user'          => 'PragmaRX\Sdk\Services\Users\Data\Entities\User',
+		'user'          => 'ConsultorioDigital\Services\Users\Data\Entities\User',
 	],
 
 	'services' => [

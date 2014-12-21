@@ -2,57 +2,50 @@
 
 namespace PragmaRX\Sdk\Services\Users\Data\Repositories;
 
-use Illuminate\Pagination\LengthAwarePaginator;
-use Laracasts\Commander\Events\DispatchableTrait;
-use PragmaRX\Sdk\Services\Accounts\Exceptions\UserNotActivated;
-use PragmaRX\Sdk\Services\Connect\Data\Entities\Connection;
-use PragmaRX\Sdk\Services\Connect\Events\UserAcceptedInvitation;
-use PragmaRX\Sdk\Services\Connect\Events\UserWasInvited;
-use PragmaRX\Sdk\Services\Connect\Exceptions\DisconnectionIsForbidden;
-use PragmaRX\Sdk\Services\Connect\Exceptions\InvalidInvitationCode;
-use PragmaRX\Sdk\Services\Connect\Exceptions\InvitationAlreadyAccepted;
-use PragmaRX\Sdk\Services\Passwords\Events\PasswordReminderCreated;
-use PragmaRX\Sdk\Services\Passwords\Events\PasswordWasUpdated;
-use PragmaRX\Sdk\Services\Passwords\Exceptions\EmailAndUsernameNotFound;
-use PragmaRX\Sdk\Services\Passwords\Exceptions\InvalidPasswordUpdateRequest;
-use PragmaRX\Sdk\Services\Security\Events\TwoFactorEmailDisableRequested;
-use PragmaRX\Sdk\Services\Security\Events\TwoFactorEmailEnableRequested;
-use PragmaRX\Sdk\Services\Security\Exceptions\ExpiredToken;
-use PragmaRX\Sdk\Services\Security\Exceptions\InvalidCode;
-use Rhumsaa\Uuid\Uuid;
-use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
-
-use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidEmail;
-use PragmaRX\Sdk\Services\ContactInformation\Data\Entities\ContactInformation;
-use PragmaRX\Sdk\Services\EmailChanges\Data\Entities\EmailChange;
-use PragmaRX\Sdk\Services\EmailChanges\Events\EmailChangeMessageSent;
-use PragmaRX\Sdk\Services\EmailChanges\Events\EmailChangeRequested;
-use PragmaRX\Sdk\Services\Login\Events\UserWasAuthenticated;
-use PragmaRX\Sdk\Services\Mailer\Service\Mailer;
-use PragmaRX\Sdk\Services\Profiles\Events\ProfileVisited;
-use PragmaRX\Sdk\Services\ProfilesVisits\Data\Entities\ProfileVisit;
-use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidPassword;
-
-use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidAuthenticationCode;
-use PragmaRX\Sdk\Core\Exceptions\InvalidRequest;
-use PragmaRX\Sdk\Core\Exceptions\InvalidToken;
-use PragmaRX\Sdk\Services\Users\Data\Entities\User;
-
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-
-use Input;
-use Session;
-
-use Carbon;
-use Sentinel;
-
-use Flash;
 use Auth;
-use Activation;
+use Input;
+use Flash;
+use Carbon;
+use Session;
+use Sentinel;
 use Google2FA;
-use Password;
+use Activation;
+use Rhumsaa\Uuid\Uuid;
+use PragmaRX\Sdk\Core\Data\Repository;
+use PragmaRX\Sdk\Core\Exceptions\InvalidToken;
+use Illuminate\Pagination\LengthAwarePaginator;
+use PragmaRX\Sdk\Services\Mailer\Service\Mailer;
+use PragmaRX\Sdk\Core\Exceptions\InvalidRequest;
+use Laracasts\Commander\Events\DispatchableTrait;
+use PragmaRX\Sdk\Services\Users\Data\Entities\User;
+use PragmaRX\Sdk\Services\Connect\Events\UserWasInvited;
+use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
+use PragmaRX\Sdk\Services\Profiles\Events\ProfileVisited;
+use PragmaRX\Sdk\Services\Security\Exceptions\InvalidCode;
+use PragmaRX\Sdk\Services\Security\Exceptions\ExpiredToken;
+use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidEmail;
+use PragmaRX\Sdk\Services\Connect\Data\Entities\Connection;
+use PragmaRX\Sdk\Services\Login\Events\UserWasAuthenticated;
+use PragmaRX\Sdk\Services\Passwords\Events\PasswordWasUpdated;
+use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidPassword;
+use PragmaRX\Sdk\Services\Accounts\Exceptions\UserNotActivated;
+use PragmaRX\Sdk\Services\Connect\Events\UserAcceptedInvitation;
+use PragmaRX\Sdk\Services\EmailChanges\Data\Entities\EmailChange;
+use PragmaRX\Sdk\Services\Passwords\Events\PasswordReminderCreated;
+use PragmaRX\Sdk\Services\Connect\Exceptions\InvalidInvitationCode;
+use PragmaRX\Sdk\Services\EmailChanges\Events\EmailChangeRequested;
+use PragmaRX\Sdk\Services\ProfilesVisits\Data\Entities\ProfileVisit;
+use PragmaRX\Sdk\Services\EmailChanges\Events\EmailChangeMessageSent;
+use PragmaRX\Sdk\Services\Connect\Exceptions\DisconnectionIsForbidden;
+use PragmaRX\Sdk\Services\Connect\Exceptions\InvitationAlreadyAccepted;
+use PragmaRX\Sdk\Services\Passwords\Exceptions\EmailAndUsernameNotFound;
+use PragmaRX\Sdk\Services\Security\Events\TwoFactorEmailEnableRequested;
+use PragmaRX\Sdk\Services\Security\Events\TwoFactorEmailDisableRequested;
+use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidAuthenticationCode;
+use PragmaRX\Sdk\Services\Passwords\Exceptions\InvalidPasswordUpdateRequest;
+use PragmaRX\Sdk\Services\ContactInformation\Data\Entities\ContactInformation;
 
-class UserRepository {
+class UserRepository extends Repository {
 
 	use DispatchableTrait;
 
@@ -61,6 +54,8 @@ class UserRepository {
 	private $secretCodes = [];
 
 	private $twoFactorTypes = ['google', 'email', 'sms'];
+
+	private $modelAlias = 'user';
 
 	/**
 	 * Save a user.
@@ -81,7 +76,10 @@ class UserRepository {
 	 */
 	public function getPaginated($howMany = 25)
 	{
-		$users = User::orderBy('first_name')->activated()->get();
+		$users = $this
+					->call($this->modelAlias, 'orderBy', 'first_name')
+					->activated()
+					->get();
 
 		$paginated = new LengthAwarePaginator($users, count($users), $howMany);
 
@@ -96,12 +94,9 @@ class UserRepository {
 	 */
 	public function findByUsername($username)
 	{
-		return User::where('username', $username)->first();
-
-//		return User::with(['statuses' => function($query)
-//		{
-//			$query->latest();
-//		}])->where('username', $username)->first();
+		return  $users = $this
+							->call($this->modelAlias, 'where', ['username', $username])
+							->first();
 	}
 
 	/**
@@ -112,17 +107,21 @@ class UserRepository {
 	 */
 	public function findById($id)
 	{
-		return User::findOrFail($id);
+		return $this
+				->call($this->modelAlias, 'findOrFail', $id);
 	}
 
 	public function findByEmail($email)
 	{
-		return User::where('email', $email)->first();
+		return $this
+				->call($this->modelAlias, 'where', ['email', $email])
+				->first();
 	}
 
 	public function activate($email, $token)
 	{
-		return User::activate($email, $token);
+		return $this
+				->call($this->modelAlias, 'activate', [$email, $token]);
 	}
 
 	public function sendUserActivationEmail($user)
@@ -301,9 +300,9 @@ class UserRepository {
 		}
 
 		ProfileVisit::visit([
-			'visitor_id' => Auth::user()->id,
-			'visited_id' => $user->id,
-         ]);
+			                    'visitor_id' => Auth::user()->id,
+			                    'visited_id' => $user->id,
+		                    ]);
 	}
 
 	public function update(
@@ -344,9 +343,9 @@ class UserRepository {
 			if ($info['text'] && $info['type_id'])
 			{
 				$ci = new ContactInformation([
-					'kind_id' => $info['type_id'],
-					'info' => $info['text']
-				]);
+					                             'kind_id' => $info['type_id'],
+					                             'info' => $info['text']
+				                             ]);
 
 				$user->contactInformation()->save($ci);
 			}
@@ -594,8 +593,8 @@ class UserRepository {
 	private function isTwoFactorEnabled($user)
 	{
 		return $user->two_factor_google_enabled ||
-				$user->two_factor_sms_enabled   ||
-				$user->two_factor_email_enabled;
+		$user->two_factor_sms_enabled   ||
+		$user->two_factor_email_enabled;
 	}
 
 	public function requestToggleTwoFactorEmail($user)
@@ -789,8 +788,8 @@ class UserRepository {
 		}
 
 		Connection::where('requestor_id', $connection->requestor_id)
-					->where('requested_id', $connection->requested_id)
-					->update(['authorized' => $authorized, $column => Carbon::now()]);
+			->where('requested_id', $connection->requested_id)
+			->update(['authorized' => $authorized, $column => Carbon::now()]);
 
 		return $user;
 	}
@@ -807,7 +806,7 @@ class UserRepository {
 
 	private function inviteUser($inviter, $email)
 	{
-		$invited = User::register(
+		$invited = $this->register(
 			$this->makeUsernameFromEmail($email),
 			$email,
 			Uuid::uuid4(), /// password can't be blank
@@ -822,6 +821,16 @@ class UserRepository {
 		$invited->save();
 
 		$inviter->raise(new UserWasInvited($invited));
+	}
+
+	public function register($username, $email, $password = null, $first_name = null, $last_name = null)
+	{
+		return $this
+				->call($this->modelAlias, 'register',
+				       [
+							$username, $email, $password, $first_name, $last_name
+						]
+				);
 	}
 
 	public function sendInvitationEmail($user)
@@ -843,7 +852,7 @@ class UserRepository {
 
 		$i = 1;
 
-		while (User::where('username', $username)->first())
+		while ($this->call($this->modelAlias, 'where', ['username', $username])->first())
 		{
 			$username = $name.$i;
 
@@ -855,7 +864,7 @@ class UserRepository {
 
 	public function acceptInvitation($user_id)
 	{
-		if ( ! $user = User::find($user_id))
+		if ( ! $user = $this->call($this->modelAlias, 'find', $user_id))
 		{
 			throw new InvalidInvitationCode();
 		}
@@ -883,9 +892,9 @@ class UserRepository {
 
 	public function resetPassword($email, $username = null)
 	{
-		if ( ! $email || ! $user = User::where('email', $email)->first())
+		if ( ! $email || ! $user = $this->findByEmail($email))
 		{
-			if ( ! $user = User::where('username', $username)->first())
+			if ( ! $user = $this->findByUserName($username))
 			{
 				throw new EmailAndUsernameNotFound();
 			}
@@ -912,7 +921,7 @@ class UserRepository {
 
 	public function updatePassword($email, $password, $token)
 	{
-		$user = User::where('email', $email)->first();
+		$user = $this->findByEmail($email);
 
 		if ( ! Auth::updatePasswordViaReminder($user, $token, $password))
 		{
@@ -949,14 +958,12 @@ class UserRepository {
 			$email = $this->createDummyEmail();
 		}
 
-		$user = User::create([
+		return $this->call($this->modelAlias, 'create', [
 			'email' => $email,
 			'password' => Uuid::uuid4(),
 			'first_name' => $first_name,
 			'last_name' => $last_name,
 		]);
-
-		return $user;
 	}
 
 	private function createDummyEmail()
@@ -975,7 +982,7 @@ class UserRepository {
 	{
 		if ( ! $user instanceof User)
 		{
-			$user = User::find($user);
+			$user = $this->findById($user);
 		}
 
 		return $user;
@@ -988,11 +995,16 @@ class UserRepository {
 		foreach($user->connections as $connection)
 		{
 			$connections[] = $connection->requestor->id == $user->id
-								? $connection->requested
-								: $connection->requestor;
+				? $connection->requested
+				: $connection->requestor;
 		}
 
 		return $connections;
+	}
+
+	private function call($className, $method = null, $arguments = [])
+	{
+		return call($this->getClassName($className), $method, $arguments);
 	}
 
 }

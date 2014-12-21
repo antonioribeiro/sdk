@@ -217,17 +217,17 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 */
 	private function configureSentinel()
 	{
-		$this->app['config']->set('cartalyst/sentinel::users.model', $this->getConfig('models.user'));
+		$this->app['config']->set('cartalyst/sentinel::users.model', $this->getConfig('aliases.user'));
 
-		$this->app['config']->set('cartalyst/sentinel::roles.model', $this->getConfig('models.role'));
+		$this->app['config']->set('cartalyst/sentinel::roles.model', $this->getConfig('aliases.role'));
 
-		$this->app['config']->set('cartalyst/sentinel::persistences.model', $this->getConfig('models.persistence'));
+		$this->app['config']->set('cartalyst/sentinel::persistences.model', $this->getConfig('aliases.persistence'));
 
-		$this->app['config']->set('cartalyst/sentinel::activations.model', $this->getConfig('models.activation'));
+		$this->app['config']->set('cartalyst/sentinel::activations.model', $this->getConfig('aliases.activation'));
 
-		$this->app['config']->set('cartalyst/sentinel::reminders.model', $this->getConfig('models.reminder'));
+		$this->app['config']->set('cartalyst/sentinel::reminders.model', $this->getConfig('aliases.reminder'));
 
-		$this->app['config']->set('cartalyst/sentinel::throttling.model', $this->getConfig('models.throttle'));
+		$this->app['config']->set('cartalyst/sentinel::throttling.model', $this->getConfig('aliases.throttle'));
 	}
 
 	/**

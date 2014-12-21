@@ -2,14 +2,22 @@
 
 namespace PragmaRX\Sdk\Services\Statuses\Data\Repositories;
 
+use ConsultorioDigital\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Statuses\Data\Entities\Status;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 
 class StatusRepository {
 
+	private $userRepository;
+
+	function __construct(UserRepository $userRepository)
+	{
+		$this->userRepository = $userRepository;
+	}
+
 	public function save(Status $status, $user_id)
 	{
-		return User::findOrFail($user_id)
+		return $this->userRepository->findOrFail($user_id)
 				->statuses()
 				->save($status);
 	}

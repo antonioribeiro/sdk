@@ -23,7 +23,7 @@ class RegisterUserCommandHandler extends CommandHandler {
 	 */
 	public function handle($command)
 	{
-		$user = User::register(
+		$user = $this->repository->register(
 			$command->username,
 			$command->email,
 			$command->password,
