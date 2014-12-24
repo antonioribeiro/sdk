@@ -91,6 +91,13 @@ return [
 	'packages' => [
 
 		[
+			'name' => 'pragmarx/push',
+			'enabled' => true,
+			'serviceProviders' => ['PragmaRX\Sdk\Services\Push\Service\Provider'],
+			'facades' => ['Push' => 'PragmaRX\Sdk\Services\Push\Service\Facade']
+		],
+
+		[
 			'name' => 'pragmarx/exception',
 			'enabled' => true,
 			'serviceProviders' => ['PragmaRX\Sdk\Services\ExceptionHandler\Service\Provider'],

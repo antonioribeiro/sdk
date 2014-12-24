@@ -2,8 +2,9 @@
 
 namespace PragmaRX\Sdk\Services\Messages\Commands;
 
-use PragmaRX\Sdk\Services\Messages\Data\Repositories\Message as MessageRepository;
+use Push;
 use PragmaRX\Sdk\Core\Commanding\CommandHandler;
+use PragmaRX\Sdk\Services\Messages\Data\Repositories\Message as MessageRepository;
 
 class SendMessageCommandHandler extends CommandHandler {
 
@@ -36,6 +37,8 @@ class SendMessageCommandHandler extends CommandHandler {
 		);
 
 		$this->dispatchEventsFor($thread);
+
+		Push::fire('inbox', 'new.message', 'This is a message.');
 	}
 
 }
