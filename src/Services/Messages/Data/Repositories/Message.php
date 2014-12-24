@@ -2,12 +2,14 @@
 
 namespace PragmaRX\Sdk\Services\Messages\Data\Repositories;
 
+use Push;
 use Carbon\Carbon;
 use PragmaRX\Sdk\Services\Messages\Data\Entities\Attachment as AttachmentModel;
 use PragmaRX\Sdk\Services\Messages\Data\Entities\Participant as ParticipantModel;
 use PragmaRX\Sdk\Services\Messages\Data\Entities\Thread as ThreadModel;
 use PragmaRX\Sdk\Services\Messages\Data\Entities\Message as MessageModel;
 use PragmaRX\Sdk\Services\Messages\Data\Entities\Folder as FolderModel;
+use PragmaRX\Sdk\Services\Messages\Events\MessageWasSent;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Files\Data\Repositories\File as FileRepository;
 use DB;
@@ -60,6 +62,8 @@ class Message {
 		]);
 
 		$this->addAttachmentsToMessage($user, $message, $attachments);
+
+		$thread->raise(new MessageWasSent($thread));
 
 		return $thread;
 	}
@@ -324,6 +328,18 @@ class Message {
 	private function findParticipantByThreadAndUser($thread, $user)
 	{
 		return $this->createParticipant($thread, $user);
+	}
+
+	public function pushSentMessageNotifications($event, $user)
+	{
+		foreach ($event->thread->participants as $participant)
+		{
+			// Do not notify the sender
+			if ($user->id !== $participant->user->id)
+			{
+				Push::fire('inbox', 'new.message', 'new message', $participant->user);
+			}
+		}
 	}
 
 }

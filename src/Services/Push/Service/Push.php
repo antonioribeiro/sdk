@@ -13,9 +13,21 @@ class Push {
 		$this->pusher = new Pusher($public, $secret, $app);
 	}
 
-	public function fire($channels, $event, $data, $socket_id = null, $debug = false, $already_encoded = false)
+	public function fire($channel, $event, $data, $user = '', $socket_id = null, $debug = false, $already_encoded = false)
 	{
-		return $this->pusher->trigger($channels, $event, $data, $socket_id, $debug, $already_encoded);
+		if (is_object($user))
+	    {
+	        $user = "-USER-{$user->id}";
+	    }
+
+		return $this->pusher->trigger(
+			$user.'-CHANNEL-'.$channel,
+			$event,
+			$data,
+			$socket_id,
+			$debug,
+			$already_encoded
+		);
 	}
 
 }
