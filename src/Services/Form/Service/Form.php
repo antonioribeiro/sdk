@@ -60,7 +60,7 @@ class Form {
 
 		if ($returnAjaxUrl)
 		{
-			$form .= Form::hidden('no-return-ajax-url', 'true');
+			$form .= $this->hidden('no-return-ajax-url', 'true');
 		}
 
 		return $form;
@@ -79,7 +79,7 @@ class Form {
 
 		if (isset($token))
 		{
-			return Form::hidden('token', $token);
+			return $this->hidden('token', $token);
 		}
 	}
 

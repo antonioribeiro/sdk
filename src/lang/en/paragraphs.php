@@ -144,4 +144,5 @@ return array (
   'message-was-sent' => 'Your message was sent.',
   'you-already-have-this-folder' => 'You already have a folder with this name.',
   'folder-was-created' => 'Your folder was created.',
+  'choose-item-from-list' => 'Choose an item from the list',
 );

@@ -61,6 +61,8 @@ class GroupRepository {
 	{
 		$result = [];
 
+		$members = $members ?: [];
+
 		foreach($members as $member)
 		{
 			list($kind, $member_id) = explode('#', $member);
