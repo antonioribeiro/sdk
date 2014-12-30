@@ -141,7 +141,30 @@ class ClientRepository {
 
 	private function convertDateToDBFormat($date)
 	{
-		return Carbon::createFromFormat(Language::getCarbonDateFormat(), $date);
+		return ! $date
+				? $date
+				: Carbon::createFromFormat($this->guessDateFormat($date), $date);
+	}
+
+	private function guessDateFormat(&$date)
+	{
+		if (is_string($date))
+		{
+			$date = str_replace('-', '/', $date);
+		}
+
+		list($d1, $d2, $d3) = explode('/', $date);
+
+		if ($d1 > 1000)
+		{
+			$format = 'Y/m/d';
+		}
+		else
+		{
+			$format = Language::getCarbonDateFormat();
+		}
+
+		return $format;
 	}
 
 }

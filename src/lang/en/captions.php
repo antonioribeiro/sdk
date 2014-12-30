@@ -138,4 +138,5 @@ return array (
   'recipients-in-this-thread' => 'Recipients In This Thread',
   'new-answer' => 'New Answer',
   'new' => 'New',
+  'requiring-your-authorization' => 'Requiring Your Authorization',
 );
