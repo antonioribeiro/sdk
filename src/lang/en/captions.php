@@ -73,7 +73,6 @@ return array (
   'code' => 'Code',
   'pending-connections' => 'Pending Connections',
   'accept' => 'Accept',
-  'deny' => 'Deny',
   'postpone' => 'Postpone',
   'invite-someone' => 'Invite Someone',
   'send-invitation' => 'Send Invitation',
@@ -139,4 +138,6 @@ return array (
   'new-answer' => 'New Answer',
   'new' => 'New',
   'requiring-your-authorization' => 'Requiring Your Authorization',
+  'authorize' => 'Authorize',
+  'deny' => 'Deny',
 );
