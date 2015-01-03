@@ -18,7 +18,7 @@ class ClientPresenter extends UserPresenter {
 		return getContrastYIQ($this->color);
 	}
 
-	public function age()
+	public function age($canReturnEmpty = true)
 	{
 		$date = $this->entity->getAttributes()['birthdate'];
 
@@ -29,7 +29,7 @@ class ClientPresenter extends UserPresenter {
 
 		return $date
 				? $date . ' ' . p('captions.years-old', $date)
-				: null;
+				: ($canReturnEmpty ? '' : t('captions.birthday-not-informed'));
 	}
 
 }

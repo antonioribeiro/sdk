@@ -140,4 +140,5 @@ return array (
   'requiring-your-authorization' => 'Requiring Your Authorization',
   'authorize' => 'Authorize',
   'deny' => 'Deny',
+  'birthday-not-informed' => 'Birthday Not Informed',
 );

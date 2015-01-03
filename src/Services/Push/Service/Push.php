@@ -6,7 +6,9 @@ use Pusher;
 
 class Push {
 
-	private $pusher;
+	protected $pushed = [];
+
+	protected $pusher;
 
 	public function __construct($public, $secret, $app)
 	{
@@ -20,14 +22,31 @@ class Push {
 	        $user = "-USER-{$user->id}";
 	    }
 
-		return $this->pusher->trigger(
-			$user.'-CHANNEL-'.$channel,
-			$event,
-			$data,
-			$socket_id,
-			$debug,
-			$already_encoded
-		);
+		$channel = $user.'-CHANNEL-'.$channel;
+
+		if ( ! $this->wasPushed($user, $channel))
+		{
+			return $this->pusher->trigger(
+				$channel,
+				$event,
+				$data,
+				$socket_id,
+				$debug,
+				$already_encoded
+			);
+		}
+
+		return false;
+	}
+
+	private function wasPushed($user, $channel)
+	{
+		if ( ! $wasPushed = isset($this->pushed[$user . $channel]))
+		{
+			$this->pushed[$user . $channel] = $user . $channel;
+		}
+
+		return $wasPushed;
 	}
 
 }
