@@ -32,6 +32,7 @@ class Provider extends ServiceProvider {
 		});
 
 		$this->app->make('view')->addExtension('blade.jsx', 'blade');
+		$this->app->make('view')->addExtension('blade.js', 'blade');
 	}
 
 }

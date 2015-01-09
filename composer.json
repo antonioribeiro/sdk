@@ -33,7 +33,7 @@
         "laracasts/commander": "1.*",
         "laracasts/presenter": "0.*",
         "jenssegers/date": "2.0.*",
-        "pda/pheanstalk": "*",
+        "pda/pheanstalk": "2.0.*",
         "aloha/twilio": "1.0.*"
     },
 

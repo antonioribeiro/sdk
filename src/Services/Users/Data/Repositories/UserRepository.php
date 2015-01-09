@@ -126,13 +126,18 @@ class UserRepository extends Repository {
 
 	public function sendUserActivationEmail($user)
 	{
-		Mailer::send(
-			'emails.register.user-registered',
+		$this->sendEmail(
 			$user,
+			'emails.register.user-registered',
 			t('captions.activate-your-account')
 		);
 
 		Flash::message(t('paragraphs.activation-email-sent'));
+	}
+
+	public function sendEmail($user, $view, $subject, $data = null)
+	{
+		Mailer::send($view, $user, $subject, $data);
 	}
 
 	public function checkAndCreateActivation($user)
