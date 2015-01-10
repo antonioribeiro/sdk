@@ -46,7 +46,7 @@ class User extends CartalystUser {
 
 	protected $fillable = ['id', 'username', 'email', 'password', 'first_name', 'last_name'];
 
-	protected $presenter = 'PragmaRX\Sdk\Services\Users\Data\Entities\UserPresenter';
+	protected $presenter = 'PragmaRX\Sdk\Services\Users\Data\Presenters\User';
 
 	/**
 	 * The database table used by the model.

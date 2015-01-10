@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Clients\Data\Entities;
 
-use PragmaRX\Sdk\Services\Users\Data\Entities\UserPresenter;
+use PragmaRX\Sdk\Services\Users\Data\Presenters\User as UserPresenter;
 
 use Carbon;
 
