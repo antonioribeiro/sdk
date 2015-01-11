@@ -239,3 +239,16 @@ if ( ! function_exists( 'adjustBrightness' ))
 		return '#' . $r_hex . $g_hex . $b_hex;
 	}
 }
+
+if ( ! function_exists( 'array_translate' ))
+{
+	function array_translate($data)
+	{
+		foreach ($data as $key => $value)
+		{
+			$data[$key] = t($data[$key]);
+		}
+
+		return $data;
+	}
+}

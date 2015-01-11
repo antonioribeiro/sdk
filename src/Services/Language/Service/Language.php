@@ -96,4 +96,11 @@ class Language {
 				: 'd/m/Y';
 	}
 
+	public function getCarbonTimeFormat()
+	{
+		return $this->getLocale() == 'en'
+				? 'G:ia'
+				: 'H:i';
+	}
+
 }
