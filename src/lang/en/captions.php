@@ -153,4 +153,7 @@ return array (
     'date' => 'Date',
     'start' => 'Start',
     'end' => 'End',
+    'title' => 'Title',
+    'description' => 'Description',
+    'forever' => 'Forever',
 );

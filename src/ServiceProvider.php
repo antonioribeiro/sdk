@@ -124,6 +124,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 			$this->registerServiceScripts($service, $path);
 
 			$this->registerServiceServiceProviders($service, $path);
+
+			$this->registerServiceConsoleCommands($service, $path);
 		}
 	}
 
@@ -275,9 +277,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 			foreach ($files as $file)
 			{
-				$class = get_class_name_from_file($file, __DIR__, 'PragmaRX\Sdk');
-
-				if (class_exists($class))
+				if (class_exists($class = get_class_and_namespace($file)))
 				{
 					$this->app->register($class);
 				}
@@ -286,27 +286,63 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	}
 
 	/**
+	 * Load Service Console Commands.
+	 *
+	 * @param $service
+	 * @param null $path
+	 */
+	private function registerServiceConsoleCommands($service, $path = null)
+	{
+		$path = $path ?: __DIR__;
+
+		if (file_exists($commandsPath = "$path/{$service}/Console/Commands"))
+		{
+			$files = $this->app->make('files')->allFiles($commandsPath);
+
+			foreach ($files as $file)
+			{
+				if (class_exists($class = get_class_and_namespace($file, true)))
+				{
+					$instance = $this->app->make($class);
+
+					$this->app[$class] = $this->app->share(function($app) use ($instance)
+					{
+						return $instance;
+					});
+
+					$this->commands($class);
+				}
+			}
+		}
+	}
+
+	private function registerCommands()
+	{
+		$this->registerMigrationCommands();
+	}
+
+	/**
 	 * Register Artisan commands.
 	 *
 	 */
-	private function registerCommands()
+	private function registerMigrationCommands()
 	{
 		$this->app->bindShared('command.migrate', function($app)
-			{
-				$packagePath = $app['path.base'].'/vendor';
+		{
+			$packagePath = $app['path.base'].'/vendor';
 
-				return new MigrateCommand($app['migrator'], $packagePath);
-			});
+			return new MigrateCommand($app['migrator'], $packagePath);
+		});
 
 		$this->app->bindShared('command.migrate.rollback', function($app)
-			{
-				return new RollbackCommand($app['migrator']);
-			});
+		{
+			return new RollbackCommand($app['migrator']);
+		});
 
 		$this->app->bindShared('command.migrate.reset', function($app)
-			{
-				return new ResetCommand($app['migrator']);
-			});
+		{
+			return new ResetCommand($app['migrator']);
+		});
 	}
 
 	/**

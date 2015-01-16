@@ -38,6 +38,11 @@ class ClientRepository {
 		return $client;
 	}
 
+	public function find($id)
+	{
+		return Client::find($id);
+	}
+
 	private function findOrCreateUser($first_name, $last_name, $email)
 	{
 		if ( ! $email || ! $user = $this->userRepository->findByEmail($email))
