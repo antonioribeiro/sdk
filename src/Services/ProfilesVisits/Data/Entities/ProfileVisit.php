@@ -7,7 +7,7 @@ use Session;
 
 class ProfileVisit extends Model {
 
-	public static $hasIdColumn = false;
+	public static $generateId = false;
 
 	protected $table = 'profiles_visits';
 

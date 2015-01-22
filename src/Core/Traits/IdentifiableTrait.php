@@ -6,7 +6,7 @@ use Rhumsaa\Uuid\Uuid;
 
 trait IdentifiableTrait {
 
-	public static $hasIdColumn = true;
+	public static $generateId = true;
 
 	/**
 	 * Boot model and set id as uuid v4 during creation.
@@ -14,7 +14,7 @@ trait IdentifiableTrait {
 	 */
 	protected static function boot()
 	{
-		if (static::$hasIdColumn)
+		if (static::$generateId)
 		{
 			static::creating(function ($model)
 			{
@@ -33,7 +33,7 @@ trait IdentifiableTrait {
 	 */
 	public static function create(array $attributes)
 	{
-		if (static::$hasIdColumn)
+		if (static::$generateId)
 		{
 			if (!isset($attributes['id']))
 			{
@@ -54,7 +54,7 @@ trait IdentifiableTrait {
 	{
 		$this->incrementing = false;
 
-		if ( ! $this->exists && static::$hasIdColumn)
+		if ( ! $this->exists && static::$generateId && ! $this->id)
 		{
 			$this->id = (string) Uuid::uuid4();
 		}

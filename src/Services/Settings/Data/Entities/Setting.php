@@ -6,7 +6,7 @@ use PragmaRX\Sdk\Core\Model;
 
 class Setting extends Model {
 
-	public static $hasIdColumn = false;
+	public static $generateId = false;
 
 	protected $table = 'users_settings';
 
