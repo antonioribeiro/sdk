@@ -6,10 +6,6 @@ use PragmaRX\Sdk\Core\Model;
 
 class Country extends Model {
 
-	protected $fillable = [
-		'code',
-		'name',
-		'currency_id',
-	];
+	protected $table = 'glottos_countries';
 
 }
