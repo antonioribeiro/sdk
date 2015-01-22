@@ -149,6 +149,8 @@ return array (
     'delete-this-occurrence' => 'Delete this occurrence',
     'delete-all-future-occurrences' => 'Delete all future occurrences',
     'update-current-event-only' => 'Update the current event only',
+    'update-future-events-only' => 'Update only future events',
+    'update-all-events' => 'Update ALL events',
     'event-repeat-every-hint' => '1=every, 2=every two...',
     'event-occurrences-hint' => '0=forever, 1=once...',
 );
