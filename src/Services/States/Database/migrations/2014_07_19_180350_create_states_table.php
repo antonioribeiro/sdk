@@ -27,7 +27,7 @@ class CreateStatesTable extends Migration {
 		{
 			$table->foreign('country_id')
 					->references('id')
-					->on('countries')
+					->on('glottos_countries')
 					->onUpdate('cascade')
 					->onDelete('cascade');
 		});
