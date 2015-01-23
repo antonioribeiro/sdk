@@ -153,4 +153,5 @@ return array (
     'update-all-events' => 'Update ALL events',
     'event-repeat-every-hint' => '1=every, 2=every two...',
     'event-occurrences-hint' => '0=forever, 1=once...',
+    'select-one-currency' => 'Select one currency',
 );
