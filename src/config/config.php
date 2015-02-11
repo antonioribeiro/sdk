@@ -38,6 +38,7 @@ return [
 		'Services/Addresses',
 
 		'Services/Block',
+		'Services/Billing',
 
 		'Services/Cities',
 		'Services/Clients',
@@ -74,6 +75,7 @@ return [
 		'Services/States',
 		'Services/Statuses',
 		'Services/Security',
+		'Services/SystemEntities',
 
 		'Services/TwoFactor',
 
