@@ -14,8 +14,6 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 	use ServiceableTrait;
 
-	protected $sdk;
-
 	/**
 	 * Vendor name.
 	 *
@@ -45,11 +43,13 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	protected $packageNameCapitalized = 'Sdk';
 
 	/**
-	 * Internal boot method.
+	 * Boot the Service Provider.
 	 *
 	 */
-	public function wakeUp()
+	public function boot()
 	{
+		parent::boot();
+
 		$this->registerGlobalScripts();
 	}
 
@@ -62,17 +62,20 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	{
 		parent::register();
 
-		$this->registerSdk();
+		if ($this->getConfig('enabled'))
+		{
+			$this->registerSdk();
 
-		$this->registerPackages();
+			$this->registerPackages();
 
-		$this->registerServices();
+			$this->registerServices();
 
-		$this->registerCommands();
+			$this->registerCommands();
 
-		$this->configurePackages();
+			$this->configurePackages();
 
-		$this->registerAfterBootCalls();
+			$this->registerAfterBootCalls();
+		}
 	}
 
 	/**
@@ -184,6 +187,11 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 */
 	private function registerGlobalScripts()
 	{
+		if ( ! $this->getConfig('enabled'))
+		{
+			return false;
+		}
+
 		$this->includeFile(__DIR__ . "/Core/Exceptions/handlers.php");
 
 		$this->includeFile(__DIR__ . "/Sdk/App/bootstrap/start.php");
@@ -394,6 +402,16 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		{
 			return $sdk;
 		});
+	}
+
+	/**
+	 * Get the current package directory.
+	 *
+	 * @return string
+	 */
+	public function getPackageDir()
+	{
+		return __DIR__;
 	}
 
 }
