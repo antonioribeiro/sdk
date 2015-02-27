@@ -47,7 +47,7 @@ use PragmaRX\Sdk\Services\ContactInformation\Data\Entities\ContactInformation;
 
 class UserRepository extends Repository {
 
-	use DispatchableTrait;
+	// use DispatchableTrait;
 
 	const TOKEN_LIFETIME = 10;
 

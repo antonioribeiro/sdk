@@ -72,4 +72,15 @@ class Provider extends ServiceProvider {
 		return ['pragmarx.form', 'html', 'form'];
 	}
 
+
+	/**
+	 * Get the current package directory.
+	 *
+	 * @return string
+	 */
+	public function getPackageDir()
+	{
+		return __DIR__;
+	}
+
 }

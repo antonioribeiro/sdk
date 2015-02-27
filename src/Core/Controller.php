@@ -2,15 +2,14 @@
 
 namespace PragmaRX\Sdk\Core;
 
-use Illuminate\Routing\Controller as IlluminateController;
-use Laracasts\Commander\CommanderTrait;
-use Laracasts\Commander\Events\DispatchableTrait;
 use Response;
+use Illuminate\Foundation\Bus\DispatchesCommands;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Routing\Controller as IlluminateController;
 
 class Controller extends IlluminateController {
 
-	use CommanderTrait;
-	use DispatchableTrait;
+	use DispatchesCommands, ValidatesRequests;
 
 	/**
 	 * Setup the layout used by the controller.

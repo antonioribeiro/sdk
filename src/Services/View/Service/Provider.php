@@ -2,9 +2,8 @@
 
 namespace PragmaRX\Sdk\Services\View\Service;
 
-use Illuminate\View\FileViewFinder;
-use PragmaRX\Sdk\Services\View\Compilers\BladeCompiler;
 use PragmaRX\Support\ServiceProvider;
+use PragmaRX\Sdk\Services\View\Compilers\BladeCompiler;
 
 class Provider extends ServiceProvider {
 
@@ -33,6 +32,16 @@ class Provider extends ServiceProvider {
 
 		$this->app->make('view')->addExtension('blade.jsx', 'blade');
 		$this->app->make('view')->addExtension('blade.js', 'blade');
+	}
+
+	/**
+	 * Get the current package directory.
+	 *
+	 * @return string
+	 */
+	public function getPackageDir()
+	{
+		return __DIR__;
 	}
 
 }

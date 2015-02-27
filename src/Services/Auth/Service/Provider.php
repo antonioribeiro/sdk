@@ -34,4 +34,14 @@ class Provider extends ServiceProvider {
 	{
 		return ['pragmarx.auth'];
 	}
+
+	/**
+	 * Get the current package directory.
+	 *
+	 * @return string
+	 */
+	public function getPackageDir()
+	{
+		return __DIR__;
+	}
 }

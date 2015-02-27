@@ -1,9 +1,14 @@
-<?php namespace PragmaRX\Sdk\Services\Translator\Service;
+<?php
+
+namespace PragmaRX\Sdk\Services\Translator\Service;
 
 use PragmaRX\Support\ServiceProvider;
-use PragmaRX\Sdk\Services\Translator\Service\Translator;
 
 class Provider extends ServiceProvider {
+
+	protected $iocAliases = ['translator'];
+
+	protected $defer = true;
 
 	/**
 	 * Register the service provider.
@@ -12,7 +17,7 @@ class Provider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app->bindShared('translator', function($app)
+		$this->app->singleton($this->iocAliases, function($app)
 		{
 			$loader = $app['translation.loader'];
 
@@ -27,6 +32,17 @@ class Provider extends ServiceProvider {
 
 			return $trans;
 		});
+	}
+
+
+	/**
+	 * Get the current package directory.
+	 *
+	 * @return string
+	 */
+	public function getPackageDir()
+	{
+		return __DIR__;
 	}
 
 }

@@ -7,6 +7,6 @@ use Laracasts\Commander\Events\DispatchableTrait;
 
 abstract class CommandHandler implements LaracastsCommandHandler {
 
-	use DispatchableTrait;
+	// use DispatchableTrait;
 
 } 

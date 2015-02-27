@@ -38,4 +38,14 @@ class Provider extends ServiceProvider {
 		return [$this->defaultBinding];
 	}
 
+	/**
+	 * Get the current package directory.
+	 *
+	 * @return string
+	 */
+	public function getPackageDir()
+	{
+		return __DIR__;
+	}
+
 }

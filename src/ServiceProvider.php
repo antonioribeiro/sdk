@@ -2,13 +2,13 @@
 
 namespace PragmaRX\Sdk;
 
-use PragmaRX\Sdk\Core\Migrations\MigrateCommand;
+use Language;
 use PragmaRX\Sdk\Core\Migrations\ResetCommand;
-use PragmaRX\Sdk\Core\Migrations\RollbackCommand;
 use PragmaRX\Sdk\Core\Traits\ServiceableTrait;
+use PragmaRX\Sdk\Core\Migrations\MigrateCommand;
+use PragmaRX\Sdk\Core\Migrations\RollbackCommand;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
 
-use Language;
 
 class ServiceProvider extends PragmaRXServiceProvider {
 
@@ -42,6 +42,8 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 */
 	protected $packageNameCapitalized = 'Sdk';
 
+	protected $defer = true;
+
 	/**
 	 * Boot the Service Provider.
 	 *
@@ -51,6 +53,10 @@ class ServiceProvider extends PragmaRXServiceProvider {
 		parent::boot();
 
 		$this->registerGlobalScripts();
+
+		$this->registerViews();
+
+		$this->registerTranslations();
 	}
 
 	/**
@@ -139,17 +145,17 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 */
 	private function registerPackageServiceProviders($package)
 	{
-		$serviceProviders = ! isset($package['serviceProviders'])
-			? []
-			: $package['serviceProviders'];
-
-		foreach ($serviceProviders as $serviceProvider)
-		{
-			if (class_exists($serviceProvider) && $package['enabled'])
-			{
-				$this->app->register($serviceProvider);
-			}
-		}
+//		$serviceProviders = ! isset($package['serviceProviders'])
+//			? []
+//			: $package['serviceProviders'];
+//
+//		foreach ($serviceProviders as $serviceProvider)
+//		{
+//			if (class_exists($serviceProvider) && $package['enabled'])
+//			{
+//				$this->app->register($serviceProvider);
+//			}
+//		}
 	}
 
 	/**
@@ -277,20 +283,20 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 */
 	private function registerServiceServiceProviders($service, $path = null)
 	{
-		$path = $path ?: __DIR__;
-
-		if (file_exists($providersPath = "$path/{$service}/Providers"))
-		{
-			$files = $this->app->make('files')->allFiles($providersPath);
-
-			foreach ($files as $file)
-			{
-				if (class_exists($class = get_class_and_namespace($file)))
-				{
-					$this->app->register($class);
-				}
-			}
-		}
+//		$path = $path ?: __DIR__;
+//
+//		if (file_exists($providersPath = "$path/{$service}/Providers"))
+//		{
+//			$files = $this->app->make('files')->allFiles($providersPath);
+//
+//			foreach ($files as $file)
+//			{
+//				if (class_exists($class = get_class_and_namespace($file)))
+//				{
+//					$this->app->register($class);
+//				}
+//			}
+//		}
 	}
 
 	/**
@@ -412,6 +418,16 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	public function getPackageDir()
 	{
 		return __DIR__;
+	}
+
+	private function registerViews()
+	{
+		$this->loadViewsFrom(__DIR__.'/views', 'pragmarx/sdk');
+	}
+
+	private function registerTranslations()
+	{
+		$this->loadTranslationsFrom(__DIR__.'/lang', 'pragmarx/sdk');
 	}
 
 }
