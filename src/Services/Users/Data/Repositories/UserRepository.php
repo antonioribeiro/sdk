@@ -427,7 +427,7 @@ class UserRepository extends Repository {
 	{
 		if ($user = Auth::findByCredentials($credentials))
 		{
-			if ( ! Auth::getUserRepository()->validateCredentials($user, $credentials))
+			if ( ! Auth::hasValidCredentials($user, $credentials))
 			{
 				$user = false;
 			}

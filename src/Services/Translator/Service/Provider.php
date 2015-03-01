@@ -3,10 +3,11 @@
 namespace PragmaRX\Sdk\Services\Translator\Service;
 
 use PragmaRX\Support\ServiceProvider;
+use Illuminate\Translation\FileLoader;
 
 class Provider extends ServiceProvider {
 
-	protected $iocAliases = ['translator'];
+	protected $iocAliases = ['translator', 'translation.loader'];
 
 	protected $defer = true;
 
@@ -17,6 +18,8 @@ class Provider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		$this->registerLoader();
+
 		$this->app->singleton($this->iocAliases, function($app)
 		{
 			$loader = $app['translation.loader'];
@@ -34,6 +37,13 @@ class Provider extends ServiceProvider {
 		});
 	}
 
+	protected function registerLoader()
+	{
+		$this->app->singleton('translation.loader', function($app)
+		{
+			return new FileLoader($app['files'], $app['path.lang']);
+		});
+	}
 
 	/**
 	 * Get the current package directory.

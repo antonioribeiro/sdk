@@ -252,3 +252,11 @@ if ( ! function_exists( 'array_translate' ))
 		return $data;
 	}
 }
+
+if ( ! function_exists( 'uuid' ))
+{
+	function uuid()
+	{
+		return (string) Rhumsaa\Uuid\Uuid::uuid4();
+	}
+}

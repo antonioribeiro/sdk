@@ -1,7 +1,8 @@
-<?php namespace PragmaRX\Sdk\Services\Auth\Service;
+<?php
+
+namespace PragmaRX\Sdk\Services\Auth\Service;
 
 use PragmaRX\Support\ServiceProvider;
-use PragmaRX\Sdk\Services\Auth\Service\Auth;
 
 class Provider extends ServiceProvider {
 
@@ -21,7 +22,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app['pragmarx.auth'] = $this->app->share(function($app)
 		{
-			return new Auth;
+			return new IlluminateAuth();
 		});
 	}
 

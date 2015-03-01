@@ -2,11 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\ExceptionHandler\Service;
 
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-
-use ReflectionFunction;
 use Closure;
+use ReflectionFunction;
 use Exception as PHPException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class ExceptionHandler {
 

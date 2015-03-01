@@ -2,34 +2,29 @@
 
 namespace PragmaRX\Sdk\Services\Users\Data\Entities;
 
-use Cartalyst\Sentinel\Users\EloquentUser as CartalystUser;
-
+use DB;
+use Auth;
+use Activation;
+use Rhumsaa\Uuid\Uuid;
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\User as UserContract;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Hash;
-
-use PragmaRX\Sdk\Core\Traits\IdentifiableTrait;
+use PragmaRX\Sdk\Core\Bus\Events\EventGenerator;
+use Illuminate\Database\Eloquent\Collection;
 use PragmaRX\Sdk\Core\Traits\ReloadableTrait;
+use PragmaRX\Sdk\Core\Traits\IdentifiableTrait;
+use Illuminate\Contracts\Auth\User as UserContract;
+use PragmaRX\Sdk\Services\Presenter\PresentableTrait;
+use PragmaRX\Sdk\Services\Clients\Data\Entities\Client;
+use PragmaRX\Sdk\Services\Settings\Data\Entities\Setting;
+use Cartalyst\Sentinel\Users\EloquentUser as CartalystUser;
+use PragmaRX\Sdk\Services\Registration\Events\UserRegistered;
+use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
+use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\BlockableTrait;
+use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\VisitableTrait;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidActivationToken;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserActivationNotFound;
-use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
-use PragmaRX\Sdk\Services\Clients\Data\Entities\Client;
-use PragmaRX\Sdk\Services\Registration\Events\UserRegistered;
-
-use Laracasts\Commander\Events\EventGenerator;
-use Laracasts\Presenter\PresentableTrait;
-
-use PragmaRX\Sdk\Services\Settings\Data\Entities\Setting;
-use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\BlockableTrait;
-use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\ConnectableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\FollowableTrait;
-use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\VisitableTrait;
-use Rhumsaa\Uuid\Uuid;
-
-use Activation;
-use Auth;
-use DB;
+use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\ConnectableTrait;
 
 class User extends CartalystUser {
 

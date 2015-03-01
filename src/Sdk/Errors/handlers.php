@@ -1,12 +1,5 @@
 <?php
 
-ExceptionHandler::addHandler(function(Laracasts\Validation\FormValidationException $exception, $code)
-{
-	Flash::errors($exception->getErrors());
-
-	return Redirect::back()->withInput();
-});
-
 ExceptionHandler::addHandler(function(Illuminate\Session\TokenMismatchException $exception, $code)
 {
 	Flash::error(t('paragraphs.token-mismatch'));

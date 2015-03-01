@@ -3,7 +3,7 @@
 use PragmaRX\Support\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddRememberToUsersStable extends Migration {
+class AddRememberToUsersTable extends Migration {
 
 	/**
 	 * Run the migrations.
