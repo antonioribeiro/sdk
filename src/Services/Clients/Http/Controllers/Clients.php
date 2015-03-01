@@ -49,7 +49,7 @@ class Clients extends BaseController {
 		return Redirect::back();
 	}
 
-	public function validate(AddClientRequest $request)
+	public function validateAdd(AddClientRequest $request)
 	{
 		return Response::json(['success' => true]);
 	}
