@@ -1,10 +1,10 @@
 <?php
 
-namespace PragmaRX\Sdk\Core;
+namespace PragmaRX\Sdk\Core\Kernel;
 
 use Illuminate\Foundation\Http\Kernel as IlluminateHttpKernel;
 
-class Kernel extends IlluminateHttpKernel {
+class Http extends IlluminateHttpKernel {
 
 	/**
 	 * Get the bootstrap classes for the application.
