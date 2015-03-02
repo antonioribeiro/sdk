@@ -43,7 +43,7 @@ class Folders extends Controller {
 		return Redirect::back();
 	}
 
-	public function validate(AddFolder $request)
+	public function validateAdd(AddFolder $request)
 	{
 		return $this->success();
 	}

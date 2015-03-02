@@ -1,3 +1,7 @@
-<?php namespace PragmaRX\Sdk\Services\Presenter\Exceptions;
+<?php
 
-class PresenterException extends \Exception {}
+namespace PragmaRX\Sdk\Services\Presenter\Exceptions;
+
+class PresenterException extends \Exception {
+
+}

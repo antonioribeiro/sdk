@@ -2,9 +2,9 @@
 
 namespace PragmaRX\Sdk\Core;
 
-use Laracasts\Presenter\Presenter as LaracastsPresenter;
+use PragmaRX\Sdk\Services\Presenter\Presenter as SdkPresenter;
 
-class Presenter extends LaracastsPresenter {
+class Presenter extends SdkPresenter {
 
 	public function __get($property)
 	{

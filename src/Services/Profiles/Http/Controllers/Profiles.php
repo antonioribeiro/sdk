@@ -2,20 +2,17 @@
 
 namespace PragmaRX\Sdk\Services\Profiles\Http\Controllers;
 
-use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Services\Kinds\Data\Entities\Kind;
-use PragmaRX\Sdk\Services\Kinds\Data\Repositories\KindRepository;
-use PragmaRX\Sdk\Services\Profiles\Commands\EditProfileCommand;
-use PragmaRX\Sdk\Services\Statuses\Data\Repositories\StatusRepository;
-use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
-use PragmaRX\Sdk\Services\Profiles\Forms\Edit as EditForm;
-use PragmaRX\Sdk\Services\Profiles\Http\Requests\UpdateProfile;
-
 use View;
 use Auth;
-use Input;
 use Flash;
 use Redirect;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Profiles\Commands\EditProfileCommand;
+use PragmaRX\Sdk\Services\Profiles\Http\Requests\UpdateProfile;
+use PragmaRX\Sdk\Services\Kinds\Data\Repositories\KindRepository;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
+use PragmaRX\Sdk\Services\Statuses\Data\Repositories\StatusRepository;
+
 
 class Profiles extends BaseController {
 
@@ -29,18 +26,11 @@ class Profiles extends BaseController {
 	 */
 	private $statusRepository;
 
-	/**
-	 * @var EditForm
-	 */
-	private $editForm;
-
-	function __construct(UserRepository $userRepository, StatusRepository $statusRepository, EditForm $editForm)
+	function __construct(UserRepository $userRepository, StatusRepository $statusRepository)
 	{
 		$this->userRepository = $userRepository;
 
 		$this->statusRepository = $statusRepository;
-
-		$this->editForm = $editForm;
 	}
 
 	public function show($username)

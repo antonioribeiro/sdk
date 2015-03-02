@@ -45,7 +45,7 @@ class Groups extends BaseController {
 				->with('owner', Auth::user());
 	}
 
-	public function validate(AddGroupRequest $request)
+	public function validateAdd(AddGroupRequest $request)
 	{
 		return $this->success();
 	}

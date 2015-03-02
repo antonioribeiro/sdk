@@ -99,7 +99,7 @@ class Messages extends Controller {
 		return Redirect::route('messages');
 	}
 
-	public function validate(SendMessage $request)
+	public function validateSend(SendMessage $request)
 	{
 		return $this->success();
 	}

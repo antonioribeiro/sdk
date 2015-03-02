@@ -1,4 +1,6 @@
-<?php namespace PragmaRX\Sdk\Services\Presenter\Contracts;
+<?php
+
+namespace PragmaRX\Sdk\Services\Presenter\Contracts;
 
 interface PresentableInterface {
 

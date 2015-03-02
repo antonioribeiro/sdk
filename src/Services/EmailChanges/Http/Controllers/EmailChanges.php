@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Sdk\Services\Profiles\Http\Controllers;
+namespace PragmaRX\Sdk\Services\EmailChanges\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;

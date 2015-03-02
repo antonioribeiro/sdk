@@ -1,4 +1,6 @@
-<?php namespace PragmaRX\Sdk\Services\Presenter\Presenter;
+<?php
+
+namespace PragmaRX\Sdk\Services\Presenter;
 
 abstract class Presenter {
 
