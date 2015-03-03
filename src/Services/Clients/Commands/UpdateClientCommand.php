@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Clients\Commands;
 
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Clients\Data\Repositories\ClientRepository;
 
-class UpdateClientCommand {
+class UpdateClientCommand extends SelfHandlingCommand {
 
 	public $id;
 
@@ -38,6 +40,24 @@ class UpdateClientCommand {
 		$this->color = $color;
 
 		$this->birthdate = $birthdate;
+	}
+
+	public function handle(ClientRepository $clientRepository)
+	{
+		$client = $clientRepository->update(
+			$this->user,
+			$this->id,
+			$this->first_name,
+			$this->last_name,
+			$this->email,
+			$this->notes,
+			$this->color,
+			$this->birthdate
+		);
+
+		$this->dispatchEventsFor($client);
+
+		return $client;
 	}
 
 }

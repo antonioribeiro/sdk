@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Clients\Commands;
 
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Clients\Data\Repositories\ClientRepository;
 
-class DeleteClientCommand {
+class DeleteClientCommand extends SelfHandlingCommand {
 
 	public $id;
 
@@ -14,6 +16,18 @@ class DeleteClientCommand {
 		$this->id = $id;
 
 		$this->user = $user;
+	}
+
+	public function handle(ClientRepository $clientRepository)
+	{
+		$user = $clientRepository->delete(
+			$this->user,
+			$this->id
+		);
+
+		$this->dispatchEventsFor($user);
+
+		return $user;
 	}
 
 }

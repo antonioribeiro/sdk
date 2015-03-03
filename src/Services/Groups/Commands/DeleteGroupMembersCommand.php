@@ -1,6 +1,11 @@
-<?php namespace PragmaRX\Sdk\Services\Groups\Commands;
+<?php
 
-class DeleteGroupMembersCommand {
+namespace PragmaRX\Sdk\Services\Groups\Commands;
+
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Groups\Data\Repositories\GroupRepository;
+
+class DeleteGroupMembersCommand extends SelfHandlingCommand {
 
 	public $user;
 
@@ -19,6 +24,20 @@ class DeleteGroupMembersCommand {
 		$this->members = $members;
 
 		$this->user = $user;
+	}
+
+	public function handle(GroupRepository $groupRepository)
+	{
+		$group = $groupRepository->deleteGroupMembers(
+			$this->group_id,
+			$this->user,
+			$this->members,
+			$this->administrators
+		);
+
+		$this->dispatchEventsFor($group);
+
+		return $group;
 	}
 
 }

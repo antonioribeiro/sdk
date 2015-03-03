@@ -2,14 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Accounts\Commands;
 
-use Illuminate\Contracts\Bus\SelfHandling;
-use PragmaRX\Sdk\Core\Bus\Events\DispatchableTrait;
-use PragmaRX\Sdk\Core\Bus\Commands\Command as CommandBus;
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
-class SignInCommand extends CommandBus implements SelfHandling {
-
-	use DispatchableTrait;
+class SignInCommand extends SelfHandlingCommand {
 
 	public $email;
 

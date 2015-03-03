@@ -13,7 +13,7 @@ class SendMessageCommandHandler extends CommandHandler {
 	 */
 	private $messageRepository;
 
-	function __construct(MessageRepository $messageRepository)
+	function __construct
 	{
 		$this->messageRepository = $messageRepository;
 	}
@@ -21,24 +21,9 @@ class SendMessageCommandHandler extends CommandHandler {
 	/**
 	 * Handle the command
 	 *
-	 * @param $command
+	 * @param $this
 	 * @return mixed
 	 */
-	public function handle($command)
-	{
-		$thread = $this->messageRepository->sendMessage(
-			$command->user,
-			$command->thread_id,
-			$command->recipients,
-			$command->subject,
-			$command->body,
-			$command->attachments,
-			$command->answering_message_id
-		);
 
-		$this->dispatchEventsFor($thread);
-
-		Push::fire('inbox', 'new.message', 'This is a message.');
-	}
 
 }

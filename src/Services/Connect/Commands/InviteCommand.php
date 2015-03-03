@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Connect\Commands;
 
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
-class InviteCommand {
+class InviteCommand extends SelfHandlingCommand {
 
 	public $user;
 
@@ -14,6 +16,16 @@ class InviteCommand {
 		$this->emails = $emails;
 
 		$this->user = $user;
+	}
+
+	public function handle(UserRepository $userRepository)
+	{
+		$user = $userRepository->inviteUsers(
+			$this->user,
+			$this->emails
+		);
+
+		$this->dispatchEventsFor($user);
 	}
 
 }

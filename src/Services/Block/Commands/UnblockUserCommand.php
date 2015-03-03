@@ -2,7 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Block\Commands;
 
-class UnblockUserCommand {
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
+
+class UnblockUserCommand extends SelfHandlingCommand {
 
 	public $user_to_unblock;
 
@@ -13,6 +16,11 @@ class UnblockUserCommand {
 		$this->user_to_unblock = $user_to_unblock;
 
 		$this->user_id = $user_id;
+	}
+
+	public function handle(UserRepository $userRepository)
+	{
+		return $userRepository->unblock($this->user_to_unblock, $this->user_id);
 	}
 
 }

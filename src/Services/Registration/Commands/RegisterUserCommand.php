@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Registration\Commands;
 
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
-class RegisterUserCommand {
+class RegisterUserCommand extends SelfHandlingCommand {
 
 	public $username;
 
@@ -26,6 +28,23 @@ class RegisterUserCommand {
 		$this->first_name = $first_name;
 
 		$this->last_name = $last_name;
+	}
+
+	public function handle(UserRepository $repository)
+	{
+		$user = $repository->register(
+			$this->username,
+			$this->email,
+			$this->password,
+			$this->first_name,
+			$this->last_name
+		);
+
+		$repository->save($user);
+
+		$this->dispatchEventsFor($user);
+
+		return $user;
 	}
 
 } 

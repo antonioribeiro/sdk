@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Settings\Commands;
 
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
-class UpdateCommand {
+class UpdateCommand extends SelfHandlingCommand {
 
 	public $user;
 
@@ -14,6 +16,13 @@ class UpdateCommand {
 		$this->input = $input;
 
 		$this->user = $user;
+	}
+
+	public function handle(UserRepository $userRepository)
+	{
+		$user = $userRepository->updateSettings($this->user, $this->input);
+
+		$this->dispatchEventsFor($user);
 	}
 
 }

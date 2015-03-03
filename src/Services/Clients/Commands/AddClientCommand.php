@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Clients\Commands;
 
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Clients\Data\Repositories\ClientRepository;
 
-class AddClientCommand {
+class AddClientCommand extends SelfHandlingCommand {
 
 	public $user;
 
@@ -26,6 +28,19 @@ class AddClientCommand {
 		$this->user = $user;
 
 		$this->birthdate = $birthdate;
+	}
+
+	public function handle(ClientRepository $clientRepository)
+	{
+		$client = $clientRepository->create(
+			$this->user,
+			$this->first_name,
+			$this->last_name,
+			$this->email,
+			$this->birthdate
+		);
+
+		$this->dispatchEventsFor($client);
 	}
 
 }

@@ -2,7 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Passwords\Commands;
 
-class ResetPasswordCommand {
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
+
+class ResetPasswordCommand extends SelfHandlingCommand {
 
 	public $email;
 
@@ -13,6 +16,13 @@ class ResetPasswordCommand {
 		$this->email = $email;
 
 		$this->username = $username;
+	}
+
+	public function handle(UserRepository $userRepository)
+	{
+		$user = $userRepository->resetPassword($this->email, $this->username);
+
+		$this->dispatchEventsFor($user);
 	}
 
 }

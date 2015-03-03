@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Connect\Commands;
 
+use PragmaRX\Sdk\Core\Bus\Commands\Command;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
-class ConnectActionCommand {
+class ConnectActionCommand extends SelfHandlingCommand {
 
 	public $user;
 
@@ -20,5 +22,13 @@ class ConnectActionCommand {
 		$this->user = $user;
 	}
 
+	public function handle(UserRepository $userRepository)
+	{
+		return $userRepository->connectAction(
+			$this->user,
+			$this->connection_id,
+			$this->action
+		);
+	}
 
 }

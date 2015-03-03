@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Follow\Commands;
 
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
-class FollowUserCommand {
+class FollowUserCommand extends SelfHandlingCommand {
 
 	public $user_to_follow;
 
@@ -14,6 +16,11 @@ class FollowUserCommand {
 		$this->user_to_follow = $user_to_follow;
 
 		$this->user_id = $user_id;
+	}
+
+	public function handle(UserRepository $userRepository)
+	{
+		return $userRepository->follow($this->user_to_follow, $this->user_id);
 	}
 
 }

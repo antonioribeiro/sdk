@@ -2,7 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Passwords\Commands;
 
-class UpdatePasswordCommand {
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
+
+class UpdatePasswordCommand extends SelfHandlingCommand {
 
 	public $email;
 
@@ -17,6 +20,17 @@ class UpdatePasswordCommand {
 		$this->password = $password;
 
 		$this->token = $token;
+	}
+
+	public function handle(UserRepository $userRepository)
+	{
+		$user = $userRepository->updatePassword(
+			$this->email,
+			$this->password,
+			$this->token
+		);
+
+		$this->dispatchEventsFor($user);
 	}
 
 }

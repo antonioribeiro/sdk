@@ -2,7 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Security\Commands;
 
-class ToggleEmailCommand {
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
+
+class ToggleEmailCommand extends SelfHandlingCommand {
 
 	public $user;
 
@@ -13,6 +16,17 @@ class ToggleEmailCommand {
 		$this->user = $user;
 
 		$this->code = $code;
+	}
+	public function handle(UserRepository $userRepository)
+	{
+		$user = $userRepository->toggleTwoFactorEmail(
+			$this->user,
+			$this->code
+		);
+
+		$this->dispatchEventsFor($user);
+
+		return $user;
 	}
 
 }

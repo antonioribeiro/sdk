@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Messages\Commands;
 
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Messages\Data\Repositories\Message as MessageRepository;
 
-class SendMessageCommand {
+class SendMessageCommand extends SelfHandlingCommand {
 
 	public $user;
 
@@ -34,6 +36,23 @@ class SendMessageCommand {
 		$this->thread_id = $thread_id;
 
 		$this->answering_message_id = $answering_message_id;
+	}
+
+	public function handle(MessageRepository $messageRepository)
+	{
+		$thread = $messageRepository->sendMessage(
+			$this->user,
+			$this->thread_id,
+			$this->recipients,
+			$this->subject,
+			$this->body,
+			$this->attachments,
+			$this->answering_message_id
+		);
+
+		$this->dispatchEventsFor($thread);
+
+		Push::fire('inbox', 'new.message', 'This is a message.');
 	}
 
 }

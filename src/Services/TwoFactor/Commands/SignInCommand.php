@@ -1,6 +1,9 @@
 <?php namespace PragmaRX\Sdk\Services\TwoFactor\Commands;
 
-class SignInCommand {
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
+
+class SignInCommand extends SelfHandlingCommand {
 
 	public $user_id;
 
@@ -29,6 +32,22 @@ class SignInCommand {
 		$this->two_factor_google_token = $two_factor_google_token;
 		$this->two_factor_sms_token = $two_factor_sms_token;
 		$this->user_id = $user_id;
+	}
+
+	public function handle(UserRepository $userRepository)
+	{
+		$user = $userRepository->authenticateViaTwoFactor(
+			$this->user_id,
+			$this->remember,
+			$this->authentication_code,
+			$this->two_factor_google_token,
+			$this->two_factor_sms_token,
+			$this->two_factor_email_token
+		);
+
+		$this->dispatchEventsFor($user);
+
+		return $user;
 	}
 
 }

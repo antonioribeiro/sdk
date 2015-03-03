@@ -1,6 +1,9 @@
 <?php namespace PragmaRX\Sdk\Services\Groups\Commands;
 
-class AddGroupCommand {
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Groups\Data\Repositories\GroupRepository;
+
+class AddGroupCommand extends SelfHandlingCommand {
 
 	public $user;
 
@@ -15,6 +18,19 @@ class AddGroupCommand {
 		$this->name = $name;
 
 		$this->members = $members;
+	}
+
+	public function handle(GroupRepository $groupRepository)
+	{
+		$user = $groupRepository->addGroup(
+			$this->user,
+			$this->name,
+			$this->members
+		);
+
+		$this->dispatchEventsFor($user);
+
+		return $user;
 	}
 
 }

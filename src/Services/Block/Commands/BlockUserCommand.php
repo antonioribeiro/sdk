@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Block\Commands;
 
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
-class BlockUserCommand {
+class BlockUserCommand extends SelfHandlingCommand {
 
 	public $user_to_block;
 
@@ -14,6 +16,11 @@ class BlockUserCommand {
 		$this->user_to_block = $user_to_block;
 
 		$this->user_id = $user_id;
+	}
+
+	public function handle(UserRepository $userRepository)
+	{
+		return $userRepository->block($this->user_to_block, $this->user_id);
 	}
 
 }

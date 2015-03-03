@@ -1,6 +1,11 @@
-<?php namespace PragmaRX\Sdk\Services\Groups\Commands;
+<?php
 
-class UpdateGroupCommand {
+namespace PragmaRX\Sdk\Services\Groups\Commands;
+
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Groups\Data\Repositories\GroupRepository;
+
+class UpdateGroupCommand extends SelfHandlingCommand {
 
 	public $user;
 
@@ -23,6 +28,21 @@ class UpdateGroupCommand {
 		$this->name = $name;
 
 		$this->user = $user;
+	}
+
+	public function handle(GroupRepository $groupRepository)
+	{
+		$group = $groupRepository->updateGroup(
+			$this->user,
+			$this->name,
+			$this->group_id,
+			$this->members,
+			$this->administrators
+		);
+
+		$this->dispatchEventsFor($group);
+
+		return $group;
 	}
 
 }

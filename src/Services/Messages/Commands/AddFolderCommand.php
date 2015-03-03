@@ -2,8 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Messages\Commands;
 
+use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Messages\Data\Repositories\Message as MessageRepository;
 
-class AddFolderCommand {
+class AddFolderCommand extends SelfHandlingCommand {
 
 	public $user;
 
@@ -14,6 +16,18 @@ class AddFolderCommand {
 		$this->folder_name = $folder_name;
 
 		$this->user = $user;
+	}
+
+	public function handle(MessageRepository $messageRepository)
+	{
+		$thread = $messageRepository->addFolder(
+			$this->user,
+			$this->folder_name
+		);
+
+		$this->dispatchEventsFor($thread);
+
+		return $thread;
 	}
 
 }
