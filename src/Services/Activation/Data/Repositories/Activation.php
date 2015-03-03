@@ -33,7 +33,7 @@ class Activation {
 		return $this->completed($user);
 	}
 
-	private function findActivation($user)
+	public function findActivation($user)
 	{
 		if (is_object($user))
 		{
@@ -52,17 +52,7 @@ class Activation {
 		return $activation;
 	}
 
-	private function create($user)
-	{
-		if ( ! is_object($user))
-		{
-			$this->userRepository->find($user);
-		}
-
-		return Model::createFor($user);
-	}
-
-	private function exists($user)
+	public function exists($user)
 	{
 		return $this->findActivation($user);
 	}
@@ -84,6 +74,16 @@ class Activation {
 		$activation->completed = true;
 
 		return $activation->save();
+	}
+
+	private function create($user)
+	{
+		if ( ! is_object($user))
+		{
+			$this->userRepository->find($user);
+		}
+
+		return Model::createFor($user);
 	}
 
 }

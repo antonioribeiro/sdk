@@ -985,7 +985,7 @@ class UserRepository extends Repository {
 		return $user->isActivated;
 	}
 
-	private function find($user)
+	public function find($user)
 	{
 		if ( ! $user instanceof User)
 		{
