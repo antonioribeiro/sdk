@@ -7,7 +7,8 @@ use PragmaRX\Sdk\Core\Model;
 class Activation extends Model {
 
 	protected $fillable = [
-		'items_entity_id',
+		'user_id',
+		'code',
 	];
 
 	public static function createFor($user)

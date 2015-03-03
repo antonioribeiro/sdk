@@ -2,35 +2,88 @@
 
 namespace PragmaRX\Sdk\Services\Activation\Data\Repositories;
 
+use Carbon;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Activation\Data\Entities\Activation as Model;
 
 class Activation {
 
-	public function isActivated($user)
+	/**
+	 * @var UserRepository
+	 */
+	private $userRepository;
+
+	public function __construct(UserRepository $userRepository)
+	{
+		$this->userRepository = $userRepository;
+	}
+
+	public function completed($user)
 	{
 		if ( ! $activation = $this->findActivation($user))
 		{
-			$this->createActivation($user);
-
 			return false;
 		}
 
 		return $activation->completed;
 	}
 
+	public function isActivated($user)
+	{
+		return $this->completed($user);
+	}
+
 	private function findActivation($user)
 	{
 		if (is_object($user))
 		{
-			$user = $user->id;
+			$user_id = $user->id;
+		}
+		else
+		{
+			$user_id = $user;
 		}
 
-		return Model::where('user_id', $user)->first();
+		if ( ! $activation = Model::where('user_id', $user_id)->first())
+		{
+			$activation = $this->create($user);
+		}
+
+		return $activation;
 	}
 
-	private function createActivation($user)
+	private function create($user)
 	{
+		if ( ! is_object($user))
+		{
+			$this->userRepository->find($user);
+		}
+
 		return Model::createFor($user);
+	}
+
+	private function exists($user)
+	{
+		return $this->findActivation($user);
+	}
+
+	public function complete($user, $token)
+	{
+		if ( ! $activation = $this->findActivation($user))
+		{
+			return false;
+		}
+
+		if ($activation->code != $token)
+		{
+			return false;
+		}
+
+		$activation->completed_at = Carbon::now();
+
+		$activation->completed = true;
+
+		return $activation->save();
 	}
 
 }
