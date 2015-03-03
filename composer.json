@@ -26,7 +26,8 @@
         "guzzlehttp/guzzle": "~4.0",
         "cartalyst/sentinel": "*",
         "cartalyst/support": "*",
-        "twilio/sdk":"3.12.*"
+        "twilio/sdk":"3.12.*",
+        "jenssegers/date": "~2"
     },
 
     "require-dev": {
