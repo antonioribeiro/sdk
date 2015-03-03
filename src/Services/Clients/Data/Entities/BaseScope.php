@@ -2,12 +2,13 @@
 
 namespace PragmaRX\Sdk\Services\Clients\Data\Entities;
 
-use Illuminate\Database\Eloquent\ScopeInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\ScopeInterface;
 
 class BaseScope implements ScopeInterface {
 
-	public function apply(Builder $builder)
+	public function apply(Builder $builder, Model $model)
 	{
 		$tableName = $builder->getModel()->getTable();
 
@@ -25,7 +26,7 @@ class BaseScope implements ScopeInterface {
 	 * @param  \Illuminate\Database\Eloquent\Builder $builder
 	 * @return void
 	 */
-	public function remove(Builder $builder)
+	public function remove(Builder $builder, Model $model)
 	{
 		// TODO: Implement remove() method.
 	}

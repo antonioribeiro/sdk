@@ -22,4 +22,9 @@ class Activation {
 		return $this->activationRepository->isActivated($user);
 	}
 
+	public function completed($user)
+	{
+		return $this->activated($user);
+	}
+
 }
