@@ -14,13 +14,13 @@ class ChangeIdOnUsersTable extends Migration {
 	{
 		// Drop Sentinel users and recreate it
 
-		Schema::drop('users');
-		Schema::drop('throttle');
-		Schema::drop('role_users');
-		Schema::drop('roles');
-		Schema::drop('reminders');
-		Schema::drop('persistences');
-		Schema::drop('activations');
+		$this->drop('users');
+		$this->drop('throttle');
+		$this->drop('role_users');
+		$this->drop('roles');
+		$this->drop('reminders');
+		$this->drop('persistences');
+		$this->drop('activations');
 
 		Schema::create('users', function(Blueprint $table)
 		{

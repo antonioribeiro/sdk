@@ -15,7 +15,7 @@ class LoadConfiguration extends IlluminateLoadConfiguration {
 
 		parent::bootstrap($this->app);
 
-		$this->app->config->set('app.providers', array_merge($this->app->config['app.providers'], $this->getSdkProviders($this->app->config['sdk'])));
+		$this->app->config->set('app.providers', array_merge($this->app->config['app.providers'], $this->getSdkProviders($this->getSdkConfig())));
 
 //		dd($this->app->config['app.providers']);
 	}
@@ -89,6 +89,15 @@ class LoadConfiguration extends IlluminateLoadConfiguration {
 		}
 
 		return $providers;
+	}
+
+	private function getSdkConfig()
+	{
+		$packageConfig = require __DIR__.'/../../../config/config.php';
+
+		$appConfig = require base_path('config/sdk.php');
+
+		return array_merge($appConfig, $packageConfig);
 	}
 
 }

@@ -12,17 +12,19 @@ class CreateActivationsTable extends Migration {
 	 */
 	public function migrateUp()
 	{
-		Schema::create('activations', function(Blueprint $table)
-		{
-			$table->string('id', 64)->unique()->primary()->index();
+		/// Check --- ChangeIdOnUsersTable -- Sentinel !!
 
-			$table->string('user_id', 64);
-			$table->string('code');
-			$table->boolean('completed')->default(0);
-			$table->timestamp('completed_at')->nullable();
-
-			$table->timestamps();
-		});
+//		Schema::create('activations', function(Blueprint $table)
+//		{
+//			$table->string('id', 64)->unique()->primary()->index();
+//
+//			$table->string('user_id', 64);
+//			$table->string('code');
+//			$table->boolean('completed')->default(0);
+//			$table->timestamp('completed_at')->nullable();
+//
+//			$table->timestamps();
+//		});
 	}
 
 	/**
@@ -32,7 +34,7 @@ class CreateActivationsTable extends Migration {
 	 */
 	public function migrateDown()
 	{
-		Schema::drop('activations');
+//		Schema::drop('activations');
 	}
 
 }

@@ -41,9 +41,9 @@ trait MigratableTrait {
 
 	private function getServicesMigrationPaths()
 	{
-		$services = App::make('config')->get('pragmarx/sdk::services');
+		$services = App::make('config')->get('sdk.services');
 
-		$applicationservicesPath = App::make('config')->get('pragmarx/sdk::application_services_path');
+		$applicationservicesPath = App::make('config')->get('sdk.application_services_path');
 
 		$paths = [];
 
@@ -56,7 +56,7 @@ trait MigratableTrait {
 		return $paths;
 	}
 
-	private function getMigrationsPaths($services, $directory)
+	private function getMigrationsPaths($services = [], $directory )
 	{
 		$paths = [];
 
@@ -105,19 +105,7 @@ trait MigratableTrait {
 			return $this->packagePath.'/'.$package.'/src/migrations';
 		}
 
-		$bench = $this->getOption('bench');
-
-		// Finally we will check for the workbench option, which is a shortcut into
-		// specifying the full path for a "workbench" project. Workbenches allow
-		// developers to develop packages along side a "standard" app install.
-		if ( ! is_null($bench))
-		{
-			$path = "/workbench/{$bench}/src/migrations";
-
-			return $this->laravel['path.base'].$path;
-		}
-
-		return $this->laravel['path'].'/database/migrations';
+		return base_path('database/migrations');
 	}
 
 	private function getOption($option)
@@ -156,7 +144,7 @@ trait MigratableTrait {
 
 	private function requireServiceMigrations()
 	{
-		$services = App::make('config')->get('pragmarx/sdk::services');
+		$services = App::make('config')->get('sdk.services');
 
 		$paths = [];
 

@@ -19,23 +19,26 @@
 
 return [
 
+	'enabled' => true,
+
 	'application_services_path' => app_path() . '/Services/',
 
 	'files_path' => public_path() . '/files/',
 
 	'aliases' => [
 		'activation'    => 'PragmaRX\Sdk\Services\Users\Data\Entities\UserActivation',
-	    'persistence'   => 'PragmaRX\Sdk\Services\Users\Data\Entities\Persistence',
-	    'reminder'      => 'PragmaRX\Sdk\Services\Users\Data\Entities\Reminder',
-	    'role'          => 'PragmaRX\Sdk\Services\Users\Data\Entities\Role',
-	    'throttle'      => 'PragmaRX\Sdk\Services\Users\Data\Entities\Throttle',
-	    // 'user'          => 'PragmaRX\Sdk\Services\Users\Data\Entities\User',
+		'persistence'   => 'PragmaRX\Sdk\Services\Users\Data\Entities\Persistence',
+		'reminder'      => 'PragmaRX\Sdk\Services\Users\Data\Entities\Reminder',
+		'role'          => 'PragmaRX\Sdk\Services\Users\Data\Entities\Role',
+		'throttle'      => 'PragmaRX\Sdk\Services\Users\Data\Entities\Throttle',
+		// 'user'          => 'PragmaRX\Sdk\Services\Users\Data\Entities\User',
 		'user'          => 'ConsultorioDigital\Services\Users\Data\Entities\User',
 	],
 
 	'services' => [
 		'Services/Accounts',
 		'Services/Addresses',
+		'Services/Activation',
 
 		'Services/Block',
 		'Services/Billing',
@@ -155,10 +158,9 @@ return [
 		[
 			'name' => 'pragmarx/zipcode',
 			'enabled' => true,
-			'serviceProviders' => ['PragmaRX\ZIPcode\Vendor\Laravel\ServiceProvider'],
+			'serviceProviders' => ['PragmaRX\ZipCode\Vendor\Laravel\ServiceProvider'],
 			'facades' => [
-				'ZipCode' => 'PragmaRX\ZIPcode\Vendor\Laravel\Facade',
-				'ZIPCode' => 'PragmaRX\ZIPcode\Vendor\Laravel\Facade',
+				'ZipCode' => 'PragmaRX\ZipCode\Vendor\Laravel\Facade',
 			]
 		],
 
@@ -183,10 +185,19 @@ return [
 		[
 			'name' => 'pragmarx/auth',
 			'enabled' => true,
-		    'serviceProviders' => ['PragmaRX\Sdk\Services\Auth\Service\Provider'],
+			'serviceProviders' => ['PragmaRX\Sdk\Services\Auth\Service\Provider'],
 			'facades' => [
 				'Authentication' => 'PragmaRX\Sdk\Services\Auth\Service\Facade',
 				'Auth'           => 'PragmaRX\Sdk\Services\Auth\Service\Facade', /// overrides the Laravel Facade
+			]
+		],
+
+		[
+			'name' => 'pragmarx/activation',
+			'enabled' => true,
+			'serviceProviders' => ['PragmaRX\Sdk\Services\Activation\Service\Provider'],
+			'facades' => [
+				'Activation' => 'PragmaRX\Sdk\Services\Activation\Service\Facade',
 			]
 		],
 
@@ -211,7 +222,7 @@ return [
 		[
 			'name' => 'pragmarx/flash',
 			'enabled' => true,
-		    'serviceProviders' => ['PragmaRX\Sdk\Services\Flash\Service\Provider'],
+			'serviceProviders' => ['PragmaRX\Sdk\Services\Flash\Service\Provider'],
 			'facades' => [
 				'Flash' => 'PragmaRX\Sdk\Services\Flash\Service\Facade',
 			]
@@ -220,7 +231,7 @@ return [
 		[
 			'name' => 'pragmarx/tracker',
 			'enabled' => true,
-		    'serviceProviders' => ['PragmaRX\Tracker\Vendor\Laravel\ServiceProvider'],
+			'serviceProviders' => ['PragmaRX\Tracker\Vendor\Laravel\ServiceProvider'],
 		],
 
 		[
@@ -265,24 +276,24 @@ return [
 			'serviceProviders' => ['Laracasts\Utilities\UtilitiesServiceProvider'],
 		],
 
-		[
-			'name' => 'cartalyst/sentinel',
-			'enabled' => true,
-			'serviceProviders' => ['Cartalyst\Sentinel\Laravel\SentinelServiceProvider'],
-		    'facades' => [
-				'Activation' => 'Cartalyst\Sentinel\Laravel\Facades\Activation',
-				'Reminder'   => 'Cartalyst\Sentinel\Laravel\Facades\Reminder',
-				'Sentinel'   => 'Cartalyst\Sentinel\Laravel\Facades\Sentinel',
-		    ]
-		],
+		//		[
+		//			'name' => 'cartalyst/sentinel',
+		//			'enabled' => true,
+		//			'serviceProviders' => ['Cartalyst\Sentinel\Laravel\SentinelServiceProvider'],
+		//		    'facades' => [
+		//				'Activation' => 'Cartalyst\Sentinel\Laravel\Facades\Activation',
+		//				'Reminder'   => 'Cartalyst\Sentinel\Laravel\Facades\Reminder',
+		//				'Sentinel'   => 'Cartalyst\Sentinel\Laravel\Facades\Sentinel',
+		//		    ]
+		//		],
 
 		[
 			'name' => 'jenssegers/date',
 			'enabled' => true,
 			'serviceProviders' => ['Jenssegers\Date\DateServiceProvider'],
-		    'facades' => [
-			    'Carbon' => 'Jenssegers\Date\Date',
-		    ]
+			'facades' => [
+				'Carbon' => 'Jenssegers\Date\Date',
+			]
 		],
 
 		[
@@ -312,11 +323,11 @@ return [
 			'serviceProviders' => ['Illuminate\Html\HtmlServiceProvider'],
 		],
 
-//		[
-//			'name' => 'barryvdh/translationmanager',
-//			'enabled' => true,
-//			'serviceProviders' => ['Barryvdh\TranslationManager\ManagerServiceProvider'],
-//		],
+		//		[
+		//			'name' => 'barryvdh/translationmanager',
+		//			'enabled' => true,
+		//			'serviceProviders' => ['Barryvdh\TranslationManager\ManagerServiceProvider'],
+		//		],
 
 	]
 ];
