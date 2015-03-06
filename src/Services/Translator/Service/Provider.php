@@ -9,7 +9,7 @@ class Provider extends ServiceProvider {
 
 	protected $iocAliases = ['translator', 'translation.loader'];
 
-	protected $defer = true;
+	protected $defer = false;
 
 	/**
 	 * Register the service provider.

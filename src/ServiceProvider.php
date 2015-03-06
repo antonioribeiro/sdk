@@ -145,17 +145,17 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 */
 	private function registerPackageServiceProviders($package)
 	{
-//		$serviceProviders = ! isset($package['serviceProviders'])
-//			? []
-//			: $package['serviceProviders'];
-//
-//		foreach ($serviceProviders as $serviceProvider)
-//		{
-//			if (class_exists($serviceProvider) && $package['enabled'])
-//			{
-//				$this->app->register($serviceProvider);
-//			}
-//		}
+		$serviceProviders = ! isset($package['serviceProviders'])
+			? []
+			: $package['serviceProviders'];
+
+		foreach ($serviceProviders as $serviceProvider)
+		{
+			if (class_exists($serviceProvider) && $package['enabled'])
+			{
+				$this->app->register($serviceProvider);
+			}
+		}
 	}
 
 	/**

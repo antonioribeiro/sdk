@@ -81,6 +81,7 @@ return [
 		'Services/SystemEntities',
 
 		'Services/TwoFactor',
+		'Services/Translator',
 
 		'Services/Users',
 
@@ -153,6 +154,9 @@ return [
 			'name' => 'pragmarx/translator',
 			'enabled' => true,
 			'serviceProviders' => ['PragmaRX\Sdk\Services\Translator\Service\Provider'],
+			'facades' => [
+				// 'Lang' => 'PragmaRX\Sdk\Services\Translator\Service\Facade',
+			]
 		],
 
 		[
