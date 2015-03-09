@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Statuses\Commands;
 
-use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Bus\Commands\SelfHandlingCommand;
 use PragmaRX\Sdk\Services\Statuses\Data\Entities\Status;
 use PragmaRX\Sdk\Services\Statuses\Data\Repositories\StatusRepository;
 

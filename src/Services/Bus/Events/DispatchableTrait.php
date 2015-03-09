@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Sdk\Core\Bus\Events;
+namespace PragmaRX\Sdk\Services\Bus\Events;
 
 use App;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -37,6 +37,6 @@ trait DispatchableTrait {
 	 */
 	public function getDispatcher()
 	{
-		return $this->dispatcher ?: App::make('PragmaRX\Sdk\Core\Bus\Events\EventDispatcher');
+		return $this->dispatcher ?: App::make('PragmaRX\Sdk\Services\Bus\Events\EventDispatcher');
 	}
 }

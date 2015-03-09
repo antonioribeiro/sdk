@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Sdk\Core\Bus\Commands;
+namespace PragmaRX\Sdk\Services\Bus\Commands;
 
 use Illuminate\Contracts\Bus\SelfHandling;
 

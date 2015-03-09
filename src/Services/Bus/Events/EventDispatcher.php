@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Sdk\Core\Bus\Events;
+namespace PragmaRX\Sdk\Services\Bus\Events;
 
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Log\Writer;

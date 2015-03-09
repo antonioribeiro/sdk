@@ -1,8 +1,8 @@
 <?php
 
-namespace PragmaRX\Sdk\Core\Bus\Commands;
+namespace PragmaRX\Sdk\Services\Bus\Commands;
 
-use PragmaRX\Sdk\Core\Bus\Events\DispatchableTrait;
+use PragmaRX\Sdk\Services\Bus\Events\DispatchableTrait;
 
 abstract class Command {
 

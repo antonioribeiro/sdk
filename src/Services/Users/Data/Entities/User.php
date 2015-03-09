@@ -8,7 +8,7 @@ use Activation;
 use Rhumsaa\Uuid\Uuid;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
-use PragmaRX\Sdk\Core\Bus\Events\EventGenerator;
+use PragmaRX\Sdk\Services\Bus\Events\EventGenerator;
 use Illuminate\Database\Eloquent\Collection;
 use PragmaRX\Sdk\Core\Traits\ReloadableTrait;
 use PragmaRX\Sdk\Core\Traits\IdentifiableTrait;

@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Messages\Commands;
 
-use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Bus\Commands\SelfHandlingCommand;
 use PragmaRX\Sdk\Services\Messages\Data\Repositories\Message as MessageRepository;
 
 class MoveMessagesCommand extends SelfHandlingCommand {

@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Connect\Commands;
 
-use PragmaRX\Sdk\Core\Bus\Commands\Command;
+use PragmaRX\Sdk\Services\Bus\Commands\Command;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 class ConnectUserCommand extends SelfHandlingCommand {

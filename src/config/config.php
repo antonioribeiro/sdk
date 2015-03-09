@@ -40,8 +40,9 @@ return [
 		'Services/Addresses',
 		'Services/Activation',
 
-		'Services/Block',
 		'Services/Billing',
+		'Services/Block',
+		'Services/Bus',
 
 		'Services/Cities',
 		'Services/Clients',

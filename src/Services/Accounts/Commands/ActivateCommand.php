@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Accounts\Commands;
 
-use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Bus\Commands\SelfHandlingCommand;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 class ActivateCommand extends SelfHandlingCommand {

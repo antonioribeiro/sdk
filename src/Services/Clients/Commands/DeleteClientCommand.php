@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Clients\Commands;
 
-use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Bus\Commands\SelfHandlingCommand;
 use PragmaRX\Sdk\Services\Clients\Data\Repositories\ClientRepository;
 
 class DeleteClientCommand extends SelfHandlingCommand {

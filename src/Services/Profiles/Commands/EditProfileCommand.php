@@ -3,7 +3,7 @@
 namespace PragmaRX\Sdk\Services\Profiles\Commands;
 
 use Illuminate\Contracts\Auth\Guard;
-use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Bus\Commands\SelfHandlingCommand;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 class EditProfileCommand extends SelfHandlingCommand {

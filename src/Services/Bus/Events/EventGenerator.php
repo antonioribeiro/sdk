@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Sdk\Core\Bus\Events;
+namespace PragmaRX\Sdk\Services\Bus\Events;
 
 trait EventGenerator {
 

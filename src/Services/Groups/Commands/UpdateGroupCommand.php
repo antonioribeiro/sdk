@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Groups\Commands;
 
-use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Bus\Commands\SelfHandlingCommand;
 use PragmaRX\Sdk\Services\Groups\Data\Repositories\GroupRepository;
 
 class UpdateGroupCommand extends SelfHandlingCommand {

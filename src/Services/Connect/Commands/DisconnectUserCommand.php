@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Connect\Commands;
 
-use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Bus\Commands\SelfHandlingCommand;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 class DisconnectUserCommand extends SelfHandlingCommand {

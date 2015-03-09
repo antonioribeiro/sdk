@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Files\Commands;
 
-use PragmaRX\Sdk\Core\Bus\Commands\SelfHandlingCommand;
+use PragmaRX\Sdk\Services\Bus\Commands\SelfHandlingCommand;
 use PragmaRX\Sdk\Services\Files\Data\Repositories\File as FileRepository;
 
 class UploadFileCommand extends SelfHandlingCommand {
