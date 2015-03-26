@@ -7,8 +7,8 @@ use PragmaRX\Sdk\Core\Migrations\ResetCommand;
 use PragmaRX\Sdk\Core\Traits\ServiceableTrait;
 use PragmaRX\Sdk\Core\Migrations\MigrateCommand;
 use PragmaRX\Sdk\Core\Migrations\RollbackCommand;
+use Illuminate\Foundation\AliasLoader as IlluminateAliasLoader;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
-
 
 class ServiceProvider extends PragmaRXServiceProvider {
 
@@ -116,7 +116,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 		foreach ($facades as $name => $class)
 		{
-			$this->loadFacade($name, $class);
+			IlluminateAliasLoader::getInstance()->alias($name, $class);
 		}
 	}
 
