@@ -31,7 +31,7 @@ trait IdentifiableTrait {
 	 * @param  array  $attributes
 	 * @return static
 	 */
-	public static function create(array $attributes)
+	public static function create(array $attributes = [])
 	{
 		if (static::$generateId)
 		{
