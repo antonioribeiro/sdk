@@ -8,7 +8,7 @@ class KindRepository {
 
 	public function allForSelect()
 	{
-		$kinds = Kind::lists('name', 'id');
+		$kinds = Kind::lists('name', 'id')->toArray();
 
 		foreach ($kinds as $key => $kind)
 		{

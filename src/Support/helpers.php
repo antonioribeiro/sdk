@@ -260,3 +260,19 @@ if ( ! function_exists( 'uuid' ))
 		return (string) Rhumsaa\Uuid\Uuid::uuid4();
 	}
 }
+
+if ( ! function_exists( 'upper' ))
+{
+	function upper($string)
+	{
+		return Illuminate\Support\Str::upper($string);
+	}
+}
+
+if ( ! function_exists( 'lower' ))
+{
+	function lower($string)
+	{
+		return Illuminate\Support\Str::lower($string);
+	}
+}

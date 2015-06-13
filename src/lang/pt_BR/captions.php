@@ -32,7 +32,7 @@ return array (
   'dashboard' => 'Painel de Controle',
   'deleted' => 'Deletado',
   'disconnect' => 'Desconectar',
-  'edit-professional-info' => 'Editar Informações Profissionais',
+  'edit-professional-info' => 'Editar Perfil Profissional',
   'edit-profile' => 'Editar Perfil',
   'edit-your-professional-info' => 'Altere Suas Informações Profissionais',
   'edit-your-profile' => 'Altere Seu Perfil',

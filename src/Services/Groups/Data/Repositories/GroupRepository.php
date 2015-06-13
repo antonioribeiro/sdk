@@ -235,14 +235,14 @@ class GroupRepository {
 
 	public function isGroupManager($group_id, $user)
 	{
-		$managers = $this->getManagers($group_id)->lists('id');
+		$managers = $this->getManagers($group_id)->lists('id')->toArray();
 
 		return in_array($user->id, $managers);
 	}
 
 	public function isGroupOwner($group_id, $user)
 	{
-		$managers = $this->getManagers($group_id, 'owner')->lists('id');
+		$managers = $this->getManagers($group_id, 'owner')->lists('id')->toArray();
 
 		return in_array($user->id, $managers);
 	}

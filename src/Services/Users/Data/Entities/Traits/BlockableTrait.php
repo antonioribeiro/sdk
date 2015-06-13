@@ -34,7 +34,7 @@ trait BlockableTrait {
 	 */
 	public function isBlockedBy(User $otherUser)
 	{
-		$idsWhoOtherUserBlocks = $otherUser->blockages()->lists('blocked_id');
+		$idsWhoOtherUserBlocks = $otherUser->blockages()->lists('blocked_id')->toArray();
 
 		return in_array($this->id, $idsWhoOtherUserBlocks);
 	}
