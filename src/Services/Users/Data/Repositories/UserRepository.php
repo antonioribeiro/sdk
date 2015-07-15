@@ -44,8 +44,9 @@ use PragmaRX\Sdk\Services\Security\Events\TwoFactorEmailDisableRequested;
 use PragmaRX\Sdk\Services\TwoFactor\Exceptions\InvalidAuthenticationCode;
 use PragmaRX\Sdk\Services\Passwords\Exceptions\InvalidPasswordUpdateRequest;
 use PragmaRX\Sdk\Services\ContactInformation\Data\Entities\ContactInformation;
+use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository as UserRepositoryContract;
 
-class UserRepository extends Repository {
+class UserRepository extends Repository implements UserRepositoryContract {
 
 	// use DispatchableTrait;
 
@@ -364,7 +365,7 @@ class UserRepository extends Repository {
 	 * @param $email
 	 * @return void
 	 */
-	private function requestEmailChange($user, $email)
+	public function requestEmailChange($user, $email)
 	{
 		$data = ['user' => $user, 'email' => $email];
 
@@ -464,7 +465,7 @@ class UserRepository extends Repository {
 		return ['user' => $user, 'next' => $next];
 	}
 
-	private function findAuthenticatableByCredentials($credentials)
+	public function findAuthenticatableByCredentials($credentials)
 	{
 		if ( ! $user = $this->findByCredentials($credentials))
 		{

@@ -2,9 +2,9 @@
 
 namespace PragmaRX\Sdk\Services\Statuses\Data\Repositories;
 
-use ConsultorioDigital\Services\Users\Data\Repositories\User as UserRepository;
-use PragmaRX\Sdk\Services\Statuses\Data\Entities\Status;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
+use PragmaRX\Sdk\Services\Statuses\Data\Entities\Status;
+use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
 
 class StatusRepository {
 
