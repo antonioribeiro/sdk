@@ -42,7 +42,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 */
 	protected $packageNameCapitalized = 'Sdk';
 
-	protected $defer = true;
+	protected $defer = false;
 
 	/**
 	 * Boot the Service Provider.
