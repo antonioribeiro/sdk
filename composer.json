@@ -37,7 +37,6 @@
         "mockery/mockery": "~0.8",
         "laracasts/testdummy": "1.*",
         "fzaninotto/faker": "1.4.*",
-        "way/generators": "~2",
         "pragmarx/sqli": "0.*"
     },
 
