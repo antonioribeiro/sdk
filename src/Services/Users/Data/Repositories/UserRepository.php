@@ -206,6 +206,11 @@ class UserRepository extends Repository implements UserRepositoryContract {
 
 		$user_to_connect = $this->findByUsername($user_to_connect);
 
+		if ( ! $user_to_connect)
+		{
+			return false;
+		}
+
 		if ( ! $user->isConnectedOrIsPendingTo($user_to_connect))
 		{
 			$connection = new Connection();
