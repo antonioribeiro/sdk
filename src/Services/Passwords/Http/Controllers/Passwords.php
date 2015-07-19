@@ -47,7 +47,13 @@ class Passwords extends BaseController {
 	 */
 	public function store(RemindPasswordRequest $request)
 	{
-		$this->execute(ResetPasswordCommand::class);
+		$this->execute(
+			ResetPasswordCommand::class,
+			[
+				'username' => $request->get('username'),
+				'email' => $request->get('email')
+			]
+		);
 
 		return Redirect::route_no_ajax('notification')
 			->with('title', t('titles.reset-your-password'))
