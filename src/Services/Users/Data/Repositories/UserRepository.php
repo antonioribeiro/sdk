@@ -911,9 +911,9 @@ class UserRepository extends Repository implements UserRepositoryContract {
 			}
 		}
 
-		$reminder = Auth::createReminder($user);
+		$token = Auth::createReminder($user);
 
-		$user->raise(new PasswordReminderCreated($user, $reminder->code));
+		$user->raise(new PasswordReminderCreated($user, $token));
 
 		return $user;
 	}

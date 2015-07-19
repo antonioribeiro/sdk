@@ -5,6 +5,8 @@ namespace PragmaRX\Sdk\Services\Users\Data\Entities;
 use DB;
 use Auth;
 use Activation;
+use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Rhumsaa\Uuid\Uuid;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
@@ -26,7 +28,7 @@ use PragmaRX\Sdk\Services\Accounts\Exceptions\UserActivationNotFound;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\FollowableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\ConnectableTrait;
 
-class User extends CartalystUser {
+class User extends CartalystUser implements CanResetPassword {
 
 	use
 		FollowableTrait,
@@ -37,7 +39,8 @@ class User extends CartalystUser {
 		EventGenerator,
 		PresentableTrait,
 		ReloadableTrait,
-		IdentifiableTrait;
+		IdentifiableTrait,
+		CanResetPasswordTrait;
 
 	protected $fillable = ['id', 'username', 'email', 'password', 'first_name', 'last_name'];
 
@@ -251,5 +254,4 @@ class User extends CartalystUser {
 
 		return new Collection($connections);
 	}
-
 }

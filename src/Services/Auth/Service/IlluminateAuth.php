@@ -13,6 +13,8 @@ class IlluminateAuth implements AuthContract {
 	public function __construct()
 	{
 	    $this->auth = app('auth');
+
+		$this->tokens = app('auth.password.tokens');
 	}
 
 	public function check()
@@ -81,12 +83,23 @@ class IlluminateAuth implements AuthContract {
 
 	public function createReminder($user)
     {
-		return Reminder::create($user);
+		return $this->tokens->create($user);
     }
 
 	public function updatePasswordViaReminder($user, $token, $password)
 	{
-		return Reminder::complete($user, $token, $password);
+		if ( ! $this->tokens->exists($user, $token))
+		{
+			throw new Exception('token is not valid');
+		}
+
+		$user->password = Hash::make($password);
+
+		$user->save();
+
+		$this->tokens->delete($token);
+
+		return true;
 	}
 
 	public function forceActivation($user)
