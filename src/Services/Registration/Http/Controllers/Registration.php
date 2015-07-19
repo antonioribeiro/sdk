@@ -33,7 +33,7 @@ class Registration extends BaseController {
 				->with('message', t('paragraphs.welcome-message'))
 				->with('buttons', [[
 									'caption' => t('captions.go-to-login-page'),
-				                    'url' => route('login')
+				                    'url' => route('auth.login')
 				                   ]])
 				->withInput();
 	}

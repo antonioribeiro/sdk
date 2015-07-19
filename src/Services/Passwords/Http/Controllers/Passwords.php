@@ -90,7 +90,7 @@ class Passwords extends BaseController {
 
 		$this->execute(UpdatePasswordCommand::class, $credentials);
 
-		return Redirect::route('login');
+		return Redirect::route('auth.login');
 	}
 
 }

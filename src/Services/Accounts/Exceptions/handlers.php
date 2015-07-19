@@ -16,7 +16,7 @@ ExceptionHandler::addHandler(function(UserAlreadyActivated $exception, $code)
 			->with('message', t('paragraphs.account-already-activated'))
 			->with('buttons', [[
 				                   'caption' => t('captions.go-to-login-page'),
-				                   'url' => route('login')
+				                   'url' => route('auth.login')
 			                   ]])
 			->withInput();
 });
