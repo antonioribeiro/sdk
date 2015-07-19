@@ -20,7 +20,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->registerLoader();
 
-		$this->app->singleton($this->iocAliases, function($app)
+		$translator = function($app)
 		{
 			$loader = $app['translation.loader'];
 
@@ -34,15 +34,23 @@ class Provider extends ServiceProvider {
 			$trans->setFallback($app['config']['app.fallback_locale']);
 
 			return $trans;
-		});
+		};
+
+		$this->app->singleton('translator', $translator);
+
+		$this->app->singleton('pragmarx.translator', $translator);
 	}
 
 	protected function registerLoader()
 	{
-		$this->app->singleton('translation.loader', function($app)
+		$fileLoader = function($app)
 		{
 			return new FileLoader($app['files'], $app['path.lang']);
-		});
+		};
+
+		$this->app->singleton('translation.loader', $fileLoader);
+
+		$this->app->singleton('pragmarx.translation.loader', $fileLoader);
 	}
 
 	/**
@@ -55,4 +63,8 @@ class Provider extends ServiceProvider {
 		return __DIR__;
 	}
 
+	public function provides()
+	{
+		return $this->iocAliases;
+	}
 }

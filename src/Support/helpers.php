@@ -1,5 +1,7 @@
 <?php
 
+use PragmaRX\Sdk\Services\Translator\Service\Facade as Translator;
+
 if ( ! function_exists('explode_attributes'))
 {
 	function explode_attributes($attributes = null)
@@ -36,7 +38,7 @@ if ( ! function_exists( 'p' ))
 	{
 		$string = get_lang_string($string, $replace, $locale);
 
-		return \Lang::choice($string, $number);
+		return Translator::choice($string, $number);
 	}
 }
 
@@ -44,7 +46,7 @@ if ( ! function_exists( 'get_lang_string' ))
 {
 	function get_lang_string($key, $replace = array(), $locale = null)
 	{
-		return \Lang::get($key, $replace, $locale);
+		return Translator::get($key, $replace, $locale);
 	}
 }
 
