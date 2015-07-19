@@ -46,6 +46,7 @@ return [
 
 		'Services/Cities',
 		'Services/Clients',
+		'Services/Clipping',
 		'Services/Connect',
 		'Services/ContactInformation',
 		'Services/Countries',
