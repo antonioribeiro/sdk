@@ -3,8 +3,10 @@
 namespace PragmaRX\Sdk\Services\Auth\Service;
 
 use DB;
+use Hash;
 use Activation;
 use Carbon\Carbon;
+use PragmaRX\Sdk\Core\Exceptions\InvalidToken;
 use PragmaRX\Sdk\Services\Auth\Exceptions\UserNotActivated;
 use PragmaRX\Sdk\Services\Auth\Contracts\Auth as AuthContract;
 
@@ -90,7 +92,7 @@ class IlluminateAuth implements AuthContract {
 	{
 		if ( ! $this->tokens->exists($user, $token))
 		{
-			throw new Exception('token is not valid');
+			throw new InvalidToken;
 		}
 
 		$user->password = Hash::make($password);
