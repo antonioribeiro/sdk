@@ -19,7 +19,7 @@ class UpdatePassword extends FormRequest {
 		return [
 			'email' => 'exists:users,email',
 			'password' => 'required|confirmed',
-			'token' => 'exists:reminders,code'
+			'token' => 'exists:password_resets,token'
 		];
 	}
 

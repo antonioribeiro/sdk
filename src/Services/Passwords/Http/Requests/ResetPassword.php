@@ -22,7 +22,7 @@ class ResetPassword extends FormRequest {
 		});
 
 		return [
-			'token' => 'exists:reminders,code'
+			'token' => 'exists:password_resets,token'
 		];
 	}
 
