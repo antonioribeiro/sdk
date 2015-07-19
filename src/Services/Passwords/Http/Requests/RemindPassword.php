@@ -21,9 +21,11 @@ class RemindPassword extends FormRequest {
 
 	public function beforeValidate()
 	{
-		$email = $this->all()['email'];
+		$request = $this->all();
 
-		$username = $this->all()['username'];
+		$email = isset($request['email']) ? $request['email'] : null;
+
+		$username = isset($request['username']) ? $request['username'] : null;
 
 		if ( ! $email && ! $username)
 		{
