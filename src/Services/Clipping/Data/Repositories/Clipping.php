@@ -10,4 +10,9 @@ class Clipping
 	{
 		return Model::orderBy('published_at', 'desc')->paginate(20);
 	}
+
+	public function findPostById($id)
+	{
+		return Model::findOrFail($id);
+	}
 }
