@@ -22,8 +22,25 @@ class CreateClippingTagsTable extends Migration
 
 			$table->timestamps();
 		});
-	}
 
+		Schema::table('clipping_tags', function(Blueprint $table)
+		{
+			$table->foreign('clipping_id')
+				->references('id')
+				->on('clipping')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		Schema::table('clipping_tags', function(Blueprint $table)
+		{
+			$table->foreign('tag_id')
+				->references('id')
+				->on('tags')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+	}
 
 	/**
 	 * Reverse the migrations.

@@ -16,7 +16,7 @@ class CreateTagsTable extends Migration {
 		{
 			$table->string('id', 64)->primary();
 
-			$table->string('tag', 64)->index();
+			$table->string('name', 64)->index();
 
 			$table->timestamps();
 		});

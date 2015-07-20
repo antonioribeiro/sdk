@@ -26,7 +26,6 @@ class CreateClippingTable extends Migration {
 			$table->string('author_id')->nullable()->index();
 			$table->string('locality_id', 64)->nullable()->index();
 			$table->timestamp('published_at')->nullable();
-			$table->text('tags')->nullable();
 			$table->string('main_image_id', 64)->nullable();
 
 			$table->timestamps();
@@ -76,6 +75,7 @@ class CreateClippingTable extends Migration {
 				->onUpdate('cascade')
 				->onDelete('cascade');
 		});
+
 	}
 
 

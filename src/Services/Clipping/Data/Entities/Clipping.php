@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Clipping\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Tags\Data\Entities\Tag;
 
 class Clipping extends Model
 {
@@ -37,6 +38,6 @@ class Clipping extends Model
 
 	public function tags()
 	{
-		return $this->hasMany(ClippingTag::class);
+		return $this->belongsToMany(Tag::class, 'clipping_tags');
 	}
 }
