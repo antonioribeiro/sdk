@@ -10,6 +10,8 @@ use PragmaRX\Sdk\Services\Presenter\PresentableTrait;
 
 class Model extends Eloquent {
 
+	protected $dates = ['created_at', 'updated_at'];
+
 	use
 		EventGenerator,
 		PresentableTrait,
