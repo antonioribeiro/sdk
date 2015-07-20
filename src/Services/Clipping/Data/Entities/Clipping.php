@@ -8,14 +8,16 @@ class Clipping extends Model
 {
 	protected $table = 'clipping';
 
+	protected $dates = ['created_at', 'updated_at', 'published_at'];
+
 	public function author()
 	{
-		return $this->belongsTo('PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingAuthor', 'category_id');
+		return $this->belongsTo('PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingAuthor', 'author_id');
 	}
 
 	public function category()
 	{
-		return $this->belongsTo('PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingCategory', 'author_id');
+		return $this->belongsTo('PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingCategory', 'category_id');
 	}
 
 	public function files()
