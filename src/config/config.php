@@ -82,6 +82,7 @@ return [
 		'Services/Security',
 		'Services/SystemEntities',
 
+		'Services/Tags',
 		'Services/TwoFactor',
 		'Services/Translator',
 
