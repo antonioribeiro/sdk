@@ -23,7 +23,7 @@
         "pragmarx/glottos": "~1.5",
         "pragmarx/zipcode": "~1.5",
         "pragmarx/google2fa": "~0.5",
-        "guzzlehttp/guzzle": "~4.0",
+        "guzzlehttp/guzzle": "~5.0",
         "cartalyst/sentinel": "*",
         "cartalyst/support": "*",
         "twilio/sdk":"3.12.*",
