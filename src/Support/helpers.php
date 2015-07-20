@@ -278,3 +278,37 @@ if ( ! function_exists( 'lower' ))
 		return Illuminate\Support\Str::lower($string);
 	}
 }
+
+if ( ! function_exists( 'remove_accents' ))
+{
+	function remove_accents ($string)
+	{
+		$a = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŔŕ';
+		$b = 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRr';
+
+		$string = utf8_decode($string);
+
+		$string = strtr($string, utf8_decode($a), $b);
+
+		$string = strtolower($string);
+
+		return utf8_encode($string);
+	}
+}
+
+if ( ! function_exists( 'clear_tag' ))
+{
+	function clear_tag($tag)
+	{
+		$tag = remove_accents(strtolower(trim($tag)));
+
+		$tag = str_replace('  ', ' ', $tag);
+
+		$tag = str_replace('-', ' ', $tag);
+
+		$tag = str_replace('_', ' ', $tag);
+
+		return $tag;
+	}
+}
+
