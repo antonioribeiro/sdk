@@ -2,7 +2,12 @@
 
 namespace PragmaRX\Sdk\Services\Clipping\Data\Repositories;
 
-class Clipping {
+use PragmaRX\Sdk\Services\Clipping\Data\Entities\Clipping as Model;
 
-
+class Clipping
+{
+	public function paginated()
+	{
+		return Model::orderBy('published_at', 'desc')->paginate(20);
+	}
 }
