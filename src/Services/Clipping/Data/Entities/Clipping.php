@@ -12,26 +12,31 @@ class Clipping extends Model
 
 	public function author()
 	{
-		return $this->belongsTo('PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingAuthor', 'author_id');
+		return $this->belongsTo(ClippingAuthor::class, 'author_id');
 	}
 
 	public function category()
 	{
-		return $this->belongsTo('PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingCategory', 'category_id');
+		return $this->belongsTo(ClippingCategory::class, 'category_id');
 	}
 
 	public function files()
 	{
-		return $this->hasMany('PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingFile');
+		return $this->hasMany(ClippingFile::class);
 	}
 
 	public function locality()
 	{
-		return $this->hasMany('PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingLocality', 'locality_id');
+		return $this->belongsTo(ClippingLocality::class, 'locality_id');
 	}
 
 	public function vehicle()
 	{
-		return $this->hasMany('PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingVehicle', 'vehicle_id');
+		return $this->belongsTo(ClippingVehicle::class, 'vehicle_id');
+	}
+
+	public function tags()
+	{
+		return $this->hasMany(ClippingTag::class);
 	}
 }
