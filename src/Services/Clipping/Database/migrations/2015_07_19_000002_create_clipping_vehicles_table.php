@@ -18,7 +18,7 @@ class CreateClippingVehiclesTable extends Migration
 
 			$table->string('name');
 
-			$table->string('url')->nullable();
+			$table->string('url', 1024)->nullable();
 
 			$table->timestamps();
 		});

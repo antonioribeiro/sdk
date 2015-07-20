@@ -16,13 +16,13 @@ class CreateClippingTable extends Migration {
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
-			$table->text('heading');
-			$table->text('subheading');
-			$table->text('body');
-			$table->string('url');
-			$table->string('article_preview_url');
-			$table->string('category_id', 64)->index();
-			$table->string('vehicle_id', 64)->index();
+			$table->text('heading')->nullable();
+			$table->text('subheading')->nullable();
+			$table->text('body')->nullable();
+			$table->string('url', 1024)->nullable();
+			$table->string('article_preview_url', 1024)->nullable();
+			$table->string('category_id', 64)->nullable()->index();
+			$table->string('vehicle_id', 64)->nullable()->index();
 			$table->string('author_id')->nullable()->index();
 			$table->string('locality_id', 64)->nullable()->index();
 			$table->timestamp('published_at')->nullable();

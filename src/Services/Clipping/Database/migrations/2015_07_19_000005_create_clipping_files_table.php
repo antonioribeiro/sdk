@@ -22,7 +22,7 @@ class CreateClippingFilesTable extends Migration
 
 			$table->string('file_type_id', 64);
 
-			$table->string('url');
+			$table->string('url', 1024);
 
 			$table->timestamps();
 		});
