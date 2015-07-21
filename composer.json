@@ -27,7 +27,8 @@
         "cartalyst/sentinel": "*",
         "cartalyst/support": "*",
         "twilio/sdk":"3.12.*",
-        "jenssegers/date": "~3"
+        "jenssegers/date": "~3",
+        "league/commonmark": "~0.9"
     },
 
     "require-dev": {
