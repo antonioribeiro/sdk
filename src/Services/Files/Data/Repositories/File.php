@@ -3,6 +3,8 @@
 namespace PragmaRX\Sdk\Services\Files\Data\Repositories;
 
 use Config;
+use PragmaRX\Sdk\Services\Clipping\Data\Entities\Clipping;
+use PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingFile;
 use PragmaRX\Sdk\Services\Files\Data\Entities\File as FileModel;
 use PragmaRX\Sdk\Services\Files\Data\Entities\Directory as DirectoryModel;
 use PragmaRX\Sdk\Services\Files\Data\Entities\FileName as FileNameModel;
@@ -22,7 +24,7 @@ class File {
 
 	public function uploadUserFile(UploadedFile $uploaded, User $user, $returnUserFile = true)
 	{
-		$hash = Filesystem::hash($uploaded->getPathname());
+		$hash = $this->makeFileHash($uploaded);
 
 		$originalName = $uploaded->getClientOriginalName();
 
@@ -33,23 +35,7 @@ class File {
 					: $file;
 		}
 
-		$uploadFullPath = $this->getRootPath().'/'.$this->getRelativePath();
-
-		list($uploaded, $deepPath) = Filesystem::moveUploadedFile($uploaded, $uploadFullPath, $hash);
-
-		$directory = DirectoryModel::firstOrCreate([
-			'path' => $this->getRootPath(),
-			'relative_path' => $this->getRelativePath()
-		]);
-
-		$file = FileModel::create([
-			'directory_id' => $directory->id,
-			'deep_path' => $deepPath,
-			'hash' => $hash,
-			'size' => $uploaded->getSize(),
-		    'extension' => $uploaded->getExtension(),
-		    'image' => starts_with($uploaded->getMimeType(), 'image/'),
-		]);
+		$file = $this->uploadFile($uploaded, $hash);
 
 		$userFile = $this->findUserFile($user, $file, $originalName);
 
@@ -65,7 +51,9 @@ class File {
 	{
 		if ( ! $path = Config::get('app.upload_relative_path'))
 		{
-			throw new UploadPathNotSet('You must set the upload path in config/app.php.');
+			throw new UploadPathNotSet(
+				'You must set the upload path in config/app.php.'
+			);
 		}
 
 		return $path;
@@ -94,4 +82,91 @@ class File {
 		]);
 	}
 
+	public function downloadFile($url)
+	{
+		$pathInfo = pathinfo($url);
+
+		$contents = file_get_contents($url);
+
+		file_put_contents($tempname = tempnam(sys_get_temp_dir(), 'tmpfile'), $contents);
+
+		return $this->uploadFile(
+			new UploadedFile(
+				$tempname,
+				$this->cleanBaseName($pathInfo['basename']),
+				null,
+				null,
+				null,
+				true // Test mode
+			)
+		);
+	}
+
+	/**
+	 * @param UploadedFile $uploaded
+	 * @return mixed
+	 */
+	private function makeFileHash(UploadedFile $uploaded)
+	{
+		return Filesystem::hash($uploaded->getPathname());
+	}
+
+	/**
+	 * @param UploadedFile $uploaded
+	 * @param $hash
+	 * @return static
+	 */
+	private function createFile(UploadedFile $uploaded, $hash)
+	{
+		$uploadFullPath = $this->getRootPath() . '/' . $this->getRelativePath();
+
+		list($uploaded, $deepPath) = Filesystem::moveUploadedFile($uploaded, $uploadFullPath, $hash);
+
+		$directory = DirectoryModel::firstOrCreate(
+			[
+				'path' => $this->getRootPath(),
+				'relative_path' => $this->getRelativePath()
+			]
+		);
+
+		$file = FileModel::create(
+			[
+				'directory_id' => $directory->id,
+				'deep_path' => $deepPath,
+				'hash' => $hash,
+				'size' => $uploaded->getSize(),
+				'extension' => $uploaded->getExtension(),
+				'image' => starts_with($uploaded->getMimeType(), 'image/'),
+			]
+		);
+
+		return $file;
+	}
+
+	public function uploadFile(UploadedFile $uploaded)
+	{
+		$hash = $this->makeFileHash($uploaded);
+
+		if ( ! $file = FileModel::where('hash', $hash)->first())
+		{
+			$file = $this->createFile($uploaded, $hash);
+		}
+
+		return FileNameModel::firstOrCreate([
+			'file_id' => $file->id,
+			'name' => $uploaded->getClientOriginalName()
+		]);
+	}
+
+	private function cleanBaseName($basename)
+	{
+		$pos = strpos($basename, '?');
+
+		if ($pos !== false)
+		{
+			$basename = substr($basename, 0, $pos);
+		}
+
+		return $basename;
+	}
 }

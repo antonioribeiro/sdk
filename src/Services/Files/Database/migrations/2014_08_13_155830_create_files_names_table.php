@@ -16,7 +16,7 @@ class CreateFilesNamesTable extends Migration {
 		{
 			$table->string('id', 64)->primary();
 			$table->string('file_id', 64)->index();
-			$table->string('name')->index();
+			$table->string('name', 1024)->index();
 			$table->timestamps();
 		});
 

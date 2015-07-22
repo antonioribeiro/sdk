@@ -11,6 +11,8 @@ class Clipping extends Model
 
 	protected $dates = ['created_at', 'updated_at', 'published_at'];
 
+	protected $presenter = 'PragmaRX\Sdk\Services\Clipping\Data\Presenters\Clipping';
+
 	public function author()
 	{
 		return $this->belongsTo(ClippingAuthor::class, 'author_id');
@@ -24,6 +26,17 @@ class Clipping extends Model
 	public function files()
 	{
 		return $this->hasMany(ClippingFile::class);
+	}
+
+	public function mainFile()
+	{
+		return $this->files()->where('clipping_files.is_main', true)->first();
+
+	}
+
+	public function snapshotFile()
+	{
+		return $this->files()->where('clipping_files.is_snapshot', true)->first();
 	}
 
 	public function locality()
