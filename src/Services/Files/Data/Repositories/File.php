@@ -3,19 +3,20 @@
 namespace PragmaRX\Sdk\Services\Files\Data\Repositories;
 
 use Config;
-use PragmaRX\Sdk\Services\Clipping\Data\Entities\Clipping;
-use PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingFile;
+use Exception;
+use File as Filesystem;
+use Guzzle\Http\Client;
+use PragmaRX\Sdk\Services\Users\Data\Entities\User;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use PragmaRX\Sdk\Services\Files\Exceptions\UploadPathNotSet;
 use PragmaRX\Sdk\Services\Files\Data\Entities\File as FileModel;
 use PragmaRX\Sdk\Services\Files\Data\Entities\Directory as DirectoryModel;
 use PragmaRX\Sdk\Services\Files\Data\Entities\FileName as FileNameModel;
 use PragmaRX\Sdk\Services\Users\Data\Entities\UserFile as UserFileModel;
 
-use File as Filesystem;
-use PragmaRX\Sdk\Services\Files\Exceptions\UploadPathNotSet;
-use PragmaRX\Sdk\Services\Users\Data\Entities\User;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
-class File {
+class File
+{
+	private $guzzle;
 
 	public function upload(UploadedFile $uploaded, User $user)
 	{
@@ -86,9 +87,7 @@ class File {
 	{
 		$pathInfo = pathinfo($url);
 
-		$contents = file_get_contents($url);
-
-		file_put_contents($tempname = tempnam(sys_get_temp_dir(), 'tmpfile'), $contents);
+		$tempname = $this->download($url);
 
 		return $this->uploadFile(
 			new UploadedFile(
@@ -168,5 +167,26 @@ class File {
 		}
 
 		return $basename;
+	}
+
+	private function download($url)
+	{
+		$tempname = tempnam(sys_get_temp_dir(), 'tmpfile_');
+
+		$cmd = "wget -q \"$url\" -O $tempname";
+
+		@exec($cmd);
+
+		return $tempname;
+	}
+
+	public function guzzle()
+	{
+		if ( ! $this->guzzle)
+		{
+			$this->guzzle = new Client();
+		}
+
+		return $this->guzzle;
 	}
 }

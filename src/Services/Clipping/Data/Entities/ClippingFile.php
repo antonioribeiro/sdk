@@ -20,8 +20,8 @@ class ClippingFile extends Model
 
 		return static::create([
 			'clipping_id' => $clipping->id,
-			'is_main' => $isMain,
-			'is_snapshot' => $isSnapshot,
+			'is_main' => $isMain && $fileNameModel,
+			'is_snapshot' => $isSnapshot && $fileNameModel,
 			'file_name_id' => $fileNameModel ? $fileNameModel->id : null,
 			'file_type_id' => $fileType->id,
 			'url' => $url
