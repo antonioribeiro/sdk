@@ -37,6 +37,6 @@ trait DispatchableTrait {
 	 */
 	public function getDispatcher()
 	{
-		return $this->dispatcher ?: App::make('PragmaRX\Sdk\Services\Bus\Events\EventDispatcher');
+		return $this->dispatcher ?: App::make('PragmaRX\Sdk\Services\Bus\Service\Dispatcher');
 	}
 }

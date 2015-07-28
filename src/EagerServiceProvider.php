@@ -276,20 +276,20 @@ class EagerServiceProvider extends PragmaRXServiceProvider {
 	 */
 	private function registerServiceServiceProviders($service, $path = null)
 	{
-//		$path = $path ?: __DIR__;
-//
-//		if (file_exists($providersPath = "$path/{$service}/Providers"))
-//		{
-//			$files = $this->app->make('files')->allFiles($providersPath);
-//
-//			foreach ($files as $file)
-//			{
-//				if (class_exists($class = get_class_and_namespace($file)))
-//				{
-//					$this->app->register($class);
-//				}
-//			}
-//		}
+		$path = $path ?: __DIR__;
+
+		if (file_exists($providersPath = "$path/{$service}/Providers"))
+		{
+			$files = $this->app->make('files')->allFiles($providersPath);
+
+			foreach ($files as $file)
+			{
+				if (class_exists($class = get_class_and_namespace($file)))
+				{
+					$this->app->register($class);
+				}
+			}
+		}
 	}
 
 	/**
