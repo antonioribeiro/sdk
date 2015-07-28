@@ -15,4 +15,13 @@ class Clipping
 	{
 		return Model::findOrFail($id);
 	}
+
+	public function add($data)
+	{
+		echo "done?\n";
+
+		dd($data);
+
+		return $data;
+	}
 }
