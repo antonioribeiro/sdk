@@ -19,7 +19,24 @@ trait DispatchableTrait {
 	 */
 	public function dispatchEventsFor($entity)
 	{
-		return $this->getDispatcher()->dispatch($entity->releaseEvents());
+		if ( ! is_array($events = $entity->releaseEvents()))
+		{
+			return $this->getDispatcher()->dispatch($events);
+		}
+
+		$result = [];
+
+		foreach ($events as $event)
+		{
+			$result[] = app('events')->fire($event, $entity);
+		}
+
+		if (count($result) == 1)
+		{
+			$result = $result[0];
+		}
+
+		return $result;
 	}
 	/**
 	 * Set the dispatcher instance.

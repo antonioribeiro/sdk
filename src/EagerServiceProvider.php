@@ -284,7 +284,7 @@ class EagerServiceProvider extends PragmaRXServiceProvider {
 
 			foreach ($files as $file)
 			{
-				if (class_exists($class = get_class_and_namespace($file)))
+				if ($class = $this->getClassName($file))
 				{
 					$this->app->register($class);
 				}
@@ -392,5 +392,26 @@ class EagerServiceProvider extends PragmaRXServiceProvider {
 	private function registerTranslations()
 	{
 		$this->loadTranslationsFrom(__DIR__.'/lang', 'pragmarx/sdk');
+	}
+
+	private function getClassName($file)
+	{
+		$class = get_class_and_namespace($file);
+
+		if (count($class) > 1)
+		{
+			$class = $class[1] . '\\' . $class[0];
+		}
+		else
+		{
+			$class = $class[1];
+		}
+
+		if (class_exists($class))
+		{
+			return $class;
+		}
+
+		return false;
 	}
 }
