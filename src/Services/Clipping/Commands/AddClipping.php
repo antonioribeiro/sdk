@@ -39,9 +39,9 @@ class AddClipping extends SelfHandlingCommand {
 
 	public function handle(ClippingRepository $clippingRepository)
 	{
-		$result = $clippingRepository->add($this->getPublicProperties());
-
-		$this->dispatchEventsFor($result['user']);
+		$this->dispatchEventsFor(
+			$result = $clippingRepository->add($this->getPublicProperties())
+		);
 
 		return $result;
 	}
