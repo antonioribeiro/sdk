@@ -29,21 +29,24 @@ class Clipping
 	{
 		$publishedAt = Carbon::createFromFormat('m/d/Y', $article['published_at']);
 
-		$authorId = ClippingAuthor::firstOrCreate(['name' => $article['author']]);
+		$authorId = $this->getAuthorId($article['author']);
 
-		if ( ! $vehicleId = $article['vehicle_id'])
+		$categoryId = $article['editorial_id'];
+		if ($article['editorial_id'] == "9999")
 		{
-			$vehicleId = ClippingVehicle::firstOrCreate(['name' => $article['vehicle_other']])->id;
+			$categoryId = ClippingCategory::firstOrCreate(['name' => $article['editorial_other']])->id;
 		}
 
-		if ( ! $categoryId = $article['category_id'])
-		{
-			$categoryId = ClippingCategory::firstOrCreate(['name' => $article['category_other']])->id;
-		}
-
-		if ( ! $localityId = $article['locality_id'])
+		$localityId = $article['locality_id'];
+		if ($article['locality_id'] == "9999")
 		{
 			$localityId = ClippingLocality::firstOrCreate(['name' => $article['locality_other']]);
+		}
+
+		$vehicleId = $article['vehicle_id'];
+		if ($article['vehicle_id'] == "9999")
+		{
+			$vehicleId = ClippingVehicle::firstOrCreate(['name' => $article['vehicle_other']])->id;
 		}
 
 		$clipping = ClippingArticle::create(
@@ -61,26 +64,37 @@ class Clipping
 			]
 		);
 
-		$this->createImages($clipping->id, $article['image_main_urls'], true); // main
-		$this->createImages($clipping->id, $article['image_snapshot_urls'], false, true); // snapshot
-		$this->createImages($clipping->id, $article['image_other_urls']); // other images
+		$this->createImages($clipping, $article['image_main_urls'], true); // main
+		$this->createImages($clipping, $article['image_snapshot_urls'], false, true); // snapshot
+		$this->createImages($clipping, $article['image_other_urls']); // other images
 
 		return $clipping;
 	}
 
-	private function createImages($clippingId, $urls, $main = false, $snapshot = false)
+	private function createImages($clipping, $urls, $main = false, $snapshot = false)
 	{
+		$urls = explode("\r\n", $urls);
+
 		$clippingFile = app()->make(ClippingFile::class);
 
 		foreach ($urls as $url)
 		{
 			$clippingFile->createFor(
-				$clippingId,
+				$clipping,
 				$main,
 				$snapshot,
 				$url,
 				ClippingFileType::firstorCreate(['name' => 'image'])
 			);
 		}
+	}
+
+	/**
+	 * @param $article
+	 * @return static
+	 */
+	private function getAuthorId($author)
+	{
+		return $author ? ClippingAuthor::firstOrCreate(['name' => $author])->id : null;
 	}
 }
