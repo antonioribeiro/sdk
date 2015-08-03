@@ -9,6 +9,8 @@ class ClippingTag extends Model
 {
 	protected $table = 'clipping_tags';
 
+	protected $fillable = ['name'];
+
 	public function tag()
 	{
 		return $this->belongsTo(Tag::class);

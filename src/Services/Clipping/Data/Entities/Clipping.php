@@ -13,6 +13,19 @@ class Clipping extends Model
 
 	protected $presenter = 'PragmaRX\Sdk\Services\Clipping\Data\Presenters\Clipping';
 
+	protected $fillable = [
+		'heading',
+		'subheading',
+		'body',
+		'author_id',
+		'vehicle_id',
+		'category_id',
+		'locality_id',
+		'url',
+		'article_preview_url',
+		'published_at',
+	];
+
 	public function author()
 	{
 		return $this->belongsTo(ClippingAuthor::class, 'author_id');

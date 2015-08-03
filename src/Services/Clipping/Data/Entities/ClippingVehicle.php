@@ -7,4 +7,6 @@ use PragmaRX\Sdk\Core\Model;
 class ClippingVehicle extends Model
 {
 	protected $table = 'clipping_vehicles';
+
+	protected $fillable = ['name'];
 }

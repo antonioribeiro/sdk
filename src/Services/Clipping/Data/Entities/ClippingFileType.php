@@ -8,4 +8,5 @@ class ClippingFileType extends Model
 {
 	protected $table = 'clipping_files_types';
 
+	protected $fillable = ['name'];
 }

@@ -10,6 +10,15 @@ class ClippingFile extends Model
 {
 	protected $table = 'clipping_files';
 
+	protected $fillable = [
+		'clipping_id',
+		'is_main',
+		'is_snapshot',
+		'file_name_id',
+		'file_type_id',
+		'url',
+	];
+
 	public function createFor($clipping, $isMain, $isSnapshot, $url, $fileType)
 	{
 		$repository = new FileRepository();

@@ -7,4 +7,6 @@ use PragmaRX\Sdk\Core\Model;
 class ClippingCategory extends Model
 {
 	protected $table = 'clipping_categories';
+
+	protected $fillable = ['name'];
 }
