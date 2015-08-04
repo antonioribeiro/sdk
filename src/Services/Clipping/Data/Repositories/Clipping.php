@@ -27,7 +27,7 @@ class Clipping
 
 	public function add($article)
 	{
-		$publishedAt = Carbon::createFromFormat('m/d/Y', $article['published_at']);
+		$publishedAt = Carbon::createFromFormat('d/m/Y', $article['published_at']);
 
 		$authorId = $this->getAuthorId($article['author']);
 
