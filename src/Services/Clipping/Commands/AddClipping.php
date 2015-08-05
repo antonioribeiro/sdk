@@ -37,6 +37,10 @@ class AddClipping extends SelfHandlingCommand {
 
 	public $image_other_urls;
 
+	public $videos;
+
+	public $tags;
+
 	public function handle(ClippingRepository $clippingRepository)
 	{
 		$this->dispatchEventsFor(

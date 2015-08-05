@@ -22,6 +22,8 @@ class CreateClippingFilesTable extends Migration
 
 			$table->boolean('is_snapshot')->default(false);
 
+			$table->boolean('is_video')->default(false);
+
 			$table->string('file_name_id', 64)->nullable();
 
 			$table->string('file_type_id', 64);

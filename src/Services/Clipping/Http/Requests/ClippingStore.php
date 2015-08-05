@@ -24,6 +24,7 @@ class ClippingStore extends FormRequest {
 			'locality_other' => 'required_if:locality_id,9999',
 			'vehicle_id' => 'required',
 			'vehicle_other' => 'required_if:vehicle_id,9999',
+			'tags' => 'required',
 		];
 	}
 

@@ -11,7 +11,9 @@ use PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingCategory;
 use PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingFile;
 use PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingFileType;
 use PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingLocality;
+use PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingTag;
 use PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingVehicle;
+use PragmaRX\Sdk\Services\Tags\Data\Entities\Tag;
 
 class Clipping
 {
@@ -64,14 +66,17 @@ class Clipping
 			]
 		);
 
-		$this->createImages($clipping, $article['image_main_urls'], true); // main
-		$this->createImages($clipping, $article['image_snapshot_urls'], false, true); // snapshot
-		$this->createImages($clipping, $article['image_other_urls']); // other images
+		$this->createFiles($clipping, $article['image_main_urls'], true); // main
+		$this->createFiles($clipping, $article['image_snapshot_urls'], false, true); // snapshot
+		$this->createFiles($clipping, $article['image_other_urls']); // other images
+		$this->createFiles($clipping, $article['videos'], false, false, true); // other images
+
+		$this->createTags($clipping, $article['tags']);
 
 		return $clipping;
 	}
 
-	private function createImages($clipping, $urls, $main = false, $snapshot = false)
+	private function createFiles($clipping, $urls, $main = false, $snapshot = false, $video = false)
 	{
 		$urls = explode("\r\n", $urls);
 
@@ -83,6 +88,7 @@ class Clipping
 				$clipping,
 				$main,
 				$snapshot,
+				$video,
 				$url,
 				ClippingFileType::firstorCreate(['name' => 'image'])
 			);
@@ -90,11 +96,27 @@ class Clipping
 	}
 
 	/**
-	 * @param $article
+	 * @param $author
 	 * @return static
 	 */
 	private function getAuthorId($author)
 	{
 		return $author ? ClippingAuthor::firstOrCreate(['name' => $author])->id : null;
+	}
+
+	private function createTags($clipping, $tags)
+	{
+		foreach ($tags as $tag)
+		{
+			if ($tag = Tag::findOrCreateTag($tag))
+			{
+				ClippingTag::firstOrCreate(
+					[
+						'clipping_id' => $clipping->id,
+						'tag_id' => $tag->id
+					]
+				);
+			}
+		}
 	}
 }

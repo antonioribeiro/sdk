@@ -11,6 +11,8 @@ class Tag extends Model {
 
 	protected $presenter = 'PragmaRX\Sdk\Services\Tags\Data\Entities\ClientPresenter';
 
+	protected $fillable = ['name'];
+
 	public static function findOrCreateTag($tag)
 	{
 		if ( ! $tag = clear_tag($tag))

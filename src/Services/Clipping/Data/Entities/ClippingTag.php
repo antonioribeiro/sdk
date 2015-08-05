@@ -9,7 +9,7 @@ class ClippingTag extends Model
 {
 	protected $table = 'clipping_tags';
 
-	protected $fillable = ['name'];
+	protected $fillable = ['clipping_id', 'tag_id'];
 
 	public function tag()
 	{

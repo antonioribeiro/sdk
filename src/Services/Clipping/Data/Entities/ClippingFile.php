@@ -19,7 +19,7 @@ class ClippingFile extends Model
 		'url',
 	];
 
-	public function createFor($clipping, $isMain, $isSnapshot, $url, $fileType)
+	public function createFor($clipping, $isMain, $isSnapshot, $isVideo, $url, $fileType)
 	{
 		$repository = new FileRepository();
 
@@ -31,6 +31,7 @@ class ClippingFile extends Model
 			'clipping_id' => $clipping->id,
 			'is_main' => $isMain && $fileNameModel,
 			'is_snapshot' => $isSnapshot && $fileNameModel,
+			'is_video' => $isVideo && $fileNameModel,
 			'file_name_id' => $fileNameModel ? $fileNameModel->id : null,
 			'file_type_id' => $fileType->id,
 			'url' => $url
