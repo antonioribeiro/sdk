@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Sdk\Services\Redirect\Service;
 
-use Config;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Redirector;
 
@@ -63,7 +62,7 @@ class Redirect extends Redirector {
 			return new JsonResponse(['redirect' => route_ajax($route, $parameters)]);
 		}
 
-		if ($this->wantsAjax($ajax))
+		if ($this->wantsAjax($ajax) && $this->isBasedOnAjax())
 		{
 			return parent::to(route_ajax($route, $parameters));
 		}
@@ -105,7 +104,10 @@ class Redirect extends Redirector {
 
 		if ($this->wantsJson() || $this->wantsAjax())
 		{
-			$referer = convert_url_to_ajax($referer);
+			if ($this->isBasedOnAjax())
+			{
+				$referer = convert_url_to_ajax($referer);
+			}
 		}
 
 		return $referer;
@@ -149,7 +151,7 @@ class Redirect extends Redirector {
 		{
 			if ($referrer = $this->generator->getRequest()->get('referer-href-url'))
 			{
-				if ($ajax = Config::get('sdk.ajax_based_url'))
+				if ($this->isBasedOnAjax())
 				{
 					$referrer = route('home') . '/#' . $referrer;
 				}
@@ -157,6 +159,11 @@ class Redirect extends Redirector {
 		}
 
 		return $referrer;
+	}
+
+	public function isBasedOnAjax()
+	{
+		return \Config::get('sdk.ajax_based_url');
 	}
 
 }
