@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Redirect\Service;
 
+use Config;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Redirector;
 
@@ -148,7 +149,10 @@ class Redirect extends Redirector {
 		{
 			if ($referrer = $this->generator->getRequest()->get('referer-href-url'))
 			{
-				$referrer = route('home') . '/#' . $referrer;
+				if ($ajax = Config::get('sdk.ajax_based_url'))
+				{
+					$referrer = route('home') . '/#' . $referrer;
+				}
 			}
 		}
 
