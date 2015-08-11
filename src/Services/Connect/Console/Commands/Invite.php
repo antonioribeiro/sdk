@@ -3,10 +3,13 @@
 namespace PragmaRX\Sdk\Services\Connect\Console\Commands;
 
 use Illuminate\Console\Command;
+use PragmaRX\Sdk\Services\Bus\Events\DispatchableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 class Invite extends Command
 {
+	use DispatchableTrait;
+
     /**
      * The name and signature of the console command.
      *
@@ -28,6 +31,8 @@ class Invite extends Command
      */
     public function handle(UserRepository $userRepository)
     {
-        $userRepository->inviteUsers(null, $this->argument('email'));
+        $users = $userRepository->inviteUsers(null, $this->argument('email'));
+
+	    $this->dispatchEventsFor($users);
     }
 }

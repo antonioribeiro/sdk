@@ -2,11 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Activation\Service;
 
-use PragmaRX\Sdk\Services\Activation\Exceptions\UserNotActivated;
 use PragmaRX\Sdk\Services\Activation\Data\Repositories\Activation as ActivationRepository;
 
-class Activation {
-
+class Activation
+{
 	/**
 	 * @var ActivationRepository
 	 */
@@ -27,4 +26,8 @@ class Activation {
 		return $this->activated($user);
 	}
 
+	public function exists($user)
+	{
+		return $this->activationRepository->exists($user);
+	}
 }

@@ -17,7 +17,21 @@ trait DispatchableTrait {
 	 *
 	 * @param object $entity
 	 */
-	public function dispatchEventsFor($entity)
+	public function dispatchEventsFor($entities)
+	{
+		$entities = is_array($entities) ? $entities : [$entities];
+
+		$results = [];
+
+		foreach ($entities as $entity)
+		{
+			$results[] = $this->dispatchEventsForEntity($entity);
+		}
+
+		return count($results) > 1 ? $results : $results[0];
+	}
+
+	public function dispatchEventsForEntity($entity)
 	{
 		if ( ! is_array($events = $entity->releaseEvents()))
 		{
@@ -38,6 +52,7 @@ trait DispatchableTrait {
 
 		return $result;
 	}
+
 	/**
 	 * Set the dispatcher instance.
 	 *

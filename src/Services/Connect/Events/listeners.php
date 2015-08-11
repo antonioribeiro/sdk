@@ -13,8 +13,13 @@ Event::listen('PragmaRX.Sdk.Services.Connect.Events.UserAcceptedInvitation', fun
 {
 	$repo = new UserRepository();
 
-	// Establish a connection between the users
-	$repo->connect($event->user->username, $event->user->inviter->id, true);
+	$inviterId = $event->user->inviter ? $event->user->inviter->id : null;
+
+	if ($inviterId)
+	{
+		// Establish a connection between the users
+		$repo->connect($event->user->username, $event->user->inviter->id, true);
+	}
 
 	// Send a password reminder to the new user
 	$user = $repo->sendPasswordReminder($event->user);

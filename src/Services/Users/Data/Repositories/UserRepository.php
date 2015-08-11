@@ -6,6 +6,7 @@ use Auth;
 use Input;
 use Flash;
 use Carbon;
+use Config;
 use Session;
 use Sentinel;
 use Google2FA;
@@ -809,12 +810,14 @@ class UserRepository extends Repository implements UserRepositoryContract {
 	{
 		$emails = is_array($emails) ? $emails : [$emails];
 
+		$users = [];
+
 		foreach ($emails as $email)
 		{
-			$this->inviteUser($user, $email);
+			$users[] = $this->inviteUser($user, $email);
 		}
 
-		return $user;
+		return $users;
 	}
 
 	private function inviteUser($inviter, $email)
@@ -837,6 +840,8 @@ class UserRepository extends Repository implements UserRepositoryContract {
 		$invited->save();
 
 		$invited->raise(new UserWasInvited($invited));
+
+		return $invited;
 	}
 
 	public function register($username, $email, $password = null, $first_name = null, $last_name = null)
@@ -854,7 +859,7 @@ class UserRepository extends Repository implements UserRepositoryContract {
 		Mailer::send(
 			'emails.register.invite',
 			$user,
-			t('paragraphs.you-have-been-invited-by') . ' '. $user->inviter->present()->fullName
+			t('paragraphs.you-have-been-invited-by') . ' ' . $this->getInviterName($user->inviter)
 		);
 
 		Flash::message(t('paragraphs.invitation-email-sent-to').' '.$user->email);
@@ -1028,6 +1033,13 @@ class UserRepository extends Repository implements UserRepositoryContract {
 	private function getModel()
 	{
 		return $this->modelAlias;
+	}
+
+	private function getInviterName($inviter)
+	{
+		return $inviter
+				? $inviter->present()->fullName
+				: Config::get('app.owner_name');
 	}
 
 }

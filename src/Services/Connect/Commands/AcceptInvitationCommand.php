@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Connect\Commands;
 
-use PragmaRX\Sdk\Services\Bus\Commands\Command;
+use PragmaRX\Sdk\Services\Bus\Commands\SelfHandlingCommand;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 class AcceptInvitationCommand extends SelfHandlingCommand {
