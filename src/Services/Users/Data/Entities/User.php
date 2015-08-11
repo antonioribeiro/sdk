@@ -5,16 +5,15 @@ namespace PragmaRX\Sdk\Services\Users\Data\Entities;
 use DB;
 use Auth;
 use Activation;
-use Illuminate\Contracts\Auth\CanResetPassword;
-use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Rhumsaa\Uuid\Uuid;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
-use PragmaRX\Sdk\Services\Bus\Events\EventGenerator;
 use Illuminate\Database\Eloquent\Collection;
 use PragmaRX\Sdk\Core\Traits\ReloadableTrait;
 use PragmaRX\Sdk\Core\Traits\IdentifiableTrait;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\User as UserContract;
+use PragmaRX\Sdk\Services\Bus\Events\EventGenerator;
 use PragmaRX\Sdk\Services\Presenter\PresentableTrait;
 use PragmaRX\Sdk\Services\Clients\Data\Entities\Client;
 use PragmaRX\Sdk\Services\Settings\Data\Entities\Setting;
@@ -27,6 +26,8 @@ use PragmaRX\Sdk\Services\Accounts\Exceptions\InvalidActivationToken;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserActivationNotFound;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\FollowableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\ConnectableTrait;
+use PragmaRX\Sdk\Services\Registration\Service\Facade as Registration;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 
 class User extends CartalystUser implements CanResetPassword {
 
@@ -79,7 +80,7 @@ class User extends CartalystUser implements CanResetPassword {
 		    'username' => $username,
 		];
 
-		$user = Auth::register($credentials);
+		$user = Registration::register($credentials);
 
 		$user->raise(new UserRegistered($user));
 

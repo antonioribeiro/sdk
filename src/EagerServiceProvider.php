@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Sdk;
 
-use Language;
 use PragmaRX\Sdk\Core\Traits\ServiceableTrait;
 use Illuminate\Foundation\AliasLoader as IlluminateAliasLoader;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;
@@ -128,6 +127,8 @@ class EagerServiceProvider extends PragmaRXServiceProvider {
 			$this->registerServiceScripts($service, $path);
 
 			$this->registerServiceServiceProviders($service, $path);
+
+			$this->registerServiceConsoleCommands($service, $path);
 		}
 	}
 

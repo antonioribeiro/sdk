@@ -56,7 +56,7 @@ class UserRepository extends Repository implements UserRepositoryContract {
 
 	private $twoFactorTypes = ['google', 'email', 'sms'];
 
-	private $modelAlias = 'user';
+	private $modelAlias = \App\Data\Entities\User::class;
 
 	/**
 	 * Save a user.
@@ -78,7 +78,7 @@ class UserRepository extends Repository implements UserRepositoryContract {
 	public function getPaginated($howMany = 25)
 	{
 		$users = $this
-					->call($this->modelAlias, 'orderBy', 'first_name')
+					->call($this-getModel(), 'orderBy', 'first_name')
 					->activated()
 					->get();
 
@@ -96,7 +96,7 @@ class UserRepository extends Repository implements UserRepositoryContract {
 	public function findByUsername($username)
 	{
 		return  $users = $this
-							->call($this->modelAlias, 'where', ['username', $username])
+							->call($this->getModel(), 'where', ['username', $username])
 							->first();
 	}
 
@@ -109,20 +109,20 @@ class UserRepository extends Repository implements UserRepositoryContract {
 	public function findById($id)
 	{
 		return $this
-				->call($this->modelAlias, 'findOrFail', $id);
+				->call($this->getModel(), 'findOrFail', $id);
 	}
 
 	public function findByEmail($email)
 	{
 		return $this
-				->call($this->modelAlias, 'where', ['email', $email])
+				->call($this->getModel(), 'where', ['email', $email])
 				->first();
 	}
 
 	public function activate($email, $token)
 	{
 		return $this
-				->call($this->modelAlias, 'activate', [$email, $token]);
+				->call($this->getModel(), 'activate', [$email, $token]);
 	}
 
 	public function sendUserActivationEmail($user)
@@ -807,6 +807,8 @@ class UserRepository extends Repository implements UserRepositoryContract {
 
 	public function inviteUsers($user, $emails)
 	{
+		$emails = is_array($emails) ? $emails : [$emails];
+
 		foreach ($emails as $email)
 		{
 			$this->inviteUser($user, $email);
@@ -825,19 +827,22 @@ class UserRepository extends Repository implements UserRepositoryContract {
 			''
 		);
 
-		$invited->inviter_id = $inviter->id;
+		if ($inviter)
+		{
+			$invited->inviter_id = $inviter->id;
+		}
 
 		$invited->invited_at = Carbon::now();
 
 		$invited->save();
 
-		$inviter->raise(new UserWasInvited($invited));
+		$invited->raise(new UserWasInvited($invited));
 	}
 
 	public function register($username, $email, $password = null, $first_name = null, $last_name = null)
 	{
 		return $this
-				->call($this->modelAlias, 'register',
+				->call($this->getModel(), 'register',
 				       [
 							$username, $email, $password, $first_name, $last_name
 						]
@@ -863,7 +868,7 @@ class UserRepository extends Repository implements UserRepositoryContract {
 
 		$i = 1;
 
-		while ($this->call($this->modelAlias, 'where', ['username', $username])->first())
+		while ($this->call($this->getModel(), 'where', ['username', $username])->first())
 		{
 			$username = $name.$i;
 
@@ -875,7 +880,7 @@ class UserRepository extends Repository implements UserRepositoryContract {
 
 	public function acceptInvitation($user_id)
 	{
-		if ( ! $user = $this->call($this->modelAlias, 'find', $user_id))
+		if ( ! $user = $this->call($this->getModel(), 'find', $user_id))
 		{
 			throw new InvalidInvitationCode();
 		}
@@ -976,7 +981,7 @@ class UserRepository extends Repository implements UserRepositoryContract {
 			'last_name' => $last_name,
 		];
 
-		return $this->call($this->modelAlias, 'create', [$data]);
+		return $this->call($this->getModel(), 'create', [$data]);
 	}
 
 	private function createDummyEmail()
@@ -1018,6 +1023,11 @@ class UserRepository extends Repository implements UserRepositoryContract {
 	private function call($className, $method = null, $arguments = [])
 	{
 		return call($this->getClassName($className), $method, $arguments);
+	}
+
+	private function getModel()
+	{
+		return $this->modelAlias;
 	}
 
 }
