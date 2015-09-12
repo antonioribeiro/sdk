@@ -3,7 +3,9 @@
 	<head>
 		<meta charset="{!! $html_charset or 'utf-8' !!}" />
 
-		<title>{!! $html_title or '' !!}</title>
+        @if (isset($html_title))
+            <title>{{ $html_title }}</title>
+        @endif
 
 		<meta name="keywords" content="{!! $html_keywords or '' !!}" />
 		<meta name="description" content="{!! $html_description or '' !!}" />
