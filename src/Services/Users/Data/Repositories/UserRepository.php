@@ -57,7 +57,7 @@ class UserRepository extends Repository implements UserRepositoryContract {
 
 	private $twoFactorTypes = ['google', 'email', 'sms'];
 
-	private $modelAlias = \App\Data\Entities\User::class;
+	private $modelAlias = \App\Services\Users\Data\Entities\User::class;
 
 	/**
 	 * Save a user.

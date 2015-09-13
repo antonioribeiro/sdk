@@ -2,11 +2,12 @@
 
 namespace PragmaRX\Sdk\Services\Registration\Http\Requests;
 
+use Config;
 use PragmaRX\Sdk\Core\Validation\FormRequest;
 use Validator;
 
-class Register extends FormRequest {
-
+class Register extends FormRequest
+{
 	/**
 	 * Get the validation rules that apply to the request.
 	 *
@@ -14,12 +15,18 @@ class Register extends FormRequest {
 	 */
 	public function rules()
 	{
-		return [
+		$rules = [
 			'first_name' => 'required',
-			'username' => 'required|unique:users',
 			'email' => 'required|email|unique:users',
 			'password' => 'required|confirmed',
 		];
+
+		if ( ! (Config::get('app.register.username') === false))
+		{
+			$rules[] = ['username' => 'required|unique:users'];
+		}
+
+		return $rules;
 	}
 
 	public function beforeValidate()
@@ -37,6 +44,4 @@ class Register extends FormRequest {
 			}
 		});
 	}
-
 }
-

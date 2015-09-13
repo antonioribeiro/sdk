@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Registration\Service;
 
-use App\Data\Entities\User;
+use App\Services\Users\Data\Entities\User;
 
 class Registration
 {

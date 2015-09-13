@@ -2,14 +2,15 @@
 
 namespace PragmaRX\Sdk\Services\Registration\Http\Controllers;
 
+use Config;
+use View;
+use Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Registration\Commands\RegisterUserCommand;
 use PragmaRX\Sdk\Services\Registration\Http\Requests\Register as RegisterRequest;
-use View;
-use Redirect;
 
-class Registration extends BaseController {
-
+class Registration extends BaseController
+{
 	/**
 	 * @return mixed
 	 */
@@ -26,7 +27,9 @@ class Registration extends BaseController {
 	 */
 	public function store(RegisterRequest $request)
 	{
-		$this->execute(RegisterUserCommand::class);
+		$input = $this->getRequestInput($request);
+
+		$this->execute(RegisterUserCommand::class, $input);
 
 		return Redirect::route_no_ajax('notification')
 				->with('title', t('titles.welcome'))
@@ -38,4 +41,20 @@ class Registration extends BaseController {
 				->withInput();
 	}
 
+	private function getRequestInput($request)
+	{
+		$input = $request->all();
+
+		if (Config::get('app.register.username') === false)
+		{
+			$input['username'] = null;
+		}
+
+		if (Config::get('app.register.last_name') === false)
+		{
+			$input['last_name'] = null;
+		}
+
+		return $input;
+	}
 }
