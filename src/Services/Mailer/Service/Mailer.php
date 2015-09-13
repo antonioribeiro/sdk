@@ -10,7 +10,7 @@ class Mailer {
 	{
 		$data = array_merge(
 			['user' => $user],
-			$data
+			$data ?: []
 		);
 
         Mail::send($view, $data, function($message) use ($user, $subject)
