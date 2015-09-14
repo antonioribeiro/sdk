@@ -3,7 +3,7 @@
 use PragmaRX\Support\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateProductsVariantsTable extends Migration {
+class CreateProductsSkusTable extends Migration {
 
 	/**
 	 * Run the migrations.
