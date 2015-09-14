@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Sdk\Services\Passwords\Providers;
+namespace PragmaRX\Sdk\Services\Registration\Providers;
 
 use PragmaRX\Sdk\Services\Registration\Events\UserWasRegistered;
 use PragmaRX\Sdk\Services\Registration\Listeners\SendActivationEmail;

@@ -24,7 +24,10 @@ class SendActivationEmail
 	 */
 	public function handle(UserWasRegistered $event)
 	{
-		$this->userRepository->checkAndCreateActivation($event->user);
+		if ( ! $this->userRepository->checkAndCreateActivation($event->user))
+		{
+			$this->userRepository->sendUserActivationEmail($event->user);
+		}
 
 		$this->userRepository->create2FASecrets($event->user);
 	}

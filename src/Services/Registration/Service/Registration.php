@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Registration\Service;
 
 use App\Services\Users\Data\Entities\User;
+use PragmaRX\Sdk\Services\Registration\Events\UserWasRegistered;
 
 class Registration
 {
@@ -18,6 +19,10 @@ class Registration
 			return $user;
 		}
 
-		return User::firstOrCreate($credentials);
+		$user = User::firstOrCreate($credentials);
+
+		event(new UserWasRegistered($user));
+
+		return $user;
 	}
 }

@@ -147,7 +147,11 @@ class UserRepository extends Repository implements UserRepositoryContract {
 		if (Auth::checkAndCreateActivation($user))
 		{
 			$this->sendUserActivationEmail($user);
+
+			return true;
 		}
+
+		return false;
 	}
 
 	public function checkActivationByEmail($email)

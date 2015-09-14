@@ -18,7 +18,6 @@ use PragmaRX\Sdk\Services\Presenter\PresentableTrait;
 use PragmaRX\Sdk\Services\Clients\Data\Entities\Client;
 use PragmaRX\Sdk\Services\Settings\Data\Entities\Setting;
 use Cartalyst\Sentinel\Users\EloquentUser as CartalystUser;
-use PragmaRX\Sdk\Services\Registration\Events\UserWasRegistered;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\BlockableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\VisitableTrait;
@@ -81,8 +80,6 @@ class User extends CartalystUser implements CanResetPassword {
 		];
 
 		$user = Registration::register($credentials);
-
-		$user->raise(new UserWasRegistered($user));
 
 		return $user;
 	}

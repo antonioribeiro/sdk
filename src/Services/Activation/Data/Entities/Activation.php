@@ -13,10 +13,12 @@ class Activation extends Model {
 
 	public static function createFor($user)
 	{
-		return static::create([
+		$activation = static::create([
 			'user_id' => $user->id,
 			'code' => uuid(),
 		]);
+
+		return $activation;
 	}
 
 }
