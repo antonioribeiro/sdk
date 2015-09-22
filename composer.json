@@ -24,8 +24,6 @@
         "pragmarx/zipcode": "~1.5",
         "pragmarx/google2fa": "~0.5",
         "guzzlehttp/guzzle": "~5.0|~6.0",
-        "cartalyst/sentinel": "*",
-        "cartalyst/support": "*",
         "twilio/sdk":"3.12.*",
         "jenssegers/date": "~3",
         "league/commonmark": "~0.9"

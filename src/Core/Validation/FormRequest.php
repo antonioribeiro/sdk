@@ -2,14 +2,16 @@
 
 namespace PragmaRX\Sdk\Core\Validation;
 
-use Illuminate\Foundation\Http\FormRequest as IlluminateFormRequest;
-
-use Illuminate\Http\JsonResponse;
 use Input;
 use Flash;
 use Redirect;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Http\FormRequest as IlluminateFormRequest;
 
-class FormRequest extends IlluminateFormRequest {
+class FormRequest extends IlluminateFormRequest
+{
+	use AuthorizesRequests;
 
 	public function rules()
 	{
@@ -103,5 +105,4 @@ class FormRequest extends IlluminateFormRequest {
 
 		return true;
 	}
-
 }
