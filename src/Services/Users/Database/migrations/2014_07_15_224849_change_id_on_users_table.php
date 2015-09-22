@@ -16,8 +16,6 @@ class ChangeIdOnUsersTable extends Migration {
 
 		$this->drop('users');
 		$this->drop('throttle');
-		$this->drop('role_users');
-		$this->drop('roles');
 		$this->drop('reminders');
 		$this->drop('persistences');
 		$this->drop('activations');
@@ -68,25 +66,6 @@ class ChangeIdOnUsersTable extends Migration {
 			$table->timestamp('completed_at')->nullable();
 
 			$table->timestamps();
-		});
-
-		Schema::create('roles', function(Blueprint $table)
-		{
-			$table->string('id', 64)->primary();
-
-			$table->string('slug');
-			$table->string('name');
-			$table->text('permissions')->nullable();
-
-			$table->timestamps();
-		});
-
-		Schema::create('role_users', function(Blueprint $table)
-		{
-			$table->string('user_id', 64);
-			$table->string('role_id', 64);
-
-			$table->nullableTimestamps();
 		});
 
 		Schema::create('throttle', function(Blueprint $table)
