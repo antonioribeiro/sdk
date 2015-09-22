@@ -89,10 +89,7 @@ class ChangeIdOnUsersTable extends Migration {
 	public function migrateDown()
 	{
 		$tables = [
-			'users',
 			'throttle',
-			'role_users',
-			'roles',
 			'reminders',
 			'persistences',
 			'activations',
@@ -100,14 +97,13 @@ class ChangeIdOnUsersTable extends Migration {
 
 		foreach ($tables as $tableName)
 		{
-			$this->dropColumn($tableName, 'id');
-
-			Schema::table($tableName, function(Blueprint $table)
-			{
-				$table->increments('id')->unique();
-			});
+			$this->drop($tableName);
+//
+//			Schema::table($tableName, function(Blueprint $table)
+//			{
+//				$table->increments('id')->unique();
+//			});
 		}
-
 	}
 
 }
