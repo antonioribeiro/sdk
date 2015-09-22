@@ -40,7 +40,8 @@ class User extends CartalystUser implements CanResetPassword {
 		PresentableTrait,
 		ReloadableTrait,
 		IdentifiableTrait,
-		CanResetPasswordTrait;
+		CanResetPasswordTrait,
+		PermissionableTrait;
 
 	protected $fillable = ['id', 'username', 'email', 'password', 'first_name', 'last_name'];
 

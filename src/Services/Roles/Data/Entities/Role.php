@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Roles\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Permissions\Data\Entities\Permission;
 
 class Role extends Model
 {
@@ -14,9 +15,13 @@ class Role extends Model
 
 	];
 
-	public function author()
+	public function permissions()
 	{
-		return $this->belongsTo(RolesAuthor::class, 'author_id');
+		return $this->belongsToMany(Permission::class, 'permission_role');
 	}
 
+	public function givePermissionTo(Permission $permission)
+	{
+		return $this->permissions()->save($permission);
+	}
 }
