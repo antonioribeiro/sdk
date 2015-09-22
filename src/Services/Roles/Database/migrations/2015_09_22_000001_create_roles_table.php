@@ -16,22 +16,39 @@ class CreateRolesTable extends Migration {
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
-			$table->text('name');
-			$table->text('description')->nullable();
+			$table->string('name');
+			$table->string('slug');
+			$table->text('permissions')->nullable();
 
 			$table->timestamps();
 		});
 
-//		Schema::table('roles', function(Blueprint $table)
-//		{
-//			$table->foreign('category_id')
-//					->references('id')
-//					->on('roles_categories')
-//					->onUpdate('cascade')
-//					->onDelete('cascade');
-//		});
-	}
+		Schema::create('permissions_roles', function(Blueprint $table)
+		{
+			$table->string('permission_id', 64)->index();
+			$table->string('role_id', 64)->index();
 
+			$table->timestamps();
+		});
+
+		Schema::table('permissions_roles', function(Blueprint $table)
+		{
+			$table->foreign('permission_id')
+					->references('id')
+					->on('permissions')
+					->onUpdate('cascade')
+					->onDelete('cascade');
+		});
+
+		Schema::table('permissions_roles', function(Blueprint $table)
+		{
+			$table->foreign('role_id')
+				->references('id')
+				->on('roles')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+	}
 
 	/**
 	 * Reverse the migrations.
@@ -40,6 +57,7 @@ class CreateRolesTable extends Migration {
 	 */
 	public function migrateDown()
 	{
+		Schema::drop('permissions_roles');
 		Schema::drop('roles');
 	}
 

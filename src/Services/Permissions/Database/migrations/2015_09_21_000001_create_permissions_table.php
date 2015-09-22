@@ -16,20 +16,12 @@ class CreatePermissionsTable extends Migration {
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
-			$table->text('name');
-			$table->text('description')->nullable();
+			$table->string('name');
+			$table->string('slug');
+			$table->text('permissions')->nullable();
 
 			$table->timestamps();
 		});
-
-//		Schema::table('permissions', function(Blueprint $table)
-//		{
-//			$table->foreign('category_id')
-//					->references('id')
-//					->on('permissions_categories')
-//					->onUpdate('cascade')
-//					->onDelete('cascade');
-//		});
 	}
 
 
