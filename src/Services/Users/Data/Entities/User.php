@@ -5,6 +5,7 @@ namespace PragmaRX\Sdk\Services\Users\Data\Entities;
 use DB;
 use Auth;
 use Activation;
+use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\PermissionableTrait;
 use Rhumsaa\Uuid\Uuid;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;

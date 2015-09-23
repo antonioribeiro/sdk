@@ -11,7 +11,7 @@ use Illuminate\Foundation\Http\FormRequest as IlluminateFormRequest;
 
 class FormRequest extends IlluminateFormRequest
 {
-	use AuthorizesRequests;
+//	use AuthorizesRequests;
 
 	public function rules()
 	{
