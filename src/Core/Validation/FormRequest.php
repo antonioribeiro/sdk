@@ -6,12 +6,11 @@ use Input;
 use Flash;
 use Redirect;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Http\FormRequest as IlluminateFormRequest;
 
 class FormRequest extends IlluminateFormRequest
 {
-//	use AuthorizesRequests;
+	use AuthorizesRequests;
 
 	public function rules()
 	{
