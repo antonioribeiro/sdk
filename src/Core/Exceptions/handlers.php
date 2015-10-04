@@ -29,3 +29,8 @@ ExceptionHandler::addHandler(function(Illuminate\Contracts\Validation\Validation
 
 //	return Redirect::home();
 });
+
+ExceptionHandler::addHandler(function(Symfony\Component\HttpKernel\Exception\HttpException $exception, $code)
+{
+	return Redirect::route('error', ['code' => $code]);
+});
