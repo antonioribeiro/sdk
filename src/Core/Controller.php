@@ -3,13 +3,14 @@
 namespace PragmaRX\Sdk\Core;
 
 use Response;
-use Illuminate\Foundation\Bus\DispatchesCommands;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use PragmaRX\Sdk\Core\Validation\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as IlluminateController;
 
-class Controller extends IlluminateController {
-
-	use DispatchesCommands, ValidatesRequests;
+class Controller extends IlluminateController
+{
+	use DispatchesJobs, AuthorizesRequests, ValidatesRequests;
 
 	/**
 	 * Setup the layout used by the controller.
@@ -35,5 +36,4 @@ class Controller extends IlluminateController {
 
 		return $this->dispatchFrom($class, $request, $input);
 	}
-
 }
