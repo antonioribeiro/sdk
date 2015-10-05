@@ -10,4 +10,9 @@ class Products
 	{
 		return Model::orderBy('published_at', 'desc')->paginate(20);
 	}
+
+	public function add($properties)
+	{
+		dd($properties);
+	}
 }
