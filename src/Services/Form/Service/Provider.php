@@ -2,8 +2,8 @@
 
 namespace PragmaRX\Sdk\Services\Form\Service;
 
-use Illuminate\Html\FormBuilder;
-use Illuminate\Html\HtmlBuilder;
+use Collective\Html\FormBuilder;
+use Collective\Html\HtmlBuilder;
 use PragmaRX\Support\ServiceProvider;
 
 class Provider extends ServiceProvider {
