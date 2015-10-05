@@ -23,6 +23,7 @@ class CreateProductsSkusTable extends Migration {
 			$table->string('size_id')->nullable();
 			$table->decimal('cost', 13, 2)->default(0);
 			$table->decimal('price', 13, 2)->default(0);
+			$table->integer('stock')->default(0);
 
 			$table->timestamps();
 		});
