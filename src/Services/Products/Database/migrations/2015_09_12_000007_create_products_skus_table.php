@@ -1,5 +1,6 @@
 <?php
 
+use \DB;
 use PragmaRX\Support\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -16,8 +17,6 @@ class CreateProductsSkusTable extends Migration {
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
-			$table->integer('sku')->autoincrement();
-
 			$table->string('product_id', 64)->index();
 			$table->string('color_id')->nullable();
 			$table->string('size_id')->nullable();
@@ -27,6 +26,8 @@ class CreateProductsSkusTable extends Migration {
 
 			$table->timestamps();
 		});
+
+		DB::statement('ALTER TABLE products_skus ADD sku SERIAL;');
 
 		Schema::table('products_skus', function(Blueprint $table)
 		{
