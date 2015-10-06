@@ -11,12 +11,7 @@ class Product extends Model
 	protected $presenter = 'PragmaRX\Sdk\Services\Products\Data\Presenters\Product';
 
 	protected $fillable = [
-
+		'name',
+	    'description',
 	];
-
-	public function author()
-	{
-		return $this->belongsTo(ProductsAuthor::class, 'author_id');
-	}
-
 }

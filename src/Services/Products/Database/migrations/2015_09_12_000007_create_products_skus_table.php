@@ -16,7 +16,7 @@ class CreateProductsSkusTable extends Migration {
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
-			$table->string('sku')->index();
+			$table->integer('sku')->autoincrement();
 
 			$table->string('product_id', 64)->index();
 			$table->string('color_id')->nullable();

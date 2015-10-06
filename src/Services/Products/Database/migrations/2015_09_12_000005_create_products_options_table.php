@@ -3,8 +3,8 @@
 use PragmaRX\Support\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateProductsOptionsTable extends Migration {
-
+class CreateProductsOptionsTable extends Migration
+{
 	/**
 	 * Run the migrations.
 	 *
@@ -22,7 +22,6 @@ class CreateProductsOptionsTable extends Migration {
 		});
 	}
 
-
 	/**
 	 * Reverse the migrations.
 	 *
@@ -32,5 +31,4 @@ class CreateProductsOptionsTable extends Migration {
 	{
 		Schema::drop('products_options');
 	}
-
 }

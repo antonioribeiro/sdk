@@ -38,6 +38,11 @@ class EagerServiceProvider extends PragmaRXServiceProvider {
 	 */
 	protected $packageNameCapitalized = 'Sdk';
 
+	/**
+	 * Package name capitalized.
+	 *
+	 * @var string
+	 */
 	protected $defer = false;
 
 	/**

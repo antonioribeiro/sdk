@@ -30,14 +30,32 @@ class CreateProductsTable extends Migration {
 			$table->timestamps();
 		});
 
-//		Schema::table('products', function(Blueprint $table)
-//		{
-//			$table->foreign('category_id')
-//					->references('id')
-//					->on('products_categories')
-//					->onUpdate('cascade')
-//					->onDelete('cascade');
-//		});
+		Schema::table('products', function(Blueprint $table)
+		{
+			$table->foreign('brand_id')
+				->references('id')
+				->on('products_brands')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		Schema::table('products', function(Blueprint $table)
+		{
+			$table->foreign('category_id')
+					->references('id')
+					->on('products_categories')
+					->onUpdate('cascade')
+					->onDelete('cascade');
+		});
+
+		Schema::table('products', function(Blueprint $table)
+		{
+			$table->foreign('unit_id')
+				->references('id')
+				->on('products_units')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
 	}
 
 

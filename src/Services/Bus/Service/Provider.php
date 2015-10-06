@@ -20,6 +20,8 @@ class Provider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		$this->checkLaravelConflict();
+
 		$this->app->singleton('Illuminate\Bus\Dispatcher', function($app)
 		{
 			return new Dispatcher($app, function() use ($app)
@@ -54,6 +56,16 @@ class Provider extends ServiceProvider {
 	public function getPackageDir()
 	{
 		return __DIR__;
+	}
+
+	private function checkLaravelConflict()
+	{
+		if (array_search(\Illuminate\Bus\BusServiceProvider::class, config('app.providers')))
+		{
+			echo 'If you want to use ' . __CLASS__ . ',<br>';
+			echo 'please disable Laravel BusServiceProvider on your config';
+			die;
+		}
 	}
 
 }

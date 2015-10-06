@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Products\Data\Repositories;
 
+use PragmaRX\Sdk\Services\Products\Data\Entities\Product;
 use PragmaRX\Sdk\Services\Products\Data\Entities\Products as Model;
 
 class Products
@@ -13,6 +14,13 @@ class Products
 
 	public function add($properties)
 	{
-		dd($properties);
+		$product = Product::firstOrCreate([
+            'name' => $properties['name'],
+            'description' => $properties['description'],
+		]);
+
+		return Sku::create([
+			'product_id' => $product->id
+		]);
 	}
 }
