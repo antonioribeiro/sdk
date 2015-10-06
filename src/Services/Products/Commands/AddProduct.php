@@ -17,6 +17,12 @@ class AddProduct extends SelfHandlingCommand
 
 	public $stock;
 
+	public $brand_id;
+
+	public $category_id;
+
+	public $unit_id;
+
 	public function handle(ProductsRepository $productsRepository)
 	{
 		$this->dispatchEventsFor(
