@@ -28,7 +28,8 @@
         "cartalyst/support": "*",
         "twilio/sdk":"3.12.*",
         "jenssegers/date": "~3",
-        "league/commonmark": "~0.9"
+        "league/commonmark": "~0.9",
+        "baum/baum": "~1.1"
     },
 
     "require-dev": {
