@@ -32,13 +32,13 @@ class File
 		if ($file = FileModel::where('hash', $hash)->first())
 		{
 			return $returnUserFile
-					? $this->findUserFile($user, $file, $originalName)
+					? $this->findOrCreateUserFile($user, $file, $originalName)
 					: $file;
 		}
 
 		$file = $this->uploadFile($uploaded, $hash);
 
-		$userFile = $this->findUserFile($user, $file, $originalName);
+		$userFile = $this->findOrCreateUserFile($user, $file, $originalName);
 
 		if ($returnUserFile)
 		{
@@ -53,7 +53,7 @@ class File
 		if ( ! $path = Config::get('app.upload_relative_path'))
 		{
 			throw new UploadPathNotSet(
-				'You must set the upload path in config/app.php.'
+				'You must set the upload_relative_path directory in config/app.php.'
 			);
 		}
 
@@ -64,16 +64,16 @@ class File
 	{
 		if ( ! $path = Config::get('app.upload_root'))
 		{
-			throw new UploadPathNotSet('You must set the upload root in config/app.php.');
+			throw new UploadPathNotSet('You must set upload_root directory in config/app.php.');
 		}
 
 		return $path;
 	}
 
-	private function findUserFile($user, $file, $originalName)
+	private function findOrCreateUserFile($user, $file, $originalName)
 	{
 		$fileName = FileNameModel::firstOrCreate([
-			'file_id' => $file->id,
+			'file_id' => $file->file_id,
 			'name' => $originalName
 		]);
 
