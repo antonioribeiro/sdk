@@ -12,12 +12,15 @@ class UpdateTrackerIds extends Migration {
 	 */
 	public function migrateUp()
 	{
-		$this->dropColumn('tracker_sessions', 'user_id');
-
-		Schema::table('tracker_sessions', function(Blueprint $table)
+		if ($this->tableExists('tracker_sessions'))
 		{
-			$table->string('user_id', 64)->nullable();
-		});
+			$this->dropColumn('tracker_sessions', 'user_id');
+
+			Schema::table('tracker_sessions', function(Blueprint $table)
+			{
+				$table->string('user_id', 64)->nullable();
+			});
+		}
 	}
 
 	/**
