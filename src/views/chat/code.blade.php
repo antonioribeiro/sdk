@@ -9,6 +9,7 @@
             messages: [],
             currentUser: '{{ $chatterUsername }}',
             currentMessage: '',
+            connected: false,
         },
 
         methods:
@@ -25,6 +26,16 @@
 
         ready: function()
         {
+            socket.on('connect', function(data)
+            {
+                this.connected = true;
+            }.bind(this));
+
+            socket.on('disconnect', function(data)
+            {
+                this.connected = false;
+            }.bind(this));
+
             socket.on('{{ $listenChannel }}', function(data)
             {
                 var isOperator = data.username == '{{ $operatorUsername }}';

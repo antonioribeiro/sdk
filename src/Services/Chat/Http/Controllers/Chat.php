@@ -8,18 +8,26 @@ use PragmaRX\Sdk\Services\Chat\Events\ChatMessageSent;
 
 class Chat extends BaseController
 {
-	public function index(Request $request)
+	public function create()
 	{
-		return view('chat.index')
-			->with('operatorUsername', 'Alo Alerj')
-			->with('chatterUsername', $request->get('username'))
-			->with('operatorAvatar', 'logo-alo-alerj-50px.png')
-			->with('chatterAvatar', 'voce.png')
-			->with('listenChannel', 'chat-channel:PragmaRX\\Sdk\\Services\\Chat\\Events\\ChatMessageSent');
+		return view('chat.create');
 	}
 
-	public function sendMessage($username, $message)
+	public function chat(Request $request)
 	{
-		event(new ChatMessageSent($username, $message));
+		return view('chat.index')
+			->with('chatterUsername', $request->get('username'))
+			->with('operatorUsername', env('CHAT_OPERATOR_USERNAME'))
+			->with('operatorAvatar', env('CHAT_OPERATOR_AVATAR'))
+			->with('chatterAvatar', env('CHAT_CHATTER_AVATAR'))
+			->with('listenChannel', 'chat-channel:PragmaRX\\\\Sdk\\\\Services\\\\Chat\\\\Events\\\\ChatMessageSent');
+	}
+
+	public function sendMessage($username, $message = '')
+	{
+		if ( ! is_null($message) && ! empty($message))
+		{
+			event(new ChatMessageSent($username, $message));
+		}
 	}
 }

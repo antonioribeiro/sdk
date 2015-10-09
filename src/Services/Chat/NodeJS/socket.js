@@ -7,6 +7,8 @@
 //
 //
 
+var port = 23172;
+
 var server = require('http').Server();
 
 var io = require('socket.io')(server);
@@ -26,6 +28,6 @@ redis.on('message', function(channel, message)
     io.emit(channel + ':' + message.event, message.data);
 });
 
-console.log('listening...');
+console.log('Listening port '+port+'...');
 
-server.listen(23172);
+server.listen(port);
