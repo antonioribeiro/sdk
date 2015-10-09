@@ -1,7 +1,7 @@
 {
     "name": "pragmarx/sdk",
 
-    "description": "A Laravel 4.2+ Sdk",
+    "description": "A Laravel 5.1+ Sdk",
 
     "keywords": ["sdk", "laravel", "pragmarx"],
 
@@ -29,7 +29,8 @@
         "twilio/sdk":"3.12.*",
         "jenssegers/date": "~3",
         "league/commonmark": "~0.9",
-        "baum/baum": "~1.1"
+        "baum/baum": "~1.1",
+        "laravelcollective/html": "5.1.*"
     },
 
     "require-dev": {
