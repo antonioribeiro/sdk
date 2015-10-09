@@ -4,5 +4,5 @@ Route::group(['prefix' => 'chat', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Htt
 {
 	Route::get('/', ['as' => 'chat.index', 'uses' => 'Chat@index']);
 
-	Route::get('chat/send/{username}/{message}', ['as' => 'chat.send.message', 'uses' => 'Chat@sendMessage']);
+	Route::get('send/{username}/{message}', ['as' => 'chat.send.message', 'uses' => 'Chat@sendMessage']);
 });

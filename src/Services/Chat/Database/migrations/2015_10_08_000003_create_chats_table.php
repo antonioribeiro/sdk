@@ -11,7 +11,7 @@ class CreateChatsTable extends Migration
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
-			$table->string('client_id', 64);
+			$table->string('chat_customer_id', 64);
 			$table->string('user_id', 64);
 
 			$table->timestamps();
@@ -19,7 +19,7 @@ class CreateChatsTable extends Migration
 
 		Schema::table('chats', function(Blueprint $table)
 		{
-			$table->foreign('client_id')
+			$table->foreign('chat_customer_id')
 				->references('id')
 				->on('chat_clients')
 				->onUpdate('cascade')

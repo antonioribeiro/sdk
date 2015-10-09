@@ -9,7 +9,7 @@ class Chat extends Model
 	protected $table = 'chats';
 
 	protected $fillable = [
-		'client_id',
+		'chat_customer_id',
 		'user_id',
 	];
 
