@@ -11,7 +11,11 @@ class Chat extends BaseController
 	public function index(Request $request)
 	{
 		return view('chat.index')
-			->with('username', $request->get('username'));
+			->with('operatorUsername', 'Alo Alerj')
+			->with('chatterUsername', $request->get('username'))
+			->with('operatorAvatar', 'logo-alo-alerj-50px.png')
+			->with('chatterAvatar', 'voce.png')
+			->with('listenChannel', 'chat-channel:PragmaRX\\Sdk\\Services\\Chat\\Events\\ChatMessageSent');
 	}
 
 	public function sendMessage($username, $message)
