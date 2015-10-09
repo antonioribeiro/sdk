@@ -1,3 +1,0 @@
-<?php
-
-ZipCode::setCountry('BR');
