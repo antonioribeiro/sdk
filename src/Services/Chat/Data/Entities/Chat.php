@@ -9,8 +9,8 @@ class Chat extends Model
 	protected $table = 'chats';
 
 	protected $fillable = [
-		'chat_customer_id',
-		'user_id',
+		'chat_room_id',
+		'owner_id',
 	];
 
 	protected $presenter = 'PragmaRX\Sdk\Services\Chat\Data\Presenters\ChatPresenter';

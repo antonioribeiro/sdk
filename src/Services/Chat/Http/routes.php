@@ -2,7 +2,7 @@
 
 Route::group(['prefix' => 'chat', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Controllers'], function ()
 {
-	Route::get('/', ['as' => 'chat', 'uses' => 'Chat@chat']);
+	Route::get('/{id}', ['as' => 'chat', 'uses' => 'Chat@chat']);
 
 	Route::get('create', ['as' => 'chat.create', 'uses' => 'Chat@create']);
 

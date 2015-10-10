@@ -10,6 +10,7 @@ class Chat
 {
 	public function create($name, $email)
 	{
+
 		$business = ChatBusiness::firstOrCreate(['name' => 'Alerj']);
 
 		$customer = ChatCustomer::firstOrCreate(['chat_business_id' => $business->id, 'name' => 'Alô Alerj']);

@@ -5,31 +5,41 @@ namespace PragmaRX\Sdk\Services\Chat\Http\Controllers;
 use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Events\ChatMessageSent;
-use PragmaRX\Sdk\Services\Chat\Http\Requests\CreateChat;
+use PragmaRX\Sdk\Services\Chat\Commands\CreateChat as CreateChatCommand;
+use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
+use PragmaRX\Sdk\Services\Chat\Http\Requests\CreateChat as CreateChatRequest;
 
 class Chat extends BaseController
 {
+	private $chatRepository;
+
+	public function __construct(ChatRepository $chatRepository)
+	{
+		$this->chatRepository = $chatRepository;
+	}
+
 	public function create()
 	{
 		return view('chat.create');
 	}
 
-	public function chat(Request $request)
+	public function chat($chat_id, Request $request)
 	{
+		$chat = $this->chatRepository->find($chat_id);
+
 		return view('chat.index')
-			->with('chatterUsername', $request->get('username'))
+			->with('chatterUsername', $chat->chat)
 			->with('operatorUsername', env('CHAT_OPERATOR_USERNAME'))
 			->with('operatorAvatar', env('CHAT_OPERATOR_AVATAR'))
 			->with('chatterAvatar', env('CHAT_CHATTER_AVATAR'))
 			->with('listenChannel', 'chat-channel:PragmaRX\\\\Sdk\\\\Services\\\\Chat\\\\Events\\\\ChatMessageSent');
 	}
 
-	public function store(CreateChat $request)
+	public function store(CreateChatRequest $request)
 	{
 		$chat = $this->execute(CreateChatCommand::class, $request->all());
 
-		return redirect('chat', ['chat_id' => $chat->id])
-				->withInput();
+		return redirect('chat/'.$chat->id);
 	}
 
 	public function sendMessage($username, $message = '')
