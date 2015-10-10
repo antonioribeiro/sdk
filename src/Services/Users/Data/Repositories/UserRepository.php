@@ -120,6 +120,21 @@ class UserRepository extends Repository implements UserRepositoryContract {
 				->first();
 	}
 
+	public function findByEmailOrCreate($email, $data)
+	{
+		if ( ! $user = $this->findByEmail($email))
+		{
+			$user = $this->firstOrCreate(['email' => $email] + $data);
+		}
+
+		return $user;
+	}
+
+	public function findByEmailOrCreate($data)
+	{
+		return $this->call($this->getModel(), 'firstOrCreate', $data);
+	}
+
 	public function activate($email, $token)
 	{
 		return $this
