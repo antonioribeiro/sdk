@@ -12,7 +12,7 @@ class CreateChatsTable extends Migration
 			$table->string('id', 64)->unique()->primary()->index();
 
 			$table->string('chat_customer_id', 64);
-			$table->string('user_id', 64);
+			$table->string('user_id', 64)->nullable();
 
 			$table->timestamps();
 		});
