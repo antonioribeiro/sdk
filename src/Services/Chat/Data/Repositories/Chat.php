@@ -19,7 +19,7 @@ class Chat
 
 	public function create($name, $email)
 	{
-		$user = $this->userRepository->findByEmailOrCreate($email, ['name' => $name]);
+		$user = $this->userRepository->findByEmailOrCreate($email, ['first_name' => $name], true); // allow empty password
 
 		$business = ChatBusiness::firstOrCreate(['name' => 'Alerj']);
 
@@ -27,7 +27,7 @@ class Chat
 
 		$customer = ChatRoom::firstOrCreate(['chat_customer_id' => $customer->id, 'name' => 'Call Center']);
 
-		return ChatModel::firstOrCreate(['chat_room_id' => $customer->id]);
+		return ChatModel::firstOrCreate(['chat_room_id' => $customer->id, 'owner_id' => $user->id]);
 	}
 
 	public function find($id)

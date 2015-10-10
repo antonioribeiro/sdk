@@ -47,10 +47,8 @@ use PragmaRX\Sdk\Services\Passwords\Exceptions\InvalidPasswordUpdateRequest;
 use PragmaRX\Sdk\Services\ContactInformation\Data\Entities\ContactInformation;
 use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository as UserRepositoryContract;
 
-class UserRepository extends Repository implements UserRepositoryContract {
-
-	// use DispatchableTrait;
-
+class UserRepository extends Repository implements UserRepositoryContract
+{
 	const TOKEN_LIFETIME = 10;
 
 	private $secretCodes = [];
@@ -120,19 +118,37 @@ class UserRepository extends Repository implements UserRepositoryContract {
 				->first();
 	}
 
-	public function findByEmailOrCreate($email, $data)
+	public function findByEmailOrCreate($email, $attributes, $allowEmptyPassword = false)
 	{
 		if ( ! $user = $this->findByEmail($email))
 		{
-			$user = $this->firstOrCreate(['email' => $email] + $data);
+			$user = $this->firstOrCreate(['email' => $email] + $attributes, $allowEmptyPassword);
 		}
 
 		return $user;
 	}
 
-	public function findByEmailOrCreate($data)
+	public function firstOrCreate($attributes, $allowEmptyPassword = false)
 	{
-		return $this->call($this->getModel(), 'firstOrCreate', $data);
+		$model = $this->getNewModel();
+
+		if (! is_null($instance = $model->where($attributes)->first())) {
+            return $instance;
+        }
+
+        return $this->create($attributes, $allowEmptyPassword);
+	}
+
+	public function create($attributes, $allowEmptyPassword = false)
+	{
+		$model = $this->getNewModel();
+
+		if ( ! isset($attributes['password']) && $allowEmptyPassword)
+		{
+			$attributes['password'] = str_random(64);
+		}
+
+		return $model->create($attributes);
 	}
 
 	public function activate($email, $token)
@@ -152,9 +168,9 @@ class UserRepository extends Repository implements UserRepositoryContract {
 		Flash::message(t('paragraphs.activation-email-sent'));
 	}
 
-	public function sendEmail($user, $view, $subject, $data = null)
+	public function sendEmail($user, $view, $subject, $attributes = null)
 	{
-		Mailer::send($view, $user, $subject, $data);
+		Mailer::send($view, $user, $subject, $attributes);
 	}
 
 	public function checkAndCreateActivation($user)
@@ -392,7 +408,7 @@ class UserRepository extends Repository implements UserRepositoryContract {
 	 */
 	public function requestEmailChange($user, $email)
 	{
-		$data = ['user' => $user, 'email' => $email];
+		$attributes = ['user' => $user, 'email' => $email];
 
 		if ($emailChange = EmailChange::where('user_id', $user->id)->where('email', $email)->first())
 		{
@@ -410,31 +426,31 @@ class UserRepository extends Repository implements UserRepositoryContract {
 
 		}
 
-		$data['email_change'] = $emailChange;
+		$attributes['email_change'] = $emailChange;
 
-		$user->raise(new EmailChangeRequested($data));
+		$user->raise(new EmailChangeRequested($attributes));
 	}
 
-	public function sendEmailChangeEmail($data)
+	public function sendEmailChangeEmail($attributes)
 	{
-		$data = array_merge(
-			$data,
+		$attributes = array_merge(
+			$attributes,
 			[
-				'link' => route('email.change', [$data['email_change']->token]),
-				'report-link' => route('email.change.report', [$data['email_change']->token]),
+				'link' => route('email.change', [$attributes['email_change']->token]),
+				'report-link' => route('email.change.report', [$attributes['email_change']->token]),
 			]
 		);
 
 		Mailer::send(
 			'emails.users.change-email-current-address',
-			$data['user'],
+			$attributes['user'],
 			t('paragraphs.authorize-email-change'),
-			$data
+			$attributes
 		);
 
 		Flash::warning(t('paragraphs.email-change-message-sent'));
 
-		$data['user']->raise(new EmailChangeMessageSent($data));
+		$attributes['user']->raise(new EmailChangeMessageSent($attributes));
 	}
 
 	public function attachFile($id, $originalName, $user_id)
@@ -657,7 +673,7 @@ class UserRepository extends Repository implements UserRepositoryContract {
 
 	public function sendEmailToggleTwoFactorEmail($user)
 	{
-		$data = [
+		$attributes = [
 			'link' => route('security.email.toggle', [$user->two_factor_email_secret_key]),
 		];
 
@@ -665,7 +681,7 @@ class UserRepository extends Repository implements UserRepositoryContract {
 			'emails.users.authorize-two-factor-email',
 			$user,
 			t('paragraphs.authorize-two-factor-email'),
-			$data
+			$attributes
 		);
 
 		Flash::message(t('paragraphs.autorization-link-sent'));
@@ -998,14 +1014,14 @@ class UserRepository extends Repository implements UserRepositoryContract {
 			$email = $this->createDummyEmail();
 		}
 
-		$data = [
+		$attributes = [
 			'email' => $email,
 			'password' => Uuid::uuid4(),
 			'first_name' => $first_name,
 			'last_name' => $last_name,
 		];
 
-		return $this->call($this->getModel(), 'create', [$data]);
+		return $this->call($this->getModel(), 'create', [$attributes]);
 	}
 
 	private function createDummyEmail()
@@ -1052,6 +1068,11 @@ class UserRepository extends Repository implements UserRepositoryContract {
 	private function getModel()
 	{
 		return $this->modelAlias;
+	}
+
+	private function getNewModel()
+	{
+		return new $this->modelAlias;
 	}
 
 	private function getInviterName($inviter)
