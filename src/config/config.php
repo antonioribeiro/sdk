@@ -1,21 +1,4 @@
 <?php
-/**
- * Part of the Sdk package.
- *
- * NOTICE OF LICENSE
- *
- * Licensed under the 3-clause BSD License.
- *
- * This source file is subject to the 3-clause BSD License that is
- * bundled with this package in the LICENSE file.  It is also available at
- * the following URL: http://www.opensource.org/licenses/BSD-3-Clause
- *
- * @package    Sdk
- * @author     Antonio Carlos Ribeiro @ PragmaRX
- * @license    BSD License (3-clause)
- * @copyright  (c) 2013, PragmaRX
- * @link       http://pragmarx.com
- */
 
 return [
 
@@ -44,6 +27,8 @@ return [
 		'Services/Block',
 		'Services/Bus',
 
+		'Services/Categories',
+		'Services/Chat',
 		'Services/Cities',
 		'Services/Clients',
 		'Services/Clipping',
@@ -53,6 +38,7 @@ return [
 		'Services/Currencies',
 
 		'Services/EmailChanges',
+		'Services/ExceptionHandler',
 
 		'Services/Files',
 		'Services/Firewall',
@@ -71,9 +57,12 @@ return [
 		'Services/Notifications',
 
 		'Services/Passwords',
+		'Services/Permissions',
+		'Services/Products',
 		'Services/Profiles',
 
 		'Services/Registration',
+		'Services/Roles',
 
 		'Services/Settings',
 		'Services/Sms',
@@ -127,6 +116,22 @@ return [
 			'facades' => [
 				'Google2FA' => 'PragmaRX\Google2FA\Vendor\Laravel\Facade',
 			]
+		],
+
+		[
+			'name' => 'pragmarx/sdk/registration',
+			'enabled' => true,
+			'serviceProviders' => ['PragmaRX\Sdk\Services\Registration\Service\Provider'],
+			'facades' => [
+				'Registration' => 'PragmaRX\Sdk\Services\Registration\Service\Facade',
+			]
+		],
+
+		[
+			'name' => 'pragmarx/sdk/bus',
+			'enabled' => true,
+			'serviceProviders' => ['PragmaRX\Sdk\Services\Bus\Service\Provider'],
+			'facades' => []
 		],
 
 		[
@@ -213,7 +218,8 @@ return [
 			'enabled' => true,
 			'serviceProviders' => ['PragmaRX\Sdk\Services\Form\Service\Provider'],
 			'facades' => [
-				'Form' => 'PragmaRX\Sdk\Services\Form\Service\Facade', /// overrides the Laravel Facade
+				'Form' => 'PragmaRX\Sdk\Services\Form\Service\FormFacade',
+				'Html' => 'PragmaRX\Sdk\Services\Form\Service\HtmlFacade',
 			]
 		],
 
