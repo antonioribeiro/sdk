@@ -23,9 +23,9 @@ class Chat extends BaseController
 		return view('chat.create');
 	}
 
-	public function chat($chat_id, Request $request)
+	public function chat($chat_id)
 	{
-		$chat = $this->chatRepository->find($chat_id);
+		$chat = $this->chatRepository->findById($chat_id);
 
 		return view('chat.index')
 			->with('chatterUsername', $chat->chat)

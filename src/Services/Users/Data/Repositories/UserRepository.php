@@ -55,7 +55,7 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 	private $twoFactorTypes = ['google', 'email', 'sms'];
 
-	private $modelAlias = \App\Services\Users\Data\Entities\User::class;
+	protected $model = \App\Services\Users\Data\Entities\User::class;
 
 	/**
 	 * Save a user.
@@ -97,18 +97,6 @@ class UserRepository extends Repository implements UserRepositoryContract
 		return  $users = $this
 							->call($this->getModel(), 'where', ['username', $username])
 							->first();
-	}
-
-	/**
-	 * Find a user by id.
-	 *
-	 * @param $id
-	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|static
-	 */
-	public function findById($id)
-	{
-		return $this
-				->call($this->getModel(), 'findOrFail', $id);
 	}
 
 	public function findByEmail($email)
@@ -1058,21 +1046,6 @@ class UserRepository extends Repository implements UserRepositoryContract
 		}
 
 		return $connections;
-	}
-
-	private function call($className, $method = null, $arguments = [])
-	{
-		return call($this->getClassName($className), $method, $arguments);
-	}
-
-	private function getModel()
-	{
-		return $this->modelAlias;
-	}
-
-	private function getNewModel()
-	{
-		return new $this->modelAlias;
 	}
 
 	private function getInviterName($inviter)
