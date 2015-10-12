@@ -11,7 +11,7 @@ class CreateChatBusinessesTable extends Migration
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
-			$table->string('name');
+			$table->string('name')->index();
 
 			$table->timestamps();
 		});

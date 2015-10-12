@@ -4,12 +4,13 @@ namespace PragmaRX\Sdk\Services\Chat\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
 
-class ChatRoom extends Model
+class ChatClientRoom extends Model
 {
-	protected $table = 'chat_rooms';
+	protected $table = 'chat_client_rooms';
 
 	protected $fillable = [
-		'chat_customer_id',
+		'chat_client_service_id'
+		'chat_business_client_id',
 		'name',
 	];
 }

@@ -11,23 +11,24 @@ class CreateChatsTable extends Migration
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
-			$table->string('chat_room_id', 64);
+			$table->string('chat_business_client_service_room_id', 64)->index();
 
-			$table->string('owner_id', 64);
+			$table->string('owner_id', 64)->index();
 
-			$table->string('responder_id', 64)->nullable();
+			$table->string('responder_id', 64)->index()->nullable();
 
-			$table->timestamp('started_at')->nullable();
-			$table->timestamp('finished_at')->nullable();
+			$table->timestamp('opened_at')->index()->nullable();
+			$table->timestamp('last_message_at')->index()->nullable();
+			$table->timestamp('closed_at')->index()->nullable();
 
 			$table->timestamps();
 		});
 
 		Schema::table('chats', function(Blueprint $table)
 		{
-			$table->foreign('chat_room_id')
+			$table->foreign('chat_business_client_service_room_id')
 				->references('id')
-				->on('chat_rooms')
+				->on('chat_business_client_service_rooms')
 				->onUpdate('cascade')
 				->onDelete('cascade');
 		});
@@ -36,7 +37,7 @@ class CreateChatsTable extends Migration
 		{
 			$table->foreign('owner_id')
 				->references('id')
-				->on('users')
+				->on('chat_business_client_talkers')
 				->onUpdate('cascade')
 				->onDelete('cascade');
 		});
@@ -45,7 +46,7 @@ class CreateChatsTable extends Migration
 		{
 			$table->foreign('responder_id')
 				->references('id')
-				->on('users')
+				->on('chat_business_client_talkers')
 				->onUpdate('cascade')
 				->onDelete('cascade');
 		});
