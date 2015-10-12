@@ -28,7 +28,7 @@ class Chat extends BaseController
 		$chat = $this->chatRepository->findById($chat_id);
 
 		return view('chat.index')
-			->with('chatterUsername', $chat->chat)
+			->with('chatterUsername', $chat->owner->first_name)
 			->with('operatorUsername', env('CHAT_OPERATOR_USERNAME'))
 			->with('operatorAvatar', env('CHAT_OPERATOR_AVATAR'))
 			->with('chatterAvatar', env('CHAT_CHATTER_AVATAR'))

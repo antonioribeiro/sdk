@@ -8,21 +8,10 @@ class Repository
 {
 	protected $model = '';
 
-	/**
-	 * Find a user by id.
-	 *
-	 * @param $id
-	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|static
-	 */
 	public function findById($id)
 	{
 		return $this
 			->call($this->getModel(), 'findOrFail', $id);
-	}
-
-	private function call($className, $method = null, $arguments = [])
-	{
-		return call($this->getClassName($className), $method, $arguments);
 	}
 
 	public function getModel()
@@ -47,5 +36,10 @@ class Repository
 		}
 
 		return $className;
+	}
+
+	protected function call($className, $method = null, $arguments = [])
+	{
+		return call($this->getClassName($className), $method, $arguments);
 	}
 }
