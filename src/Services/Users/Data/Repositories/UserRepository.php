@@ -957,7 +957,10 @@ class UserRepository extends Repository implements UserRepositoryContract
 			'emails.password.reminder',
 			$user,
 			t('captions.change-your-password'),
-			['token' => $token]
+			[
+				'token' => $token,
+			    'title' => t('captions.change-your-password'),
+			]
 		);
 
 		Flash::message(t('paragraphs.reset-password-sent'));
@@ -984,7 +987,10 @@ class UserRepository extends Repository implements UserRepositoryContract
 		Mailer::send(
 			'emails.password.updated',
 			$user,
-			t('captions.your-password-was-updated')
+			t('captions.your-password-was-updated'),
+			[
+				'title' => t('captions.your-password-was-updated'),
+			]
 		);
 	}
 
