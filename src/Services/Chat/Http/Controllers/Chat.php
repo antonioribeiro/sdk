@@ -2,7 +2,6 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Http\Controllers;
 
-use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Events\ChatMessageSent;
 use PragmaRX\Sdk\Services\Chat\Commands\CreateChat as CreateChatCommand;
@@ -20,14 +19,14 @@ class Chat extends BaseController
 
 	public function create()
 	{
-		return view('chat.create');
+		return view('chat.client.create');
 	}
 
 	public function chat($chat_id)
 	{
 		$chat = $this->chatRepository->findById($chat_id);
 
-		return view('chat.index')
+		return view('chat.client.index')
 			->with('chatterUsername', $chat->owner->first_name)
 			->with('operatorUsername', env('CHAT_OPERATOR_USERNAME'))
 			->with('operatorAvatar', env('CHAT_OPERATOR_AVATAR'))
@@ -39,7 +38,7 @@ class Chat extends BaseController
 	{
 		$chat = $this->execute(CreateChatCommand::class, $request->all());
 
-		return redirect('chat/'.$chat->id);
+		return redirect('chat/client/'.$chat->id);
 	}
 
 	public function sendMessage($username, $message = '')

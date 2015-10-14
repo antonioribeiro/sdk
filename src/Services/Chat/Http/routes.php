@@ -1,12 +1,12 @@
 <?php
 
-Route::group(['prefix' => 'chat', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Controllers'], function ()
+Route::group(['prefix' => 'chat/client', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Controllers'], function ()
 {
-	Route::get('/', ['as' => 'chat.create', 'uses' => 'Chat@create']);
+	Route::get('/', ['as' => 'chat.client.create', 'uses' => 'Chat@create']);
 
-	Route::get('/{id}', ['as' => 'chat', 'uses' => 'Chat@chat']);
+	Route::get('/{id}', ['as' => 'chat.client', 'uses' => 'Chat@chat']);
 
-	Route::post('create', ['as' => 'chat.store', 'uses' => 'Chat@store']);
+	Route::post('create', ['as' => 'chat.client.store', 'uses' => 'Chat@store']);
 
-	Route::get('send/{username}/{message?}', ['as' => 'chat.send.message', 'uses' => 'Chat@sendMessage']);
+	Route::get('send/{username}/{message?}', ['as' => 'chat.client.send.message', 'uses' => 'Chat@sendMessage']);
 });

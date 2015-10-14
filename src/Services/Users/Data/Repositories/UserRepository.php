@@ -1060,5 +1060,4 @@ class UserRepository extends Repository implements UserRepositoryContract
 				? $inviter->present()->fullName
 				: Config::get('app.owner_name');
 	}
-
 }
