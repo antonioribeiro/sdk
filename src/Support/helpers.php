@@ -312,3 +312,10 @@ if ( ! function_exists( 'clear_tag' ))
 	}
 }
 
+if ( ! function_exists('set_menu_active'))
+{
+	function set_menu_active($path)
+	{
+		return Request::is($path) ? 'active' : '';
+	}
+}

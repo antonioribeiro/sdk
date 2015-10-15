@@ -2,15 +2,16 @@
 
 namespace PragmaRX\Sdk\Services\Passwords\Http\Controllers;
 
-use PragmaRX\Sdk\Core\Controller as BaseController;
-use Password as PasswordReminder;
+use Auth;
 use Redirect;
+use Password as PasswordReminder;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Passwords\Commands\ResetPasswordCommand;
 use PragmaRX\Sdk\Services\Passwords\Commands\UpdatePasswordCommand;
 use PragmaRX\Sdk\Services\Passwords\Http\Requests\RemindPassword as RemindPasswordRequest;
 use PragmaRX\Sdk\Services\Passwords\Http\Requests\ResetPassword as ResetPasswordRequest;
 use PragmaRX\Sdk\Services\Passwords\Http\Requests\UpdatePassword as UpdatePasswordRequest;
-use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 use Input;
 use View;
@@ -18,8 +19,8 @@ use Hash;
 
 use Flash;
 
-class Passwords extends BaseController {
-
+class Passwords extends BaseController
+{
 	/**
 	 * @var UserRepository
 	 */
@@ -37,7 +38,12 @@ class Passwords extends BaseController {
 	 */
 	public function create()
 	{
-		return View::make('passwords.create');
+		if ( ! $user = Auth::user())
+		{
+			return View::make('passwords.create');
+		}
+
+		return $this->resetPassword($user->username, $user->email);
 	}
 
 	/**
@@ -47,18 +53,7 @@ class Passwords extends BaseController {
 	 */
 	public function store(RemindPasswordRequest $request)
 	{
-		$this->execute(
-			ResetPasswordCommand::class,
-			[
-				'username' => $request->get('username'),
-				'email' => $request->get('email')
-			]
-		);
-
-		return Redirect::route_no_ajax('notification')
-			->with('title', t('titles.reset-your-password'))
-			->with('message', t('paragraphs.reset-password-sent'))
-			->withInput();
+		return $this->resetPassword($request->get('username'), $request->get('email'));
 	}
 
 	/**
@@ -93,4 +88,23 @@ class Passwords extends BaseController {
 		return Redirect::route('auth.login');
 	}
 
+	/**
+	 * @param RemindPasswordRequest $request
+	 * @return mixed
+	 */
+	private function resetPassword($username, $email)
+	{
+		$this->execute(
+			ResetPasswordCommand::class,
+			[
+				'username' => $username,
+				'email' => $email,
+			]
+		);
+
+		return Redirect::route_no_ajax('notification')
+			->with('title', t('titles.reset-your-password'))
+			->with('message', t('paragraphs.reset-password-sent'))
+			->withInput();
+	}
 }

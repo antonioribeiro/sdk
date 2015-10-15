@@ -6,7 +6,7 @@ use PragmaRX\Sdk\Core\Model;
 
 class ChatBusinessClientTalker extends Model
 {
-	protected $table = 'chat_business_client_services';
+	protected $table = 'chat_business_client_talkers';
 
 	protected $fillable = [
 		'chat_business_client_id',
