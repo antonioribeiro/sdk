@@ -29,8 +29,8 @@ class Chat extends BaseController
 		return view('chat.client.index')
 			->with('chatterUsername', $chat->owner->user->first_name)
 			->with('operatorUsername', env('CHAT_OPERATOR_USERNAME'))
-			->with('operatorAvatar', env('CHAT_OPERATOR_AVATAR'))
-			->with('chatterAvatar', env('CHAT_CHATTER_AVATAR'))
+			->with('operatorAvatar', $chat->owner->user->present()->avatar)
+			->with('chatterAvatar', $chat->owner->user->present()->avatar)
 			->with('listenChannel', 'chat-channel:PragmaRX\\\\Sdk\\\\Services\\\\Chat\\\\Events\\\\ChatMessageSent');
 	}
 

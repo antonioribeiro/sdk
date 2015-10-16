@@ -20,7 +20,7 @@
 
                 var message = event.targetVM.$data.currentMessage;
 
-                this.$http.get('{{ url() }}/chat/send/'+user+'/'+message);
+                this.$http.get('{{ url() }}/chat/client/send/'+user+'/'+message);
             }
         },
 

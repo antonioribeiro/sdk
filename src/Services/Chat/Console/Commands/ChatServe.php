@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Chat\Console\Commands;
 
 use Illuminate\Console\Command;
+use PragmaRX\Sdk\Services\Process\Service\Process;
 
 class ChatServe extends Command
 {
@@ -27,6 +28,8 @@ class ChatServe extends Command
      */
     public function handle()
     {
+		Process::start('node ' . app_path('Services/Chat/Server/NodeJs/socket.js &'));
 
+	    $this->info('Server successfuly started');
     }
 }

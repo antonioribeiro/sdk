@@ -1,22 +1,14 @@
 <?php
 
-namespace PragmaRX\Sdk\Services\Process;
+namespace PragmaRX\Sdk\Services\Process\Service;
 
 use Symfony\Component\Process\Process as SymfonyProcess;
 
 class Process
 {
-	public static function execute($commandLine)
+	public static function start($commandLine)
 	{
 		$process = new SymfonyProcess($commandLine);
-		$process->run();
-
-		// executes after the command finishes
-		if ( ! $process->isSuccessful())
-		{
-			throw new \RuntimeException($process->getErrorOutput());
-		}
-
-		echo $process->getOutput();
+		$process->start();
 	}
 }
