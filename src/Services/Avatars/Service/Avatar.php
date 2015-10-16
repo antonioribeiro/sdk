@@ -5,8 +5,8 @@ namespace PragmaRX\Sdk\Services\Avatars\Service;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 use File;
 
-class Avatar {
-
+class Avatar
+{
 	/**
 	 * Get avatar URL.
 	 *
@@ -31,11 +31,10 @@ class Avatar {
 	 * @param int $size
 	 * @return string
 	 */
-	public function getGravatarUrl($email, $size = 30)
+	public function getGravatarUrl($email, $size = 60)
 	{
 		$email = md5($email);
 
 		return "//www.gravatar.com/avatar/{$email}?s={$size}&d=identicon";
 	}
-
 }

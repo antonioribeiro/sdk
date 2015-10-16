@@ -7,8 +7,10 @@
 
         data: {
             messages: [],
-            currentUser: '{{ $chatterUsername }}',
+            currentUsername: '{{ $chatterUsername }}',
+            currentEmail: '{{ $chatterEmail }}',
             currentMessage: '',
+            chatId: '{{ $chatId }}',
             connected: false,
         },
 
@@ -16,11 +18,13 @@
         {
             __sendMessage: function(event)
             {
-                var user = event.targetVM.$data.currentUser;
+                var user = event.targetVM.$data.currentUsername;
 
                 var message = event.targetVM.$data.currentMessage;
 
-                this.$http.get('{{ url() }}/chat/client/send/'+user+'/'+message);
+                var chatId = event.targetVM.$data.chatId;
+
+                this.$http.get('{{ url() }}/chat/client/send/'+chatId+'/'+user+'/'+message);
             }
         },
 
@@ -45,7 +49,7 @@
                     "username": data.username,
                     "message": data.message,
                     "pull": isOperator ? 'left' : 'right',
-                    "photo": isOperator ? '{{ $operatorAvatar }}' : '{{ $chatterAvatar }}',
+                    "photo": isOperator ? '{!! $operatorAvatar !!}' : '{!! $chatterAvatar !!}',
                 };
 
                 this.messages.push(message);

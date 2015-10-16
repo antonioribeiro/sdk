@@ -28,6 +28,7 @@ class Chat extends BaseController
 
 		return view('chat.client.index')
 			->with('chatterUsername', $chat->owner->user->first_name)
+			->with('chatId', $chat_id)
 			->with('operatorUsername', env('CHAT_OPERATOR_USERNAME'))
 			->with('operatorAvatar', $chat->owner->user->present()->avatar)
 			->with('chatterAvatar', $chat->owner->user->present()->avatar)
@@ -41,7 +42,7 @@ class Chat extends BaseController
 		return redirect('chat/client/'.$chat->id);
 	}
 
-	public function sendMessage($username, $message = '')
+	public function sendMessage($chatId, $username, $message = '')
 	{
 		if ( ! is_null($message) && ! empty($message))
 		{
