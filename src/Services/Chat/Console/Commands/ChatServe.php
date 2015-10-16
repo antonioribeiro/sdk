@@ -28,8 +28,10 @@ class ChatServe extends Command
      */
     public function handle()
     {
-		Process::start('node ' . app_path('Services/Chat/Server/NodeJs/socket.js &'));
+	    $command = 'node ' . app_path('Services/Chat/Server/NodeJs/socket.js');
 
-	    $this->info('Server successfuly started');
+//		Process::start($command);
+//	    $this->info('Server successfuly started');
+	    $this->info('Please, manually execute: '.$command);
     }
 }
