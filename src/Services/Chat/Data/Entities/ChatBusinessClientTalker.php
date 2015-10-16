@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Chat\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
+use App\Services\Users\Data\Entities\User;
 
 class ChatBusinessClientTalker extends Model
 {
@@ -13,4 +14,9 @@ class ChatBusinessClientTalker extends Model
 		'user_id',
 		'phone_id',
 	];
+
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
 }
