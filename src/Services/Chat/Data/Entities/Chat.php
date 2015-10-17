@@ -10,7 +10,7 @@ class Chat extends Model
 	protected $table = 'chats';
 
 	protected $fillable = [
-		'chat_business_client_service_room_id',
+		'chat_business_client_service_id',
 		'owner_id',
 	];
 
@@ -26,8 +26,8 @@ class Chat extends Model
 		return $this->belongsTo(User::class, 'responder_id');
 	}
 
-	public function room()
+	public function service()
 	{
-		return $this->belongsTo(ChatBusinessClientRoom::class, 'chat_business_client_service_room_id');
+		return $this->belongsTo(ChatBusinessClientService::class, 'chat_business_client_service_id');
 	}
 }

@@ -6,10 +6,9 @@ use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatCustomer;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusiness;
-use PragmaRX\Sdk\Services\Chat\Data\Entities\Chat as ChatModel;
 use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\Chat as ChatModel;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClient;
-use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientRoom;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientTalker;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientService;
 
@@ -45,14 +44,33 @@ class Chat extends Repository
             'description' => 'Chat do Call Center',
 		]);
 
-		$room = ChatBusinessClientRoom::firstOrCreate([
-			'chat_business_client_service_id' => $clientService->id,
-			'name' => 'Sala de Chat'
-		]);
-
 		return ChatModel::firstOrCreate([
-			'chat_business_client_service_room_id' => $room->id,
+			'chat_business_client_service_id' => $clientService->id,
 			'owner_id' => $talker->id
 		]);
+	}
+
+	public function all()
+	{
+		$chats = ChatModel::all();
+
+		$result = [];
+
+		foreach($chats as $chat)
+		{
+			$result[$chat->id] = [
+				'id' => $chat->id,
+				'talker' => [
+					'fullName' => $chat->owner->user->present()->fullName,
+					'avatar' => $chat->owner->user->present()->avatar
+				],
+				'responder' => $chat->responder ? ['fullName' => $chat->responder->user->present()->fullName] : null,
+				'email' => $chat->owner->user->email,
+				'isClosed' => is_null($chat->closed_at),
+				'service' => strtolower($chat->service->type->name),
+			];
+		}
+
+		return $result;
 	}
 }
