@@ -15,7 +15,7 @@ class User extends Presenter {
 	 * @param int $size
 	 * @return string
 	 */
-	public function avatar($size = 30)
+	public function avatar($size = 100)
 	{
 		return Avatar::getUrl($this->entity, $size);
 	}

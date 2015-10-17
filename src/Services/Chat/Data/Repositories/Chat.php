@@ -3,15 +3,15 @@
 namespace PragmaRX\Sdk\Services\Chat\Data\Repositories;
 
 use PragmaRX\Sdk\Core\Data\Repository;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatCustomer;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusiness;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\Chat as ChatModel;
+use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClient;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientRoom;
-use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientService;
-use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusiness;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientTalker;
-use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatCustomer;
-use PragmaRX\Sdk\Services\Chat\Data\Entities\Chat as ChatModel;
-use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
-use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientService;
 
 class Chat extends Repository
 {

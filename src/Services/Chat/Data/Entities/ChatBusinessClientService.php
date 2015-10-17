@@ -13,4 +13,9 @@ class ChatBusinessClientService extends Model
 		'chat_service_id',
 		'description',
 	];
+
+	public function type()
+	{
+		return $this->belongsTo(ChatService::class, 'chat_service_id');
+	}
 }

@@ -7,8 +7,8 @@
 
         data: {
             messages: [],
-            currentUsername: '{{ $chatterUsername }}',
-            currentEmail: '{{ $chatterEmail }}',
+            currentUsername: '{{ $talkerUsername }}',
+            currentEmail: '{{ $talkerEmail }}',
             currentMessage: '',
             chatId: '{{ $chatId }}',
             connected: false,
@@ -49,7 +49,7 @@
                     "username": data.username,
                     "message": data.message,
                     "pull": isOperator ? 'left' : 'right',
-                    "photo": isOperator ? '{!! $operatorAvatar !!}' : '{!! $chatterAvatar !!}',
+                    "photo": isOperator ? '{!! $operatorAvatar !!}' : '{!! $talkerAvatar !!}',
                 };
 
                 this.messages.push(message);

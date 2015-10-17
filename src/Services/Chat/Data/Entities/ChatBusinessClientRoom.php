@@ -12,4 +12,9 @@ class ChatBusinessClientRoom extends Model
 		'chat_business_client_service_id',
 		'name',
 	];
+
+	public function service()
+	{
+		return $this->belongsTo(ChatBusinessClientService::class, 'chat_business_client_service_id');
+	}
 }
