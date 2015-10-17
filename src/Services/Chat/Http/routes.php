@@ -14,4 +14,6 @@ Route::group(['prefix' => 'chat/client', 'namespace' => 'PragmaRX\Sdk\Services\C
 Route::group(['prefix' => 'chat/server', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Controllers'], function ()
 {
 	Route::get('all', ['as' => 'chat.server.all', 'uses' => 'Server@all']);
+
+	Route::get('{chatId}', ['as' => 'chat.server.get', 'uses' => 'Server@get']);
 });

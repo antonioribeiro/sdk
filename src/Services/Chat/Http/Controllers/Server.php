@@ -23,7 +23,7 @@ class Server extends BaseController
 
 		foreach($chats as $chat)
 		{
-			$result[] = [
+			$result[$chat->id] = [
 				'id' => $chat->id,
 				'talker' => [
 					'fullName' => $chat->owner->user->present()->fullName,
@@ -32,6 +32,30 @@ class Server extends BaseController
 				'responder' => $chat->responder ? ['fullName' => $chat->responder->user->present()->fullName] : null,
 			    'email' => $chat->owner->user->email,
 			    'isClosed' => is_null($chat->closed_at),
+				'service' => strtolower($chat->room->service->type->name),
+			];
+		}
+
+		return $result;
+	}
+
+	public function get($chatId)
+	{
+		$chat = ChatModel::find($chatId);
+
+		$result = [];
+
+		foreach($chats as $chat)
+		{
+			$result[] = [
+				'id' => $chat->id,
+				'talker' => [
+					'fullName' => $chat->owner->user->present()->fullName,
+					'avatar' => $chat->owner->user->present()->avatar
+				],
+				'responder' => $chat->responder ? ['fullName' => $chat->responder->user->present()->fullName] : null,
+				'email' => $chat->owner->user->email,
+				'isClosed' => is_null($chat->closed_at),
 				'service' => strtolower($chat->room->service->type->name),
 			];
 		}
