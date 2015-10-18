@@ -13,4 +13,9 @@ class ChatMessage extends Model
 		'chat_business_client_talker_id',
 		'message',
 	];
+
+	public function talker()
+	{
+		return $this->belongsTo(ChatBusinessClientTalker::class, 'chat_business_client_talker_id');
+	}
 }
