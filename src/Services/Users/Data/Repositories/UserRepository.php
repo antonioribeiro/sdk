@@ -1060,4 +1060,11 @@ class UserRepository extends Repository implements UserRepositoryContract
 				? $inviter->present()->fullName
 				: Config::get('app.owner_name');
 	}
+
+	public function allWithBusiness()
+	{
+		$model = $this->getNewModel()->newQuery();
+
+		return $model->with('businessRoles')->get();
+	}
 }

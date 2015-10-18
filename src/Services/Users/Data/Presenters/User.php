@@ -6,6 +6,7 @@ use Config;
 use Avatar;
 use Google2FA;
 use PragmaRX\Sdk\Core\Presenter;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessRole;
 
 class User extends Presenter {
 
@@ -112,12 +113,18 @@ class User extends Presenter {
 
 	public function businessRole()
 	{
-		\DB::listen(function($sql, $bindings, $time) { var_dump($sql); var_dump($bindings); });
+		if ($this->entity->is_root)
+		{
+			$role = new BusinessRole();
+			$role->power = 0;
+			$role->name = 'root';
+			$role->description = 'Root';
+		}
+		else
+		{
+			$role = $this->entity->businessRoles->first()->role;
+		}
 
-		dd($this->entity->businessRoles);
-
-		$roles = $this->entity->businessRoles()->orderBy('business_roles.power')->get();
-
-		return $roles;
+		return $role;
 	}
 }
