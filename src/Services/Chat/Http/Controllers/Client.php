@@ -46,23 +46,21 @@ class Client extends BaseController
 		return redirect('chat/client/'.$chat->id);
 	}
 
-	public function sendMessage($chatId, $username, $message = '')
+	public function sendMessage($chatId, $userId, $message = '')
 	{
+		$message = $this->chatRepository->createMessage($chatId, $userId, $message);
+
 		if ( ! is_null($message) && ! empty($message))
 		{
 			$data = [
 				'event' => $chatId,
 
-				'data' => [
-					'chatId' => $chatId,
-					'username' => $username,
-					'message' => $message
-				]
+				'data' => $message->toArray()
 			];
 
 			Redis::publish('chat-channel', json_encode($data));
 
-//			event(new ChatMessageSent($chatId, $username, $message));
+			event(new ChatMessageSent($chatId, $userId, $message));
 		}
 	}
 }

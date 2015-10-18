@@ -10,6 +10,7 @@ class ChatMessage extends Model
 
 	protected $fillable = [
 		'chat_id',
+		'chat_business_client_talker_id',
 		'message',
 	];
 }

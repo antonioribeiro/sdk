@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Chat\Data\Repositories;
 
 use PragmaRX\Sdk\Core\Data\Repository;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatMessage;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatCustomer;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusiness;
@@ -73,5 +74,25 @@ class Chat extends Repository
 		}
 
 		return $result;
+	}
+
+	public function createMessage($chatId, $userId, $message)
+	{
+		$chat = ChatModel::find($chatId);
+
+		$talker = $this->findTalker($chat, $userId);
+
+		return ChatMessage::create([
+            'chat_id' => $chatId,
+			'chat_business_client_talker_id' => $talker->id,
+			'message' => $message,
+		]);
+	}
+
+	private function findTalker($chat, $userId)
+	{
+		return ChatBusinessClientTalker::where('user_id', $userId)
+					->where('chat_business_client_id', $chat->service->chat_business_client_id)
+					->first();
 	}
 }
