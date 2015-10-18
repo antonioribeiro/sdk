@@ -7,7 +7,7 @@ class CreateBusinessClientUserRolesTable extends Migration
 {
 	public function migrateUp()
 	{
-		Schema::create('business_clients_user_roles', function(Blueprint $table)
+		Schema::create('business_client_user_roles', function(Blueprint $table)
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
@@ -18,7 +18,7 @@ class CreateBusinessClientUserRolesTable extends Migration
 			$table->timestamps();
 		});
 
-		Schema::table('business_clients_user_roles', function(Blueprint $table)
+		Schema::table('business_client_user_roles', function(Blueprint $table)
 		{
 			$table->foreign('business_client_id')
 				->references('id')
@@ -27,7 +27,7 @@ class CreateBusinessClientUserRolesTable extends Migration
 				->onDelete('cascade');
 		});
 
-		Schema::table('business_clients_user_roles', function(Blueprint $table)
+		Schema::table('business_client_user_roles', function(Blueprint $table)
 		{
 			$table->foreign('user_id')
 				->references('id')
@@ -36,7 +36,7 @@ class CreateBusinessClientUserRolesTable extends Migration
 				->onDelete('cascade');
 		});
 
-		Schema::table('business_clients_user_roles', function(Blueprint $table)
+		Schema::table('business_client_user_roles', function(Blueprint $table)
 		{
 			$table->foreign('business_role_id')
 				->references('id')
@@ -48,6 +48,6 @@ class CreateBusinessClientUserRolesTable extends Migration
 
 	public function migrateDown()
 	{
-		Schema::drop('business_clients_user_roles');
+		Schema::drop('business_client_user_roles');
 	}
 }

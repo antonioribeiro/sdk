@@ -14,6 +14,7 @@ class CreateBusinessRolesTable extends Migration
 			$table->string('business_id', 64);
 			$table->string('name');
 			$table->string('description');
+			$table->integer('power')->default(256);
 
 			$table->timestamps();
 		});

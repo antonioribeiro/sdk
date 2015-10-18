@@ -5,7 +5,6 @@ namespace PragmaRX\Sdk\Services\Users\Data\Entities;
 use DB;
 use Auth;
 use Activation;
-use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\PermissionableTrait;
 use Rhumsaa\Uuid\Uuid;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
@@ -27,10 +26,12 @@ use PragmaRX\Sdk\Services\Accounts\Exceptions\UserActivationNotFound;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\FollowableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\ConnectableTrait;
 use PragmaRX\Sdk\Services\Registration\Service\Facade as Registration;
+use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\BusinessableTrait;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
+use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\PermissionableTrait;
 
-class User extends CartalystUser implements CanResetPassword {
-
+class User extends CartalystUser implements CanResetPassword
+{
 	use
 		FollowableTrait,
 		ConnectableTrait,
@@ -42,7 +43,8 @@ class User extends CartalystUser implements CanResetPassword {
 		ReloadableTrait,
 		IdentifiableTrait,
 		CanResetPasswordTrait,
-		PermissionableTrait;
+		PermissionableTrait,
+		BusinessableTrait;
 
 	protected $fillable = ['id', 'username', 'email', 'password', 'first_name', 'last_name'];
 

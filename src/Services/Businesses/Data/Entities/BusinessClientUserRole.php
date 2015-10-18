@@ -7,12 +7,12 @@ use App\Services\Users\Data\Entities\User;
 
 class BusinessClientUserRole extends Model
 {
-	protected $table = 'business_client_user_role';
+	protected $table = 'business_client_user_roles';
 
 	protected $fillable = [
 		'business_client_id',
 		'business_role_id',
-		'name',
+		'user_id',
 	];
 
 	public function client()

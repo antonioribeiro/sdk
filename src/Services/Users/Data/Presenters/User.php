@@ -109,4 +109,15 @@ class User extends Presenter {
 				? $this->settings->client_field_name
 				: t("captions.clients");
 	}
+
+	public function businessRole()
+	{
+		\DB::listen(function($sql, $bindings, $time) { var_dump($sql); var_dump($bindings); });
+
+		dd($this->entity->businessRoles);
+
+		$roles = $this->entity->businessRoles()->orderBy('business_roles.power')->get();
+
+		return $roles;
+	}
 }
