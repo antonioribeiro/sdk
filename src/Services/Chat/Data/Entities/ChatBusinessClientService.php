@@ -9,7 +9,7 @@ class ChatBusinessClientService extends Model
 	protected $table = 'chat_business_client_services';
 
 	protected $fillable = [
-		'chat_business_client_id',
+		'business_client_id',
 		'chat_service_id',
 		'description',
 	];

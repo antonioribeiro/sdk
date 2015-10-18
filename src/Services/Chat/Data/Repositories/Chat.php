@@ -6,10 +6,10 @@ use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatMessage;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatCustomer;
-use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusiness;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\Business;
 use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\Chat as ChatModel;
-use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClient;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientTalker;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientService;
 
@@ -28,12 +28,12 @@ class Chat extends Repository
 	{
 		$user = $this->userRepository->findByEmailOrCreate($email, ['first_name' => $name], true); // allow empty password
 
-		$business = ChatBusiness::firstOrCreate(['name' => 'Alerj']);
+		$business = Business::firstOrCreate(['name' => 'Alerj']);
 
-		$client = ChatBusinessClient::firstOrCreate(['chat_business_id' => $business->id, 'name' => 'Alô Alerj']);
+		$client = BusinessClient::firstOrCreate(['business_id' => $business->id, 'name' => 'Alô Alerj']);
 
 		$talker = ChatBusinessClientTalker::firstOrCreate([
-			'chat_business_client_id' => $client->id,
+			'business_client_id' => $client->id,
 			'user_id' => $user->id,
 		]);
 
@@ -41,7 +41,7 @@ class Chat extends Repository
 
 		$clientService = ChatBusinessClientService::firstOrCreate([
 			'chat_service_id' => $service->id,
-			'chat_business_client_id' => $client->id,
+			'business_client_id' => $client->id,
             'description' => 'Chat do Call Center',
 		]);
 
@@ -92,7 +92,7 @@ class Chat extends Repository
 	private function findTalker($chat, $userId)
 	{
 		return ChatBusinessClientTalker::where('user_id', $userId)
-					->where('chat_business_client_id', $chat->service->chat_business_client_id)
+					->where('business_client_id', $chat->service->business_client_id)
 					->first();
 	}
 
