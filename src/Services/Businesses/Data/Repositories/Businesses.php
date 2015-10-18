@@ -47,7 +47,7 @@ class Businesses extends Repository
 
 	public function createClientForBusiness($business, $name)
 	{
-		return BusinessClient::create([
+		return BusinessClient::firstOrCreate([
 			'business_id' => $business->id, 'name' => $name
 		]);
 	}
