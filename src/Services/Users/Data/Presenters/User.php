@@ -122,7 +122,14 @@ class User extends Presenter {
 		}
 		else
 		{
-			$role = $this->entity->businessRoles->first()->role;
+			if ($role = $this->entity->businessRoles->first())
+			{
+				$role = $this->entity->businessRoles->first()->role;
+			}
+			else
+			{
+				$role = new BusinessRole();
+			}
 		}
 
 		return $role;

@@ -1063,8 +1063,23 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 	public function allWithBusiness()
 	{
-		$model = $this->getNewModel()->newQuery();
+		$users = $this->getNewModel()->newQuery()->with('businessRoles')->get();
 
-		return $model->with('businessRoles')->get();
+		$result = [];
+
+		foreach($users as $user)
+		{
+			$result[] = [
+				'id' => $user->id,
+				'first_name' => $user->first_name,
+				'last_name' => $user->last_name,
+				'email' => $user->email,
+				'username' => $user->username,
+				'fullName' => $user->present()->fullName,
+				'role' => $user->present()->businessRole->description,
+			];
+		}
+
+		return $result;
 	}
 }
