@@ -8,7 +8,7 @@ Route::group(['prefix' => 'chat/client', 'namespace' => 'PragmaRX\Sdk\Services\C
 
 	Route::get('/{id}', ['as' => 'chat.client', 'uses' => 'Client@chat']);
 
-	Route::get('send/{chatId}/{username}/{message?}', ['as' => 'chat.client.send.message', 'uses' => 'Client@sendMessage']);
+	Route::get('send/{chatId}/{usernameId}/{message?}', ['as' => 'chat.client.send.message', 'uses' => 'Client@sendMessage']);
 });
 
 Route::group(['prefix' => 'chat/server', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Controllers'], function ()

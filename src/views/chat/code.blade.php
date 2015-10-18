@@ -7,8 +7,9 @@
 
         data: {
             messages: [],
-            currentUsername: '{{ $talkerUsername }}',
-            currentEmail: '{{ $talkerEmail }}',
+            talkerUsername: '{{ $talkerUsername }}',
+            talkerEmail: '{{ $talkerEmail }}',
+            talkerId: '{{ $talkerId }}',
             currentMessage: '',
             chatId: '{{ $chatId }}',
             connected: false,
@@ -18,13 +19,13 @@
         {
             __sendMessage: function(event)
             {
-                var user = event.targetVM.$data.currentUsername;
+                var userId = event.targetVM.$data.talkerId;
 
                 var message = event.targetVM.$data.currentMessage;
 
                 var chatId = event.targetVM.$data.chatId;
 
-                this.$http.get('{{ url() }}/chat/client/send/'+chatId+'/'+user+'/'+message);
+                this.$http.get('{{ url() }}/chat/client/send/'+chatId+'/'+userId+'/'+message);
             }
         },
 
@@ -40,7 +41,9 @@
                 this.connected = false;
             }.bind(this));
 
-            socket.on('{{ $listenChannel }}', function(data)
+            {{--{{ $listenChannel }}--}}
+
+            socket.on('chat-channel:{{ $chatId }}', function(data)
             {
                 var isOperator = data.username == '{{ $operatorUsername }}';
 

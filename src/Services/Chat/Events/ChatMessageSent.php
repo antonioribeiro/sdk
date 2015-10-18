@@ -10,13 +10,18 @@ class ChatMessageSent extends Event implements ShouldBroadcast
 {
     use SerializesModels;
 
+	public $chatId;
+
 	public $username;
 
 	public $message;
 
-    public function __construct($username, $message)
+    public function __construct($chatId, $username, $message)
     {
+	    $this->chatId = $chatId;
+
 	    $this->username = $username;
+
 	    $this->message = $message;
     }
 

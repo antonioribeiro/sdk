@@ -30,4 +30,9 @@ class Chat extends Model
 	{
 		return $this->belongsTo(ChatBusinessClientService::class, 'chat_business_client_service_id');
 	}
+
+	public function messages()
+	{
+		return $this->hasMany(ChatMessage::class);
+	}
 }

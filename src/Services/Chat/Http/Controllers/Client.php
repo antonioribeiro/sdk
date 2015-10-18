@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Http\Controllers;
 
+use Redis;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Events\ChatMessageSent;
 use PragmaRX\Sdk\Services\Chat\Commands\CreateChat as CreateChatCommand;
@@ -29,11 +30,13 @@ class Client extends BaseController
 		return view('chat.client.index')
 			->with('talkerUsername', $chat->owner->user->first_name)
 			->with('talkerEmail', $chat->owner->user->email)
+			->with('talkerId', $chat->owner->user->id)
 			->with('chatId', $chat_id)
 			->with('operatorUsername', env('CHAT_OPERATOR_USERNAME'))
 			->with('operatorAvatar', $chat->owner->user->present()->avatar)
 			->with('talkerAvatar', $chat->owner->user->present()->avatar)
-			->with('listenChannel', 'chat-channel:PragmaRX\\\\Sdk\\\\Services\\\\Chat\\\\Events\\\\ChatMessageSent');
+//			->with('listenChannel', 'chat-channel:PragmaRX\\\\Sdk\\\\Services\\\\Chat\\\\Events\\\\ChatMessageSent');
+			->with('listenChannel', 'chat-channel:' . $chat_id);
 	}
 
 	public function store(CreateChatRequest $request)
@@ -47,7 +50,19 @@ class Client extends BaseController
 	{
 		if ( ! is_null($message) && ! empty($message))
 		{
-			event(new ChatMessageSent($username, $message));
+			$data = [
+				'event' => $chatId,
+
+				'data' => [
+					'chatId' => $chatId,
+					'username' => $username,
+					'message' => $message
+				]
+			];
+
+			Redis::publish('chat-channel', json_encode($data));
+
+//			event(new ChatMessageSent($chatId, $username, $message));
 		}
 	}
 }

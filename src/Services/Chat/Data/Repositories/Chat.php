@@ -68,6 +68,7 @@ class Chat extends Repository
 				'email' => $chat->owner->user->email,
 				'isClosed' => is_null($chat->closed_at),
 				'service' => strtolower($chat->service->type->name),
+			    'messages' => $chat->messages,
 			];
 		}
 
