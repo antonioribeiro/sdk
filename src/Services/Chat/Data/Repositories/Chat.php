@@ -69,7 +69,7 @@ class Chat extends Repository
 				'email' => $chat->owner->user->email,
 				'isClosed' => is_null($chat->closed_at),
 				'service' => strtolower($chat->service->type->name),
-			    'messages' => $chat->messages()->with('talker')->get(),
+			    'messages' => $this->makeMessages($chat->messages()->with('talker.user')->get()),
 			];
 		}
 
@@ -94,5 +94,22 @@ class Chat extends Repository
 		return ChatBusinessClientTalker::where('user_id', $userId)
 					->where('chat_business_client_id', $chat->service->chat_business_client_id)
 					->first();
+	}
+
+	private function makeMessages($get)
+	{
+		$messages = [];
+
+		foreach($get as $message)
+		{
+			$messages[] = [
+				'message' => $message->message,
+			    'talker' => [
+				    'id' => $message->talker->id,
+				    'fullName' => $message->talker->user->present()->fullName,
+			        'avatar' => $message->talker->user->present()->avatar,
+			    ]
+			];
+		}
 	}
 }
