@@ -111,5 +111,7 @@ class Chat extends Repository
 			    ]
 			];
 		}
+
+		return $messages;
 	}
 }
