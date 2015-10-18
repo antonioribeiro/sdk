@@ -12,6 +12,7 @@ use PragmaRX\Sdk\Services\Chat\Data\Entities\Chat as ChatModel;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientTalker;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientService;
+use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses as BusinessesRepository;
 
 class Chat extends Repository
 {
@@ -19,18 +20,24 @@ class Chat extends Repository
 
 	protected $model = ChatModel::class;
 
-	public function __construct(UserRepository $userRepository)
+	/**
+	 * @var BusinessesRepository
+	 */
+	private $businessesRepository;
+
+	public function __construct(UserRepository $userRepository, BusinessesRepository $businessesRepository)
 	{
 		$this->userRepository = $userRepository;
+		$this->businessesRepository = $businessesRepository;
 	}
 
 	public function create($name, $email)
 	{
 		$user = $this->userRepository->findByEmailOrCreate($email, ['first_name' => $name], true); // allow empty password
 
-		$business = Business::firstOrCreate(['name' => 'Alerj']);
+		$business = $this->businessesRepository->createBusiness(['name' => 'Alerj']);
 
-		$client = BusinessClient::firstOrCreate(['business_id' => $business->id, 'name' => 'Alô Alerj']);
+		$client = $this->businessesRepository->createClientForBusiness($business, 'Alô Alerj');
 
 		$talker = ChatBusinessClientTalker::firstOrCreate([
 			'business_client_id' => $client->id,
