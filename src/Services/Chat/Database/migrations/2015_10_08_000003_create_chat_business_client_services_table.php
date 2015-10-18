@@ -11,7 +11,7 @@ class CreateChatBusinessClientServicesTable extends Migration
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
-			$table->string('chat_business_client_id', 64);
+			$table->string('business_client_id', 64);
 			$table->string('chat_service_id', 64);
 			$table->string('description');
 
@@ -20,9 +20,9 @@ class CreateChatBusinessClientServicesTable extends Migration
 
 		Schema::table('chat_business_client_services', function(Blueprint $table)
 		{
-			$table->foreign('chat_business_client_id')
+			$table->foreign('business_client_id')
 				->references('id')
-				->on('chat_business_clients')
+				->on('business_clients')
 				->onUpdate('cascade')
 				->onDelete('cascade');
 		});

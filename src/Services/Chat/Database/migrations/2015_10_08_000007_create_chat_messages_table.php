@@ -21,7 +21,7 @@ class CreateChatMessagesTable extends Migration
 
 		DB::unprepared('alter table chat_messages add serial bigserial;');
 
-		Schema::create('chat_messages', function(Blueprint $table)
+		Schema::table('chat_messages', function(Blueprint $table)
 		{
 			$table->index('serial');
 		});

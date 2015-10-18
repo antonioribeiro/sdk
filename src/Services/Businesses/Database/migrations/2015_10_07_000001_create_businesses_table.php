@@ -3,11 +3,11 @@
 use PragmaRX\Support\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateChatBusinessesTable extends Migration
+class CreateBusinessesTable extends Migration
 {
 	public function migrateUp()
 	{
-		Schema::create('chat_businesses', function(Blueprint $table)
+		Schema::create('businesses', function(Blueprint $table)
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
@@ -19,6 +19,6 @@ class CreateChatBusinessesTable extends Migration
 
 	public function migrateDown()
 	{
-		Schema::drop('chat_businesses');
+		Schema::drop('businesses');
 	}
 }
