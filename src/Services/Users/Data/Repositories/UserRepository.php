@@ -1063,21 +1063,46 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 	public function allWithBusiness()
 	{
-		$users = $this->getNewModel()->newQuery()->with('businessRoles')->get();
+		if ($user = Auth::user())
+		{
+			if ( ! $user->is_root)
+			{
+				if ( ! $role = $user->businessClientRoles()->first())
+				{
+					return null;
+				}
+
+				$users = $this->getNewModel()->newQuery();
+			}
+		}
+		else
+		{
+			return null;
+		}
+
+		$users = $users->get();
 
 		$result = [];
 
+		$authUserClients = $user->businessClientRoles->lists('business_client_id')->toArray();
+
 		foreach($users as $user)
 		{
-			$result[] = [
-				'id' => $user->id,
-				'first_name' => $user->first_name,
-				'last_name' => $user->last_name,
-				'email' => $user->email,
-				'username' => $user->username,
-				'fullName' => $user->present()->fullName,
-				'role' => $user->present()->businessRole->description,
-			];
+			$clients = $user->businessClientRoles->lists('business_client_id')->toArray();
+
+			if (array_intersect($authUserClients, $clients))
+			{
+				$result[] = [
+					'id' => $user->id,
+					'first_name' => $user->first_name,
+					'last_name' => $user->last_name,
+					'email' => $user->email,
+					'username' => $user->username,
+					'fullName' => $user->present()->fullName,
+					'role' => $user->present()->businessRole->description,
+					'businessClient' => $user->present()->businessClient->name,
+				];
+			}
 		}
 
 		return $result;

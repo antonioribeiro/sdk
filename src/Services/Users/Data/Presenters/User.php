@@ -6,6 +6,7 @@ use Config;
 use Avatar;
 use Google2FA;
 use PragmaRX\Sdk\Core\Presenter;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessRole;
 
 class User extends Presenter {
@@ -122,9 +123,9 @@ class User extends Presenter {
 		}
 		else
 		{
-			if ($role = $this->entity->businessRoles->first())
+			if ($role = $this->entity->businessClientRoles->first())
 			{
-				$role = $this->entity->businessRoles->first()->role;
+				$role = $this->entity->businessClientRoles->first()->role;
 			}
 			else
 			{
@@ -133,5 +134,19 @@ class User extends Presenter {
 		}
 
 		return $role;
+	}
+
+	public function businessClient()
+	{
+		if ($client = $this->entity->businessClientRoles->first())
+		{
+			$client = $this->entity->businessClientRoles->first()->client;
+		}
+		else
+		{
+			$client = new BusinessClient();
+		}
+
+		return $client;
 	}
 }

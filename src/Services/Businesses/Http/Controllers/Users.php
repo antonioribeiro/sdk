@@ -20,4 +20,9 @@ class Users extends BaseController
 
 		return view('businesses.users.index')->with('users', $users);
 	}
+
+	public function create()
+	{
+		return view('businesses.users.create');
+	}
 }
