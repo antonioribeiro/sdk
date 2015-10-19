@@ -2,16 +2,26 @@
 
 namespace PragmaRX\Sdk\Services\Businesses\Http\Controllers;
 
+use Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Businesses\Http\Requests\CreateUser;
 use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
+use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses as BusinessesRepository;
+use \PragmaRX\Sdk\Services\Businesses\Commands\CreateUser as CreateUserCommand;
 
 class Users extends BaseController
 {
 	private $userRepository;
 
-	public function __construct(UserRepository $userRepository)
+	/**
+	 * @var BusinessesRepository
+	 */
+	private $businessesRepository;
+
+	public function __construct(UserRepository $userRepository, BusinessesRepository $businessesRepository)
 	{
 		$this->userRepository = $userRepository;
+		$this->businessesRepository = $businessesRepository;
 	}
 
 	public function index()
@@ -23,6 +33,19 @@ class Users extends BaseController
 
 	public function create()
 	{
-		return view('businesses.users.create');
+		$clients = $this->businessesRepository->allClients()->lists('name', 'id');
+
+		return view('businesses.users.create')
+				->with('businessClients', $clients);
+	}
+
+	public function store(CreateUser $createUser)
+	{
+		$this->execute(CreateUserCommand::class);
+
+		return Redirect::route_no_ajax('notification')
+			->with('title', t('titles.reset-your-password'))
+			->with('message', t('paragraphs.reset-password-sent'))
+			->withInput();
 	}
 }

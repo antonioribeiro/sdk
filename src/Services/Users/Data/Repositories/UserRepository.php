@@ -1063,16 +1063,16 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 	public function allWithBusiness()
 	{
-		if ($user = Auth::user())
+		if ($loggedUser = Auth::user())
 		{
-			if ( ! $user->is_root)
+			$users = $this->getNewModel()->newQuery();
+
+			if ( ! $loggedUser->is_root)
 			{
-				if ( ! $role = $user->businessClientRoles()->first())
+				if ( ! $role = $loggedUser->businessClientRoles()->first())
 				{
 					return null;
 				}
-
-				$users = $this->getNewModel()->newQuery();
 			}
 		}
 		else
@@ -1084,13 +1084,13 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 		$result = [];
 
-		$authUserClients = $user->businessClientRoles->lists('business_client_id')->toArray();
+		$authUserClients = $loggedUser->businessClientRoles->lists('business_client_id')->toArray();
 
 		foreach($users as $user)
 		{
 			$clients = $user->businessClientRoles->lists('business_client_id')->toArray();
 
-			if (array_intersect($authUserClients, $clients))
+			if ($loggedUser->is_root || array_intersect($authUserClients, $clients))
 			{
 				$result[] = [
 					'id' => $user->id,

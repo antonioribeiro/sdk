@@ -4,12 +4,20 @@ namespace PragmaRX\Sdk\Services\Businesses\Data\Repositories;
 
 use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\Business;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessRole;
+use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUserRole;
-use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessRole;
 
 class Businesses extends Repository
 {
+	private $userRepository;
+
+	public function __construct(UserRepository $userRepository)
+	{
+		$this->userRepository = $userRepository;
+	}
+
 	public function createBusiness($atributes)
 	{
 		$business = Business::firstOrCreate($atributes);
@@ -70,5 +78,28 @@ class Businesses extends Repository
 			'business_role_id' => $role->id,
 			'user_id' => $user->id,
 		]);
+	}
+
+	public function allClients()
+	{
+		return BusinessClient::all();
+	}
+
+	public function createUser($attributes)
+	{
+		$user = $this->userRepository->findByEmailOrCreate(
+			$attributes['email'],
+			[
+				'first_name' => $attributes['first_name'],
+				'last_name' => $attributes['last_name'],
+			],
+			true
+		);
+
+		$client = BusinessClient::find($attributes['business_client_id']);
+
+		$this->createClientUserRole($client, 'operator', $user);
+
+		return $user;
 	}
 }
