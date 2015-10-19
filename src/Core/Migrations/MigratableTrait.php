@@ -163,5 +163,4 @@ trait MigratableTrait {
 	{
 		return File::glob($this->getTemporaryMigrationDirectory().'/*_*.php');
 	}
-
-} 
+}

@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Businesses\Http\Controllers;
 
+use Flash;
 use Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Businesses\Http\Requests\CreateUser;
@@ -43,9 +44,8 @@ class Users extends BaseController
 	{
 		$this->execute(CreateUserCommand::class);
 
-		return Redirect::route_no_ajax('notification')
-			->with('title', t('titles.reset-your-password'))
-			->with('message', t('paragraphs.reset-password-sent'))
-			->withInput();
+		Flash::message(t('paragraphs.user-created'));
+
+		return Redirect::route_no_ajax('businesses.users.index');
 	}
 }

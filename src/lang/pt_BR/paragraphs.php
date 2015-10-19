@@ -137,4 +137,5 @@ return array (
   'you-need-to-select-members' => 'Você precisa selecionar pelo menos um membro.',
   'your-password-was-updated' => 'Isto é só para lembrar que você trocou a sua senha.',
   'your-settings-were-updated' => 'Suas configurações foram alteradas.',
+  'user-created' => 'O usuário foi criado',
 );
