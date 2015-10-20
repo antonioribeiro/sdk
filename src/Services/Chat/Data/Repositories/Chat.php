@@ -6,6 +6,7 @@ use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatMessage;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatCustomer;
+use PragmaRX\Sdk\Services\Chat\Http\Server\Requests\CreateScript;
 use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\Chat as ChatModel;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientTalker;
@@ -118,5 +119,24 @@ class Chat extends Repository
 		}
 
 		return $messages;
+	}
+
+	public function allServices()
+	{
+		return ChatService::all();
+	}
+
+	public function createScript($attributes)
+	{
+		$script = CreateScript::firstOrCreate(
+			[
+				'name' => $attributes['name'],
+				'business_client_id' => $attributes['business_client_id'],
+				'chat_service_id' => $attributes['chat_service_id'],
+				'script' => $attributes['script'],
+			]
+		);
+
+		return $script;
 	}
 }

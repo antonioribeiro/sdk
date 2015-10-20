@@ -138,5 +138,6 @@ return array (
   'your-password-was-updated' => 'Isto é só para lembrar que você trocou a sua senha.',
   'your-settings-were-updated' => 'Suas configurações foram alteradas.',
   'user-created' => 'O usuário foi criado.',
-  'welcome-email-sent' => 'E-mail de boas vindas enviado.'
+  'welcome-email-sent' => 'E-mail de boas vindas enviado.',
+  'script-created' => 'O script foi criado.',
 );

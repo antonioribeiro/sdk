@@ -7,8 +7,8 @@ use Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Businesses\Http\Requests\CreateUser;
 use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
-use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses as BusinessesRepository;
 use \PragmaRX\Sdk\Services\Businesses\Commands\CreateUser as CreateUserCommand;
+use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses as BusinessesRepository;
 
 class Users extends BaseController
 {

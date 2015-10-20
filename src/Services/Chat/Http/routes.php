@@ -15,7 +15,14 @@ Route::group(['prefix' => 'chat/server', 'namespace' => 'PragmaRX\Sdk\Services\C
 {
 	Route::get('all', ['as' => 'chat.server.all', 'uses' => 'Home@all']);
 
-	Route::get('{chatId}', ['as' => 'chat.server.get', 'uses' => 'Home@get']);
+	Route::group(['prefix' => 'scripts'], function ()
+	{
+		Route::get('/', ['as' => 'chat.server.scripts.index', 'uses' => 'Scripts@index']);
 
-	Route::get('scripts', ['as' => 'chat.server.scripts.index', 'uses' => 'Home@get']);
+		Route::get('create', ['as' => 'chat.server.scripts.create', 'uses' => 'Scripts@create']);
+
+		Route::post('store', ['as' => 'chat.server.scripts.store', 'uses' => 'Scripts@store']);
+	});
+
+	Route::get('{chatId}', ['as' => 'chat.server.get', 'uses' => 'Home@get']);
 });
