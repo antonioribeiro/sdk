@@ -5,6 +5,7 @@ namespace PragmaRX\Sdk\Services\Businesses\Data\Repositories;
 use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\Business;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessRole;
+use PragmaRX\Sdk\Services\Businesses\Events\UserWasCreated;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUserRole;
@@ -99,6 +100,8 @@ class Businesses extends Repository
 		$client = BusinessClient::find($attributes['business_client_id']);
 
 		$this->createClientUserRole($client, 'operator', $user);
+
+		event(new UserWasCreated($user));
 
 		return $user;
 	}

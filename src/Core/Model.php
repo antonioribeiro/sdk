@@ -23,4 +23,22 @@ class Model extends Eloquent
 		IdentifiableTrait,
 		ReloadableTrait;
 
+	public static function boot()
+	{
+		parent::boot();
+	}
+
+	private function getUserId()
+	{
+		try {
+			if (\Auth::check())
+			{
+				return \Auth::user()->getAuthIdentifier();
+			}
+		} catch (\Exception $e) {
+			return null;
+		}
+
+		return null;
+	}
 }

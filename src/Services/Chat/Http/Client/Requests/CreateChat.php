@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Sdk\Services\Chat\Http\Requests;
+namespace PragmaRX\Sdk\Services\Chat\Http\Client\Requests;
 
 use PragmaRX\Sdk\Core\Validation\FormRequest;
 

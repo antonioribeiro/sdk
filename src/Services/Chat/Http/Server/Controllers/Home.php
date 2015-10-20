@@ -1,11 +1,11 @@
 <?php
 
-namespace PragmaRX\Sdk\Services\Chat\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Chat\Http\Server\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
 
-class Server extends BaseController
+class Home extends BaseController
 {
 	private $chatRepository;
 

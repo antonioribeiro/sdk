@@ -110,4 +110,5 @@ return array (
   'postpone' => 'Adiar',
   'send-invitation' => 'Eviar Convite',
   'settings' => 'Configurações',
+  'welcome' => 'Seja bem-vindo!',
 );

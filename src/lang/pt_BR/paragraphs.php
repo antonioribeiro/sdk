@@ -17,7 +17,7 @@ return array (
   'terms-and-conditions' => 'Termos e Condições',
   'type-email-or-username' => 'Por favor digite o e-mail ou nome de usuário.',
   'you-can-connect-to-members' => 'Conectar-se à comunidade ConsultórioDigital:',
-  'welcome-message' => 'Estamos felizes em ter você aqui conosco. Um link para ativação da conta foi enviado para a sua caixa postal, é preciso clicar nele para confirmar seu e-mail e ativar a sua conta.',
+  'welcome-message' => 'Seu registro foi realizado! Estamos felizes em ter você aqui conosco. Um link para ativação deve ser enviado em breve para a sua caixa postal, é preciso clicar nele para confirmar seu e-mail e ativar a sua conta.',
   'already-favorited' => 'Este item já está nos seus favoritos.',
   'confirm-password' => 'Confirme sua senha',
   'error' => 'erro',
@@ -137,5 +137,6 @@ return array (
   'you-need-to-select-members' => 'Você precisa selecionar pelo menos um membro.',
   'your-password-was-updated' => 'Isto é só para lembrar que você trocou a sua senha.',
   'your-settings-were-updated' => 'Suas configurações foram alteradas.',
-  'user-created' => 'O usuário foi criado',
+  'user-created' => 'O usuário foi criado.',
+  'welcome-email-sent' => 'E-mail de boas vindas enviado.'
 );

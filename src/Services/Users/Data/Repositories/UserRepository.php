@@ -946,7 +946,7 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 		$token = Auth::createReminder($user);
 
-		$user->raise(new PasswordReminderCreated($user, $token));
+		event(new PasswordReminderCreated($user, $token));
 
 		return $user;
 	}
@@ -1090,7 +1090,7 @@ class UserRepository extends Repository implements UserRepositoryContract
 		{
 			$clients = $user->businessClientRoles->lists('business_client_id')->toArray();
 
-			if ($loggedUser->is_root || array_intersect($authUserClients, $clients))
+			if ($loggedUser->is_root || (!$user->is_root && array_intersect($authUserClients, $clients)))
 			{
 				$result[] = [
 					'id' => $user->id,
@@ -1106,5 +1106,19 @@ class UserRepository extends Repository implements UserRepositoryContract
 		}
 
 		return $result;
+	}
+
+	public function sendWelcomeEmail($user)
+	{
+		Mailer::send(
+			'emails.user.welcome',
+			$user,
+			t('captions.welcome'),
+			[
+				'title' => t('captions.welcome'),
+			]
+		);
+
+		Flash::message(t('paragraphs.welcome-email-sent'));
 	}
 }

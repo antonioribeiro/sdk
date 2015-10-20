@@ -1,6 +1,6 @@
 <?php
 
-namespace PragmaRX\Sdk\Services\Chat\Http\Controllers;
+namespace PragmaRX\Sdk\Services\Chat\Http\Client\Controllers;
 
 use Redis;
 use PragmaRX\Sdk\Core\Controller as BaseController;
@@ -9,7 +9,7 @@ use PragmaRX\Sdk\Services\Chat\Commands\CreateChat as CreateChatCommand;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
 use PragmaRX\Sdk\Services\Chat\Http\Requests\CreateChat as CreateChatRequest;
 
-class Client extends BaseController
+class Home extends BaseController
 {
 	private $chatRepository;
 

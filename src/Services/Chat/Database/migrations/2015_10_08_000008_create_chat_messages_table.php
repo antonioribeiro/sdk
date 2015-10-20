@@ -15,6 +15,7 @@ class CreateChatMessagesTable extends Migration
 			$table->string('chat_id', 64)->index();
 			$table->string('chat_business_client_talker_id', 64)->index();
 			$table->text('message');
+			$table->string('chat_script_id', 64)->index();
 
 			$table->timestamps();
 		});
@@ -40,6 +41,15 @@ class CreateChatMessagesTable extends Migration
 			$table->foreign('chat_business_client_talker_id')
 				->references('id')
 				->on('chat_business_client_talkers')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
+		Schema::table('chat_messages', function(Blueprint $table)
+		{
+			$table->foreign('chat_script_id')
+				->references('id')
+				->on('chat_scripts')
 				->onUpdate('cascade')
 				->onDelete('cascade');
 		});
