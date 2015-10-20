@@ -2,6 +2,8 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Http\Server\Controllers;
 
+use Flash;
+use Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Commands\CreateScript as CreateScriptCommand;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
@@ -21,7 +23,7 @@ class Scripts extends BaseController
 
 	public function index()
 	{
-		$scripts = ChatScript::all();
+		$scripts = $this->chatRepository->allScripts();
 
 		return view('scripts.index')->with('scripts', $scripts);
 	}
@@ -42,6 +44,6 @@ class Scripts extends BaseController
 
 		Flash::message(t('paragraphs.script-created'));
 
-		return Redirect::route_no_ajax('chats.server.scripts.index');
+		return Redirect::route_no_ajax('chat.server.scripts.index');
 	}
 }

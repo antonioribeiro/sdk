@@ -7,7 +7,7 @@ use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Events\ChatMessageSent;
 use PragmaRX\Sdk\Services\Chat\Commands\CreateChat as CreateChatCommand;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
-use PragmaRX\Sdk\Services\Chat\Http\Requests\CreateChat as CreateChatRequest;
+use PragmaRX\Sdk\Services\Chat\Http\Client\Requests\CreateChat as CreateChatRequest;
 
 class Home extends BaseController
 {
@@ -43,6 +43,13 @@ class Home extends BaseController
 	{
 		$chat = $this->execute(CreateChatCommand::class, $request->all());
 
+		$data = [
+			'event' => 'ChatCreated',
+			'data' => [],
+		];
+
+		Redis::publish('chat-channel', json_encode($data));
+
 		return redirect('chat/client/'.$chat->id);
 	}
 
@@ -64,3 +71,4 @@ class Home extends BaseController
 		}
 	}
 }
+
