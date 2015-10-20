@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Services\Chat\Data\Repositories;
 
 use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScriptType;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatMessage;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatCustomer;
@@ -134,6 +135,7 @@ class Chat extends Repository
 				'business_client_id' => $attributes['business_client_id'],
 				'chat_service_id' => $attributes['chat_service_id'],
 				'script' => $attributes['script'],
+			    'chat_script_type_id' => $attributes['chat_script_type_id'],
 			]
 		);
 
@@ -142,6 +144,8 @@ class Chat extends Repository
 
 	public function allScripts()
 	{
+		$result = [];
+
 		foreach(ChatScript::all() as $script)
 		{
 			$result[] = [
@@ -154,5 +158,10 @@ class Chat extends Repository
 		}
 
 		return $result;
+	}
+
+	public function allScriptTypes()
+	{
+		return ChatScriptType::all();
 	}
 }

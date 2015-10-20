@@ -14,6 +14,7 @@ class CreateChatScriptsTable extends Migration
 
 			$table->string('business_client_id', 64)->index();
 			$table->string('chat_service_id', 64)->index()->nullable();
+			$table->string('chat_script_type_id')->index();
 			$table->text('name');
 			$table->string('script');
 
@@ -37,6 +38,16 @@ class CreateChatScriptsTable extends Migration
 				->onUpdate('cascade')
 				->onDelete('cascade');
 		});
+
+		Schema::table('chat_scripts', function(Blueprint $table)
+		{
+			$table->foreign('chat_script_type_id')
+				->references('id')
+				->on('chat_script_types')
+				->onUpdate('cascade')
+				->onDelete('cascade');
+		});
+
 	}
 
 	public function migrateDown()

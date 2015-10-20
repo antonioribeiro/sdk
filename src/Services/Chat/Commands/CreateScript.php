@@ -15,6 +15,8 @@ class CreateScript extends SelfHandlingCommand
 
 	public $script;
 
+	public $chat_script_type_id;
+
 	public function handle(ChatRepository $chatRepository)
 	{
 		$result = $chatRepository->createScript($this->getPublicProperties());

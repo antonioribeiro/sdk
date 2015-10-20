@@ -32,8 +32,10 @@ class Scripts extends BaseController
 	{
 		$services = $this->chatRepository->allServices()->lists('name', 'id');
 		$clients = $this->businessesRepository->allClients()->lists('name', 'id');
+		$types = $this->chatRepository->allScriptTypes()->lists('description', 'id');
 
 		return view('scripts.create')
+				->with('scriptTypes', $types)
 				->with('chatServices', $services)
 				->with('businessClients', $clients);
 	}

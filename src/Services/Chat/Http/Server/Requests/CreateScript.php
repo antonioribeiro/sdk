@@ -13,6 +13,7 @@ class CreateScript extends FormRequest
 			'business_client_id' => 'required',
 			'chat_service_id' => 'required',
 			'script' => 'required',
+		    'chat_script_type_id' => 'required',
 		];
 	}
 }
