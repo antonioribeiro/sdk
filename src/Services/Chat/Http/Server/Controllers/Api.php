@@ -41,4 +41,29 @@ class Api extends BaseController
 
 		return $script;
 	}
+
+	public function sendMessage($chatId, $userId, $message = '')
+	{
+		$message = $this->chatRepository->createMessage($chatId, $userId, $message);
+
+		if ( ! is_null($message) && ! empty($message))
+		{
+			$data = [
+				'event' => $chatId,
+
+				'data' => $message->toArray()
+			];
+
+			Redis::publish('chat-channel', json_encode($data));
+
+			event(new ChatMessageSent($chatId, $userId, $message));
+		}
+	}
+
+	public function respond($chatId)
+	{
+		$response = $this->chatRepository->respond($chatId);
+
+		return $response;
+	}
 }

@@ -4,7 +4,6 @@ namespace PragmaRX\Sdk\Services\Chat\Http\Client\Controllers;
 
 use Redis;
 use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Services\Chat\Events\ChatMessageSent;
 use PragmaRX\Sdk\Services\Chat\Commands\CreateChat as CreateChatCommand;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
 use PragmaRX\Sdk\Services\Chat\Http\Client\Requests\CreateChat as CreateChatRequest;
@@ -52,25 +51,4 @@ class Chat extends BaseController
 
 		return redirect('chat/client/'.$chat->id);
 	}
-
-	public function sendMessage($chatId, $userId, $message = '')
-	{
-		$message = $this->chatRepository->createMessage($chatId, $userId, $message);
-
-		if ( ! is_null($message) && ! empty($message))
-		{
-			$data = [
-				'event' => $chatId,
-
-				'data' => $message->toArray()
-			];
-
-			Redis::publish('chat-channel', json_encode($data));
-
-			event(new ChatMessageSent($chatId, $userId, $message));
-		}
-	}
-
-
 }
-

@@ -15,11 +15,6 @@ class Chat extends BaseController
 		$this->chatRepository = $chatRepository;
 	}
 
-	public function all()
-	{
-		return $this->chatRepository->all();
-	}
-
 	public function get($chatId)
 	{
 		$chat = ChatModel::find($chatId);
@@ -42,10 +37,5 @@ class Chat extends BaseController
 		}
 
 		return $result;
-	}
-
-	public function scripts()
-	{
-		return ChatScript::with('type')->get();
 	}
 }

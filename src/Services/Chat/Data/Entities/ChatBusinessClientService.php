@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Chat\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
 
 class ChatBusinessClientService extends Model
 {
@@ -17,5 +18,10 @@ class ChatBusinessClientService extends Model
 	public function type()
 	{
 		return $this->belongsTo(ChatService::class, 'chat_service_id');
+	}
+
+	public function client()
+	{
+		return $this->belongsTo(BusinessClient::class, 'business_client_id');
 	}
 }

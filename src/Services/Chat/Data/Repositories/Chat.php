@@ -2,6 +2,8 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Data\Repositories;
 
+use Auth;
+use Carbon\Carbon;
 use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScriptType;
@@ -163,5 +165,65 @@ class Chat extends Repository
 	public function allScriptTypes()
 	{
 		return ChatScriptType::all();
+	}
+
+	public function respond($chatId)
+	{
+		$chat = ChatModel::find($chatId);
+
+		if ( ! $chat)
+		{
+			return $this->makeResponse(false, 'Chat não localizado');
+		}
+
+		if ($chat->responder)
+		{
+			return $this->makeResponse(false, 'Chat já sendo respondido');
+		}
+
+		return $this->makeResponse(
+			true,
+			'Chat iniciado',
+			$this->setChatResponder($chat, Auth::user())
+		);
+	}
+
+	private function setChatResponder($chat, $user)
+	{
+		$talker = $this->findOrCreateTalker($chat, $user);
+
+		$chat->responder_id = $talker->id;
+
+		$chat->opened_at = Carbon::now();
+
+		$chat->save();
+
+		return $chat;
+	}
+
+	/**
+	 * @return array
+	 */
+	private function makeResponse($success, $message, $chat = null)
+	{
+		$response = [
+			'success' => $success,
+			'message' => $message,
+		];
+
+		if ($chat)
+		{
+			$response['chat'] = $chat;
+		}
+
+		return $response;
+	}
+
+	private function findOrCreateTalker($chat, $user)
+	{
+		return ChatBusinessClientTalker::firstOrCreate([
+			'business_client_id' => $chat->service->client->id,
+			'user_id' => $user->id,
+		]);
 	}
 }
