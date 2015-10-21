@@ -23,7 +23,7 @@ class Chat extends Model
 
 	public function responder()
 	{
-		return $this->belongsTo(User::class, 'responder_id');
+		return $this->belongsTo(ChatBusinessClientTalker::class, 'responder_id');
 	}
 
 	public function service()

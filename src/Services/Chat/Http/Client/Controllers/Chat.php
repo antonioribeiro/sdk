@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Http\Client\Controllers;
 
+use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
 use Redis;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Commands\CreateChat as CreateChatCommand;
@@ -12,9 +13,15 @@ class Chat extends BaseController
 {
 	private $chatRepository;
 
-	public function __construct(ChatRepository $chatRepository)
+	/**
+	 * @var EventPublisher
+	 */
+	private $eventPublisher;
+
+	public function __construct(ChatRepository $chatRepository, EventPublisher $eventPublisher)
 	{
 		$this->chatRepository = $chatRepository;
+		$this->eventPublisher = $eventPublisher;
 	}
 
 	public function create()
@@ -42,12 +49,7 @@ class Chat extends BaseController
 	{
 		$chat = $this->execute(CreateChatCommand::class, $request->all());
 
-		$data = [
-			'event' => 'ChatCreated',
-			'data' => [],
-		];
-
-		Redis::publish('chat-channel', json_encode($data));
+		$this->eventPublisher->publish('ChatCreated');
 
 		return redirect('chat/client/'.$chat->id);
 	}

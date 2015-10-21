@@ -6,14 +6,21 @@ use Auth;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
+use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
 
 class Api extends BaseController
 {
 	private $chatRepository;
 
-	public function __construct(ChatRepository $chatRepository)
+	/**
+	 * @var EventPublisher
+	 */
+	private $eventPublisher;
+
+	public function __construct(ChatRepository $chatRepository, EventPublisher $eventPublisher)
 	{
 		$this->chatRepository = $chatRepository;
+		$this->eventPublisher = $eventPublisher;
 	}
 
 	public function all()
@@ -48,13 +55,7 @@ class Api extends BaseController
 
 		if ( ! is_null($message) && ! empty($message))
 		{
-			$data = [
-				'event' => $chatId,
-
-				'data' => $message->toArray()
-			];
-
-			Redis::publish('chat-channel', json_encode($data));
+			$this->eventPublisher->publish($chatId, $message->toArray());
 
 			event(new ChatMessageSent($chatId, $userId, $message));
 		}
@@ -63,6 +64,8 @@ class Api extends BaseController
 	public function respond($chatId)
 	{
 		$response = $this->chatRepository->respond($chatId);
+
+		$this->eventPublisher->publish('chatResponded');
 
 		return $response;
 	}

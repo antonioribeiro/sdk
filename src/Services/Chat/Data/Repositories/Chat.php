@@ -75,7 +75,7 @@ class Chat extends Repository
 					'fullName' => $chat->owner->user->present()->fullName,
 					'avatar' => $chat->owner->user->present()->avatar
 				],
-				'responder' => $chat->responder ? ['fullName' => $chat->responder->user->present()->fullName] : null,
+				'responder' => $chat->responder_id ? ['fullName' => $chat->responder->user->present()->fullName] : null,
 				'responder_id' => $chat->responder_id,
 				'email' => $chat->owner->user->email,
 				'isClosed' => is_null($chat->closed_at),

@@ -4,6 +4,7 @@
 // Example:
 //
 //     node vendor/pragmarx/sdk/src/Services/Chat/NodeJS/socket.js
+//     node app/Services/Chat/Server/NodeJs/socket.js
 //
 //
 
@@ -23,7 +24,14 @@ redis.on('message', function(channel, message)
 {
     message = JSON.parse(message);
 
-    console.log(channel + ': ' + message.data.username+'> '+message.data.message);
+    var text = '';
+
+    if (typeof message.data != 'undefined' && typeof message.data.message != 'undefined')
+    {
+        text = '> '+message.data.message;
+    }
+
+    console.log(channel + ': ' + message.event + text);
 
     io.emit(channel + ':' + message.event, message.data);
 });
