@@ -3,7 +3,6 @@
 namespace PragmaRX\Sdk\Services\Chat\Http\Server\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
 
 class Chat extends BaseController
@@ -13,6 +12,18 @@ class Chat extends BaseController
 	public function __construct(ChatRepository $chatRepository)
 	{
 		$this->chatRepository = $chatRepository;
+	}
+
+	public function index()
+	{
+		$chats = $this->chatRepository->all();
+
+		$currenOperatorId = $this->chatRepository->getCurrentTalker()->id;
+
+		return view('chat.server.index')
+			->with('listenChannel', 'chat-channel:PragmaRX\\\\Sdk\\\\Services\\\\Chat\\\\Events\\\\ChatMessageSent')
+			->with('currentOperatorId', $currenOperatorId)
+			->with('chats', $chats);
 	}
 
 	public function get($chatId)
@@ -38,4 +49,5 @@ class Chat extends BaseController
 
 		return $result;
 	}
+
 }

@@ -11,6 +11,8 @@ Route::group(['prefix' => 'chat/client', 'namespace' => 'PragmaRX\Sdk\Services\C
 
 Route::group(['prefix' => 'chat/server', 'middleware' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Server\Controllers'], function ()
 {
+	Route::get('/', ['as' => 'chat.server.index', 'uses' => 'Chat@index']);
+
 	Route::group(['prefix' => 'scripts'], function ()
 	{
 		Route::get('/', ['as' => 'chat.server.scripts.index', 'uses' => 'Scripts@index']);

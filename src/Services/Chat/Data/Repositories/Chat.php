@@ -5,6 +5,7 @@ namespace PragmaRX\Sdk\Services\Chat\Data\Repositories;
 use Auth;
 use Carbon\Carbon;
 use PragmaRX\Sdk\Core\Data\Repository;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScriptType;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
@@ -75,6 +76,7 @@ class Chat extends Repository
 					'avatar' => $chat->owner->user->present()->avatar
 				],
 				'responder' => $chat->responder ? ['fullName' => $chat->responder->user->present()->fullName] : null,
+				'responder_id' => $chat->responder_id,
 				'email' => $chat->owner->user->email,
 				'isClosed' => is_null($chat->closed_at),
 				'service' => strtolower($chat->service->type->name),
@@ -190,7 +192,7 @@ class Chat extends Repository
 
 	private function setChatResponder($chat, $user)
 	{
-		$talker = $this->findOrCreateTalker($chat, $user);
+		$talker = $this->findOrCreateTalker($chat->service->client, $user);
 
 		$chat->responder_id = $talker->id;
 
@@ -219,11 +221,18 @@ class Chat extends Repository
 		return $response;
 	}
 
-	private function findOrCreateTalker($chat, $user)
+	private function findOrCreateTalker($client, $user)
 	{
 		return ChatBusinessClientTalker::firstOrCreate([
-			'business_client_id' => $chat->service->client->id,
+			'business_client_id' => $client->id,
 			'user_id' => $user->id,
 		]);
+	}
+
+	public function getCurrentTalker()
+	{
+		$client = BusinessClient::first();
+
+		return $this->findOrCreateTalker($client, Auth::user());
 	}
 }
