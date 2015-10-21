@@ -65,7 +65,7 @@ class Api extends BaseController
 	{
 		$response = $this->chatRepository->respond($chatId);
 
-		$this->eventPublisher->publish('chatResponded');
+		$this->eventPublisher->publish('ChatResponded');
 
 		return $response;
 	}
