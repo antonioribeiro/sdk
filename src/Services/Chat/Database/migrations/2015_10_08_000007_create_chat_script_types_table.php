@@ -1,6 +1,5 @@
 <?php
 
-use \DB;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScriptType;
 use PragmaRX\Support\Migration;
 use Illuminate\Database\Schema\Blueprint;

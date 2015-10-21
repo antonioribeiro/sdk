@@ -1,6 +1,5 @@
 <?php
 
-use \DB;
 use PragmaRX\Support\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -20,7 +19,7 @@ class CreateChatMessagesTable extends Migration
 			$table->timestamps();
 		});
 
-		DB::unprepared('alter table chat_messages add serial bigserial;');
+		\DB::unprepared('alter table chat_messages add serial bigserial;');
 
 		Schema::table('chat_messages', function(Blueprint $table)
 		{
