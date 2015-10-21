@@ -3,9 +3,10 @@
 namespace PragmaRX\Sdk\Services\Chat\Http\Server\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
 
-class Home extends BaseController
+class Chat extends BaseController
 {
 	private $chatRepository;
 
@@ -41,5 +42,10 @@ class Home extends BaseController
 		}
 
 		return $result;
+	}
+
+	public function scripts()
+	{
+		return ChatScript::with('type')->get();
 	}
 }

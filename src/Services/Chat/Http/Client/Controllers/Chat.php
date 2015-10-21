@@ -9,7 +9,7 @@ use PragmaRX\Sdk\Services\Chat\Commands\CreateChat as CreateChatCommand;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
 use PragmaRX\Sdk\Services\Chat\Http\Client\Requests\CreateChat as CreateChatRequest;
 
-class Home extends BaseController
+class Chat extends BaseController
 {
 	private $chatRepository;
 
@@ -70,5 +70,7 @@ class Home extends BaseController
 			event(new ChatMessageSent($chatId, $userId, $message));
 		}
 	}
+
+
 }
 

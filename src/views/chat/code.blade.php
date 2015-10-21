@@ -25,7 +25,7 @@
 
                 var chatId = event.targetVM.$data.chatId;
 
-                this.$http.get('{{ url() }}/chat/client/send/'+chatId+'/'+userId+'/'+message);
+                this.$http.get('{{ url() }}/api/v1/chat/client/send/'+chatId+'/'+userId+'/'+message);
             }
         },
 
