@@ -6,6 +6,7 @@ use Auth;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
+use PragmaRX\Sdk\Services\Chat\Events\ChatMessageSent;
 use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
 
 class Api extends BaseController

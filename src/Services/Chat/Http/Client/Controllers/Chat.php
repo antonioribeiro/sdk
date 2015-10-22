@@ -31,7 +31,13 @@ class Chat extends BaseController
 
 	public function chat($chat_id)
 	{
-		$chat = $this->chatRepository->findById($chat_id);
+		try {
+			$chat = $this->chatRepository->findById($chat_id);
+		}
+		catch (\Exception $e)
+		{
+			return redirect()->route('chat.client.create');
+		}
 
 		return view('chat.client.index')
 			->with('talkerUsername', $chat->owner->user->first_name)
