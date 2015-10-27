@@ -264,9 +264,12 @@ class Chat extends Repository
 			$read->chat_id = $chat->id;
 		}
 
-		$read->last_read_message_serial = $serial;
+		if ($read->last_read_message_serial < $serial)
+		{
+			$read->last_read_message_serial = $serial;
 
-		$read->save();
+			$read->save();
+		}
 
 		return $read;
 	}
