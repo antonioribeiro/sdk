@@ -70,6 +70,10 @@ class Chat extends Repository
 
 		foreach($chats as $chat)
 		{
+			$messages = $this->makeMessages($chat->messages()->with('talker.user')->get());
+
+			$lastMessageSerial = $this->getLastMessageSerial($messages);
+
 			$result[$chat->id] = [
 				'id' => $chat->id,
 				'talker' => [
@@ -87,7 +91,8 @@ class Chat extends Repository
 				'closed_at' => (string) $chat->closed_at,
 				'created_at' => (string) $chat->created_at,
 				'updated_at' => (string) $chat->updated_at,
-			    'last_read_message_serial' => $this->getChatLastReadSerial($chat)
+			    'last_read_message_serial' => $this->getChatLastReadSerial($chat),
+			    'last_message_serial' => $lastMessageSerial
 			];
 		}
 
@@ -281,5 +286,17 @@ class Chat extends Repository
 		return ChatRead::where('chat_business_client_talker_id', $talker->id)
 						->where('chat_id', $chat->id)
 						->first();
+	}
+
+	private function getLastMessageSerial($messages)
+	{
+		$serial = 0;
+
+		foreach ($messages as $message)
+		{
+			$serial = max($message['serial'], $serial);
+		}
+
+		return $serial;
 	}
 }
