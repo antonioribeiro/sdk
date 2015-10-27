@@ -6,6 +6,7 @@ use Auth;
 use Carbon\Carbon;
 use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatRead;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScriptType;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
@@ -81,6 +82,12 @@ class Chat extends Repository
 				'isClosed' => is_null($chat->closed_at),
 				'service' => strtolower($chat->service->type->name),
 			    'messages' => $this->makeMessages($chat->messages()->with('talker.user')->get()),
+				'opened_at' => (string) $chat->opened_at,
+				'last_message_at' => (string) $chat->last_message_at,
+				'closed_at' => (string) $chat->closed_at,
+				'created_at' => (string) $chat->created_at,
+				'updated_at' => (string) $chat->updated_at,
+			    'last_read_message_serial' => $this->getChatLastReadSerial($chat)
 			];
 		}
 
@@ -100,7 +107,7 @@ class Chat extends Repository
 		]);
 	}
 
-	private function findTalker($chat, $userId)
+	public function findTalker($chat, $userId)
 	{
 		return ChatBusinessClientTalker::where('user_id', $userId)
 					->where('business_client_id', $chat->service->business_client_id)
@@ -113,13 +120,16 @@ class Chat extends Repository
 
 		foreach($get as $message)
 		{
-			$messages[] = [
+			$messages[$message->id] = [
+				'id' => $message->id,
 				'message' => $message->message,
 			    'talker' => [
 				    'id' => $message->talker->id,
 				    'fullName' => $message->talker->user->present()->fullName,
 			        'avatar' => $message->talker->user->present()->avatar,
-			    ]
+			    ],
+				'serial' => (string) $message->serial,
+			    'created_at' => (string) $message->created_at,
 			];
 		}
 
@@ -234,5 +244,42 @@ class Chat extends Repository
 		$client = BusinessClient::first();
 
 		return $this->findOrCreateTalker($client, Auth::user());
+	}
+
+	public function readMessage($chatId, $serial)
+	{
+		$talker = $this->findTalker($chat = ChatModel::find($chatId), Auth::user()->id);
+
+		$read = $this->findChatLastReadMessage($talker, $chat);
+
+		if ( ! $read)
+		{
+			$read = new ChatRead();
+			$read->chat_business_client_talker_id = $talker->id;
+			$read->chat_id = $chat->id;
+		}
+
+		$read->last_read_message_serial = $serial;
+
+		$read->save();
+
+		return $read;
+	}
+
+	private function getChatLastReadSerial($chat)
+	{
+		$read = $this->findChatLastReadMessage(
+			$this->findTalker($chat, Auth::user()->id),
+			$chat
+		);
+
+		return $read ? $read->last_read_message_serial : 0;
+	}
+
+	private function findChatLastReadMessage($talker, $chat)
+	{
+		return ChatRead::where('chat_business_client_talker_id', $talker->id)
+						->where('chat_id', $chat->id)
+						->first();
 	}
 }

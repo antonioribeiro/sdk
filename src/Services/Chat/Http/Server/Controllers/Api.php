@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Chat\Http\Server\Controllers;
 
 use Auth;
+use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
@@ -33,12 +34,16 @@ class Api extends BaseController
 	{
 		$scripts = ChatScript::with('type')->get();
 
+		$result = [];
+
 		foreach ($scripts as $script)
 		{
 			$script->script = $this->replaceScriptTags($script->script);
+
+			$result[$script->id] = $script;
 		}
 
-		return $scripts;
+		return $result;
 	}
 
 	private function replaceScriptTags($script)
@@ -69,5 +74,23 @@ class Api extends BaseController
 		$this->eventPublisher->publish('ChatResponded');
 
 		return $response;
+	}
+
+	public function serverSendMessage(Request $request)
+	{
+		return $this->sendMessage(
+			$request['chatId'],
+			Auth::user()->id,
+			$request['message']
+		);
+	}
+
+	public function serverReadMessage(Request $request)
+	{
+		$read = $this->chatRepository->readMessage($request['chatId'], $request['serial']);
+
+		$this->eventPublisher->publish('ChatRead');
+
+		return response()->json(['success' => true, 'data' => $read]);
 	}
 }

@@ -28,13 +28,17 @@ Route::group(['prefix' => 'chat/server', 'middleware' => 'auth', 'namespace' => 
 // Authorization required
 Route::group(['prefix' => 'api/v1', 'middleware' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Server\Controllers'], function ()
 {
-	Route::group(['prefix' => 'chat'], function ()
+	Route::group(['prefix' => 'chat/server'], function ()
 	{
 		Route::get('scripts', ['as' => 'api.v1.chat.scripts', 'uses' => 'Api@scripts']);
 
 		Route::get('all', ['as' => 'chat.all', 'uses' => 'Api@all']);
 
 		Route::get('respond/{id}', ['as' => 'chat.respond', 'uses' => 'Api@respond']);
+
+		Route::post('send', ['as' => 'chat.server.send.message', 'uses' => 'Api@serverSendMessage']);
+
+		Route::post('read', ['as' => 'chat.server.read.message', 'uses' => 'Api@serverReadMessage']);
 	});
 });
 
