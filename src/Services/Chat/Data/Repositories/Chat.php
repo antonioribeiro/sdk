@@ -70,7 +70,12 @@ class Chat extends Repository
 
 		foreach($chats as $chat)
 		{
-			$messages = $this->makeMessages($chat->messages()->with('talker.user')->get());
+			$messages = $this->makeMessages(
+				$chat->messages()
+					->with('talker.user')
+					->orderBy('serial', 'desc')
+					->get()
+			);
 
 			$lastMessageSerial = $this->getLastMessageSerial($messages);
 
@@ -133,7 +138,7 @@ class Chat extends Repository
 				    'fullName' => $message->talker->user->present()->fullName,
 			        'avatar' => $message->talker->user->present()->avatar,
 			    ],
-				'serial' => (string) $message->serial,
+				'serial' => str_pad($message->serial, 10, "0", STR_PAD_LEFT),
 			    'created_at' => (string) $message->created_at,
 			];
 		}
