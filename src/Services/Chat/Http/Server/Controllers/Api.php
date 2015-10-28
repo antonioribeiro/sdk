@@ -30,6 +30,11 @@ class Api extends BaseController
 		return $this->chatRepository->all();
 	}
 
+	public function allFor($chatId)
+	{
+		return $this->chatRepository->allFor($chatId);
+	}
+
 	public function scripts()
 	{
 		$scripts = ChatScript::with('type')->get();
@@ -59,9 +64,18 @@ class Api extends BaseController
 	{
 		$message = $this->chatRepository->createMessage($chatId, $userId, $message);
 
+		$chat = $this->chatRepository->findById($chatId);
+
 		if ( ! is_null($message) && ! empty($message))
 		{
-			$this->eventPublisher->publish($chatId, $message->toArray());
+			$data = [
+				'message' => $message->message,
+				'fullName' => $chat->owner->user->present()->fullName,
+				'avatar' => $chat->owner->user->present()->avatar,
+				'owner_id' => $chat->owner->id,
+			];
+
+			$this->eventPublisher->publish($chatId, $data);
 
 			event(new ChatMessageSent($chatId, $userId, $message));
 		}
@@ -93,4 +107,14 @@ class Api extends BaseController
 
 		return response()->json(['success' => true, 'data' => $read]);
 	}
+
+	public function terminateChat(Request $request)
+	{
+		$chat = $this->chatRepository->terminate($request['chatId']);
+
+		$this->eventPublisher->publish('ChatTerminated');
+
+		return response()->json(['success' => true, 'data' => $chat]);
+	}
+
 }

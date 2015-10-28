@@ -7,11 +7,14 @@
 
         data: {
             messages: [],
+            connected: false,
+            listeningSockets: [],
             talkerUsername: '{{ $talkerUsername }}',
             talkerEmail: '{{ $talkerEmail }}',
             talkerId: '{{ $talkerId }}',
             currentMessage: '',
             chatId: '{{ $chatId }}',
+            chatInfo: {},
             connected: false,
         },
 
@@ -19,44 +22,70 @@
         {
             __sendMessage: function(event)
             {
-                var userId = event.targetVM.$data.talkerId;
+                this.$http.get('{{ url() }}/api/v1/chat/client/send/'+this.chatId+'/'+this.talkerId+'/'+this.currentMessage);
+            },
 
-                var message = event.targetVM.$data.currentMessage;
+            __loadChats: function()
+            {
+                this.$http.get(
+                    '{{ url() }}/api/v1/chat/client/all/'+this.chatId,
+                    function(data, status, request)
+                    {
+                        this.$set('chatInfo', data);
 
-                var chatId = event.targetVM.$data.chatId;
+                        console.log(data);
+                    }
+                );
+            },
 
-                this.$http.get('{{ url() }}/api/v1/chat/client/send/'+chatId+'/'+userId+'/'+message);
+            __playNewMessageSound: function()
+            {
+                var audio = new Audio('{{ url() }}/assets/sound/newmessage.mp3');
+                audio.play();
+            },
+
+            __socketOn: function(channel, callable)
+            {
+                if (this.listeningSockets.indexOf(channel) == -1)
+                {
+                    this.listeningSockets.push(channel);
+
+                    return socket.on(channel, callable);
+                }
+            },
+
+            __listenOnChatSockets: function()
+            {
+                socket.on('connect', function(data)
+                {
+                    this.connected = true;
+                }.bind(this));
+
+                socket.on('disconnect', function(data)
+                {
+                    this.connected = false;
+                }.bind(this));
+
+                socket.on('chat-channel:{{ $chatId }}', function(data)
+                {
+                    this.__loadChats();
+                }.bind(this));
+            },
+
+            __chatLeftRight: function(message)
+            {
+                console.log(message.talker.id == this.talkerId ? 'left' : 'right');
+                console.log(message.talker.id + ' - ' + this.talkerId);
+                return message.talker.id == this.talkerId ? 'left' : 'right';
             }
         },
 
         ready: function()
         {
-            socket.on('connect', function(data)
-            {
-                this.connected = true;
-            }.bind(this));
+            this.__listenOnChatSockets();
 
-            socket.on('disconnect', function(data)
-            {
-                this.connected = false;
-            }.bind(this));
-
-            {{--{{ $listenChannel }}--}}
-
-            socket.on('chat-channel:{{ $chatId }}', function(data)
-            {
-                var isOperator = data.username == '{{ $operatorUsername }}';
-
-                var message = {
-                    "isOperator": isOperator,
-                    "username": data.username,
-                    "message": data.message,
-                    "pull": isOperator ? 'left' : 'right',
-                    "photo": isOperator ? '{!! $operatorAvatar !!}' : '{!! $talkerAvatar !!}',
-                };
-
-                this.messages.push(message);
-            }.bind(this));
+            this.__loadChats();
         }
     });
 </script>
+

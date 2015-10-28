@@ -8,9 +8,9 @@ class EventPublisher
 {
 	const CHANNEL = 'chat-channel';
 
-	public function publish($event, $username = null, $data = null)
+	public function publish($event, $data = null, $username = null)
 	{
-		$message = $this->makeMessage($event, $username, $data);
+		$message = $this->makeMessage($event, $data, $username);
 
 		Redis::publish(static::CHANNEL, json_encode($message));
 	}
@@ -20,13 +20,12 @@ class EventPublisher
 	 * @param $data
 	 * @return array
 	 */
-	private function makeMessage($event, $username, $data)
+	private function makeMessage($event, $data = null, $username = null)
 	{
-		$message = ['event' => $event];
-
-		$data = [
-			'data' => $data,
-		    'username' => $username ?: 'unavailable',
+		$message = [
+			'event' => $event,
+		    'data' => $data,
+		    'username' => $username,
 		];
 
 		return $message;

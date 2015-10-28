@@ -2,9 +2,8 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Http\Client\Controllers;
 
-use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
-use Redis;
 use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
 use PragmaRX\Sdk\Services\Chat\Commands\CreateChat as CreateChatCommand;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
 use PragmaRX\Sdk\Services\Chat\Http\Client\Requests\CreateChat as CreateChatRequest;
@@ -42,12 +41,12 @@ class Chat extends BaseController
 		return view('chat.client.index')
 			->with('talkerUsername', $chat->owner->user->first_name)
 			->with('talkerEmail', $chat->owner->user->email)
-			->with('talkerId', $chat->owner->user->id)
+			->with('talkerId', $chat->owner->id)
 			->with('chatId', $chat_id)
+			->with('ownerId', $chat->owner->id)
 			->with('operatorUsername', env('CHAT_OPERATOR_USERNAME'))
 			->with('operatorAvatar', $chat->owner->user->present()->avatar)
 			->with('talkerAvatar', $chat->owner->user->present()->avatar)
-//			->with('listenChannel', 'chat-channel:PragmaRX\\\\Sdk\\\\Services\\\\Chat\\\\Events\\\\ChatMessageSent');
 			->with('listenChannel', 'chat-channel:' . $chat_id);
 	}
 

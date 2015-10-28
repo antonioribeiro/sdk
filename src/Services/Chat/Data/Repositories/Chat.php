@@ -58,47 +58,20 @@ class Chat extends Repository
 
 		return ChatModel::firstOrCreate([
 			'chat_business_client_service_id' => $clientService->id,
-			'owner_id' => $talker->id
+			'owner_id' => $talker->id,
+		    'closed_at' => null,
 		]);
 	}
 
 	public function all()
 	{
-		$chats = ChatModel::all();
+		$chats = ChatModel::whereNull('closed_at')->get();
 
 		$result = [];
 
 		foreach($chats as $chat)
 		{
-			$messages = $this->makeMessages(
-				$chat->messages()
-					->with('talker.user')
-					->orderBy('serial', 'desc')
-					->get()
-			);
-
-			$lastMessageSerial = $this->getLastMessageSerial($messages);
-
-			$result[$chat->id] = [
-				'id' => $chat->id,
-				'talker' => [
-					'fullName' => $chat->owner->user->present()->fullName,
-					'avatar' => $chat->owner->user->present()->avatar
-				],
-				'responder' => $chat->responder_id ? ['fullName' => $chat->responder->user->present()->fullName] : null,
-				'responder_id' => $chat->responder_id,
-				'email' => $chat->owner->user->email,
-				'isClosed' => is_null($chat->closed_at),
-				'service' => strtolower($chat->service->type->name),
-			    'messages' => $this->makeMessages($chat->messages()->with('talker.user')->get()),
-				'opened_at' => (string) $chat->opened_at,
-				'last_message_at' => (string) $chat->last_message_at,
-				'closed_at' => (string) $chat->closed_at,
-				'created_at' => (string) $chat->created_at,
-				'updated_at' => (string) $chat->updated_at,
-			    'last_read_message_serial' => $this->getChatLastReadSerial($chat),
-			    'last_message_serial' => $lastMessageSerial
-			];
+			$result[$chat->id] = $this->makeChatData($chat);
 		}
 
 		return $result;
@@ -106,15 +79,21 @@ class Chat extends Repository
 
 	public function createMessage($chatId, $userId, $message)
 	{
-		$chat = ChatModel::find($chatId);
+		$chat = $this->findById($chatId);
 
 		$talker = $this->findTalker($chat, $userId);
 
-		return ChatMessage::create([
+		$message = ChatMessage::create([
             'chat_id' => $chatId,
 			'chat_business_client_talker_id' => $talker->id,
 			'message' => $message,
 		]);
+
+		$chat->last_message_at = Carbon::now();
+
+		$chat->save();
+
+		return $message;
 	}
 
 	public function findTalker($chat, $userId)
@@ -191,7 +170,7 @@ class Chat extends Repository
 
 	public function respond($chatId)
 	{
-		$chat = ChatModel::find($chatId);
+		$chat = $this->findById($chatId);
 
 		if ( ! $chat)
 		{
@@ -258,7 +237,7 @@ class Chat extends Repository
 
 	public function readMessage($chatId, $serial)
 	{
-		$talker = $this->findTalker($chat = ChatModel::find($chatId), Auth::user()->id);
+		$talker = $this->findTalker($chat = $this->findById($chatId), Auth::user()->id);
 
 		$read = $this->findChatLastReadMessage($talker, $chat);
 
@@ -279,10 +258,10 @@ class Chat extends Repository
 		return $read;
 	}
 
-	private function getChatLastReadSerial($chat)
+	private function getChatLastReadSerial($chat, $userId)
 	{
 		$read = $this->findChatLastReadMessage(
-			$this->findTalker($chat, Auth::user()->id),
+			$this->findTalker($chat, $userId),
 			$chat
 		);
 
@@ -306,5 +285,62 @@ class Chat extends Repository
 		}
 
 		return $serial;
+	}
+
+	public function terminate($chatId)
+	{
+		$chat = $this->findById($chatId);
+
+		$chat->closed_at = Carbon::now();
+
+		$chat->save();
+
+		return $chat;
+	}
+
+	public function allFor($chatId)
+	{
+		$chat = $this->findById($chatId);
+
+		return $this->makeChatData($chat);
+	}
+
+	private function makeChatData($chat)
+	{
+		$user = Auth::user() ?: $chat->owner->user;
+
+		$messages = $this->makeMessages(
+			$chat->messages()
+				->with('talker.user')
+				->orderBy('serial', 'desc')
+				->get()
+		);
+
+		$data = [];
+
+		$lastMessageSerial = $this->getLastMessageSerial($messages);
+
+		$data['id'] = $chat->id;
+
+		$data['talker'] = [
+			'fullName' => $chat->owner->user->present()->fullName,
+			'avatar' => $chat->owner->user->present()->avatar
+		];
+
+		$data['responder'] = $chat->responder_id ? ['fullName' => $chat->responder->user->present()->fullName] : null;
+		$data['responder_id'] = $chat->responder_id;
+		$data['email'] = $chat->owner->user->email;
+		$data['isClosed'] = is_null($chat->closed_at);
+		$data['service'] = strtolower($chat->service->type->name);
+		$data['messages'] = $this->makeMessages($chat->messages()->with('talker.user')->get());
+		$data['opened_at'] = (string) $chat->opened_at;
+		$data['last_message_at'] = (string) $chat->last_message_at;
+		$data['closed_at'] = (string) $chat->closed_at;
+		$data['created_at'] = (string) $chat->created_at;
+		$data['updated_at'] = (string) $chat->updated_at;
+		$data['last_read_message_serial'] = $this->getChatLastReadSerial($chat, $user->id);
+		$data['last_message_serial'] = $lastMessageSerial;
+
+		return $data;
 	}
 }

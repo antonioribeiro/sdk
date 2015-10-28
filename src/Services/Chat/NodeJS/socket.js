@@ -22,6 +22,8 @@ redis.subscribe('chat-channel');
 
 redis.on('message', function(channel, message)
 {
+    ???????????????????? console.log(message);
+
     message = JSON.parse(message);
 
     var text = '';

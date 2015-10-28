@@ -39,6 +39,8 @@ Route::group(['prefix' => 'api/v1', 'middleware' => 'auth', 'namespace' => 'Prag
 		Route::post('send', ['as' => 'chat.server.send.message', 'uses' => 'Api@serverSendMessage']);
 
 		Route::post('read', ['as' => 'chat.server.read.message', 'uses' => 'Api@serverReadMessage']);
+
+		Route::post('terminate', ['as' => 'chat.server.terminate', 'uses' => 'Api@terminateChat']);
 	});
 });
 
@@ -47,6 +49,11 @@ Route::group(['prefix' => 'api/v1', 'namespace' => 'PragmaRX\Sdk\Services\Chat\H
 {
 	Route::group(['prefix' => 'chat'], function ()
 	{
-		Route::get('client/send/{chatId}/{usernameId}/{message?}', ['as' => 'chat.client.send.message', 'uses' => 'Api@sendMessage']);
+		Route::group(['prefix' => 'client'], function ()
+		{
+			Route::get('send/{chatId}/{usernameId}/{message?}', ['as' => 'chat.client.send.message', 'uses' => 'Api@sendMessage']);
+
+			Route::get('all/{chatId}', ['as' => 'chat.client.all', 'uses' => 'Api@allFor']);
+		});
 	});
 });

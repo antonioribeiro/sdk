@@ -12,6 +12,7 @@ class Chat extends Model
 	protected $fillable = [
 		'chat_business_client_service_id',
 		'owner_id',
+	    'closed_at',
 	];
 
 	protected $presenter = 'PragmaRX\Sdk\Services\Chat\Data\Presenters\ChatPresenter';
