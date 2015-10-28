@@ -22,15 +22,18 @@ redis.subscribe('chat-channel');
 
 redis.on('message', function(channel, message)
 {
-    ???????????????????? console.log(message);
-
     message = JSON.parse(message);
 
     var text = '';
 
-    if (typeof message.data != 'undefined' && typeof message.data.message != 'undefined')
+    if (typeof message.data != 'undefined' && message.data && typeof message.data.message != 'undefined')
     {
-        text = '> '+message.data.message;
+        if (typeof message.data.fullName != 'undefined' && message.data.fullName)
+        {
+            text += ' # '+message.data.fullName;
+        }
+
+        text += '> '+message.data.message;
     }
 
     console.log(channel + ': ' + message.event + text);
