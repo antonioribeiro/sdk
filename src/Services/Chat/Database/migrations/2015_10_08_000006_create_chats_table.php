@@ -14,6 +14,7 @@ class CreateChatsTable extends Migration
 			$table->string('chat_business_client_service_id', 64)->index();
 
 			$table->string('owner_id', 64)->index();
+			$table->string('owner_ip_address');
 
 			$table->string('responder_id', 64)->index()->nullable();
 

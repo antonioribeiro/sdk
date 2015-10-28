@@ -35,7 +35,12 @@ class Chat extends BaseController
 		}
 		catch (\Exception $e)
 		{
-			return redirect()->route('chat.client.create');
+			return $this->redirectToHome();
+		}
+
+		if ($chat->closed_at)
+		{
+			return $this->redirectToHome();
 		}
 
 		return view('chat.client.index')
@@ -57,5 +62,18 @@ class Chat extends BaseController
 		$this->eventPublisher->publish('ChatCreated');
 
 		return redirect('chat/client/'.$chat->id);
+	}
+
+	public function terminated()
+	{
+		return view('chat.client.terminated');
+	}
+
+	/**
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	private function redirectToHome()
+	{
+		return redirect()->route('chat.client.create');
 	}
 }

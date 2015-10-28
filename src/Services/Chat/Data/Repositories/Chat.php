@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Services\Chat\Data\Repositories;
 
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatRead;
@@ -29,10 +30,16 @@ class Chat extends Repository
 	 */
 	private $businessesRepository;
 
-	public function __construct(UserRepository $userRepository, BusinessesRepository $businessesRepository)
+	/**
+	 * @var Request
+	 */
+	private $request;
+
+	public function __construct(UserRepository $userRepository, BusinessesRepository $businessesRepository, Request $request)
 	{
 		$this->userRepository = $userRepository;
 		$this->businessesRepository = $businessesRepository;
+		$this->request = $request;
 	}
 
 	public function create($name, $email)
@@ -59,6 +66,7 @@ class Chat extends Repository
 		return ChatModel::firstOrCreate([
 			'chat_business_client_service_id' => $clientService->id,
 			'owner_id' => $talker->id,
+			'owner_ip_address' => $this->request->ip(),
 		    'closed_at' => null,
 		]);
 	}
@@ -86,6 +94,7 @@ class Chat extends Repository
 		$message = ChatMessage::create([
             'chat_id' => $chatId,
 			'chat_business_client_talker_id' => $talker->id,
+            'talker_ip_address' => $this->request->ip(),
 			'message' => $message,
 		]);
 

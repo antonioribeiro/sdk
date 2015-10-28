@@ -32,8 +32,6 @@
                     function(data, status, request)
                     {
                         this.$set('chatInfo', data);
-
-                        console.log(data);
                     }
                 );
             },
@@ -70,13 +68,22 @@
                 {
                     this.__loadChats();
                 }.bind(this));
+
+                socket.on('chat-channel:{{ $chatId }}:ChatTerminated', function(data)
+                {
+                    console.log('TERMINATED!');
+                    this.__terminateChat();
+                }.bind(this));
             },
 
             __chatLeftRight: function(message)
             {
-                console.log(message.talker.id == this.talkerId ? 'left' : 'right');
-                console.log(message.talker.id + ' - ' + this.talkerId);
                 return message.talker.id == this.talkerId ? 'left' : 'right';
+            },
+
+            __terminateChat: function()
+            {
+                window.location.replace("{{ url() }}/chat/client/terminated");
             }
         },
 

@@ -6,7 +6,9 @@ Route::group(['prefix' => 'chat/client', 'namespace' => 'PragmaRX\Sdk\Services\C
 
 	Route::post('/', ['as' => 'chat.client.store', 'uses' => 'Chat@store']);
 
-	Route::get('/{id}', ['as' => 'chat.client', 'uses' => 'Chat@chat']);
+	Route::get('terminated', ['as' => 'chat.client.terminated', 'uses' => 'Chat@terminated']);
+
+	Route::get('{id}', ['as' => 'chat.client', 'uses' => 'Chat@chat']);
 });
 
 Route::group(['prefix' => 'chat/server', 'middleware' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Server\Controllers'], function ()

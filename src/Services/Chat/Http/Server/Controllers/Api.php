@@ -113,8 +113,8 @@ class Api extends BaseController
 		$chat = $this->chatRepository->terminate($request['chatId']);
 
 		$this->eventPublisher->publish('ChatTerminated');
+		$this->eventPublisher->publish($request['chatId'] . ':ChatTerminated');
 
 		return response()->json(['success' => true, 'data' => $chat]);
 	}
-
 }
