@@ -3,7 +3,6 @@
 namespace PragmaRX\Sdk\Services\Files\Data\Repositories;
 
 use Config;
-use Exception;
 use File as Filesystem;
 use Guzzle\Http\Client;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
@@ -21,6 +20,13 @@ class File
 	public function upload(UploadedFile $uploaded, User $user)
 	{
 		return $this->uploadUserFile($uploaded, $user, false);
+	}
+
+	public function uploadFromSystemFile($file, User $user)
+	{
+		$uploaded = $this->createUploadedFileFromSystemFile($file);
+
+		return $this->upload($uploaded, $user);
 	}
 
 	public function uploadUserFile(UploadedFile $uploaded, User $user, $returnUserFile = true)
@@ -188,5 +194,16 @@ class File
 		}
 
 		return $this->guzzle;
+	}
+
+	private function createUploadedFileFromSystemFile($file)
+	{
+		$temp = tempnam("/tmp", "FILE_");
+
+		copy($file, $temp);
+
+		$uploaded = new UploadedFile($temp, basename($file), null, null, null, true);
+
+		return $uploaded;
 	}
 }
