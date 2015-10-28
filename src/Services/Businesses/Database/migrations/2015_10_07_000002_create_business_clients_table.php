@@ -13,6 +13,7 @@ class CreateBusinessClientsTable extends Migration
 
 			$table->string('business_id', 64);
 			$table->string('name')->index();
+			$table->string('avatar_id', 64)->nullable();
 
 			$table->timestamps();
 		});

@@ -12,6 +12,7 @@ class CreateBusinessesTable extends Migration
 			$table->string('id', 64)->unique()->primary()->index();
 
 			$table->string('name')->index();
+			$table->string('avatar_id', 64)->nullable();
 
 			$table->timestamps();
 		});
