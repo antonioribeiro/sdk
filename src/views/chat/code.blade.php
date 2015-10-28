@@ -23,6 +23,8 @@
             __sendMessage: function(event)
             {
                 this.$http.get('{{ url() }}/api/v1/chat/client/send/'+this.chatId+'/'+this.talkerId+'/'+this.currentMessage);
+
+                this.currentMessage = '';
             },
 
             __loadChats: function()

@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Businesses\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Files\Data\Entities\FileName;
 
 class BusinessClient extends Model
 {
@@ -16,5 +17,10 @@ class BusinessClient extends Model
 	public function business()
 	{
 		return $this->belongsTo(Business::class, 'business_id');
+	}
+
+	public function avatar()
+	{
+		return $this->belongsTo(FileName::class, 'avatar_id');
 	}
 }

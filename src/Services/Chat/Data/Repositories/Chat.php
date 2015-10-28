@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUserRole;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatRead;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScriptType;
@@ -107,16 +108,23 @@ class Chat extends Repository
 
 	public function findTalker($chat, $userId)
 	{
-		return ChatBusinessClientTalker::where('user_id', $userId)
-					->where('business_client_id', $chat->service->business_client_id)
-					->first();
+		$talker = ChatBusinessClientTalker::find($userId);
+
+		if ( ! $talker)
+		{
+			$talker = ChatBusinessClientTalker::where('user_id', $userId)
+						->where('business_client_id', $chat->service->business_client_id)
+						->first();
+		}
+
+		return $talker;
 	}
 
-	private function makeMessages($get)
+	private function makeMessages($all, $chat = null)
 	{
 		$messages = [];
 
-		foreach($get as $message)
+		foreach($all as $message)
 		{
 			$messages[$message->id] = [
 				'id' => $message->id,
@@ -124,7 +132,7 @@ class Chat extends Repository
 			    'talker' => [
 				    'id' => $message->talker->id,
 				    'fullName' => $message->talker->user->present()->fullName,
-			        'avatar' => $message->talker->user->present()->avatar,
+			        'avatar' => $this->makeAvatar($message->talker, $chat),
 			    ],
 				'serial' => str_pad($message->serial, 10, "0", STR_PAD_LEFT),
 			    'created_at' => (string) $message->created_at,
@@ -322,7 +330,8 @@ class Chat extends Repository
 			$chat->messages()
 				->with('talker.user')
 				->orderBy('serial', 'desc')
-				->get()
+				->get(),
+			$chat
 		);
 
 		$data = [];
@@ -341,7 +350,7 @@ class Chat extends Repository
 		$data['email'] = $chat->owner->user->email;
 		$data['isClosed'] = is_null($chat->closed_at);
 		$data['service'] = strtolower($chat->service->type->name);
-		$data['messages'] = $this->makeMessages($chat->messages()->with('talker.user')->get());
+		$data['messages'] = $this->makeMessages($chat->messages()->with('talker.user')->get(), $chat);
 		$data['opened_at'] = (string) $chat->opened_at;
 		$data['last_message_at'] = (string) $chat->last_message_at;
 		$data['closed_at'] = (string) $chat->closed_at;
@@ -351,5 +360,23 @@ class Chat extends Repository
 		$data['last_message_serial'] = $lastMessageSerial;
 
 		return $data;
+	}
+
+	private function makeAvatar($talker, $chat)
+	{
+		$role = BusinessClientUserRole::where('business_client_id', $talker->client->id)
+										->where('user_id', $talker->user->id)
+										->first();
+
+		if ($role)
+		{
+			$avatar = $talker->client->avatar->file->getUrl();
+		}
+		else
+		{
+			$avatar = $talker->user->present()->avatar;
+		}
+
+		return $avatar;
 	}
 }
