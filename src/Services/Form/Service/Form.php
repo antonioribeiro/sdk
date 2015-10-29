@@ -14,6 +14,13 @@ class Form {
 
 	public function opener($params1, $params2 = null)
 	{
+		if (is_null($params1) && ! is_null($params2))
+		{
+			$params1 = $params2;
+
+			$params2 = null;
+		}
+
 		if(is_array($params1) && isset($params1['model']))
 		{
 			$params2 = $params1;

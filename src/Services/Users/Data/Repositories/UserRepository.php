@@ -1069,7 +1069,7 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 			if ( ! $loggedUser->is_root)
 			{
-				if ( ! $role = $loggedUser->businessClientRoles()->first())
+				if ( ! $role = $loggedUser->businessClientUsers()->first())
 				{
 					return null;
 				}
@@ -1084,14 +1084,18 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 		$result = [];
 
-		$authUserClients = $loggedUser->businessClientRoles->lists('business_client_id')->toArray();
+		$authUserClients = $loggedUser->businessClientUsers->lists('business_client_id')->toArray();
 
 		foreach($users as $user)
 		{
-			$clients = $user->businessClientRoles->lists('business_client_id')->toArray();
+			$clients = $user->businessClientUsers->lists('business_client_id')->toArray();
 
 			if ($loggedUser->is_root || (!$user->is_root && array_intersect($authUserClients, $clients)))
 			{
+				$role = $user->present()->businessRole->description;
+
+				$client = $user->present()->businessClient->name;
+
 				$result[] = [
 					'id' => $user->id,
 					'first_name' => $user->first_name,
@@ -1099,8 +1103,8 @@ class UserRepository extends Repository implements UserRepositoryContract
 					'email' => $user->email,
 					'username' => $user->username,
 					'fullName' => $user->present()->fullName,
-					'role' => $user->present()->businessRole->description,
-					'businessClient' => $user->present()->businessClient->name,
+					'role' => $role,
+					'businessClient' => $client,
 				];
 			}
 		}

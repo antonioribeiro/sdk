@@ -37,7 +37,9 @@ class Users extends BaseController
 		$clients = $this->businessesRepository->allClients()->lists('name', 'id');
 
 		return view('businesses.users.create')
-				->with('businessClients', $clients);
+				->with('businessClients', $clients)
+				->with('route', 'businesses.users.store')
+				->with('submitButton', 'Criar usuário');
 	}
 
 	public function store(CreateUser $createUser)
@@ -47,5 +49,20 @@ class Users extends BaseController
 		Flash::message(t('paragraphs.user-created'));
 
 		return Redirect::route_no_ajax('businesses.users.index');
+	}
+
+	public function edit($userId)
+	{
+		$user = $this->businessesRepository->findUserById($userId);
+
+		$user->business_client_id = $user->present()->businessClient->id;
+
+		$clients = $this->businessesRepository->allClients()->lists('name', 'id');
+
+		return view('businesses.users.edit')
+				->with('user', $user)
+				->with('businessClients', $clients)
+				->with('route', 'businesses.users.update')
+				->with('submitButton', 'Gravar');
 	}
 }

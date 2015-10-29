@@ -120,17 +120,17 @@ class User extends Presenter {
 			$role->power = 0;
 			$role->name = 'root';
 			$role->description = 'Root';
+
+			return $role;
+		}
+
+		if ($clientUser = $this->entity->businessClientUsers->first())
+		{
+			$role = $clientUser->roles->first()->role;
 		}
 		else
 		{
-			if ($role = $this->entity->businessClientRoles->first())
-			{
-				$role = $this->entity->businessClientRoles->first()->role;
-			}
-			else
-			{
-				$role = new BusinessRole();
-			}
+			$role = new BusinessRole();
 		}
 
 		return $role;
@@ -138,11 +138,14 @@ class User extends Presenter {
 
 	public function businessClient()
 	{
-		if ($client = $this->entity->businessClientRoles->first())
+		$client = null;
+
+		if ($clientUser = $this->entity->businessClientUsers->first())
 		{
-			$client = $this->entity->businessClientRoles->first()->client;
+			$client = $clientUser->client;
 		}
-		else
+
+		if ( ! $client)
 		{
 			$client = new BusinessClient();
 		}

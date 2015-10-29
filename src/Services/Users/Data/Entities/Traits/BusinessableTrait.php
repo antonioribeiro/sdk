@@ -3,17 +3,16 @@
 namespace PragmaRX\Sdk\Services\Users\Data\Entities\Traits;
 
 use DB;
-use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUserRole;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUser;
 
 trait BusinessableTrait
 {
-	public function businessClientRoles()
+	public function businessClientUsers()
 	{
-		$relation = $this->hasMany(BusinessClientUserRole::class, 'user_id')
-						->with('role')
-						->with('user')
+		$relation = $this->hasMany(BusinessClientUser::class, 'user_id')
 						->with('client')
-						->join('business_clients', 'business_clients.id', '=', 'business_client_user_roles.business_client_id')
+						->with('user')
+						->with('roles')
 		;
 
 		return $relation;

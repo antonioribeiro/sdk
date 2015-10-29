@@ -11,8 +11,7 @@ class CreateBusinessClientUserRolesTable extends Migration
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
-			$table->string('business_client_id', 64);
-			$table->string('user_id', 64);
+			$table->string('business_client_user_id', 64);
 			$table->string('business_role_id', 64);
 
 			$table->timestamps();
@@ -20,18 +19,9 @@ class CreateBusinessClientUserRolesTable extends Migration
 
 		Schema::table('business_client_user_roles', function(Blueprint $table)
 		{
-			$table->foreign('business_client_id')
+			$table->foreign('business_client_user_id')
 				->references('id')
-				->on('business_clients')
-				->onUpdate('cascade')
-				->onDelete('cascade');
-		});
-
-		Schema::table('business_client_user_roles', function(Blueprint $table)
-		{
-			$table->foreign('user_id')
-				->references('id')
-				->on('users')
+				->on('business_client_users')
 				->onUpdate('cascade')
 				->onDelete('cascade');
 		});
