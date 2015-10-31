@@ -68,6 +68,11 @@ class Flash {
 		return $messages;
 	}
 
+	public function popJsonMessages()
+	{
+		return json_encode($this->popMessages());
+	}
+
 	private function getKind($kind)
 	{
 		$kind = $kind == 'message' ? 'info' : $kind;

@@ -1125,4 +1125,13 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 		Flash::message(t('paragraphs.welcome-email-sent'));
 	}
+
+	public function deleteUser($userId)
+	{
+		$user = $this->findById($userId);
+
+		\DB::table('users')->where('id', $userId)->delete();
+
+		return $user;
+	}
 }

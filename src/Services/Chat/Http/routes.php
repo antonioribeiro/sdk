@@ -22,6 +22,12 @@ Route::group(['prefix' => 'chat/server', 'middleware' => 'auth', 'namespace' => 
 		Route::get('create', ['as' => 'chat.server.scripts.create', 'uses' => 'Scripts@create']);
 
 		Route::post('store', ['as' => 'chat.server.scripts.store', 'uses' => 'Scripts@store']);
+
+		Route::get('edit/{scriptId}', ['as' => 'chat.server.scripts.edit', 'uses' => 'Scripts@edit']);
+
+		Route::post('update', ['as' => 'chat.server.scripts.update', 'uses' => 'Scripts@update']);
+
+		Route::get('delete/{scriptId}', ['as' => 'chat.server.scripts.delete', 'uses' => 'Scripts@delete']);
 	});
 
 	Route::get('{chatId}', ['as' => 'chat.server.get', 'uses' => 'Chat@get']);

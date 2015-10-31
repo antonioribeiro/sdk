@@ -2,11 +2,13 @@
 
 namespace PragmaRX\Sdk\Services\Businesses\Data\Repositories;
 
-use App\Services\Users\Data\Repositories\User;
+use Illuminate\Support\Arr;
 use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\Business;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUser;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessRole;
 use PragmaRX\Sdk\Services\Businesses\Events\UserWasCreated;
+use PragmaRX\Sdk\Services\Businesses\Events\UserWasUpdated;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUserRole;
@@ -67,16 +69,16 @@ class Businesses extends Repository
 		]);
 	}
 
-	public function createClientUserRole($client, $role, $user)
+	public function createClientUserRole($clientUser, $businessId, $role)
 	{
 		if ( ! is_object($role))
 		{
-			$role = BusinessRole::where('business_id', $client->business->id)
+			$role = BusinessRole::where('business_id', $businessId)
 						->where('name', $role)->first();
 		}
 
 		return BusinessClientUserRole::firstOrCreate([
-			'business_client_user_id' => $user->id,
+			'business_client_user_id' => $clientUser->id,
 			'business_role_id' => $role->id,
 		]);
 	}
@@ -99,7 +101,12 @@ class Businesses extends Repository
 
 		$client = BusinessClient::find($attributes['business_client_id']);
 
-		$this->createClientUserRole($client, 'operator', $user);
+		$clientUser = BusinessClientUser::firstOrCreate([
+			'business_client_id' => $client->id,
+			'user_id' => $user->id,
+		]);
+
+		$this->createClientUserRole($clientUser, $client->business_id, 'operator');
 
 		event(new UserWasCreated($user));
 
@@ -109,5 +116,30 @@ class Businesses extends Repository
 	public function findUserById($userId)
 	{
 		return $this->userRepository->findById($userId);
+	}
+
+	public function updateUser($attributes)
+	{
+		$user = $this->userRepository->findById($attributes['id']);
+
+		$currentBusinessClientId = $user->present()->businessClient->id;
+
+		$user->setRawAttributes(Arr::except($attributes, ['business_client_id', 'dispatcher']));
+
+		$user->save();
+
+		$clientUser = BusinessClientUser::firstOrCreate([
+			'business_client_id' => $currentBusinessClientId,
+			'user_id' => $user->id,]);
+
+		if ($clientUser->business_client_id !== $attributes['business_client_id'])
+		{
+			$clientUser->business_client_id = $attributes['business_client_id'];
+			$clientUser->save();
+		}
+
+		event(new UserWasUpdated($user));
+
+		return $user;
 	}
 }

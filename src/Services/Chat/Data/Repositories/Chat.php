@@ -379,4 +379,39 @@ class Chat extends Repository
 
 		return $avatar;
 	}
+
+	/**
+	 * @param $id
+	 * @return \PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript|null
+	 */
+	public function findScriptById($id)
+	{
+		return ChatScript::find($id);
+	}
+
+	public function updateScript($attributes)
+	{
+		$script = $this->findScriptById($attributes['id']);
+
+		$script->setRawAttributes(array_only($attributes,
+		[
+			'id',
+			'name',
+			'business_client_id',
+			'chat_service_id',
+			'script',
+			'chat_script_type_id',
+		]));
+
+		$script->save();
+	}
+
+	public function deleteScript($scriptId)
+	{
+		$script = $this->findScriptById($scriptId);
+
+		$script->delete();
+
+		return $script;
+	}
 }

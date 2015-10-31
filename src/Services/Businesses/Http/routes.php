@@ -6,7 +6,7 @@ Route::group(['prefix' => 'businesses', 'middleware' => 'auth', 'namespace' => '
 
 	Route::get('edit/{id}', ['as' => 'businesses.users.edit', 'uses' => 'Users@edit']);
 
-	Route::get('delete/{id}', ['as' => 'businesses.users.delete', 'uses' => 'Users@delete']);
+	Route::get('users/delete/{id}', ['as' => 'businesses.users.delete', 'uses' => 'Users@delete']);
 
 	Route::get('users/create', ['as' => 'businesses.users.create', 'uses' => 'Users@create']);
 

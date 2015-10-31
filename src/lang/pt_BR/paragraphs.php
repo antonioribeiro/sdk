@@ -140,4 +140,9 @@ return array (
   'user-created' => 'O usuário foi criado.',
   'welcome-email-sent' => 'E-mail de boas vindas enviado.',
   'script-created' => 'O script foi criado.',
+  'script-updated' => 'O script foi atualizado.',
+  'script-deleted' => 'O script foi deletado.',
+  'user-deleted' => 'O usuário deletado.',
+  'user-created' => 'Um usuário foi criado.',
+  'user-updated' => 'Os dados do usuário foram modificados.',
 );

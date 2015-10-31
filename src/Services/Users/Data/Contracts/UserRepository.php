@@ -71,4 +71,6 @@ interface UserRepository {
 
 	public function find($user);
 
+	public function deleteUser($userId);
+
 }
