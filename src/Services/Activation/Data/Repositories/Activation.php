@@ -57,14 +57,19 @@ class Activation {
 		return $this->findActivation($user);
 	}
 
-	public function complete($user, $token)
+	public function activate($user, $token, $force)
+	{
+		return $this->complete($user, $token, $force);
+	}
+
+	public function complete($user, $token, $force)
 	{
 		if ( ! $activation = $this->findActivation($user))
 		{
 			return false;
 		}
 
-		if ($activation->code != $token)
+		if ( ! $force && $activation->code != $token)
 		{
 			return false;
 		}

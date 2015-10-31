@@ -111,45 +111,4 @@ class User extends Presenter {
 				? $this->settings->client_field_name
 				: t("captions.clients");
 	}
-
-	public function businessRole()
-	{
-		if ($this->entity->is_root)
-		{
-			$role = new BusinessRole();
-			$role->power = 0;
-			$role->name = 'root';
-			$role->description = 'Root';
-
-			return $role;
-		}
-
-		if ($clientUser = $this->entity->businessClientUsers->first())
-		{
-			$role = $clientUser->roles->first()->role;
-		}
-		else
-		{
-			$role = new BusinessRole();
-		}
-
-		return $role;
-	}
-
-	public function businessClient()
-	{
-		$client = null;
-
-		if ($clientUser = $this->entity->businessClientUsers->first())
-		{
-			$client = $clientUser->client;
-		}
-
-		if ( ! $client)
-		{
-			$client = new BusinessClient();
-		}
-
-		return $client;
-	}
 }

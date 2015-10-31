@@ -2,6 +2,8 @@
 
 namespace PragmaRX\Sdk\Services\Businesses\Http\Controllers;
 
+use Gate;
+use Auth;
 use Flash;
 use Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
@@ -24,11 +26,17 @@ class Users extends BaseController
 	public function __construct(UserRepository $userRepository, BusinessesRepository $businessesRepository)
 	{
 		$this->userRepository = $userRepository;
+
 		$this->businessesRepository = $businessesRepository;
 	}
 
 	public function index()
 	{
+		if (Gate::denies('viewUsers', Auth::user()))
+		{
+			abort(403);
+		}
+
 		$users = $this->userRepository->allWithBusiness();
 
 		return view('businesses.users.index')

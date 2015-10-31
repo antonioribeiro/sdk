@@ -26,6 +26,11 @@ class Activation
 		return $this->activated($user);
 	}
 
+	public function complete($user, $token, $force = false)
+	{
+		return $this->activationRepository->activate($user, $token, $force);
+	}
+
 	public function exists($user)
 	{
 		return $this->activationRepository->exists($user);

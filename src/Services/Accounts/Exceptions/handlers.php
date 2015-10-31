@@ -21,3 +21,14 @@ ExceptionHandler::addHandler(function(UserAlreadyActivated $exception, $code)
 			->withInput();
 });
 
+ExceptionHandler::addHandler(function(UserAlreadyActivated $exception, $code)
+{
+	return Redirect::route_no_ajax('notification')
+		->with('title', t('titles.account-already-activated'))
+		->with('message', t('paragraphs.account-already-activated'))
+		->with('buttons', [[
+			                   'caption' => t('captions.go-to-login-page'),
+			                   'url' => route('auth.login')
+		                   ]])
+		->withInput();
+});

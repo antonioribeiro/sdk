@@ -139,10 +139,10 @@ class UserRepository extends Repository implements UserRepositoryContract
 		return $model->create($attributes);
 	}
 
-	public function activate($email, $token)
+	public function activate($email, $token = null, $force = false)
 	{
 		return $this
-				->call($this->getModel(), 'activate', [$email, $token]);
+				->call($this->getModel(), 'activate', [$email, $token, $force]);
 	}
 
 	public function sendUserActivationEmail($user)

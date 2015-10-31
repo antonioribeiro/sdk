@@ -22,7 +22,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app['pragmarx.auth'] = $this->app->share(function($app)
 		{
-			return new IlluminateAuth();
+			return app()->make(IlluminateAuth::class);
 		});
 	}
 

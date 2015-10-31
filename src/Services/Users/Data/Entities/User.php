@@ -88,7 +88,7 @@ class User extends CartalystUser implements CanResetPassword
 		return $user;
 	}
 
-	public static function activate($email, $token)
+	public static function activate($email, $token, $force = false)
 	{
 		$user = static::where('email', $email)->first();
 
@@ -102,7 +102,7 @@ class User extends CartalystUser implements CanResetPassword
 			throw new UserActivationNotFound();
 		}
 
-	    if ( ! Activation::complete($user, $token))
+	    if ( ! Activation::complete($user, $token, $force))
 	    {
 		    throw new InvalidActivationToken();
 	    }

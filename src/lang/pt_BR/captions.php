@@ -111,4 +111,5 @@ return array (
   'send-invitation' => 'Eviar Convite',
   'settings' => 'Configurações',
   'welcome' => 'Seja bem-vindo!',
+  'back' => 'Voltar',
 );

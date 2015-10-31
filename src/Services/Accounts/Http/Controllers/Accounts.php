@@ -28,5 +28,4 @@ class Accounts extends BaseController {
 				                   ]])
 				->withInput();
 	}
-
 }

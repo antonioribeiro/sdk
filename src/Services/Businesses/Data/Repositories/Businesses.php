@@ -37,28 +37,42 @@ class Businesses extends Repository
 			'business_id' => $business->id,
 			'name' => 'owner',
 		    'description' => 'Dono',
-		    'power' => 1,
+		    'power' => BusinessRole::POWER_OWNER,
 		]);
 
 		BusinessRole::firstOrCreate([
 			'business_id' => $business->id,
 			'name' => 'administrator',
 		    'description' => 'Administrador',
-			'power' => 2,
+			'power' => BusinessRole::POWER_ADMINISTRATOR,
 		]);
 
 		BusinessRole::firstOrCreate([
 			'business_id' => $business->id,
 			'name' => 'manager',
 		    'description' => 'Gerente',
-			'power' => 4,
+			'power' => BusinessRole::POWER_MANAGER,
+		]);
+
+		BusinessRole::firstOrCreate([
+			'business_id' => $business->id,
+			'name' => 'supervisor',
+			'description' => 'Supervisor',
+			'power' => BusinessRole::POWER_SUPERVISOR,
+		]);
+
+		BusinessRole::firstOrCreate([
+			'business_id' => $business->id,
+			'name' => 'triage',
+			'description' => 'Triagem',
+			'power' => BusinessRole::POWER_TRIAGE,
 		]);
 
 		BusinessRole::firstOrCreate([
 			'business_id' => $business->id,
 			'name' => 'operator',
 			'description' => 'Operador',
-			'power' => 8,
+			'power' => BusinessRole::POWER_OPERATOR,
 		]);
 	}
 
