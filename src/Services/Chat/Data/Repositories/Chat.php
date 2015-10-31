@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUser;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUserRole;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatRead;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
@@ -364,11 +365,9 @@ class Chat extends Repository
 
 	private function makeAvatar($talker, $chat)
 	{
-		$role = BusinessClientUserRole::where('business_client_id', $talker->client->id)
-										->where('user_id', $talker->user->id)
-										->first();
+		$role = $this->findRoleByTalker($talker);
 
-		if ($role)
+		if ($role && $talker->client->avatar)
 		{
 			$avatar = $talker->client->avatar->file->getUrl();
 		}
@@ -413,5 +412,24 @@ class Chat extends Repository
 		$script->delete();
 
 		return $script;
+	}
+
+	/**
+	 * @param $talker
+	 * @return mixed
+	 */
+	private function findRoleByTalker($talker)
+	{
+		if ($clientUser = $this->findClientUserByTalker($talker))
+		{
+			return BusinessClientUserRole::where('business_client_user_id', $clientUser->id)->first();
+		}
+
+		return null;
+	}
+
+	private function findClientUserByTalker($talker)
+	{
+		return BusinessClientUser::where('user_id', $talker->user->id)->first();
 	}
 }
