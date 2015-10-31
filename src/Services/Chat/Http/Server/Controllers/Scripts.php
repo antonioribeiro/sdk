@@ -2,11 +2,12 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Http\Server\Controllers;
 
+use Gate;
+use Auth;
 use Flash;
 use Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Commands\CreateScript as CreateScriptCommand;
-use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
 use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses as BusinessesRepository;
 use PragmaRX\Sdk\Services\Chat\Http\Server\Requests\CreateScript as CreateScriptRequest;
@@ -24,6 +25,11 @@ class Scripts extends BaseController
 
 	public function index()
 	{
+		if (Gate::denies('viewScripts', Auth::user()))
+		{
+			abort(403);
+		}
+
 		$scripts = $this->chatRepository->allScripts();
 
 		return view('scripts.index')
