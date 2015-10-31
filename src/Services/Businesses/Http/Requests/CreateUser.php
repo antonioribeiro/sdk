@@ -13,6 +13,7 @@ class CreateUser extends FormRequest
 			'last_name' => 'required',
 			'business_client_id' => 'required',
 			'email' => 'required|email',
+		    'business_role_id' => 'required',
 		];
 	}
 }

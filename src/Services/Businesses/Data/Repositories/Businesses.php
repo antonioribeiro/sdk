@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Businesses\Data\Repositories;
 
+use Auth;
 use Illuminate\Support\Arr;
 use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\Business;
@@ -83,17 +84,11 @@ class Businesses extends Repository
 		]);
 	}
 
-	public function createClientUserRole($clientUser, $businessId, $role)
+	public function createClientUserRole($clientUser, $businessRoleId)
 	{
-		if ( ! is_object($role))
-		{
-			$role = BusinessRole::where('business_id', $businessId)
-						->where('name', $role)->first();
-		}
-
 		return BusinessClientUserRole::firstOrCreate([
 			'business_client_user_id' => $clientUser->id,
-			'business_role_id' => $role->id,
+			'business_role_id' => $businessRoleId,
 		]);
 	}
 
@@ -120,7 +115,7 @@ class Businesses extends Repository
 			'user_id' => $user->id,
 		]);
 
-		$this->createClientUserRole($clientUser, $client->business_id, 'operator');
+		$this->createClientUserRole($clientUser, $attributes['business_role_id']);
 
 		event(new UserWasCreated($user));
 
@@ -155,5 +150,23 @@ class Businesses extends Repository
 		event(new UserWasUpdated($user));
 
 		return $user;
+	}
+
+	public function allowedRoles()
+	{
+		$user = Auth::user();
+
+		if ($user->is_root)
+		{
+			return BusinessRole::all();
+		}
+
+		$business = $user->businessClient->business;
+		$userRole = $user->businessRole;
+
+		return BusinessRole::where('power', '>=', $userRole->power)
+				->where('business_id', $business->id)
+				->get()
+		;
 	}
 }

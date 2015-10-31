@@ -47,17 +47,30 @@ class Users extends BaseController
 
 	public function create()
 	{
+		if (Gate::denies('create', Auth::user()))
+		{
+			abort(403);
+		}
+
 		$clients = $this->businessesRepository->allClients()->lists('name', 'id');
+
+		$roles = $this->businessesRepository->allowedRoles();
 
 		return view('businesses.users.create')
 				->with('businessClients', $clients)
 				->with('postRoute', 'businesses.users.store')
 				->with('cancelRoute', 'businesses.users.index')
-				->with('submitButton', 'Criar usuário');
+				->with('submitButton', 'Criar usuário')
+				->with('roles', $roles->lists('description', 'id'));
 	}
 
 	public function store(CreateUserRequest $createUser)
 	{
+		if (Gate::denies('store', Auth::user()))
+		{
+			abort(403);
+		}
+
 		$this->execute(CreateUserCommand::class);
 
 		Flash::message(t('paragraphs.user-created'));
@@ -67,22 +80,37 @@ class Users extends BaseController
 
 	public function edit($userId)
 	{
+		if (Gate::denies('edit', Auth::user()))
+		{
+			abort(403);
+		}
+
+		$roles = $this->businessesRepository->allowedRoles();
+
 		$user = $this->businessesRepository->findUserById($userId);
+
+		$user->business_role_id = $user->businessRole->id;
 
 		$user->business_client_id = $user->present()->businessClient->id;
 
 		$clients = $this->businessesRepository->allClients()->lists('name', 'id');
 
 		return view('businesses.users.edit')
-				->with('user', $user)
-				->with('businessClients', $clients)
-				->with('postRoute', 'businesses.users.update')
-				->with('cancelRoute', 'businesses.users.index')
+			->with('user', $user)
+			->with('businessClients', $clients)
+			->with('postRoute', 'businesses.users.update')
+			->with('cancelRoute', 'businesses.users.index')
+			->with('roles', $roles->lists('description', 'id'))
 		;
 	}
 
 	public function update(UpdateUserRequest $updateUserRequest)
 	{
+		if (Gate::denies('update', Auth::user()))
+		{
+			abort(403);
+		}
+
 		$this->execute(UpdateUserCommand::class);
 
 		Flash::message(t('paragraphs.user-updated'));
@@ -92,6 +120,11 @@ class Users extends BaseController
 
 	public function delete($userId)
 	{
+		if (Gate::denies('delete', Auth::user()))
+		{
+			abort(403);
+		}
+
 		$this->userRepository->deleteUser($userId);
 
 		Flash::message(t('paragraphs.user-deleted'));

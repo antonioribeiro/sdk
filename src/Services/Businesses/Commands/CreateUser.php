@@ -15,6 +15,8 @@ class CreateUser extends SelfHandlingCommand
 
 	public $business_client_id;
 
+	public $business_role_id;
+
 	public function handle(BusinessesRepository $businessesRepository)
 	{
 		$this->dispatchEventsFor(

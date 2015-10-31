@@ -5,6 +5,7 @@ namespace PragmaRX\Sdk\Services\Chat\Http\Server\Controllers;
 use Gate;
 use Auth;
 use Flash;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
 use Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Commands\CreateScript as CreateScriptCommand;
@@ -40,6 +41,11 @@ class Scripts extends BaseController
 
 	public function create()
 	{
+		if (Gate::denies('create', new ChatScript()))
+		{
+			abort(403);
+		}
+
 		list($services, $clients, $types) = $this->getAllLists();
 
 		return view('scripts.create')
@@ -54,6 +60,11 @@ class Scripts extends BaseController
 
 	public function store(CreateScriptRequest $request)
 	{
+		if (Gate::denies('store', new ChatScript()))
+		{
+			abort(403);
+		}
+
 		$this->execute(CreateScriptCommand::class);
 
 		Flash::message(t('paragraphs.script-created'));
@@ -63,6 +74,11 @@ class Scripts extends BaseController
 
 	public function edit($scriptId)
 	{
+		if (Gate::denies('edit', new ChatScript()))
+		{
+			abort(403);
+		}
+
 		list($services, $clients, $types) = $this->getAllLists();
 
 		$script = $this->chatRepository->findScriptById($scriptId);
@@ -88,6 +104,11 @@ class Scripts extends BaseController
 
 	public function update(UpdateScriptRequest $request)
 	{
+		if (Gate::denies('update', new ChatScript()))
+		{
+			abort(403);
+		}
+
 		$this->chatRepository->updateScript($request->all());
 
 		Flash::message(t('paragraphs.script-updated'));
@@ -97,6 +118,11 @@ class Scripts extends BaseController
 
 	public function delete($scriptId)
 	{
+		if (Gate::denies('delete', new ChatScript()))
+		{
+			abort(403);
+		}
+
 		$this->chatRepository->deleteScript($scriptId);
 
 		Flash::message(t('paragraphs.script-deleted'));
