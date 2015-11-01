@@ -86,9 +86,17 @@ class Businesses extends Repository
 
 	public function createClientUserRole($clientUser, $businessRoleId)
 	{
-		return BusinessClientUserRole::firstOrCreate([
+		if ( ! $businessRole = BusinessRole::find($businessRoleId))
+		{
+			$businessRole = BusinessRole::where('name', $businessRoleId)
+								->where('business_id', $clientUser->client->business->id)
+								->first();
+		}
+
+		return BusinessClientUserRole::firstOrCreate(
+		[
 			'business_client_user_id' => $clientUser->id,
-			'business_role_id' => $businessRoleId,
+			'business_role_id' => $businessRole->id,
 		]);
 	}
 
