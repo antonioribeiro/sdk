@@ -1134,4 +1134,11 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 		return $user;
 	}
+
+	public function updateLastLogin($user)
+	{
+		$user->last_login = Carbon::now();
+
+		$user->save();
+	}
 }
