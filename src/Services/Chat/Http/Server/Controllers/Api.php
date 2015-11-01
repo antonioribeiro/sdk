@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Chat\Http\Server\Controllers;
 
 use Auth;
+use Markdown;
 use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
@@ -43,7 +44,7 @@ class Api extends BaseController
 
 		foreach ($scripts as $script)
 		{
-			$script->script = $this->replaceScriptTags($script->script);
+			$script->script = $this->markdownToHtml($this->replaceScriptTags($script->script));
 
 			$result[$script->id] = $script;
 		}
@@ -116,5 +117,10 @@ class Api extends BaseController
 		$this->eventPublisher->publish($request['chatId'] . ':ChatTerminated');
 
 		return response()->json(['success' => true, 'data' => $chat]);
+	}
+
+	private function markdownToHtml($script)
+	{
+		return Markdown::toHtml($script);
 	}
 }
