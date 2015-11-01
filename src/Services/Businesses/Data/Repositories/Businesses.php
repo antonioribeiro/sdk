@@ -86,7 +86,11 @@ class Businesses extends Repository
 
 	public function createClientUserRole($clientUser, $businessRoleId)
 	{
-		if ( ! $businessRole = BusinessRole::find($businessRoleId))
+		if ($businessRoleId instanceof BusinessRole)
+		{
+			$businessRole = $businessRoleId;
+		}
+		elseif ( ! $businessRole = BusinessRole::find($businessRoleId))
 		{
 			$businessRole = BusinessRole::where('name', $businessRoleId)
 								->where('business_id', $clientUser->client->business->id)

@@ -15,8 +15,8 @@ class CreateChatScriptsTable extends Migration
 			$table->string('chat_service_id', 64)->index()->nullable();
 			$table->string('chat_script_type_id')->index();
 			$table->integer('order')->nullable();
-			$table->text('name');
-			$table->string('script');
+			$table->string('name');
+			$table->text('script');
 
 			$table->timestamps();
 		});
