@@ -6,19 +6,20 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Data\Repository;
-use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
-use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUser;
-use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUserRole;
+use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatRead;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
-use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScriptType;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatMessage;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatCustomer;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScriptType;
 use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\Chat as ChatModel;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientTalker;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUser;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientService;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUserRole;
 use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses as BusinessesRepository;
 
 class Chat extends Repository
@@ -87,15 +88,13 @@ class Chat extends Repository
 		return $result;
 	}
 
-	public function createMessage($chatId, $userId, $message)
+	public function createMessage($chatId, $talkerId, $message)
 	{
 		$chat = $this->findById($chatId);
 
-		$talker = $this->findTalker($chat, $userId);
-
 		$message = ChatMessage::create([
             'chat_id' => $chatId,
-			'chat_business_client_talker_id' => $talker->id,
+            'chat_business_client_talker_id' => $talkerId,
             'talker_ip_address' => $this->request->ip(),
 			'message' => $message,
 		]);
@@ -109,16 +108,7 @@ class Chat extends Repository
 
 	public function findTalker($chat, $userId)
 	{
-		$talker = ChatBusinessClientTalker::find($userId);
-
-		if ( ! $talker)
-		{
-			$talker = ChatBusinessClientTalker::where('user_id', $userId)
-						->where('business_client_id', $chat->service->business_client_id)
-						->first();
-		}
-
-		return $talker;
+		return $this->findOrCreateTalker($chat->service->client, $userId);
 	}
 
 	private function makeMessages($all, $chat = null)
@@ -238,11 +228,16 @@ class Chat extends Repository
 		return $response;
 	}
 
-	private function findOrCreateTalker($client, $user)
+	private function findOrCreateTalker($client, $userId)
 	{
+		if ($userId instanceof User)
+		{
+			$userId = $userId->id;
+		}
+
 		return ChatBusinessClientTalker::firstOrCreate([
 			'business_client_id' => $client->id,
-			'user_id' => $user->id,
+			'user_id' => $userId,
 		]);
 	}
 

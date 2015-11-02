@@ -61,9 +61,9 @@ class Api extends BaseController
 		return $script;
 	}
 
-	public function sendMessage($chatId, $userId, $message = '')
+	public function sendMessage($chatId, $talkerId, $message = '')
 	{
-		$message = $this->chatRepository->createMessage($chatId, $userId, $message);
+		$message = $this->chatRepository->createMessage($chatId, $talkerId, $message);
 
 		$chat = $this->chatRepository->findById($chatId);
 
@@ -78,7 +78,7 @@ class Api extends BaseController
 
 			$this->eventPublisher->publish($chatId, $data);
 
-			event(new ChatMessageSent($chatId, $userId, $message));
+			event(new ChatMessageSent($chatId, $talkerId, $message));
 		}
 	}
 
@@ -95,7 +95,7 @@ class Api extends BaseController
 	{
 		return $this->sendMessage(
 			$request['chatId'],
-			Auth::user()->id,
+			$this->chatRepository->getCurrentTalker()->id,
 			$request['message']
 		);
 	}
