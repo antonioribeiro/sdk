@@ -103,7 +103,7 @@ class Passwords extends BaseController
 		);
 
 		return Redirect::route_no_ajax('notification')
-			->with('title', t('titles.reset-your-password'))
+			->with('title', t('titles.reset-your-password') . $email . '.')
 			->with('message', t('paragraphs.reset-password-sent'))
 			->withInput();
 	}
