@@ -181,4 +181,42 @@ class Businesses extends Repository
 				->get()
 		;
 	}
+
+	public function allUsers()
+	{
+		if ($loggedUser = Auth::user())
+		{
+			if ( ! $loggedUser->is_root)
+			{
+				if ( ! $role = $loggedUser->businessClientUsers()->first())
+				{
+					return null;
+				}
+			}
+			else
+			{
+				return $this->userRepository->allWithBusiness();
+			}
+		}
+		else
+		{
+			return null;
+		}
+
+		$clientUsers = $loggedUser->businessClient->clientUsers;
+
+		$result = [];
+
+		foreach ($clientUsers as $clientUser)
+		{
+			$result[] = $this->userRepository->makeUserWithBusiness($clientUser->user);
+		}
+
+		return $result;
+	}
+
+	private function allClientUsersFor($businessClient)
+	{
+		return BusinessClientUser::with('user')->where('business_client_id', $businessClient->id)->get();
+	}
 }

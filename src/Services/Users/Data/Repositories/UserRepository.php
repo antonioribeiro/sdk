@@ -1092,20 +1092,7 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 			if ($loggedUser->is_root || (!$user->is_root && array_intersect($authUserClients, $clients)))
 			{
-				$role = $user->present()->businessRole->description;
-
-				$client = $user->present()->businessClient->name;
-
-				$result[] = [
-					'id' => $user->id,
-					'first_name' => $user->first_name,
-					'last_name' => $user->last_name,
-					'email' => $user->email,
-					'username' => $user->username,
-					'fullName' => $user->present()->fullName,
-					'role' => $role,
-					'businessClient' => $client,
-				];
+				$result[] = $this->makeUserWithBusiness($user);
 			}
 		}
 
@@ -1140,5 +1127,23 @@ class UserRepository extends Repository implements UserRepositoryContract
 		$user->last_login = Carbon::now();
 
 		$user->save();
+	}
+
+	public function makeUserWithBusiness($user)
+	{
+		$role = $user->present()->businessRole->description;
+
+		$client = $user->present()->businessClient->name;
+
+		return [
+			'id' => $user->id,
+			'first_name' => $user->first_name,
+			'last_name' => $user->last_name,
+			'email' => $user->email,
+			'username' => $user->username,
+			'fullName' => $user->present()->fullName,
+			'role' => $role,
+			'businessClient' => $client,
+		];
 	}
 }

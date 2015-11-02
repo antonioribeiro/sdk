@@ -37,7 +37,7 @@ class Users extends BaseController
 			abort(403);
 		}
 
-		$users = $this->userRepository->allWithBusiness();
+		$users = $this->businessesRepository->allUsers();
 
 		return view('businesses.users.index')
 			->with('users', $users)

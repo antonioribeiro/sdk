@@ -23,4 +23,9 @@ class BusinessClient extends Model
 	{
 		return $this->belongsTo(FileName::class, 'avatar_id');
 	}
+
+	public function clientUsers()
+	{
+		return $this->hasMany(BusinessClientUser::class)->with('user');
+	}
 }
