@@ -387,15 +387,9 @@ class Chat extends Repository
 	{
 		$script = $this->findScriptById($attributes['id']);
 
-		$script->setRawAttributes(array_only($attributes,
-		[
-			'id',
-			'name',
-			'business_client_id',
-			'chat_service_id',
-			'script',
-			'chat_script_type_id',
-		]));
+		$attributes = array_only($attributes, $this->getModelFillableAttributes($script));
+
+		$script->fill($attributes);
 
 		$script->save();
 	}

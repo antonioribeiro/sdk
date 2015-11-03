@@ -42,4 +42,11 @@ class Repository
 	{
 		return call($this->getClassName($className), $method, $arguments);
 	}
+
+	public function getModelFillableAttributes($model = null)
+	{
+		$model = $model ?: $this->getNewModel();
+
+		return $model->getFillable();
+	}
 }

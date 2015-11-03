@@ -5,17 +5,19 @@ namespace PragmaRX\Sdk\Services\Businesses\Data\Repositories;
 use Auth;
 use Illuminate\Support\Arr;
 use PragmaRX\Sdk\Core\Data\Repository;
-use PragmaRX\Sdk\Services\Businesses\Data\Entities\Business;
-use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUser;
-use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessRole;
 use PragmaRX\Sdk\Services\Businesses\Events\UserWasCreated;
 use PragmaRX\Sdk\Services\Businesses\Events\UserWasUpdated;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\Business;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessRole;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUser;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUserRole;
 
 class Businesses extends Repository
 {
+	protected $model = Business::class;
+
 	private $userRepository;
 
 	public function __construct(UserRepository $userRepository)
@@ -25,6 +27,8 @@ class Businesses extends Repository
 
 	public function createBusiness($atributes)
 	{
+		$atributes = array_only($atributes, $this->getModelFillableAttributes());
+
 		$business = Business::firstOrCreate($atributes);
 
 		$this->createDefaultRolesForBusiness($business);
@@ -79,8 +83,14 @@ class Businesses extends Repository
 
 	public function createClientForBusiness($business, $name)
 	{
+		if ( ! is_object($business))
+		{
+			$business = $this->findById($business);
+		}
+
 		return BusinessClient::firstOrCreate([
-			'business_id' => $business->id, 'name' => $name
+			'business_id' => $business->id,
+			'name' => $name
 		]);
 	}
 
@@ -145,7 +155,7 @@ class Businesses extends Repository
 
 		$currentBusinessClientId = $user->present()->businessClient->id;
 
-		$user->setRawAttributes(Arr::except($attributes, ['business_client_id', 'dispatcher']));
+		$user->fill(Arr::except($attributes, ['business_client_id', 'dispatcher']));
 
 		$user->save();
 
@@ -215,7 +225,34 @@ class Businesses extends Repository
 		return $result;
 	}
 
-	private function allClientUsersFor($businessClient)
+	public function all()
+	{
+		return Business::all();
+	}
+
+	public function updateBusiness($attributes)
+	{
+		$business = $this->findById($attributes['id']);
+
+		$attributes = array_only($attributes, $this->getModelFillableAttributes());
+
+		$business->fill($attributes);
+
+		$business->save();
+
+		return $business;
+	}
+
+	public function deleteBusiness($businessId)
+	{
+		$business = $this->findById($businessId);
+
+		$business->delete();
+
+		return $business;
+	}
+
+	public function allClientUsersFor($businessClient)
 	{
 		return BusinessClientUser::with('user')->where('business_client_id', $businessClient->id)->get();
 	}
