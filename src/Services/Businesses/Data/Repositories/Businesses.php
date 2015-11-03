@@ -256,4 +256,31 @@ class Businesses extends Repository
 	{
 		return BusinessClientUser::with('user')->where('business_client_id', $businessClient->id)->get();
 	}
+
+	public function findClientById($clientId)
+	{
+		return BusinessClient::find($clientId);
+	}
+
+	public function updateClient($attributes)
+	{
+		$client = $this->findClientById($attributes['id']);
+
+		$attributes = array_only($attributes, $this->getModelFillableAttributes($client));
+
+		$client->fill($attributes);
+
+		$client->save();
+
+		return $client;
+	}
+
+	public function deleteClient($businessId, $clientId)
+	{
+		$client = $this->findClientById($clientId);
+
+		$client->delete();
+
+		return $client;
+	}
 }

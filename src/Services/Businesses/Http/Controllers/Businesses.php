@@ -82,7 +82,7 @@ class Businesses extends BaseController
 			->with('clients', $clients)
 			->with('postRoute', 'businesses.enterprises.update')
 			->with('cancelRoute', 'businesses.enterprises.index')
-			->with('deleteUri', '/businesses/clients/delete/')
+			->with('deleteUri', '/businesses/{businessId}/clients/{clientId}/delete/')
 		;
 	}
 

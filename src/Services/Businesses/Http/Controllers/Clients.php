@@ -55,7 +55,7 @@ class Clients extends BaseController
 		return redirect()->route('businesses.enterprises.edit', ['businessId' => $businessId]);
 	}
 
-	public function edit($businessId)
+	public function edit($businessId, $clientId)
 	{
 		if (Gate::denies('edit', $this->businessesRepository->findById($businessId)))
 		{
@@ -63,15 +63,15 @@ class Clients extends BaseController
 		}
 
 		$business = $this->businessesRepository->findById($businessId);
+		$client = $this->businessesRepository->findClientById($clientId);
 
-		$clients = $business->clients;
-
-		return view('businesses.enterprises.edit')
+		return view('businesses.enterprises.clients.edit')
 			->with('business', $business)
-			->with('clients', $clients)
-			->with('postRoute', 'businesses.enterprises.update')
-			->with('cancelRoute', 'businesses.enterprises.index')
-			->with('deleteUri', '/businesses/clients/delete/')
+			->with('client', $client)
+			->with('postRoute', 'businesses.clients.update')
+			->with('postRouteParameters', $businessId)
+			->with('cancelRoute', 'businesses.enterprises.edit')
+			->with('cancelRouteParameters', $businessId)
 		;
 	}
 
@@ -82,25 +82,25 @@ class Clients extends BaseController
 			abort(403);
 		}
 
-		$this->businessesRepository->updateBusiness($updateBusinessRequest->all());
+		$this->businessesRepository->updateClient($updateBusinessRequest->all());
 
-		Flash::message(t('paragraphs.user-updated'));
+		Flash::message(t('paragraphs.client-updated'));
 
-		return Redirect::route_no_ajax('businesses.enterprises.index');
+		return redirect()->route('businesses.enterprises.edit', ['businessId' => $updateBusinessRequest['businessId']]);
 	}
 
-	public function delete($businessId)
+	public function delete($businessId, $clientId)
 	{
-		if (Gate::denies('delete', new BusinessClient()))
+		if (Gate::denies('delete', $this->businessesRepository->findById($businessId)))
 		{
 			abort(403);
 		}
 
-		$this->businessesRepository->deleteBusiness($businessId);
+		$this->businessesRepository->deleteClient($businessId, $clientId);
 
-		Flash::message(t('paragraphs.user-deleted'));
+		Flash::message(t('paragraphs.client-deleted'));
 
-		return Redirect::route_no_ajax('businesses.enterprises.index');
+		return redirect()->route('businesses.enterprises.edit', compact('businessId'));
 	}
 
 	private function findBusiness($businessId)
