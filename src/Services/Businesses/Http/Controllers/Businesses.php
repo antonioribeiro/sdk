@@ -6,6 +6,7 @@ use Gate;
 use Auth;
 use Flash;
 use Redirect;
+use Business as BusinessService;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\Business;
 use PragmaRX\Sdk\Services\Businesses\Http\Requests\UpdateBusiness as UpdateBusinessRequest;
@@ -61,7 +62,7 @@ class Businesses extends BaseController
 
 		$this->businessesRepository->createBusiness($createBusinessRequest->all());
 
-		Flash::message(t('paragraphs.user-created'));
+		Flash::message(t('paragraphs.business-created'));
 
 		return Redirect::route_no_ajax('businesses.enterprises.index');
 	}
@@ -95,7 +96,7 @@ class Businesses extends BaseController
 
 		$this->businessesRepository->updateBusiness($updateBusinessRequest->all());
 
-		Flash::message(t('paragraphs.user-updated'));
+		Flash::message(t('paragraphs.business-updated'));
 
 		return Redirect::route_no_ajax('businesses.enterprises.index');
 	}
@@ -109,8 +110,15 @@ class Businesses extends BaseController
 
 		$this->businessesRepository->deleteBusiness($businessId);
 
-		Flash::message(t('paragraphs.user-deleted'));
+		Flash::message(t('paragraphs.business-deleted'));
 
 		return Redirect::route_no_ajax('businesses.enterprises.index');
+	}
+
+	public function select($businessId)
+	{
+		BusinessService::setCurrent($businessId);
+
+		return redirect()->back();
 	}
 }

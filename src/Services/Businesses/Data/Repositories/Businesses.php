@@ -227,7 +227,12 @@ class Businesses extends Repository
 
 	public function all()
 	{
-		return Business::all();
+		if (Auth::user()->is_root)
+		{
+			return Business::all();
+		}
+
+		Auth::
 	}
 
 	public function updateBusiness($attributes)
@@ -282,5 +287,10 @@ class Businesses extends Repository
 		$client->delete();
 
 		return $client;
+	}
+
+	public function getFirst()
+	{
+		return BusinessModel::first();
 	}
 }

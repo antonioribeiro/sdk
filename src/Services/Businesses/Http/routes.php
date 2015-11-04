@@ -15,6 +15,8 @@ Route::group(['prefix' => 'businesses', 'middleware' => 'auth', 'namespace' => '
 		Route::post('store', ['as' => 'businesses.enterprises.store', 'uses' => 'Businesses@store']);
 
 		Route::post('update', ['as' => 'businesses.enterprises.update', 'uses' => 'Businesses@update']);
+
+		Route::get('select/{businessId}', ['as' => 'businesses.enterprises.select', 'uses' => 'Businesses@select']);
 	});
 
 	Route::group(['prefix' => '{businessId}/clients'], function ()
