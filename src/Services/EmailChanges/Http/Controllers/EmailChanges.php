@@ -25,8 +25,6 @@ class EmailChanges extends BaseController {
 
 	public function change($token)
 	{
-		dd($token);
-
 		if (Auth::user())
 		{
 			$statuses = $this->statusRepository->getFeedForUser(Auth::user());

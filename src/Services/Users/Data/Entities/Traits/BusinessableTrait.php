@@ -3,8 +3,9 @@
 namespace PragmaRX\Sdk\Services\Users\Data\Entities\Traits;
 
 use DB;
-use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
+use Illuminate\Database\Eloquent\Collection;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessRole;
+use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUser;
 
 trait BusinessableTrait
@@ -61,5 +62,32 @@ trait BusinessableTrait
 		return $client;
 	}
 
-	
+	public function businessClientsUsers()
+	{
+		return $this->hasMany(BusinessClientUser::class)->with('client.business');
+	}
+
+	public function getBusinessClientsAttribute()
+	{
+		$clients = [];
+
+		foreach ($this->businessClientUsers as $clientUser)
+		{
+			$clients[] = $clientUser->client;
+		}
+
+		return new Collection($clients);
+	}
+
+	public function getBusinessesAttribute()
+	{
+		$businesses = [];
+
+		foreach ($this->businessClientUsers as $clientUser)
+		{
+			$businesses[] = $clientUser->client->business;
+		}
+
+		return new Collection($businesses);
+	}
 }

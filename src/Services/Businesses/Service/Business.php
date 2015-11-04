@@ -26,7 +26,19 @@ class Business
 			return $this->current;
 		}
 
-		$role = Auth::user()->businessRole;
+		if ( ! $user = Auth::user())
+		{
+			return null;
+		}
+
+		if ($user->preferred_business_id)
+		{
+			return $this->setCurrent(
+				$this->businessesRepository->findById($user->preferred_business_id)
+			);
+		}
+
+		$role = $user ? $user->businessRole : null;
 
 		if ($role && $role->business)
 		{
@@ -45,7 +57,16 @@ class Business
 
 	public function getCurrent()
 	{
-		return $this->makeCurrent();
+		$business = $this->makeCurrent();
+
+		if ( ! $this->allowedToCurrentUser($business))
+		{
+			$this->clear();
+
+			$business = $this->makeCurrent();
+		}
+
+		return $business;
 	}
 
 	public function setCurrent($business)
@@ -57,11 +78,62 @@ class Business
 
 		Session::put(static::CURRENT_BUSINESS_SESSION_KEY, $business);
 
+		if ($user = Auth::user())
+		{
+			$user->preferred_business_id = $business->id;
+
+			$user->save();
+		}
+
 		return $this->current = $business;
 	}
 
 	public function getAll()
 	{
-		return $this->businessesRepository->all();
+		return $this->businessesRepository->all() ?: [];
+	}
+
+	public function getAllExceptCurrent()
+	{
+		$businesses = [];
+
+		foreach ($this->getAll() as $business)
+		{
+			if ($business->id !== $this->getCurrent()->id)
+			{
+				$businesses[] = $business;
+			}
+		}
+
+		return $businesses;
+	}
+
+	private function clear()
+	{
+		$this->current = null;
+
+		Session::forget(static::CURRENT_BUSINESS_SESSION_KEY);
+	}
+
+	private function allowedToCurrentUser($business)
+	{
+		if ( ! $user = Auth::user())
+		{
+			return false;
+		}
+
+		if ($user->is_root)
+		{
+			return true;
+		}
+
+		$userBusinesses = $user->businesses;
+
+		if ( ! $userBusinesses || $userBusinesses->count() == 0)
+		{
+			return false;
+		}
+
+		return $userBusinesses->contains($business->id);
 	}
 }

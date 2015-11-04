@@ -227,12 +227,17 @@ class Businesses extends Repository
 
 	public function all()
 	{
+		if ( ! $user = Auth::user())
+		{
+			return null;
+		}
+
 		if (Auth::user()->is_root)
 		{
 			return Business::all();
 		}
 
-		Auth::
+		return Auth::user()->businesses;
 	}
 
 	public function updateBusiness($attributes)
@@ -291,6 +296,6 @@ class Businesses extends Repository
 
 	public function getFirst()
 	{
-		return BusinessModel::first();
+		return Business::first();
 	}
 }
