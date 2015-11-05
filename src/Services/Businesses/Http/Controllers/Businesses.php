@@ -121,4 +121,11 @@ class Businesses extends BaseController
 
 		return redirect()->back();
 	}
+
+	public function selectClient($clientId)
+	{
+		BusinessService::setCurrentClient($clientId);
+
+		return redirect()->back();
+	}
 }

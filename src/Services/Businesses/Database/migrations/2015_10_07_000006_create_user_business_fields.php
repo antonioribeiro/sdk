@@ -10,11 +10,13 @@ class CreateUserBusinessFields extends Migration
 		Schema::table('users', function(Blueprint $table)
 		{
 			$table->string('preferred_business_id', 64)->nullable();
+			$table->string('preferred_business_client_id', 64)->nullable();
 		});
 	}
 
 	public function migrateDown()
 	{
 		$this->dropColumn('users', 'preferred_business_id');
+		$this->dropColumn('users', 'preferred_business_client_id');
 	}
 }

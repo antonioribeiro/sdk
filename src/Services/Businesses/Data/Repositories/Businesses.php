@@ -298,4 +298,14 @@ class Businesses extends Repository
 	{
 		return Business::first();
 	}
+
+	public function getFirstClient()
+	{
+		return BusinessClient::first();
+	}
+
+	public function getNewClientModel()
+	{
+		return new BusinessClient();
+	}
 }
