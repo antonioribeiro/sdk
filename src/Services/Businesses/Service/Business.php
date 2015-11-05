@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Businesses\Service;
 
 use Auth;
+use Illuminate\Database\Eloquent\Collection;
 use Session;
 use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses as BusinessesRepository;
 
@@ -91,13 +92,16 @@ class Business
 			$business = $this->businessesRepository->findById($business);
 		}
 
-		Session::put(static::CURRENT_BUSINESS_SESSION_KEY, $business);
-
-		if ($user = Auth::user())
+		if ($business->id)
 		{
-			$user->preferred_business_id = $business->id;
+			Session::put(static::CURRENT_BUSINESS_SESSION_KEY, $business);
 
-			$user->save();
+			if ($user = Auth::user())
+			{
+				$user->preferred_business_id = $business->id;
+
+				$user->save();
+			}
 		}
 
 		return $this->current = $business;
@@ -105,7 +109,17 @@ class Business
 
 	public function getAll()
 	{
-		return $this->businessesRepository->all() ?: [];
+		if ( ! $user = Auth::user())
+		{
+			return [];
+		}
+
+		if ($user->is_root)
+		{
+			return $this->businessesRepository->all();
+		}
+
+		return $user->businesses;
 	}
 
 	public function getAllExceptCurrent()
@@ -216,13 +230,16 @@ class Business
 			$client = $this->businessesRepository->findClientById($client);
 		}
 
-		Session::put(static::CURRENT_BUSINESS_CLIENT_SESSION_KEY, $client);
-
-		if ($user = Auth::user())
+		if ($client->id)
 		{
-			$user->preferred_business_client_id = $client->id;
+			Session::put(static::CURRENT_BUSINESS_CLIENT_SESSION_KEY, $client);
 
-			$user->save();
+			if ($user = Auth::user())
+			{
+				$user->preferred_business_client_id = $client->id;
+
+				$user->save();
+			}
 		}
 
 		return $this->currentClient = $client;
@@ -230,12 +247,27 @@ class Business
 
 	public function getAllClients()
 	{
-		if ( ! $current = $this->getCurrent())
+		if ( (! $user = Auth::user()) || (! $current = $this->getCurrent()))
 		{
 			return [];
 		}
 
-		return $current->clients;
+		if ($user->is_root)
+		{
+			return $this->getCurrent()->clients;
+		}
+
+		$clients = [];
+
+		foreach ($user->businessClients as $client)
+		{
+			if ($this->clientBelongsToCurrentBusiness($client))
+			{
+				$clients[] = $client;
+			}
+		}
+
+		return new Collection($clients);
 	}
 
 	public function getAllClientsExceptCurrent()
@@ -264,7 +296,7 @@ class Business
 			return true;
 		}
 
-		$userClients = $user->clients;
+		$userClients = $user->businessClients;
 
 		if ( ! $userClients || $userClients->count() == 0)
 		{
