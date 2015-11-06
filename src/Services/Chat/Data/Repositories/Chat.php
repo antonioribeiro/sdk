@@ -45,16 +45,12 @@ class Chat extends Repository
 		$this->request = $request;
 	}
 
-	public function create($name, $email)
+	public function create($name, $email, $clientId)
 	{
 		$user = $this->userRepository->findByEmailOrCreate($email, ['first_name' => $name], true); // allow empty password
 
-		$business = $this->businessesRepository->createBusiness(['name' => 'Alerj']);
-
-		$client = $this->businessesRepository->createClientForBusiness($business, 'Alô Alerj');
-
 		$talker = ChatBusinessClientTalker::firstOrCreate([
-			'business_client_id' => $client->id,
+			'business_client_id' => $clientId,
 			'user_id' => $user->id,
 		]);
 
@@ -62,7 +58,7 @@ class Chat extends Repository
 
 		$clientService = ChatBusinessClientService::firstOrCreate([
 			'chat_service_id' => $service->id,
-			'business_client_id' => $client->id,
+			'business_client_id' => $clientId,
             'description' => 'Chat do Call Center',
 		]);
 

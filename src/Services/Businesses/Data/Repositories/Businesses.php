@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Businesses\Data\Repositories;
 
 use Auth;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Businesses\Events\UserWasCreated;
@@ -307,5 +308,13 @@ class Businesses extends Repository
 	public function getNewClientModel()
 	{
 		return new BusinessClient();
+	}
+
+	public function addChatLinkToClients($clients)
+	{
+		return $clients = $clients->each(function ($item, $key)
+		{
+			$item->chatLink = $item->present()->chatLink;
+		});
 	}
 }

@@ -23,9 +23,9 @@ class Chat extends BaseController
 		$this->eventPublisher = $eventPublisher;
 	}
 
-	public function create()
+	public function create($clientId)
 	{
-		return view('chat.client.create');
+		return view('chat.client.create')->with('clientId', $clientId);
 	}
 
 	public function chat($chat_id)

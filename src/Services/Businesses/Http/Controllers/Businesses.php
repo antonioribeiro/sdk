@@ -76,7 +76,7 @@ class Businesses extends BaseController
 
 		$business = $this->businessesRepository->findById($businessId);
 
-		$clients = $business->clients;
+		$clients = $this->businessesRepository->addChatLinkToClients($business->clients);
 
 		return view('businesses.enterprises.edit')
 			->with('business', $business)

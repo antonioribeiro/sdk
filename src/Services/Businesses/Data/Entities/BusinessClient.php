@@ -14,6 +14,8 @@ class BusinessClient extends Model
 		'name',
 	];
 
+	protected $presenter = 'PragmaRX\Sdk\Services\Businesses\Data\Presenters\BusinessClient';
+
 	public function business()
 	{
 		return $this->belongsTo(Business::class, 'business_id');
