@@ -30,7 +30,7 @@
             __loadChats: function()
             {
                 this.$http.get(
-                    '{{ url() }}/api/v1/chat/client/all/'+this.chatId,
+                    '{{ url() }}/api/v1/chat/client/get/'+this.chatId,
                     function(data, status, request)
                     {
                         this.$set('chatInfo', data);

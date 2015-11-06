@@ -70,7 +70,7 @@ class Chat extends Repository
 		]);
 	}
 
-	public function all()
+	public function allChats()
 	{
 		$chats = ChatModel::whereNull('closed_at')->get();
 
@@ -307,7 +307,7 @@ class Chat extends Repository
 		return $chat;
 	}
 
-	public function allFor($chatId)
+	public function getChat($chatId)
 	{
 		$chat = $this->findById($chatId);
 
@@ -337,7 +337,12 @@ class Chat extends Repository
 			'avatar' => $chat->owner->user->present()->avatar
 		];
 
-		$data['responder'] = $chat->responder_id ? ['fullName' => $chat->responder->user->present()->fullName] : null;
+		$data['responder'] = $chat->responder_id
+								?   [
+										'fullName' => $chat->responder->user->present()->fullName,
+								        'id' => $chat->responder->user->id,
+									]
+								: null;
 		$data['responder_id'] = $chat->responder_id;
 		$data['email'] = $chat->owner->user->email;
 		$data['isClosed'] = is_null($chat->closed_at);
@@ -416,5 +421,23 @@ class Chat extends Repository
 	private function findClientUserByTalker($talker)
 	{
 		return BusinessClientUser::where('user_id', $talker->user->id)->first();
+	}
+
+	public function allChatsForClient($clientId)
+	{
+		$chats = ChatModel::select('chats.*')
+					->join('chat_business_client_services', 'chats.chat_business_client_service_id', '=', 'chat_business_client_services.id')
+					->whereNull('closed_at')
+					->where('chat_business_client_services.business_client_id', $clientId)
+					->get();
+
+		$result = [];
+
+		foreach($chats as $chat)
+		{
+			$result[$chat->id] = $this->makeChatData($chat);
+		}
+
+		return $result;
 	}
 }

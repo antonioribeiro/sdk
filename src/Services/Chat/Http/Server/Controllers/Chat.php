@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Http\Server\Controllers;
 
+use Business as BusinessService;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
 
@@ -16,13 +17,17 @@ class Chat extends BaseController
 
 	public function index()
 	{
-		$chats = $this->chatRepository->all();
+		$chats = $this->chatRepository->allChats();
 
-		$currenOperatorId = $this->chatRepository->getCurrentTalker()->id;
+		$currenOperator = $this->chatRepository->getCurrentTalker();
+
+		$currentClientId = BusinessService::getCurrentClient()->id;
 
 		return view('chat.server.index')
 			->with('listenChannel', 'chat-channel:PragmaRX\\\\Sdk\\\\Services\\\\Chat\\\\Events\\\\ChatMessageSent')
-			->with('currentOperatorId', $currenOperatorId)
+			->with('currentOperatorId', $currenOperator->id)
+			->with('currentOperatorUserId', $currenOperator->user->id)
+			->with('currentClientId', $currentClientId)
 			->with('chats', $chats);
 	}
 

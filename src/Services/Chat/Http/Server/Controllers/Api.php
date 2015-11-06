@@ -26,14 +26,19 @@ class Api extends BaseController
 		$this->eventPublisher = $eventPublisher;
 	}
 
-	public function all()
+	public function allChats()
 	{
-		return $this->chatRepository->all();
+		return $this->chatRepository->allChats();
 	}
 
-	public function allFor($chatId)
+	public function getChat($chatId)
 	{
-		return $this->chatRepository->allFor($chatId);
+		return $this->chatRepository->getChat($chatId);
+	}
+
+	public function allChatsForClient($clientId)
+	{
+		return $this->chatRepository->allChatsForClient($clientId);
 	}
 
 	public function scripts()

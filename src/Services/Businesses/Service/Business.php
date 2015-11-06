@@ -23,6 +23,8 @@ class Business
 	public function __construct(BusinessesRepository $businessesRepository)
 	{
 		$this->businessesRepository = $businessesRepository;
+
+		$this->makeAll();
 	}
 
 	public function makeCurrent()
@@ -82,6 +84,11 @@ class Business
 
 	public function setCurrent($business)
 	{
+		if ( ! is_object($business))
+		{
+			$business = $this->businessesRepository->findById($business);
+		}
+
 		if ($this->current && $business->id !== $this->current->id)
 		{
 			$this->clearAll();
