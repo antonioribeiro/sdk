@@ -13,11 +13,12 @@ use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
 
 class IlluminateAuth implements AuthContract
 {
-
     /**
      * @var UserRepository
      */
     private $userRepository;
+
+    private $lastSeenUpdated = false;
 
     public function __construct(UserRepository $userRepository) {
         $this->auth = app('auth');
@@ -147,14 +148,16 @@ class IlluminateAuth implements AuthContract
 
     private function updateLastSeen() {
         if ($this->lastSeenUpdated) {
-            return true;
+            return;
         }
 
-        if ($user = $this->user())
+        if ($user = $this->auth->user())
         {
             $user->last_seen_at = Carbon::now();
 
             $user->save();
+
+            $this->lastSeenUpdated = true;
         }
     }
 }

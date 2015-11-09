@@ -12,7 +12,7 @@ class AddLastSeenColumn extends Migration
      */
     public function migrateUp() {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('last_seen_at')->nullable()->index();
+            $table->timestamp('last_seen_at')->nullable()->index();
         });
     }
 
