@@ -6,7 +6,7 @@ use Illuminate\Translation\Translator as IlluminateTranslator;
 
 class Translator extends IlluminateTranslator {
 
-	public function get($key, array $replace = array(), $locale = null)
+	public function get($key, array $replace = array(), $locale = null, $fallback = true)
 	{
 		$locale = $this->getCurrentLocale($locale);
 
