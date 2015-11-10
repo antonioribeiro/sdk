@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Chat\Http\Client\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses;
 use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
 use PragmaRX\Sdk\Services\Chat\Commands\CreateChat as CreateChatCommand;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
@@ -17,15 +18,29 @@ class Chat extends BaseController
 	 */
 	private $eventPublisher;
 
-	public function __construct(ChatRepository $chatRepository, EventPublisher $eventPublisher)
+    /**
+     * @var Businesses
+     */
+    private $businessesRepository;
+
+    public function __construct(ChatRepository $chatRepository, EventPublisher $eventPublisher, Businesses $businessesRepository)
 	{
 		$this->chatRepository = $chatRepository;
 		$this->eventPublisher = $eventPublisher;
-	}
+        $this->businessesRepository = $businessesRepository;
+    }
 
 	public function create($clientId)
 	{
-		return view('chat.client.create')->with('clientId', $clientId);
+        $client = $this->businessesRepository->findClientById($clientId);
+
+        if ( ! $client) {
+            return redirect()->route('home');
+        }
+
+		return view('chat.client.create')
+            ->with('clientId', $clientId)
+            ->with('businessClientName', $client->name);
 	}
 
 	public function chat($chat_id)
@@ -44,7 +59,10 @@ class Chat extends BaseController
 		}
 
 		return view('chat.client.index')
-			->with('talkerUsername', $chat->owner->user->first_name)
+            ->with('businessClientName', $chat->service->client->name)
+            ->with('talkerUsername', $chat->owner->user->username)
+			->with('talkerFirstName', $chat->owner->user->first_name)
+            ->with('talkerName', $chat->owner->user->present()->fullName)
 			->with('talkerEmail', $chat->owner->user->email)
 			->with('talkerId', $chat->owner->id)
 			->with('chatId', $chat_id)
