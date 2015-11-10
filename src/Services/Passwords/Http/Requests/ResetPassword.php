@@ -9,6 +9,8 @@ class ResetPassword extends FormRequest {
 
 	private $rules;
 
+    protected $redirectRoute = 'home';
+
 	/**
 	 * Get the validation rules that apply to the request.
 	 *

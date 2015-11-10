@@ -92,8 +92,11 @@ class User extends CartalystUser implements CanResetPassword
 	{
 		$user = static::where('email', $email)->first();
 
-		if (Activation::completed($user))
-		{
+		if (Activation::completed($user)) {
+            if ($force) {
+                return $user;
+            }
+
 			throw new UserAlreadyActivated();
 		}
 
