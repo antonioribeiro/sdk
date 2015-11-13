@@ -7,20 +7,19 @@ use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
 
 class CreateChat extends SelfHandlingCommand
 {
-	public $name;
+    public $name;
 
-	public $email;
+    public $email;
 
-	public $clientId;
-	
-	public function handle(ChatRepository $repository)
-	{
-		$chat = $repository->create(
-			$this->name,
-			$this->email,
-			$this->clientId
-		);
+    public $clientId;
 
-		return $chat;
-	}
+    public function handle(ChatRepository $repository) {
+        $chat = $repository->create(
+            $this->name,
+            $this->email,
+            $this->clientId
+        );
+
+        return $chat;
+    }
 }
