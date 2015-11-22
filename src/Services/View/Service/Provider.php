@@ -25,7 +25,7 @@ class Provider extends ServiceProvider {
 
 		$app->bindShared('blade.compiler', function($app)
 		{
-			$cache = $app['path.storage'].'/views';
+			$cache = $app['config']['view.compiled'] ?: $app['path.storage'].'/views';
 
 			return new BladeCompiler($app['files'], $cache);
 		});
