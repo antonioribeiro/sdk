@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Chat\Data\Repositories;
 
 use Auth;
+use Baum\Extensions\Eloquent\Collection;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Data\Repository;
@@ -70,7 +71,7 @@ class Chat extends Repository
 		]);
 	}
 
-	public function allChats()
+	public function allChats($open = true)
 	{
 		$chats = ChatModel::whereNull('closed_at')->get();
 
@@ -81,7 +82,7 @@ class Chat extends Repository
 			$result[$chat->id] = $this->makeChatData($chat);
 		}
 
-		return $result;
+		return new Collection($result);
 	}
 
 	public function createMessage($chatId, $talkerId, $message)
