@@ -3,10 +3,10 @@
 namespace PragmaRX\Sdk\Services\Chat\Data\Repositories;
 
 use Auth;
-use Baum\Extensions\Eloquent\Collection;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Data\Repository;
+use Illuminate\Database\Eloquent\Collection;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatRead;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
@@ -71,7 +71,7 @@ class Chat extends Repository
 		]);
 	}
 
-	public function allChats($businessClientId = null, $open = true)
+	public function allChats($open = true)
 	{
 		$chats = ChatModel::whereNull('closed_at')->get();
 
@@ -424,21 +424,24 @@ class Chat extends Repository
 		return BusinessClientUser::where('user_id', $talker->user->id)->first();
 	}
 
-	public function allChatsForClient($clientId)
+	public function allChatsForClient($clientId, $open = true)
 	{
 		$chats = ChatModel::select('chats.*')
 					->join('chat_business_client_services', 'chats.chat_business_client_service_id', '=', 'chat_business_client_services.id')
-					->whereNull('closed_at')
-					->where('chat_business_client_services.business_client_id', $clientId)
-					->get();
+					->where('chat_business_client_services.business_client_id', $clientId);
+
+        if ($open)
+        {
+            $chats->whereNull('closed_at');
+        }
 
 		$result = [];
 
-		foreach($chats as $chat)
+		foreach($chats->get() as $chat)
 		{
 			$result[$chat->id] = $this->makeChatData($chat);
 		}
 
-		return $result;
+		return new Collection($result);
 	}
 }
