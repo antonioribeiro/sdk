@@ -71,7 +71,7 @@ class Chat extends Repository
 		]);
 	}
 
-	public function allChats($open = true)
+	public function allChats($businessClientId = null, $open = true)
 	{
 		$chats = ChatModel::whereNull('closed_at')->get();
 

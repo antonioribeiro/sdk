@@ -3,7 +3,6 @@
 namespace PragmaRX\Sdk\Services\Chat\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
-use App\Services\Users\Data\Entities\User;
 
 class Chat extends Model
 {
