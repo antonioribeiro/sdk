@@ -12,7 +12,7 @@ Route::group(['namespace' => 'PragmaRX\Sdk\Services\Groups\Http\Controllers'], f
 
 		Route::delete('{id}', ['as' => 'groups.delete', 'uses' => 'Groups@delete']);
 
-		Route::post('/validate', ['as' => 'groups.validate', 'uses' => 'Groups@validate']);
+		Route::post('/validate', ['as' => 'groups.validate', 'uses' => 'Groups@validateData']);
 
 		Route::post('/{id}/members', ['as' => 'groups.members.add', 'uses' => 'Groups@addMembers']);
 

@@ -2,19 +2,18 @@
 
 namespace PragmaRX\Sdk\Services\Messages\Http\Controllers;
 
-use PragmaRX\Sdk\Core\Controller;
-use PragmaRX\Sdk\Services\Messages\Commands\MoveMessagesCommand;
-use PragmaRX\Sdk\Services\Messages\Commands\ReadMessageCommand;
-use PragmaRX\Sdk\Services\Messages\Commands\SendMessageCommand;
-use PragmaRX\Sdk\Services\Messages\Data\Repositories\Message as MessageRepository;
-use PragmaRX\Sdk\Services\Connect\Data\Repositories\Connection as ConnectionRepository;
-
-use PragmaRX\Sdk\Services\Messages\Http\Requests\SendMessage;
-use Redirect;
 use View;
 use Auth;
 use Flash;
 use Input;
+use Redirect;
+use PragmaRX\Sdk\Core\Controller;
+use PragmaRX\Sdk\Services\Messages\Http\Requests\SendMessage;
+use PragmaRX\Sdk\Services\Messages\Commands\ReadMessageCommand;
+use PragmaRX\Sdk\Services\Messages\Commands\SendMessageCommand;
+use PragmaRX\Sdk\Services\Messages\Commands\MoveMessagesCommand;
+use PragmaRX\Sdk\Services\Messages\Data\Repositories\Message as MessageRepository;
+use PragmaRX\Sdk\Services\Connect\Data\Repositories\Connection as ConnectionRepository;
 
 class Messages extends Controller {
 
@@ -99,7 +98,7 @@ class Messages extends Controller {
 		return Redirect::route('messages');
 	}
 
-	public function validateSend(SendMessage $request)
+	public function validateData(SendMessage $request)
 	{
 		return $this->success();
 	}

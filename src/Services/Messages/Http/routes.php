@@ -8,7 +8,7 @@ Route::group(['namespace' => 'PragmaRX\Sdk\Services\Messages\Http\Controllers'],
 
 		Route::post('/', ['as' => 'messages.folders', 'uses' => 'Folders@store']);
 
-		Route::post('validate', ['as' => 'messages.folders.validate', 'uses' => 'Folders@validate']);
+		Route::post('validate', ['as' => 'messages.folders.validate', 'uses' => 'Folders@validateData']);
 	});
 
 	Route::group(['prefix' => 'messages'], function()
@@ -17,7 +17,7 @@ Route::group(['namespace' => 'PragmaRX\Sdk\Services\Messages\Http\Controllers'],
 
 		Route::post('/', ['as' => 'messages', 'uses' => 'Messages@store']);
 
-		Route::post('validate', ['as' => 'messages.validate', 'uses' => 'Messages@validate']);
+		Route::post('validate', ['as' => 'messages.validate', 'uses' => 'Messages@validateData']);
 
 		Route::get('list/{folder}', ['as' => 'messages.list', 'uses' => 'Messages@messages']);
 

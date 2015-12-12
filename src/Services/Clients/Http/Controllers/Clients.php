@@ -2,21 +2,20 @@
 
 namespace PragmaRX\Sdk\Services\Clients\Http\Controllers;
 
+use Auth;
+use View;
+use Flash;
+use Redirect;
+use Response;
+use PragmaRX\Support\Inflectors\Inflector;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Clients\Commands\AddClientCommand;
 use PragmaRX\Sdk\Services\Clients\Commands\DeleteClientCommand;
 use PragmaRX\Sdk\Services\Clients\Commands\UpdateClientCommand;
+use PragmaRX\Sdk\Services\Kinds\Data\Repositories\KindRepository;
 use PragmaRX\Sdk\Services\Clients\Data\Repositories\ClientRepository;
 use PragmaRX\Sdk\Services\Clients\Http\Requests\AddClient as AddClientRequest;
 use PragmaRX\Sdk\Services\Clients\Http\Requests\UpdateClient as UpdateClientRequest;
-use PragmaRX\Sdk\Services\Kinds\Data\Repositories\KindRepository;
-use PragmaRX\Support\Inflectors\Inflector;
-
-use Auth;
-use Flash;
-use Redirect;
-use View;
-use Response;
 
 class Clients extends BaseController {
 
@@ -49,7 +48,7 @@ class Clients extends BaseController {
 		return Redirect::back();
 	}
 
-	public function validateAdd(AddClientRequest $request)
+	public function validateData(AddClientRequest $request)
 	{
 		return Response::json(['success' => true]);
 	}
