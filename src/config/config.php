@@ -32,7 +32,7 @@ return [
 		'role'          => 'PragmaRX\Sdk\Services\Users\Data\Entities\Role',
 		'throttle'      => 'PragmaRX\Sdk\Services\Users\Data\Entities\Throttle',
 		// 'user'          => 'PragmaRX\Sdk\Services\Users\Data\Entities\User',
-		'user'          => 'ConsultorioDigital\Services\Users\Data\Entities\User',
+		'user'          => 'App\Services\Users\Data\Entities\User',
 	],
 
 	'services' => [
