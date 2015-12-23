@@ -1,7 +1,7 @@
 {
     "name": "pragmarx/sdk",
 
-    "description": "A Laravel 5.1+ Sdk",
+    "description": "A Laravel 5.2+ Sdk",
 
     "keywords": ["sdk", "laravel", "pragmarx"],
 
@@ -17,7 +17,7 @@
 
     "require": {
         "php": ">=5.5.0",
-        "laravel/framework": "~5.0",
+        "laravel/framework": ">=5.0",
         "pragmarx/tracker": "~2.0",
         "pragmarx/firewall": "~0.5",
         "pragmarx/glottos": "~1.5",
@@ -30,7 +30,7 @@
         "jenssegers/date": "~3",
         "league/commonmark": "~0.9",
         "baum/baum": "~1.1",
-        "laravelcollective/html": "5.1.*"
+        "laravelcollective/html": ">=5.1.*"
     },
 
     "require-dev": {
