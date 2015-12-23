@@ -2,12 +2,12 @@
 
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
 
-ExceptionHandler::addHandler(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception)
-{
-	Flash::error('page not found');
-
-	return Redirect::home();
-});
+//ExceptionHandler::addHandler(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception)
+//{
+//	Flash::error('page not found');
+//
+//	return Redirect::home();
+//});
 
 ExceptionHandler::addHandler(function(UserAlreadyActivated $exception, $code)
 {

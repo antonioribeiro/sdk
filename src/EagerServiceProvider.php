@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk;
 
+use Language;
 use PragmaRX\Sdk\Core\Traits\ServiceableTrait;
 use Illuminate\Foundation\AliasLoader as IlluminateAliasLoader;
 use PragmaRX\Support\ServiceProvider as PragmaRXServiceProvider;

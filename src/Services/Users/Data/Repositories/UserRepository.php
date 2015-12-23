@@ -77,7 +77,7 @@ class UserRepository extends Repository implements UserRepositoryContract
 	public function getPaginated($howMany = 25)
 	{
 		$users = $this
-					->call($this-getModel(), 'orderBy', 'first_name')
+					->call($this->getModel(), 'orderBy', 'first_name')
 					->activated()
 					->get();
 
