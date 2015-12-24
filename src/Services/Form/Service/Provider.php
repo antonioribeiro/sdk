@@ -31,7 +31,7 @@ class Provider extends ServiceProvider {
 
 	private function registerIlluminateHtmlBuilder()
 	{
-		$this->app->bindShared('html', function($app)
+		$this->app->singleton('html', function($app)
 		{
 			return new HtmlBuilder($app['url']);
 		});
@@ -39,7 +39,7 @@ class Provider extends ServiceProvider {
 
 	private function registerIlluminateFormBuilder()
 	{
-		$this->app->bindShared('form', function($app)
+		$this->app->singleton('form', function($app)
 		{
 			$form = new FormBuilder($app['html'], $app['url'], $app['session.store']->getToken());
 
@@ -49,12 +49,12 @@ class Provider extends ServiceProvider {
 
 	private function registerForm()
 	{
-		$this->app->bindShared('pragmarx.form', function($app)
+		$this->app->singleton('pragmarx.form', function($app)
 		{
 			return new Form();
 		});
 
-//		$this->app->bindShared('pragmarx.form', function($app)
+//		$this->app->singleton('pragmarx.form', function($app)
 //		{
 //			$form = new Form($app['html'], $app['url'], $app['session.store']->getToken());
 //

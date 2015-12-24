@@ -375,7 +375,7 @@ class EagerServiceProvider extends PragmaRXServiceProvider {
 
 		$this->sdk = $sdk;
 
-		$this->app->bindShared('pragmarx.sdk', function($app) use ($sdk)
+		$this->app->singleton('pragmarx.sdk', function($app) use ($sdk)
 		{
 			return $sdk;
 		});

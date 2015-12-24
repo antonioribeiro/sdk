@@ -23,7 +23,7 @@ class Provider extends ServiceProvider {
 	{
 		$app = $this->app;
 
-		$app->bindShared('blade.compiler', function($app)
+		$app->singleton('blade.compiler', function($app)
 		{
 			$cache = $app['config']['view.compiled'] ?: $app['path.storage'].'/views';
 
