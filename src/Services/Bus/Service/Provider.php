@@ -4,8 +4,8 @@ namespace PragmaRX\Sdk\Services\Bus\Service;
 
 use PragmaRX\Support\ServiceProvider;
 
-class Provider extends ServiceProvider {
-
+class Provider extends ServiceProvider
+{
 	/**
 	 * Indicates if loading of the provider is deferred.
 	 *
@@ -22,7 +22,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->checkLaravelConflict();
 
-		$this->app->singleton('Illuminate\Bus\Dispatcher', function($app)
+		$this->app->singleton('AltThree\Bus', function($app)
 		{
 			return new Dispatcher($app, function() use ($app)
 			{
@@ -31,11 +31,11 @@ class Provider extends ServiceProvider {
 		});
 
 		$this->app->alias(
-			'Illuminate\Bus\Dispatcher', 'Illuminate\Contracts\Bus\Dispatcher'
+			'AltThree\Bus', 'Illuminate\Contracts\Bus\Dispatcher'
 		);
 
 		$this->app->alias(
-			'Illuminate\Bus\Dispatcher', 'Illuminate\Contracts\Bus\QueueingDispatcher'
+			'AltThree\Bus', 'Illuminate\Contracts\Bus\QueueingDispatcher'
 		);
 	}
 
@@ -47,7 +47,7 @@ class Provider extends ServiceProvider {
 	public function provides()
 	{
 		return [
-			'Illuminate\Bus\Dispatcher',
+			'AltThree\Bus',
 			'Illuminate\Contracts\Bus\Dispatcher',
 			'Illuminate\Contracts\Bus\QueueingDispatcher',
 		];
@@ -67,5 +67,4 @@ class Provider extends ServiceProvider {
 			die;
 		}
 	}
-
 }
