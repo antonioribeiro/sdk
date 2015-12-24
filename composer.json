@@ -31,7 +31,7 @@
         "league/commonmark": "~0.9",
         "baum/baum": "~1.1",
         "laravelcollective/html": "~5.1",
-        "alt-three/bus": "~1.0"
+        "alt-three/bus": "dev-master"
     },
 
     "require-dev": {
