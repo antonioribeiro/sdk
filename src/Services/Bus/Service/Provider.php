@@ -4,8 +4,8 @@ namespace PragmaRX\Sdk\Services\Bus\Service;
 
 use PragmaRX\Support\ServiceProvider;
 
-class Provider extends ServiceProvider
-{
+class Provider extends ServiceProvider {
+
 	/**
 	 * Indicates if loading of the provider is deferred.
 	 *
@@ -22,7 +22,7 @@ class Provider extends ServiceProvider
 	{
 		$this->checkLaravelConflict();
 
-		$this->app->singleton('AltThree\Bus', function($app)
+		$this->app->singleton('AltThree\Bus\Dispatcher', function($app)
 		{
 			return new Dispatcher($app, function() use ($app)
 			{
@@ -31,11 +31,11 @@ class Provider extends ServiceProvider
 		});
 
 		$this->app->alias(
-			'AltThree\Bus', 'Illuminate\Contracts\Bus\Dispatcher'
+			'AltThree\Bus\Dispatcher', 'Illuminate\Contracts\Bus\Dispatcher'
 		);
 
 		$this->app->alias(
-			'AltThree\Bus', 'Illuminate\Contracts\Bus\QueueingDispatcher'
+			'AltThree\Bus\Dispatcher', 'Illuminate\Contracts\Bus\QueueingDispatcher'
 		);
 	}
 
@@ -47,7 +47,7 @@ class Provider extends ServiceProvider
 	public function provides()
 	{
 		return [
-			'AltThree\Bus',
+			'AltThree\Bus\Dispatcher',
 			'Illuminate\Contracts\Bus\Dispatcher',
 			'Illuminate\Contracts\Bus\QueueingDispatcher',
 		];
@@ -60,11 +60,12 @@ class Provider extends ServiceProvider
 
 	private function checkLaravelConflict()
 	{
-		if (array_search(\Illuminate\Bus\BusServiceProvider::class, config('app.providers')))
+		if (array_search(\AltThree\Bus\BusServiceProvider::class, config('app.providers')))
 		{
 			echo 'If you want to use ' . __CLASS__ . ',<br>';
 			echo 'please disable Laravel BusServiceProvider on your config';
 			die;
 		}
 	}
+
 }

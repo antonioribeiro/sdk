@@ -90,7 +90,7 @@ class EagerServiceProvider extends PragmaRXServiceProvider {
 	 */
 	private function registerPackages()
 	{
-		$disabled_packages = $this->getConfig('disabled.packages') ?: [];
+		$disabled_packages = $this->getConfig('disabled_packages') ?: [];
 
 		foreach ($this->getConfig('packages') as $package)
 		{

@@ -6,9 +6,9 @@ use ArrayAccess;
 use ReflectionClass;
 use ReflectionProperty;
 use ReflectionParameter;
-use Illuminate\Bus\Dispatcher as IlluminateDispatcher;
+use AltThree\Bus\Dispatcher as AltThreeDispatcher;
 
-class Dispatcher extends IlluminateDispatcher {
+class Dispatcher extends AltThreeDispatcher {
 
 	protected function marshal($command, ArrayAccess $source, array $extras = [])
 	{
