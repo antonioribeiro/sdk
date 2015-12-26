@@ -93,7 +93,7 @@ return [
 		'Services/Zip',
 	],
 
-	'disabled.packages' => [
+	'disabled_packages' => [
 		'pragmarx/tracker'
 	],
 
