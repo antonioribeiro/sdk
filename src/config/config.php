@@ -236,11 +236,11 @@ return [
 			]
 		],
 
-		[
-			'name' => 'pragmarx/tracker',
-			'enabled' => true,
-			'serviceProviders' => ['PragmaRX\Tracker\Vendor\Laravel\ServiceProvider'],
-		],
+//		[
+//			'name' => 'pragmarx/tracker',
+//			'enabled' => true,
+//			'serviceProviders' => ['PragmaRX\Tracker\Vendor\Laravel\ServiceProvider'],
+//		],
 
 		[
 			'name' => 'pragmarx/firewall',

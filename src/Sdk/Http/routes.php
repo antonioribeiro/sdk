@@ -1,3 +1,3 @@
 <?php
 
-Route::when('*', 'csrf', ['post', 'patch', 'delete', 'put']);
+// Route::when('*', 'csrf', ['post', 'patch', 'delete', 'put']);
