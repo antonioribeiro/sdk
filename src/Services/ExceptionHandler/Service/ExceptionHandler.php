@@ -79,13 +79,8 @@ class ExceptionHandler {
 
 	protected function formatException(\Exception $e)
 	{
-		if ($this->debug)
-		{
-			$location = $e->getMessage().' in '.$e->getFile().':'.$e->getLine();
+        $message = $e->getMessage().' in '.$e->getFile().':'.$e->getLine();
 
-			return 'Error in exception handler: '.$location;
-		}
-
-		return 'Error in exception handler.';
+        return response('Error occured in exception handler: '.$message);
 	}
 }

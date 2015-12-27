@@ -53,6 +53,7 @@ return [
 		'Services/Currencies',
 
 		'Services/EmailChanges',
+        'Services/Errors',
 
 		'Services/Files',
 		'Services/Firewall',

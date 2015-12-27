@@ -24,7 +24,7 @@ ExceptionHandler::addHandler(function(UserAlreadyActivated $exception, $code)
 
 ExceptionHandler::addHandler(function(UserNotActivated $exception, $code)
 {
-    return Redirect::route_no_ajax('notification')
+    return redirect()->route('notification')
                    ->with('title', t('titles.account-not-activated'))
                    ->with('message', t('paragraphs.account-not-activated'))
                    ->with('buttons', [[
