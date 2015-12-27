@@ -7,7 +7,8 @@ use Hash;
 use Activation;
 use Carbon\Carbon;
 use PragmaRX\Sdk\Core\Exceptions\InvalidToken;
-use PragmaRX\Sdk\Services\Auth\Exceptions\UserNotActivated;
+use Illuminate\Auth\Passwords\DatabaseTokenRepository;
+use PragmaRX\Sdk\Services\Activation\Exceptions\UserNotActivated;
 use PragmaRX\Sdk\Services\Auth\Contracts\Auth as AuthContract;
 use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
 
@@ -23,7 +24,7 @@ class IlluminateAuth implements AuthContract
     public function __construct(UserRepository $userRepository) {
         $this->auth = app('auth');
 
-        $this->tokens = app('auth.password.tokens');
+        $this->tokens = $this->getTokenRepository();
 
         $this->userRepository = $userRepository;
     }
@@ -32,6 +33,15 @@ class IlluminateAuth implements AuthContract
         $this->updateLastSeen();
 
         return $this->auth->check();
+    }
+
+    private function getTokenRepository() {
+        return new DatabaseTokenRepository(
+            app('db')->connection(),
+            config('table'),
+            config('app.key'),
+            config('expire')
+        );
     }
 
     public function user() {

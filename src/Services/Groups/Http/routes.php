@@ -2,7 +2,7 @@
 
 Route::group(['namespace' => 'PragmaRX\Sdk\Services\Groups\Http\Controllers'], function()
 {
-	Route::group(['before' => 'auth', 'prefix' => 'groups'], function()
+	Route::group(['middleware' => 'auth', 'prefix' => 'groups'], function()
 	{
 		Route::get('/', ['as' => 'groups', 'uses' => 'Groups@index']);
 

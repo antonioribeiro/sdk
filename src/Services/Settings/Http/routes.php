@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['before' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Settings\Http\Controllers'], function()
+Route::group(['middleware' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Settings\Http\Controllers'], function()
 {
 	Route::group(['prefix' => 'settings'], function()
 	{

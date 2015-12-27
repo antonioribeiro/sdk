@@ -13,7 +13,7 @@ Route::group(['namespace' => 'PragmaRX\Sdk\Services\Login\Http\Controllers'], fu
 			Route::get('fast/{username}/{password}', ['as' => 'auth.login.fast', 'uses' => 'Login@fast']);
 		});
 
-		Route::group(['before' => 'auth', 'prefix' => 'logout'], function()
+		Route::group(['middleware' => 'auth', 'prefix' => 'logout'], function()
 		{
 			Route::get('/', ['as' => 'auth.logout', 'uses' => 'Login@destroy']);
 		});

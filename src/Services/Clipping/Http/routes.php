@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['before' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Clipping\Http\Controllers'], function()
+Route::group(['middleware' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Clipping\Http\Controllers'], function()
 {
 	Route::group(['prefix' => 'clipping'], function()
 	{

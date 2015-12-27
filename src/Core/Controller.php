@@ -3,7 +3,8 @@
 namespace PragmaRX\Sdk\Core;
 
 use Response;
-use Illuminate\Foundation\Bus\DispatchesJobs;
+use ArrayAccess;
+use PragmaRX\Sdk\Services\Bus\Service\DispatchesJobs;
 use PragmaRX\Sdk\Core\Validation\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as IlluminateController;

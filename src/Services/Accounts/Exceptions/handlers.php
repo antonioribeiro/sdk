@@ -1,6 +1,7 @@
 <?php
 
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
+use PragmaRX\Sdk\Services\Activation\Exceptions\UserNotActivated;
 
 //ExceptionHandler::addHandler(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception)
 //{
@@ -19,6 +20,18 @@ ExceptionHandler::addHandler(function(UserAlreadyActivated $exception, $code)
 				                   'url' => route('auth.login')
 			                   ]])
 			->withInput();
+});
+
+ExceptionHandler::addHandler(function(UserNotActivated $exception, $code)
+{
+    return Redirect::route_no_ajax('notification')
+                   ->with('title', t('titles.account-not-activated'))
+                   ->with('message', t('paragraphs.account-not-activated'))
+                   ->with('buttons', [[
+                                          'caption' => t('captions.go-to-login-page'),
+                                          'url' => route('auth.login')
+                                      ]])
+                   ->withInput();
 });
 
 ExceptionHandler::addHandler(function(UserAlreadyActivated $exception, $code)
