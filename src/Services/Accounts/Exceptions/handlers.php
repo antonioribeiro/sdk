@@ -25,8 +25,8 @@ ExceptionHandler::addHandler(function(UserAlreadyActivated $exception, $code)
 ExceptionHandler::addHandler(function(UserNotActivated $exception, $code)
 {
     return redirect()->route('notification')
-                   ->with('title', t('titles.account-not-activated'))
-                   ->with('message', t('paragraphs.account-not-activated'))
+                   ->with('title', t('titles.account-not-yet-activated'))
+                   ->with('message', t('paragraphs.account-not-yet-activated'))
                    ->with('buttons', [[
                                           'caption' => t('captions.go-to-login-page'),
                                           'url' => route('auth.login')

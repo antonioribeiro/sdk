@@ -15,7 +15,7 @@ class Notifications extends BaseController
      * @return Response
      */
     public function index() {
-        if (!Session::get('message')) {
+        if (! Session::get('message')) {
             return Redirect::home();
         }
 

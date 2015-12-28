@@ -3,6 +3,7 @@
 return array (
   'account-activated' => 'Conta <strong class="styleColor">Ativada</strong>',
   'account-already-activated' => 'Conta <strong class="styleColor">Já Ativada</strong>',
+  'account-not-yet-activated' => 'Conta Ainda <strong class="styleColor">Não Ativada</strong>',
   'activate-your-account' => 'Ative <strong class="styleColor">Sua Conta</strong>',
   'activation-message-sent' => 'strong>Bem-Vindo</strong>!',
   'all-users' => 'Todos Os <strong>Usuários</strong>',

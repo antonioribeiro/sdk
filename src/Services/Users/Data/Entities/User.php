@@ -50,6 +50,10 @@ class User extends CartalystUser implements CanResetPassword
 
 	protected $presenter = 'PragmaRX\Sdk\Services\Users\Data\Presenters\User';
 
+    protected $casts = [
+        'id' => 'string',
+    ];
+
 	/**
 	 * The database table used by the model.
 	 *

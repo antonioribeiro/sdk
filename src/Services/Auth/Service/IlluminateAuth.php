@@ -8,9 +8,10 @@ use Activation;
 use Carbon\Carbon;
 use PragmaRX\Sdk\Core\Exceptions\InvalidToken;
 use Illuminate\Auth\Passwords\DatabaseTokenRepository;
-use PragmaRX\Sdk\Services\Activation\Exceptions\UserNotActivated;
+use PragmaRX\Sdk\Services\Users\Jobs\SendUserActivationEmail;
 use PragmaRX\Sdk\Services\Auth\Contracts\Auth as AuthContract;
 use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
+use PragmaRX\Sdk\Services\Activation\Exceptions\UserNotActivated;
 
 class IlluminateAuth implements AuthContract
 {
@@ -152,6 +153,8 @@ class IlluminateAuth implements AuthContract
 
     private function checkActivation($user) {
         if ( ! Activation::activated($user)) {
+            dispatch(new SendUserActivationEmail($user));
+
             throw new UserNotActivated();
         }
     }
