@@ -17,6 +17,10 @@ class Model extends Eloquent
 
 	protected $dates = ['created_at', 'updated_at'];
 
+    protected $casts = [
+        'id' => 'string',
+    ];
+
 	use
 		EventGenerator,
 		PresentableTrait,
