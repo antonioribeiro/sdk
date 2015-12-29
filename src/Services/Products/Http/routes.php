@@ -1,11 +1,14 @@
 <?php
 
-Route::group(['middleware' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Products\Http\Controllers'], function()
-{
-	Route::group(['prefix' => 'clipping'], function()
-	{
-		Route::get('/', ['as' => 'clipping', 'uses' => 'Products@index']);
+Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX')], function() {
+    Route::group(['middleware' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Products\Http\Controllers'], function()
+    {
+        Route::group(['prefix' => 'clipping'], function()
+        {
+            Route::get('/', ['as' => 'clipping', 'uses' => 'Products@index']);
 
-		Route::get('post/{id}', ['as' => 'clipping.post', 'uses' => 'Products@post']);
-	});
+            Route::get('post/{id}', ['as' => 'clipping.post', 'uses' => 'Products@post']);
+        });
+    });
 });
+
