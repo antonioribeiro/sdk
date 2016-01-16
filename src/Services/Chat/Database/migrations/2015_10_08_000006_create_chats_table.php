@@ -22,7 +22,9 @@ class CreateChatsTable extends Migration
 			$table->timestamp('last_message_at')->index()->nullable();
 			$table->timestamp('closed_at')->index()->nullable();
 
-			$table->timestamps();
+            $table->string('layout')->default('master');
+
+            $table->timestamps();
 		});
 
 		Schema::table('chats', function(Blueprint $table)
