@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX')], function() {
+Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX', '')], function() {
     Route::group(['namespace' => 'PragmaRX\Sdk\Services\Registration\Http\Controllers'], function()
     {
         Route::group(['before' => 'guest', 'prefix' => 'register'], function()

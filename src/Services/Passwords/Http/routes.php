@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX')], function() {
+Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX', '')], function() {
     Route::group(['namespace' => 'PragmaRX\Sdk\Services\Passwords\Http\Controllers'], function()
     {
         Route::group(['prefix' => 'password'], function()

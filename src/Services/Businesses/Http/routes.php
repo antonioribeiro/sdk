@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX')], function() {
+Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX', '')], function() {
     Route::group(['prefix' => 'businesses', 'middleware' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Businesses\Http\Controllers'], function ()
     {
         Route::group(['prefix' => 'enterprises'], function ()
