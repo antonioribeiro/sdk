@@ -13,11 +13,14 @@ class CreateChat extends SelfHandlingCommand
 
     public $clientId;
 
+    public $layout;
+
     public function handle(ChatRepository $repository) {
         $chat = $repository->create(
             $this->name,
             $this->email,
-            $this->clientId
+            $this->clientId,
+            $this->layout
         );
 
         return $chat;

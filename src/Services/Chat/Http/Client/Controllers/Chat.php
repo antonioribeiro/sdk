@@ -30,7 +30,7 @@ class Chat extends BaseController
         $this->businessesRepository = $businessesRepository;
     }
 
-	public function create($clientId)
+	public function create($clientId, $layout = 'master')
 	{
         $client = $this->businessesRepository->findClientById($clientId);
 
@@ -40,6 +40,7 @@ class Chat extends BaseController
 
 		return view('chat.client.create')
             ->with('clientId', $clientId)
+            ->with('layout', $layout)
             ->with('businessClientName', $client->name);
 	}
 

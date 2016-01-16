@@ -46,7 +46,7 @@ class Chat extends Repository
 		$this->request = $request;
 	}
 
-	public function create($name, $email, $clientId)
+	public function create($name, $email, $clientId, $layout)
 	{
 		$user = $this->userRepository->findByEmailOrCreate($email, ['first_name' => $name], true); // allow empty password
 
@@ -67,6 +67,7 @@ class Chat extends Repository
 			'chat_business_client_service_id' => $clientService->id,
 			'owner_id' => $talker->id,
 			'owner_ip_address' => $this->request->ip(),
+            'layout' => $layout,
 		    'closed_at' => null,
 		]);
 	}
