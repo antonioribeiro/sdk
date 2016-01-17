@@ -3,7 +3,6 @@
 namespace PragmaRX\Sdk\Core;
 
 use Response;
-use ArrayAccess;
 use PragmaRX\Sdk\Services\Bus\Service\DispatchesJobs;
 use PragmaRX\Sdk\Core\Validation\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;

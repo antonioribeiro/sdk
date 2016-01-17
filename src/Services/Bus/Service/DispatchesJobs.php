@@ -39,6 +39,6 @@ trait DispatchesJobs
      */
     protected function dispatchFrom($job, ArrayAccess $source, $extras = [])
     {
-        return app('AltThree\Bus\Dispatcher')->dispatchFrom($job, $source, $extras);
+        return app('PragmaRX\Sdk\Services\Bus\Service\Dispatcher')->dispatchFrom($job, $source, $extras);
     }
 }
