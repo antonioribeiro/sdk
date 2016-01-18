@@ -24,7 +24,7 @@ class ResetPassword extends FormRequest {
 		});
 
 		return [
-			'token' => 'exists:password_resets,token'
+			'token' => 'exists:password_reminders,token'
 		];
 	}
 

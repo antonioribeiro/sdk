@@ -39,9 +39,9 @@ class IlluminateAuth implements AuthContract
     private function getTokenRepository() {
         return new DatabaseTokenRepository(
             app('db')->connection(),
-            config('auth.providers.users.password_reminders_table'),
+            config('auth.passwords.users.table'),
             config('app.key'),
-            config('expire')
+            config('auth.passwords.users.expire')
         );
     }
 
