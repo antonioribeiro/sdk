@@ -11,9 +11,9 @@ class Markdown
 	 */
 	private $converter;
 
-	public function __construct(CommonMarkConverter $converter)
+	public function __construct()
 	{
-		$this->converter = $converter;
+		$this->converter = new CommonMarkConverter();
 	}
 
 	public function toHtml($markdown)
