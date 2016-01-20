@@ -2,44 +2,39 @@
 
 namespace PragmaRX\Sdk;
 
-class Sdk {
+class Sdk
+{
+    protected $sdk;
 
-	protected $sdk;
+    protected $bootedCallbacks;
 
-	protected $bootedCallbacks;
+    protected $booted = false;
 
-	protected $booted = false;
+    public function boot() {
+        if ($this->booted) {
+            return;
+        }
 
-	public function booted($callback)
-	{
-		$this->bootedCallbacks[] = $callback;
+        $this->booted = true;
 
-		if ($this->isBooted()) $this->fireAppCallbacks(array($callback));
-	}
+        $this->fireAppCallbacks($this->bootedCallbacks);
+    }
 
-	protected function isBooted()
-	{
-		return $this->booted;
-	}
+    public function booted($callback) {
+        $this->bootedCallbacks[] = $callback;
 
-	protected function fireAppCallbacks(array $callbacks)
-	{
-		foreach ($callbacks as $callback)
-		{
-			call_user_func($callback, $this);
-		}
-	}
+        if ($this->isBooted()) {
+            $this->fireAppCallbacks([$callback]);
+        }
+    }
 
-	public function boot()
-	{
-		if ($this->booted)
-		{
-			return;
-		}
+    protected function fireAppCallbacks(array $callbacks) {
+        foreach ($callbacks as $callback) {
+            call_user_func($callback, $this);
+        }
+    }
 
-		$this->booted = true;
-
-		$this->fireAppCallbacks($this->bootedCallbacks);
-	}
-
+    protected function isBooted() {
+        return $this->booted;
+    }
 }
