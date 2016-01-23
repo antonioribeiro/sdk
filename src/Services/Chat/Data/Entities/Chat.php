@@ -13,6 +13,7 @@ class Chat extends Model
 		'owner_id',
 		'owner_ip_address',
 	    'closed_at',
+        'layout',
 	];
 
 	protected $presenter = 'PragmaRX\Sdk\Services\Chat\Data\Presenters\ChatPresenter';

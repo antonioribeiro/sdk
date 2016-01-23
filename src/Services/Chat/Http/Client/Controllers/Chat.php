@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Http\Client\Controllers;
 
+use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses;
 use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
@@ -71,7 +72,8 @@ class Chat extends BaseController
 			->with('operatorUsername', env('CHAT_OPERATOR_USERNAME'))
 			->with('operatorAvatar', $chat->owner->user->present()->avatar)
 			->with('talkerAvatar', $chat->owner->user->present()->avatar)
-			->with('listenChannel', 'chat-channel:' . $chat_id);
+			->with('listenChannel', 'chat-channel:' . $chat_id)
+            ->with('layout', $chat->layout);
 	}
 
 	public function store(CreateChatRequest $request)
