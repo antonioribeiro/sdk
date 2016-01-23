@@ -2,10 +2,9 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Http\Client\Controllers;
 
-use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses;
 use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
+use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses;
 use PragmaRX\Sdk\Services\Chat\Commands\CreateChat as CreateChatCommand;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
 use PragmaRX\Sdk\Services\Chat\Http\Client\Requests\CreateChat as CreateChatRequest;
