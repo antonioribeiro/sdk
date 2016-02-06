@@ -192,6 +192,11 @@ class Business
 		if ( ! $client = $this->currentClient)
 		{
 			$client = Session::get(static::CURRENT_BUSINESS_CLIENT_SESSION_KEY);
+
+            if ( ! $this->businessesRepository->findClientById($client))
+            {
+                $client = null;
+            }
 		}
 
 		if ( ! $client && $client = $user->preferred_business_client_id)
