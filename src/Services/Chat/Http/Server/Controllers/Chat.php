@@ -33,7 +33,7 @@ class Chat extends BaseController
 
 	public function get($chatId)
 	{
-		$chat = ChatModel::find($chatId);
+		$chat = $this->chatRepository->findById($chatId);
 
 		$result = [];
 
