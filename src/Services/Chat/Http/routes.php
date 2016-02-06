@@ -14,7 +14,7 @@ Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX', '')], function() {
 
     Route::group(['prefix' => 'chat/server', 'middleware' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Server\Controllers'], function ()
     {
-        Route::get('/', ['as' => 'chat.server.index', 'uses' => 'Chat@index']);
+        Route::get('/index', ['as' => 'chat.server.index', 'uses' => 'Chat@index']);
 
         Route::group(['prefix' => 'scripts'], function ()
         {
@@ -30,8 +30,6 @@ Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX', '')], function() {
 
             Route::get('delete/{scriptId}', ['as' => 'chat.server.scripts.delete', 'uses' => 'Scripts@delete']);
         });
-
-        Route::get('{chatId}', ['as' => 'chat.server.get', 'uses' => 'Chat@get']);
     });
 
     // Authorization required
