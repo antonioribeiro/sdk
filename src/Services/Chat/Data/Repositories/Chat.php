@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Data\Repositories;
 
+use Gate;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -74,16 +75,7 @@ class Chat extends Repository
 
 	public function allChats($open = true)
 	{
-		$chats = ChatModel::whereNull('closed_at')->get();
-
-		$result = [];
-
-		foreach($chats as $chat)
-		{
-			$result[$chat->id] = $this->makeChatData($chat);
-		}
-
-		return new Collection($result);
+        return $this->allChatsForClient(null, $open);
 	}
 
 	public function createMessage($chatId, $talkerId, $message)
@@ -425,11 +417,29 @@ class Chat extends Repository
 		return BusinessClientUser::where('user_id', $talker->user->id)->first();
 	}
 
-	public function allChatsForClient($clientId, $open = true)
+	public function allChatsForClient($clientId = null, $open = true)
 	{
-		$chats = ChatModel::select('chats.*')
+        $user = Auth::user();
+
+		$chats = ChatModel::select('chats.*', 'chat_business_client_talkers.user_id')
 					->join('chat_business_client_services', 'chats.chat_business_client_service_id', '=', 'chat_business_client_services.id')
-					->where('chat_business_client_services.business_client_id', $clientId);
+                    ->leftJoin('chat_business_client_talkers', function ($join) {
+                        $join->on('chat_business_client_services.business_client_id', '=', 'chat_business_client_talkers.business_client_id');
+                        $join->on('chats.responder_id', '=', 'chat_business_client_talkers.id');
+                    });
+
+        if ($clientId)
+        {
+            $chats->where('chat_business_client_services.business_client_id', $clientId);
+        }
+
+        if (Gate::denies('viewUsers', $user))
+        {
+            $chats->where(function ($query) use ($user) {
+                $query->whereNull('chats.responder_id')
+                      ->orWhere('chat_business_client_talkers.user_id', $user->id);
+            });
+        }
 
         if ($open)
         {

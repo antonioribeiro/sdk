@@ -41,7 +41,7 @@ Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX', '')], function() {
 
             Route::get('all', ['as' => 'chat.all', 'uses' => 'Api@allChats']);
 
-            Route::get('all/for/client/{clientId}', ['as' => 'chat.all.for.client', 'uses' => 'Api@allChatsForClient']);
+            Route::get('all/for/client/{clientId?}', ['as' => 'chat.all.for.client', 'uses' => 'Api@allChatsForClient']);
 
             Route::get('respond/{id}', ['as' => 'chat.respond', 'uses' => 'Api@respond']);
 
