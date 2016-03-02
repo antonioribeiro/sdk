@@ -84,9 +84,17 @@ class Chat extends BaseController
 		return redirect('chat/client/'.$chat->id);
 	}
 
-	public function terminated()
+	public function terminated($chatId)
 	{
-		return view('chat.client.terminated');
+        try {
+            $chat = $this->chatRepository->findById($chatId);
+        }
+        catch (\Exception $e)
+        {
+            return $this->redirectToHome();
+        }
+
+		return view('chat.client.terminated')->with('layout', $chat->layout);
 	}
 
 	/**

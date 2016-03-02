@@ -7,7 +7,7 @@ Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX', '')], function() {
 
         Route::post('/', ['as' => 'chat.client.store', 'uses' => 'Chat@store']);
 
-        Route::get('terminated', ['as' => 'chat.client.terminated', 'uses' => 'Chat@terminated']);
+        Route::get('terminated/{chatId}', ['as' => 'chat.client.terminated', 'uses' => 'Chat@terminated']);
 
         Route::get('{id}', ['as' => 'chat.client', 'uses' => 'Chat@chat']);
     });
