@@ -263,4 +263,9 @@ class User extends CartalystUser implements CanResetPassword
 
 		return new Collection($connections);
 	}
+
+    public function getAuthIdentifierName()
+    {
+        return 'id';
+    }
 }
