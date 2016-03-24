@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Services\Businesses\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
 use PragmaRX\Sdk\Services\Files\Data\Entities\FileName;
+use PragmaRX\Sdk\Services\Businesses\Data\Presenters\BusinessClient as BusinessClientPresenter;
 
 class BusinessClient extends Model
 {
@@ -14,7 +15,7 @@ class BusinessClient extends Model
 		'name',
 	];
 
-	protected $presenter = 'PragmaRX\Sdk\Services\Businesses\Data\Presenters\BusinessClient';
+	protected $presenter = BusinessClientPresenter::class;
 
 	public function business()
 	{

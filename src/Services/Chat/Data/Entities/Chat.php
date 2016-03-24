@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Chat\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Chat\Data\Presenters\Chat as ChatPresenter;
 
 class Chat extends Model
 {
@@ -16,7 +17,7 @@ class Chat extends Model
         'layout',
 	];
 
-	protected $presenter = 'PragmaRX\Sdk\Services\Chat\Data\Presenters\ChatPresenter';
+	protected $presenter = ChatPresenter::class;
 
 	public function owner()
 	{

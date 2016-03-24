@@ -3,9 +3,10 @@
 namespace PragmaRX\Sdk\Services\Files\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Files\Data\Presenters\File as FilePresenter;
 
-class File extends Model {
-
+class File extends Model
+{
 	protected $fillable = [
 		'directory_id',
 		'deep_path',
@@ -15,8 +16,8 @@ class File extends Model {
 		'image',
 	];
 
-	protected $presenter = 'PragmaRX\Sdk\Services\Files\Data\Presenters\File';
-
+    protected $presenter = FilePresenter::class;
+    
 	public function directory()
 	{
 		return $this->belongsTo(
@@ -43,5 +44,4 @@ class File extends Model {
 			['jpg', 'png', 'jpeg', 'gif', 'bmp', 'webp', 'tiff']
 		);
 	}
-
 }

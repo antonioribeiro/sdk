@@ -2,8 +2,8 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Data\Entities;
 
-use App\Services\Users\Data\Entities\User;
 use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Chat\Data\Presenters\ChatPhone as ChatPhonePresenter;
 
 class ChatPhone extends Model
 {
@@ -13,5 +13,5 @@ class ChatPhone extends Model
 		'number',
 	];
 
-	protected $presenter = 'PragmaRX\Sdk\Services\Chat\Data\Presenters\ChatPresenter';
+	protected $presenter = ChatPhonePresenter::class;
 }

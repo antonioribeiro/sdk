@@ -3,12 +3,13 @@
 namespace PragmaRX\Sdk\Services\Businesses\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Businesses\Data\Presenters\Business as BusinessPresenter;
 
 class Business extends Model
 {
 	protected $table = 'businesses';
 
-	protected $presenter = 'PragmaRX\Sdk\Services\Businesses\Data\Presenters\Business';
+	protected $presenter = BusinessPresenter::class;
 
 	protected $fillable = [
 		'name',

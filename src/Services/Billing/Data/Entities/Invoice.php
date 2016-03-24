@@ -3,9 +3,10 @@
 namespace PragmaRX\Sdk\Services\Billing\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Billing\Data\Presenters\Invoice as InvoicePresenter;
 
-class Invoice extends Model {
-
+class Invoice extends Model
+{
 	protected $fillable = [
 		'items_entity_id',
 		'creditor_entity_id',
@@ -18,6 +19,5 @@ class Invoice extends Model {
 		'last_reminder',
 	];
 
-	protected $presenter = 'PragmaRX\Sdk\Services\Billing\Data\Presenters\InvoicePresenter';
-
+	protected $presenter = InvoicePresenter::class;
 }

@@ -14,8 +14,6 @@ class ChatRead extends Model
 		'last_read_message_serial',
 	];
 
-	protected $presenter = 'PragmaRX\Sdk\Services\Chat\Data\Presenters\ChatPresenter';
-
 	public function chat()
 	{
 		return $this->belongsTo(Chat::class, 'chat_id');
