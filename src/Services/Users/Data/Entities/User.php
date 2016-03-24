@@ -48,7 +48,7 @@ class User extends CartalystUser implements CanResetPassword
 
 	protected $fillable = ['id', 'username', 'email', 'password', 'first_name', 'last_name'];
 
-	protected $presenter = 'PragmaRX\Sdk\Services\Users\Data\Presenters\User';
+	protected $presenter = PragmaRX\Sdk\Services\Users\Data\Presenters\User::class;
 
     protected $casts = [
         'id' => 'string',
