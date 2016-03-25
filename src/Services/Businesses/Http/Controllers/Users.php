@@ -41,7 +41,7 @@ class Users extends BaseController
 
 		return view('businesses.users.index')
 			->with('users', $users)
-			->with('deleteUri', '/businesses/users/delete/')
+			->with('deleteUri', '/businesses/client/users/delete/')
 		;
 	}
 
