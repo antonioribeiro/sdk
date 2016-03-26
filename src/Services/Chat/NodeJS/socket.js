@@ -36,11 +36,11 @@ redis.on('message', function(channel, message)
         text += '> '+message.data.message;
     }
 
-    console.log(channel + ': ' + message.event + text);
+    debug(channel + ': ' + message.event + text);
 
     io.emit(channel + ':' + message.event, message.data);
 });
 
-console.log('Listening port '+port+'...');
+debug('Listening port '+port+'...');
 
 server.listen(port);
