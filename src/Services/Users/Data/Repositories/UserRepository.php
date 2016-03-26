@@ -1145,6 +1145,7 @@ class UserRepository extends Repository implements UserRepositoryContract
 			'role' => $role,
             'last_seen_at' => $user->last_seen_at,
 			'businessClient' => $client,
+            'activated' => $user->present()->isActivated('Sim', ''),
 		];
 	}
 }

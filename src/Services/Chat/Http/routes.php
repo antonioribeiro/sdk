@@ -14,6 +14,11 @@ Route::group(['middleware' => 'web'], function()
             Route::get('{id}', ['as' => 'chat.client', 'uses' => 'Chat@chat']);
         });
 
+        Route::group(['prefix' => 'chats', 'middleware' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Server\Controllers'], function ()
+        {
+            Route::get('/index', ['as' => 'chats.index', 'uses' => 'Chats@index']);
+        });
+
         Route::group(['prefix' => 'chat/server', 'middleware' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Server\Controllers'], function ()
         {
             Route::get('/index', ['as' => 'chat.server.index', 'uses' => 'Chat@index']);

@@ -111,4 +111,11 @@ class User extends Presenter {
 				? $this->settings->client_field_name
 				: t("captions.clients");
 	}
+
+    public function isActivated($defaultYes = null, $defaultNo = null)
+    {
+        return $this->is_activated 
+                ? ($defaultYes !== null ? $defaultYes : 'yes')
+                : ($defaultNo !== null ? $defaultNo : 'no');
+    }
 }
