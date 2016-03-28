@@ -2,11 +2,9 @@
 
 namespace PragmaRX\Sdk\Services\Clients\Data\Entities;
 
-class Provider extends Client {
-
+class Provider extends Client
+{
 	protected $table = 'users';
-
-	protected $presenter = 'PragmaRX\Sdk\Services\Clients\Data\Entities\ProviderPresenter';
 
 	protected static function boot()
 	{
@@ -24,5 +22,4 @@ class Provider extends Client {
 
 		return $query->where('client_id', $client);
 	}
-
 }

@@ -4,8 +4,8 @@ namespace PragmaRX\Sdk\Services\Presenter;
 
 use PragmaRX\Sdk\Services\Presenter\Exceptions\PresenterException;
 
-trait PresentableTrait {
-
+trait PresentableTrait
+{
 	/**
 	 * View presenter instance
 	 *
@@ -33,5 +33,4 @@ trait PresentableTrait {
 
 		return $this->presenterInstance;
 	}
-
-} 
+}

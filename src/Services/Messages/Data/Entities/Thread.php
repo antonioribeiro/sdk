@@ -2,17 +2,18 @@
 
 namespace PragmaRX\Sdk\Services\Messages\Data\Entities;
 
-use PragmaRX\Sdk\Core\Model;
 use Auth;
+use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Messages\Data\Presenters\Thread as ThreadPresenter;
 
-class Thread extends Model {
-
+class Thread extends Model
+{
 	protected $table = 'messages_threads';
 
 	protected $fillable = ['owner_id', 'subject'];
 
-	protected $presenter = 'PragmaRX\Sdk\Services\Messages\Data\Presenters\Thread';
-
+    protected $presenter = ThreadPresenter::class;
+    
 	public function participants()
 	{
 		return $this->hasMany(
@@ -91,5 +92,4 @@ class Thread extends Model {
 
 		return false;
 	}
-
 }

@@ -2,16 +2,13 @@
 
 namespace PragmaRX\Sdk\Services\Clients\Data\Entities;
 
-use PragmaRX\Sdk\Services\Users\Data\Entities\User;
-
 use Carbon;
 use Language;
+use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 
-class Client extends User {
-
+class Client extends User
+{
 	protected $table = 'users';
-
-	protected $presenter = 'PragmaRX\Sdk\Services\Clients\Data\Entities\ClientPresenter';
 
 	protected static function boot()
 	{

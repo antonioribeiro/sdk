@@ -5,8 +5,8 @@ namespace PragmaRX\Sdk\Services\Statuses\Data\Entities;
 use PragmaRX\Sdk\Core\Model;
 use PragmaRX\Sdk\Services\Statuses\Events\StatusWasPublished;
 
-class Status extends Model {
-
+class Status extends Model
+{
 	protected $fillable = ['body'];
 
 	/**
@@ -15,8 +15,6 @@ class Status extends Model {
 	 * @var string
 	 */
 	protected $table = 'statuses';
-
-	protected $presenter = 'PragmaRX\Sdk\Services\Statuses\Data\Entities\StatusPresenter';
 
 	/**
 	 * Publish a new status

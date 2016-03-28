@@ -17,8 +17,6 @@ class ChatScript extends Model
 		'chat_script_type_id',
 	];
 
-	protected $presenter = 'PragmaRX\Sdk\Services\Chat\Data\Presenters\ChatPresenter';
-
 	public function client()
 	{
 		return $this->belongsTo(BusinessClient::class, 'business_client_id');

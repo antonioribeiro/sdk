@@ -26,6 +26,7 @@ use PragmaRX\Sdk\Services\Accounts\Exceptions\UserActivationNotFound;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\FollowableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\ConnectableTrait;
 use PragmaRX\Sdk\Services\Registration\Service\Facade as Registration;
+use PragmaRX\Sdk\Services\Users\Data\Presenters\User as UserPresenter;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\BusinessableTrait;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\PermissionableTrait;
@@ -48,7 +49,7 @@ class User extends CartalystUser implements CanResetPassword
 
 	protected $fillable = ['id', 'username', 'email', 'password', 'first_name', 'last_name'];
 
-	protected $presenter = 'PragmaRX\Sdk\Services\Users\Data\Presenters\User';
+	protected $presenter = UserPresenter::class;
 
     protected $casts = [
         'id' => 'string',
@@ -263,4 +264,9 @@ class User extends CartalystUser implements CanResetPassword
 
 		return new Collection($connections);
 	}
+
+    public function getAuthIdentifierName()
+    {
+        return 'id';
+    }
 }

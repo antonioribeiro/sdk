@@ -4,14 +4,13 @@ namespace PragmaRX\Sdk\Services\Clipping\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
 use PragmaRX\Sdk\Services\Tags\Data\Entities\Tag;
+use PragmaRX\Sdk\Services\Clipping\Data\Presenters\Clipping as ClippingPresenter;
 
 class Clipping extends Model
 {
 	protected $table = 'clipping';
 
 	protected $dates = ['created_at', 'updated_at', 'published_at'];
-
-	protected $presenter = 'PragmaRX\Sdk\Services\Clipping\Data\Presenters\Clipping';
 
 	protected $fillable = [
 		'heading',
@@ -26,6 +25,8 @@ class Clipping extends Model
 		'published_at',
 	];
 
+    protected $presenter = ClippingPresenter::class;
+    
 	public function author()
 	{
 		return $this->belongsTo(ClippingAuthor::class, 'author_id');

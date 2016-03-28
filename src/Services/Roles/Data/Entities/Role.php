@@ -4,12 +4,12 @@ namespace PragmaRX\Sdk\Services\Roles\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
 use PragmaRX\Sdk\Services\Permissions\Data\Entities\Permission;
-
+use PragmaRX\Sdk\Services\Roles\Data\Presenters\Role as RolePresenter;
 class Role extends Model
 {
 	protected $table = 'roles';
 
-	protected $presenter = 'PragmaRX\Sdk\Services\Roles\Data\Presenters\Role';
+	protected $presenter = RolePresenter::class;
 
 	protected $fillable = [
 

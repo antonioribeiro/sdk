@@ -21,6 +21,8 @@ class Model extends Eloquent
         'id' => 'string',
     ];
 
+    public $incrementing = false;
+
 	use
 		EventGenerator,
 		PresentableTrait,

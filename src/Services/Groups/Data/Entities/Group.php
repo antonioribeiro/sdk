@@ -5,11 +5,9 @@ namespace PragmaRX\Sdk\Services\Groups\Data\Entities;
 use Illuminate\Support\Collection;
 use PragmaRX\Sdk\Core\Model;
 
-class Group extends Model {
-
+class Group extends Model
+{
 	protected $fillable = ['name'];
-
-	protected $presenter = 'PragmaRX\Sdk\Services\Groups\Data\Entities\GroupPresenter';
 
 	public function associations()
 	{
@@ -94,5 +92,4 @@ class Group extends Model {
 					})
 				->first();
 	}
-
 }
