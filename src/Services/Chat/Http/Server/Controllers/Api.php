@@ -68,6 +68,11 @@ class Api extends BaseController
 
 	public function sendMessage($chatId, $talkerId, $message = '')
 	{
+        if (! $message)
+        {
+            return false;
+        }
+
 		$message = $this->chatRepository->createMessage($chatId, $talkerId, $message);
 
 		$chat = $this->chatRepository->findById($chatId);
@@ -128,4 +133,11 @@ class Api extends BaseController
 	{
 		return Markdown::toHtml($script);
 	}
+
+    public function ping()
+    {
+        $this->chatRepository->pingUser();
+
+        return ['success' => true];
+    }
 }

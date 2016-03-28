@@ -45,6 +45,8 @@ Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX', '')], function() {
 
             Route::get('respond/{id}', ['as' => 'chat.respond', 'uses' => 'Api@respond']);
 
+            Route::get('ping', ['as' => 'chat.respond', 'uses' => 'Api@ping']);
+
             Route::post('send', ['as' => 'chat.server.send.message', 'uses' => 'Api@serverSendMessage']);
 
             Route::post('read', ['as' => 'chat.server.read.message', 'uses' => 'Api@serverReadMessage']);

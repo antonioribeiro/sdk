@@ -47,7 +47,8 @@ class Chat extends Repository
 		$this->request = $request;
 	}
 
-	public function create($name, $email, $clientId, $layout)
+
+    public function create($name, $email, $clientId, $layout)
 	{
 		$user = $this->userRepository->findByEmailOrCreate($email, ['first_name' => $name], true); // allow empty password
 
@@ -101,7 +102,66 @@ class Chat extends Repository
 		return $this->findOrCreateTalker($chat->service->client, $userId);
 	}
 
-	private function makeMessages($all, $chat = null)
+    /**
+     * @param $clientId
+     * @return mixed
+     */
+    private function getChatAndTalkersForClient($user, $clientId, $open) {
+        $chats = $this->getChatsAndTalkers();
+
+        if ($open)
+        {
+            $chats->whereNull('closed_at');
+        }
+
+        if (Gate::denies('viewUsers', $user))
+        {
+            $chats->where(function ($query) use ($user) {
+                $query->whereNull('chats.responder_id')
+                      ->orWhere('chat_business_client_talkers.user_id', $user->id);
+            });
+        }
+
+        if ($clientId) {
+            $chats->where('chat_business_client_services.business_client_id', $clientId);
+        }
+
+        return $chats;
+    }
+
+    /**
+     * @param $clientId
+     * @param $period
+     * @return mixed
+     */
+    private function getChatAndTalkersForClientInPeriod($user, $clientId, $open, $period)
+    {
+        $chats = $this->getChatAndTalkersForClient($user, $clientId, $open);
+
+        if ($period)
+        {
+            $chats->whereBetween('chats.created_at', $period);
+        }
+
+        return $chats;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getChatsAndTalkers() {
+        $chats = ChatModel::select('chats.*', 'chat_business_client_talkers.user_id')
+                          ->join('chat_business_client_services', 'chats.chat_business_client_service_id', '=', 'chat_business_client_services.id')
+                          ->leftJoin('chat_business_client_talkers', function ($join) {
+                              $join->on('chat_business_client_services.business_client_id', '=', 'chat_business_client_talkers.business_client_id');
+                              $join->on('chats.responder_id', '=', 'chat_business_client_talkers.id');
+                          })
+        ;
+
+        return $chats;
+    }
+
+    private function makeMessages($all, $chat = null)
 	{
 		$messages = [];
 
@@ -166,7 +226,32 @@ class Chat extends Repository
 		return ChatScriptType::all();
 	}
 
-	public function respond($chatId)
+    /**
+     * @param $chats
+     * @return Collection
+     */
+    private function makeResult($chats, $id_column = 'id')
+    {
+        $result = [];
+
+        foreach ($chats->get() as $chat)
+        {
+            $result[ $chat[$id_column] ] = $this->makeChatData($chat);
+        }
+
+        return new Collection($result);
+    }
+
+    public function pingUser()
+    {
+        $user = Auth::user();
+
+        $user->last_seen_at = Carbon::now();
+
+        $user->save();
+    }
+
+    public function respond($chatId)
 	{
 		$chat = $this->findById($chatId);
 
@@ -417,42 +502,20 @@ class Chat extends Repository
 		return BusinessClientUser::where('user_id', $talker->user->id)->first();
 	}
 
-	public function allChatsForClient($clientId = null, $open = true)
+    public function allMessagesForClient($clientId, $open = true, $period = null)
+    {
+        return $this->makeResult(
+            $this->getChatAndTalkersForClientInPeriod(Auth::user(), $clientId, $open, $period)
+                ->addSelect('chat_messages.id as chat_message_id')
+                ->join('chat_messages', 'chats.id', '=', 'chat_messages.chat_id')
+            , 'chat_message_id'
+        );
+    }
+
+	public function allChatsForClient($clientId = null, $open = true, $period = null)
 	{
-        $user = Auth::user();
-
-		$chats = ChatModel::select('chats.*', 'chat_business_client_talkers.user_id')
-					->join('chat_business_client_services', 'chats.chat_business_client_service_id', '=', 'chat_business_client_services.id')
-                    ->leftJoin('chat_business_client_talkers', function ($join) {
-                        $join->on('chat_business_client_services.business_client_id', '=', 'chat_business_client_talkers.business_client_id');
-                        $join->on('chats.responder_id', '=', 'chat_business_client_talkers.id');
-                    });
-
-        if ($clientId)
-        {
-            $chats->where('chat_business_client_services.business_client_id', $clientId);
-        }
-
-        if (Gate::denies('viewUsers', $user))
-        {
-            $chats->where(function ($query) use ($user) {
-                $query->whereNull('chats.responder_id')
-                      ->orWhere('chat_business_client_talkers.user_id', $user->id);
-            });
-        }
-
-        if ($open)
-        {
-            $chats->whereNull('closed_at');
-        }
-
-		$result = [];
-
-		foreach($chats->get() as $chat)
-		{
-			$result[$chat->id] = $this->makeChatData($chat);
-		}
-
-		return new Collection($result);
+        return $this->makeResult(
+            $this->getChatAndTalkersForClientInPeriod(Auth::user(), $clientId, $open, $period)
+        );
 	}
 }
