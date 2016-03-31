@@ -33,7 +33,7 @@ Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX', '')], function() {
     });
 
     // Authorization required
-    Route::group(['prefix' => 'api/v1', 'middleware' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Server\Controllers'], function ()
+    Route::group(['prefix' => 'api/v1', 'middleware' => ['auth','cors'], 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Server\Controllers'], function ()
     {
         Route::group(['prefix' => 'chat/server'], function ()
         {
@@ -56,7 +56,7 @@ Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX', '')], function() {
     });
 
     // No authorization required
-    Route::group(['prefix' => 'api/v1', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Server\Controllers'], function ()
+    Route::group(['prefix' => 'api/v1', 'middleware' => ['cors'], 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Server\Controllers'], function ()
     {
         Route::group(['prefix' => 'chat'], function ()
         {

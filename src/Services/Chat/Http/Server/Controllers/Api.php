@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Chat\Http\Server\Controllers;
 
 use Auth;
+use Input;
 use Markdown;
 use Response;
 use Illuminate\Http\Request;
@@ -48,7 +49,14 @@ class Api extends BaseController
             'Access-Control-Allow-Origin' => '*',
         ];
 
-        return Response::json($data, 200, $headers);
+        $response = Response::json($data, 200, $headers);
+
+        if ($callback = Input::get('callback'))
+        {
+            $response->setCallback($callback);
+        }
+
+        return $response;
     }
 
     public function scripts()
