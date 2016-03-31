@@ -47,7 +47,7 @@ class Flash {
 					'title' => $title,
 				];
 
-				if (env('DEBUG_MODE'))
+				if (config('app.debug'))
 				{
 					\Log::info("FLASH MESSAGE - $kind: $item");
 				}

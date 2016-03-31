@@ -16,8 +16,8 @@ class Registration extends BaseController
 	 */
 	public function create($invite_code = null)
 	{
-		$invite_only = env('INVITE.ONLY') &&
-						$invite_code !== env('INVITE.ONLY.FREEPASS');
+		$invite_only = config('env.INVITE_ONLY') &&
+						$invite_code !== config('env.INVITE_ONLY_FREEPASS');
 
 		return View::make('registration.create', compact('invite_only'));
 	}

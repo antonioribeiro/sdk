@@ -2,7 +2,7 @@
 
 Route::group(['middleware' => 'web'], function()
 {
-    Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX', '')], function() {
+    Route::group(['prefix' => config('env.ROUTE_GLOBAL_PREFIX')], function() {
         Route::group(['prefix' => 'chat/client', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Client\Controllers'], function ()
         {
             Route::get('{clientId}/create/{layout?}', ['as' => 'chat.client.create', 'uses' => 'Chat@create']);

@@ -68,7 +68,7 @@ class Chat extends BaseController
 			->with('talkerId', $chat->owner->id)
 			->with('chatId', $chat_id)
 			->with('ownerId', $chat->owner->id)
-			->with('operatorUsername', env('CHAT_OPERATOR_USERNAME'))
+			->with('operatorUsername', config('env.CHAT_OPERATOR_USERNAME'))
 			->with('operatorAvatar', $chat->owner->user->present()->avatar)
 			->with('talkerAvatar', $chat->owner->user->present()->avatar)
 			->with('listenChannel', 'chat-channel:' . $chat_id)

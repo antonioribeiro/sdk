@@ -1020,7 +1020,7 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 	private function createDummyEmail()
 	{
-		return Uuid::uuid4() . '@' . env('DOMAIN');
+		return Uuid::uuid4() . '@' . config('env.DUMMY_DOMAIN');
 	}
 
 	public function isActivated($user)
