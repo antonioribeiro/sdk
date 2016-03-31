@@ -31,7 +31,7 @@
 
 		@yield('html.footer')
 
-		@yield('pragmarx/sdk::partials.googleanalytics')
+		@include('pragmarx/sdk::partials.googleanalytics')
 
 	</body>
 </html>
