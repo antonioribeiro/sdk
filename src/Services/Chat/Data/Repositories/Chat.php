@@ -541,7 +541,7 @@ class Chat extends Repository
 
     public function operatorsForClient($clientId = null)
     {
-        return $this->operatorsForClient($clientId)
+        return $this->getOperatorsForClient($clientId)
                     ->get()
         ;
     }
