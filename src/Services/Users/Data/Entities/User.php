@@ -69,6 +69,13 @@ class User extends CartalystUser implements CanResetPassword
 	 */
 	protected $hidden = array('password', 'remember_token');
 
+    /**
+     * The dates
+     *
+     * @var array
+     */
+    protected $dates = ['created_at', 'updated_at', 'last_seen_at'];
+
 	/**
 	 * Register a new user
 	 *
