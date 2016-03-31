@@ -230,7 +230,7 @@ class Chat extends Repository
      * @param $chats
      * @return Collection
      */
-    private function makeResult($chats, $id_column = 'id')
+    private function makeChatResult($chats, $id_column = 'id')
     {
         $result = [];
 
@@ -504,7 +504,7 @@ class Chat extends Repository
 
     public function allMessagesForClient($clientId, $open = true, $period = null)
     {
-        return $this->makeResult(
+        return $this->makeChatResult(
             $this->getChatAndTalkersForClientInPeriod(Auth::user(), $clientId, $open, $period)
                 ->addSelect('chat_messages.id as chat_message_id')
                 ->join('chat_messages', 'chats.id', '=', 'chat_messages.chat_id')
@@ -514,8 +514,45 @@ class Chat extends Repository
 
 	public function allChatsForClient($clientId = null, $open = true, $period = null)
 	{
-        return $this->makeResult(
+        return $this->makeChatResult(
             $this->getChatAndTalkersForClientInPeriod(Auth::user(), $clientId, $open, $period)
         );
 	}
+
+    /**
+     * @param $clientId
+     */
+    public function getOperatorsForClient($clientId)
+    {
+        return BusinessClientUser::
+                select([
+                    'business_client_id',
+                    'user_id',
+                    'email',
+                    'first_name',
+                    'last_name',
+                    'avatar_id',
+                    'last_seen_at',
+                ])
+                ->join('users', 'business_client_users.user_id', '=', 'users.id')
+                ->where('business_client_id', $clientId)
+        ;
+    }
+
+    public function operatorsForClient($clientId = null)
+    {
+        return $this->operatorsForClient($clientId)
+                    ->get()
+        ;
+    }
+
+    public function operatorsOnlineForClient($clientId = null)
+    {
+        $now = Carbon::now()->subMinute(1);
+
+        return $this->getOperatorsForClient($clientId)
+                ->where('users.last_seen_at', '>=', $now)
+                ->get()
+        ;
+    }
 }

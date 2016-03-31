@@ -45,7 +45,7 @@ Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX', '')], function() {
 
             Route::get('respond/{id}', ['as' => 'chat.respond', 'uses' => 'Api@respond']);
 
-            Route::get('ping', ['as' => 'chat.respond', 'uses' => 'Api@ping']);
+            Route::get('ping', ['as' => 'chat.ping', 'uses' => 'Api@ping']);
 
             Route::post('send', ['as' => 'chat.server.send.message', 'uses' => 'Api@serverSendMessage']);
 
@@ -65,6 +65,8 @@ Route::group(['prefix' => env('ROUTE_GLOBAL_PREFIX', '')], function() {
                 Route::get('send/{chatId}/{usernameId}/{message?}', ['as' => 'chat.client.send.message', 'uses' => 'Api@sendMessage']);
 
                 Route::get('get/{chatId}', ['as' => 'chat.client.all', 'uses' => 'Api@getChat']);
+
+                Route::get('operators/online/for/client/{clientId?}', ['as' => 'chat.operators.online.for.client', 'uses' => 'Api@operatorsOnlineForClient']);
             });
         });
     });

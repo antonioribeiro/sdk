@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Services\Chat\Http\Server\Controllers;
 
 use Auth;
 use Markdown;
+use Response;
 use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
@@ -41,7 +42,16 @@ class Api extends BaseController
 		return $this->chatRepository->allChatsForClient($clientId);
 	}
 
-	public function scripts()
+    private function response($data)
+    {
+        $headers = [
+            'Access-Control-Allow-Origin' => '*',
+        ];
+
+        return Response::json($data, 200, $headers);
+    }
+
+    public function scripts()
 	{
 		$scripts = ChatScript::with('type')->get();
 
@@ -139,5 +149,12 @@ class Api extends BaseController
         $this->chatRepository->pingUser();
 
         return ['success' => true];
+    }
+
+    public function operatorsOnlineForClient($clientId)
+    {
+        return $this->response(
+            $this->chatRepository->operatorsOnlineForClient($clientId)->toArray()
+        );
     }
 }
