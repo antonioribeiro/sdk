@@ -45,6 +45,15 @@ class IlluminateAuth implements AuthContract
         );
     }
 
+    private function setLoggedIn($user, $isLoggedIn)
+    {
+        $user->last_seen_at = Carbon::now();
+
+        $user->logged_in = $isLoggedIn;
+
+        $user->save();
+    }
+
     public function user() {
         $this->updateLastSeen();
 
@@ -63,21 +72,30 @@ class IlluminateAuth implements AuthContract
         return false;
     }
 
-    public function logout() {
+    public function logout()
+    {
+        $this->setLoggedIn($this->auth->user(), false);
+
         return $this->auth->logout();
     }
 
-    public function authenticate($user, $remember = false, $login = true) {
+    public function authenticate($user, $remember = false, $login = true)
+    {
         $this->checkActivation($user);
 
         if (!$login) {
             return true;
         }
 
-        return $this->auth->login($user, $remember);
+        $result = $this->auth->login($user, $remember);
+
+        $this->setLoggedIn($user, true);
+
+        return $result;
     }
 
-    public function register($credentials) {
+    public function register($credentials)
+    {
         return $this->auth->register($credentials);
     }
 

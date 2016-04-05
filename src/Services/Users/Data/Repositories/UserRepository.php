@@ -19,6 +19,7 @@ use PragmaRX\Sdk\Core\Exceptions\InvalidRequest;
 use Laracasts\Commander\Events\DispatchableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 use PragmaRX\Sdk\Services\Auth\Service\Facade as Auth;
+use PragmaRX\Sdk\Services\Login\Events\UserWasLoggedOut;
 use PragmaRX\Sdk\Services\Connect\Events\UserWasInvited;
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use PragmaRX\Sdk\Services\Profiles\Events\ProfileVisited;
@@ -493,6 +494,13 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 		return ['user' => $user, 'next' => $next];
 	}
+
+    public function logout($user)
+    {
+        Auth::logout();
+
+        $user->raise(new UserWasLoggedOut($user));
+    }
 
 	public function findAuthenticatableByCredentials($credentials)
 	{

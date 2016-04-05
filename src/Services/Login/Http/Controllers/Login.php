@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Services\Login\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Accounts\Commands\SignInCommand;
+use PragmaRX\Sdk\Services\Accounts\Commands\SignOutCommand;
 use PragmaRX\Sdk\Services\Login\Forms\SignIn as SignInForm;
 
 use PragmaRX\Sdk\Services\Login\Http\Requests\Login as LoginRequest;
@@ -40,9 +41,9 @@ class Login extends BaseController {
 
 	public function destroy()
 	{
-		Flash::message(t('paragraphs.you-are-logged-out'));
+        $this->execute(SignOutCommand::class);
 
-		Auth::logout();
+		Flash::message(t('paragraphs.you-are-logged-out'));
 
 		return Redirect::home();
 	}

@@ -552,6 +552,7 @@ class Chat extends Repository
 
         return $this->getOperatorsForClient($clientId)
                 ->where('users.last_seen_at', '>=', $now)
+                ->where('users.logged_in', true)
                 ->get()
         ;
     }
