@@ -42,11 +42,17 @@ class Presenter extends SdkPresenter {
 
     public function createdAt()
     {
-        return $this->entity->created_at->format($this->humanDateFormat());
+        if ($this->entity->created_at)
+        {
+            return $this->entity->created_at->format($this->humanDateFormat());
+        }
     }
 
     public function updatedAt()
     {
-        return $this->entity->updated_at->format($this->humanDateFormat());
+        if ($this->entity->updated_at)
+        {
+            return $this->entity->updated_at->format($this->humanDateFormat());
+        }
     }
 }

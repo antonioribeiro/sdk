@@ -8,21 +8,25 @@ class Chat extends Presenter
 {
     public function lastMessageAt()
     {
-        return $this->entity->last_message_at->format($this->humanDateFormat());
+        if ($this->entity->last_message_at)
+        {
+            return $this->entity->last_message_at->format($this->humanDateFormat());
+        }
     }
 
     public function openedAt()
     {
-        return $this->entity->opened_at->format($this->humanDateFormat());
+        if ($this->entity->opened_at)
+        {
+            return $this->entity->opened_at->format($this->humanDateFormat());
+        }
     }
 
     public function closedAt()
     {
-        return $this->entity->closed_at->format($this->humanDateFormat());
-    }
-
-    public function humanDateFormat()
-    {
-        return 'd/m/Y H:m:s';
+        if ($this->entity->closed_at)
+        {
+            return $this->entity->closed_at->format($this->humanDateFormat());
+        }
     }
 }
