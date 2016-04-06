@@ -35,4 +35,18 @@ class Presenter extends SdkPresenter {
 		return null;
 	}
 
-} 
+    public function humanDateFormat()
+    {
+        return 'd/m/Y H:m:s';
+    }
+
+    public function createdAt()
+    {
+        return $this->entity->created_at->format($this->humanDateFormat());
+    }
+
+    public function updatedAt()
+    {
+        return $this->entity->updated_at->format($this->humanDateFormat());
+    }
+}

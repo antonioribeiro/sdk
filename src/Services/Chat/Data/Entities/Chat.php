@@ -17,6 +17,14 @@ class Chat extends Model
         'layout',
 	];
 
+    protected $dates = [
+        'created_at',
+        'update_at',
+        'last_message_at',
+        'opened_at',
+        'closed_at',
+    ];
+
 	protected $presenter = ChatPresenter::class;
 
 	public function owner()

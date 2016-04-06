@@ -176,7 +176,7 @@ class Chat extends Repository
 			        'avatar' => $this->makeAvatar($message->talker, $chat),
 			    ],
 				'serial' => str_pad($message->serial, 10, "0", STR_PAD_LEFT),
-			    'created_at' => (string) $message->created_at,
+			    'created_at' => (string) $message->present()->createdAt(),
 			];
 		}
 
@@ -431,11 +431,11 @@ class Chat extends Repository
 		$data['isClosed'] = is_null($chat->closed_at);
 		$data['service'] = strtolower($chat->service->type->name);
 		$data['messages'] = $this->makeMessages($chat->messages()->with('talker.user')->get(), $chat);
-		$data['opened_at'] = (string) $chat->opened_at;
-		$data['last_message_at'] = (string) $chat->last_message_at;
-		$data['closed_at'] = (string) $chat->closed_at;
-		$data['created_at'] = (string) $chat->created_at;
-		$data['updated_at'] = (string) $chat->updated_at;
+		$data['opened_at'] = (string) $chat->present()->openedAt();
+		$data['last_message_at'] = $chat->present()->lastMessageAt();
+		$data['closed_at'] = $chat->present()->closedAt();
+		$data['created_at'] = $chat->present()->createdAt();
+		$data['updated_at'] = $chat->present()->updatedAt();
 		$data['last_read_message_serial'] = $this->getChatLastReadSerial($chat, $user->id);
 		$data['last_message_serial'] = $lastMessageSerial;
 

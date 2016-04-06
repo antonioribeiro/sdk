@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Chat\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Chat\Data\Presenters\ChatMessage as ChatMessagePresenter;
 
 class ChatMessage extends Model
 {
@@ -14,6 +15,8 @@ class ChatMessage extends Model
 		'talker_ip_address',
 		'message',
 	];
+
+    protected $presenter = ChatMessagePresenter::class;
 
 	public function talker()
 	{
