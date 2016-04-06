@@ -16,7 +16,8 @@ Route::group(['middleware' => 'web'], function()
 
         Route::group(['prefix' => 'chats', 'middleware' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Server\Controllers'], function ()
         {
-            Route::get('/index', ['as' => 'chats.index', 'uses' => 'Chats@index']);
+            Route::get('index', ['as' => 'chats.index', 'uses' => 'Chats@index']);
+            Route::get('show/{id}', ['as' => 'chats.show', 'uses' => 'Chats@show']);
         });
 
         Route::group(['prefix' => 'chat/server', 'middleware' => 'auth', 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Server\Controllers'], function ()

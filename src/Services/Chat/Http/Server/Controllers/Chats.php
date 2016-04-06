@@ -17,12 +17,19 @@ class Chats extends BaseController
 
 	public function index()
 	{
-		$chats = $this->chatRepository->allChats();
-
-		$currentClientId = BusinessService::getCurrentClient()->id;
+		$chats = $this->chatRepository->allChats(false);
 
 		return view('chats.index')
-			->with('listenChannel', 'chat-channel:PragmaRX\\\\Sdk\\\\Services\\\\Chat\\\\Events\\\\ChatMessageSent')
-			->with('chats', $chats);
+			    ->with('chats', $chats);
 	}
+
+    public function show($chatId)
+    {
+        $chat = $this->chatRepository->getChat($chatId);
+
+//        dd($chat);
+
+        return view('chats.show')
+                ->with('chat', $chat);
+    }
 }

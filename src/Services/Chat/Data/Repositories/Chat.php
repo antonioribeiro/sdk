@@ -413,13 +413,17 @@ class Chat extends Repository
 
 		$data['talker'] = [
 			'fullName' => $chat->owner->user->present()->fullName,
-			'avatar' => $chat->owner->user->present()->avatar
+			'avatar' => $chat->owner->user->present()->avatar,
+            'user_id' => $chat->owner->user->id,
+            'id' => $chat->owner->id,
 		];
 
 		$data['responder'] = $chat->responder_id
 								?   [
 										'fullName' => $chat->responder->user->present()->fullName,
-								        'id' => $chat->responder->user->id,
+								        'user_id' => $chat->responder->user->id,
+                                        'avatar' => $chat->responder->user->present()->avatar,
+                                        'id' => $chat->responder->id,
 									]
 								: null;
 		$data['responder_id'] = $chat->responder_id;
