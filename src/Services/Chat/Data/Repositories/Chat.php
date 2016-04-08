@@ -47,6 +47,14 @@ class Chat extends Repository
 		$this->request = $request;
 	}
 
+    private function addDateColumnToDataArray($data, $model, $column)
+    {
+        $data[$column] = $model->present()->{camel($column)};
+        $data[$column.'_order'] = (string) $model[$column];
+
+        return $data;
+    }
+
 
     public function create($name, $email, $clientId, $layout)
 	{
@@ -125,6 +133,8 @@ class Chat extends Repository
         if ($clientId) {
             $chats->where('chat_business_client_services.business_client_id', $clientId);
         }
+
+        $chats->orderBy('created_at', 'desc');
 
         return $chats;
     }
@@ -431,11 +441,13 @@ class Chat extends Repository
 		$data['isClosed'] = is_null($chat->closed_at);
 		$data['service'] = strtolower($chat->service->type->name);
 		$data['messages'] = $this->makeMessages($chat->messages()->with('talker.user')->get(), $chat);
-		$data['opened_at'] = (string) $chat->present()->openedAt();
-		$data['last_message_at'] = $chat->present()->lastMessageAt();
-		$data['closed_at'] = $chat->present()->closedAt();
-		$data['created_at'] = $chat->present()->createdAt();
-		$data['updated_at'] = $chat->present()->updatedAt();
+
+        $data = $this->addDateColumnToDataArray($data, $chat, 'opened_at');
+        $data = $this->addDateColumnToDataArray($data, $chat, 'last_message_at');
+        $data = $this->addDateColumnToDataArray($data, $chat, 'closed_at');
+		$data = $this->addDateColumnToDataArray($data, $chat, 'created_at');
+		$data = $this->addDateColumnToDataArray($data, $chat, 'updated_at');
+
 		$data['last_read_message_serial'] = $this->getChatLastReadSerial($chat, $user->id);
 		$data['last_message_serial'] = $lastMessageSerial;
 

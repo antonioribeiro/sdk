@@ -27,8 +27,6 @@ class Chats extends BaseController
     {
         $chat = $this->chatRepository->getChat($chatId);
 
-//        dd($chat);
-
         return view('chats.show')
                 ->with('chat', $chat);
     }
