@@ -37,7 +37,7 @@ class Presenter extends SdkPresenter {
 
     public function humanDateFormat()
     {
-        return 'd/m/Y H:m:s';
+        return 'd/m/Y H:i:s';
     }
 
     public function createdAt()
