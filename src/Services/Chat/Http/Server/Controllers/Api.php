@@ -84,11 +84,15 @@ class Api extends BaseController
 		return $script;
 	}
 
-	public function sendMessage($chatId, $talkerId, $message = '')
+	public function sendMessage(Request $request)
 	{
+        $message = $request->get('message');
+        $chatId = $request->get('chatId');
+        $talkerId = $request->get('talkerId');
+
         if (! $message)
         {
-            return false;
+            return $this->error();
         }
 
 		$message = $this->chatRepository->createMessage($chatId, $talkerId, $message);

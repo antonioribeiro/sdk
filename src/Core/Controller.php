@@ -30,6 +30,11 @@ class Controller extends IlluminateController
 		return Response::json(array_merge(['success' => true], $additional));
 	}
 
+    public function error($additional = [])
+    {
+        return Response::json(array_merge(['success' => false], $additional));
+    }
+
 	public function execute($class, $input = [])
 	{
 		$request = app('request');

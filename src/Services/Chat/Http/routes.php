@@ -62,20 +62,23 @@ Route::group(['middleware' => 'web'], function()
                 Route::post('terminate', ['as' => 'chat.server.terminate', 'uses' => 'Api@terminateChat']);
             });
         });
+    });
+});
 
-        // No authorization required
-        Route::group(['prefix' => 'api/v1', 'middleware' => ['cors'], 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Server\Controllers'], function ()
+Route::group(['middleware' => 'api'], function()
+{
+    // No authorization required
+    Route::group(['prefix' => 'api/v1', 'middleware' => ['cors'], 'namespace' => 'PragmaRX\Sdk\Services\Chat\Http\Server\Controllers'], function ()
+    {
+        Route::group(['prefix' => 'chat'], function ()
         {
-            Route::group(['prefix' => 'chat'], function ()
+            Route::group(['prefix' => 'client'], function ()
             {
-                Route::group(['prefix' => 'client'], function ()
-                {
-                    Route::get('send/{chatId}/{usernameId}/{message?}', ['as' => 'chat.client.send.message', 'uses' => 'Api@sendMessage']);
+                Route::post('send', ['as' => 'chat.client.send.message', 'uses' => 'Api@sendMessage']);
 
-                    Route::get('get/{chatId}', ['as' => 'chat.client.all', 'uses' => 'Api@getChat']);
+                Route::get('get/{chatId}', ['as' => 'chat.client.all', 'uses' => 'Api@getChat']);
 
-                    Route::get('operators/online/for/client/{clientId?}', ['as' => 'chat.operators.online.for.client', 'uses' => 'Api@operatorsOnlineForClient']);
-                });
+                Route::get('operators/online/for/client/{clientId?}', ['as' => 'chat.operators.online.for.client', 'uses' => 'Api@operatorsOnlineForClient']);
             });
         });
     });
