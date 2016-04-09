@@ -74,7 +74,7 @@ Route::group(['middleware' => 'api'], function()
         {
             Route::group(['prefix' => 'client'], function ()
             {
-                Route::post('send', ['as' => 'chat.client.send.message', 'uses' => 'Api@sendMessage']);
+                Route::post('send', ['as' => 'chat.client.send.message', 'uses' => 'Api@clientSendMessage']);
 
                 Route::get('get/{chatId}', ['as' => 'chat.client.all', 'uses' => 'Api@getChat']);
 

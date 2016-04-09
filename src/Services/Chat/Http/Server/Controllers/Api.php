@@ -84,12 +84,17 @@ class Api extends BaseController
 		return $script;
 	}
 
-	public function sendMessage(Request $request)
-	{
-        $message = $request->get('message');
-        $chatId = $request->get('chatId');
-        $talkerId = $request->get('talkerId');
+    public function clientSendMessage(Request $request)
+    {
+        return $this->sendMessage(
+            $request->get('message'),
+            $request->get('chatId'),
+            $request->get('talkerId')
+        );
+    }
 
+    public function sendMessage($message, $chatId, $talkerId)
+	{
         if (! $message)
         {
             return $this->error();
@@ -126,9 +131,9 @@ class Api extends BaseController
 	public function serverSendMessage(Request $request)
 	{
 		return $this->sendMessage(
+            $request['message'],
 			$request['chatId'],
-			$this->chatRepository->getCurrentTalker()->id,
-			$request['message']
+			$this->chatRepository->getCurrentTalker()->id
 		);
 	}
 
