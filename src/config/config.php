@@ -84,6 +84,7 @@ return [
 		'Services/SystemEntities',
 
 		'Services/Tags',
+        'Services/Telegram',
 		'Services/TwoFactor',
 		'Services/Translator',
 

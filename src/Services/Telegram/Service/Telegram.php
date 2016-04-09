@@ -10,10 +10,15 @@ class Telegram
 
     private $telegram;
 
-    function __construct()
+    public function __construct()
 	{
-        $this->telegram = $this->initializeBot();
+        $this->initializeBot();
 	}
+
+    public function getWebhookUrl()
+    {
+        return route('telegram.webhook.handle');
+    }
 
     private function initializeBot()
     {
@@ -22,9 +27,9 @@ class Telegram
 
     public function setWebhook()
     {
-        $result = $this->telegram->setWebHook(config('env.TELEGRAM_WEB_HOOK_URL'));
+        $result = $this->telegram->setWebHook($this->getWebhookUrl());
 
-        $this->description = $result->getDescription();
+        return $this->description = $result->getDescription();
     }
 
     public function handle()

@@ -2,11 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Telegram\Service;
 
-use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Support\ServiceProvider;
 
-class Provider extends ServiceProvider {
-
+class Provider extends ServiceProvider
+{
 	/**
 	 * Indicates if loading of the provider is deferred.
 	 *
@@ -25,7 +24,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app[$this->defaultBinding] = $this->app->share(function($app)
 		{
-			return new Telegram(new UserRepository());
+			return new Telegram();
 		});
 	}
 
@@ -39,7 +38,6 @@ class Provider extends ServiceProvider {
 		return [$this->defaultBinding];
 	}
 
-
 	/**
 	 * Get the current package directory.
 	 *
@@ -49,5 +47,4 @@ class Provider extends ServiceProvider {
 	{
 		return __DIR__;
 	}
-
 }
