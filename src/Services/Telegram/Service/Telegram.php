@@ -17,12 +17,18 @@ class Telegram
 
     public function getWebhookUrl()
     {
-        return route('telegram.webhook.handle', ['robot' => config('env.TELEGRAM_BOT_NAME')]);
+        return route(
+            'telegram.webhook.handle',
+            [
+                'robot' => config('env.TELEGRAM_BOT_NAME'),
+                'token' => config('env.TELEGRAM_API_TOKEN'),
+            ]
+        );
     }
 
     private function initializeBot()
     {
-        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_KEY'), config('env.TELEGRAM_BOT_NAME'));
+        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
     }
 
     public function setWebhook()
