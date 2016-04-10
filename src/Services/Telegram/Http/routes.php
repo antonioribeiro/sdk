@@ -5,7 +5,7 @@ Route::group(['prefix' => config('env.ROUTE_GLOBAL_PREFIX')], function() {
     {
         Route::group(['prefix' => 'telegram'], function()
         {
-            Route::post('webhook/handle', ['as' => 'telegram.webhook.handle', 'uses' => 'Telegram@handleWebhook']);
+            Route::post('{$robot}/webhook/handle', ['as' => 'telegram.webhook.handle', 'uses' => 'Telegram@handleWebhook']);
         });
     });
 });

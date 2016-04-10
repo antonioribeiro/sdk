@@ -17,7 +17,7 @@ class Telegram
 
     public function getWebhookUrl()
     {
-        return route('telegram.webhook.handle');
+        return route('telegram.webhook.handle', ['robot' => config('env.TELEGRAM_BOT_NAME')]);
     }
 
     private function initializeBot()

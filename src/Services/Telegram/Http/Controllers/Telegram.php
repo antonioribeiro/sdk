@@ -2,14 +2,25 @@
 
 namespace PragmaRX\Sdk\Services\Telegram\Http\Controllers;
 
+use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Products\Data\Repositories\Telegram as TelegramRepository;
 
 class Telegram extends BaseController
 {
-	public function handleWebhook()
+    /**
+     * @var TelegramRepository
+     */
+    private $repository;
+
+    public function __construct(Request $request, TelegramRepository $repository)
+    {
+        $this->request = $request;
+        $this->repository = $repository;
+    }
+
+	public function handleWebhook($robot)
 	{
-        \Log::info(\Input::all());
-        
-        return $this->success();
+        $this->repository->receive($this->request->all());
 	}
 }
