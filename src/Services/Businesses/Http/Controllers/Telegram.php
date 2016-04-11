@@ -14,15 +14,15 @@ class Telegram extends BaseController
 	 * @var BusinessesRepository
 	 */
 	private $businessesRepository;
+
     /**
      * @var TelegramService
      */
     private $telegramService;
 
-    public function __construct(BusinessesRepository $businessesRepository, TelegramService $telegramService)
+    public function __construct(BusinessesRepository $businessesRepository)
 	{
 		$this->businessesRepository = $businessesRepository;
-        $this->telegramService = $telegramService;
     }
 
 	public function setWebhook($businessId, $clientId)
@@ -34,13 +34,15 @@ class Telegram extends BaseController
 
         $client = $this->businessesRepository->findClientById($clientId);
 
-        $client->telegram_bot_webhook_url = $this->telegramService->getWebhookUrl($client->telegram_bot_name, $client->telegram_bot_token);
+        $this->telegramService = new TelegramService($client->telegram_bot_name, $client->telegram_bot_token);
+
+        $client->telegram_bot_webhook_url = $this->telegramService->getWebhookUrl();
 
         $client->save();
 
-        $message = $this->telegramService->setWebhook($client->telegram_bot_name, $client->telegram_bot_token);
+        $message = $this->telegramService->setWebhook();
 
-        Flash::message($message);
+        Flash::message(isset($message) ? $message : 'Webhook configurada.');
 
         return redirect()->back();
 	}

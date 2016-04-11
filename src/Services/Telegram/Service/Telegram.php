@@ -6,34 +6,58 @@ use Longman\TelegramBot\Telegram as TelegramBot;
 
 class Telegram
 {
+    private $botName;
+
+    private $botToken;
+
     private $description;
 
     private $telegram;
 
-    public function __construct()
+    public function __construct($botName = null, $botToken = null)
 	{
+        $this->setBotName($botName ?: config('env.TELEGRAM_BOT_NAME'));
+
+        $this->setBotToken($botToken ?: config('env.TELEGRAM_API_TOKEN'));
+
         $this->initializeBot();
 	}
 
-    public function getWebhookUrl($botName = null, $botToken = null)
+    public function getWebhookUrl()
     {
         return route(
             'telegram.webhook.handle',
             [
-                'robot' => $botName ?: config('env.TELEGRAM_BOT_NAME'),
-                'token' => $botToken ?: config('env.TELEGRAM_API_TOKEN'),
+                'robot' => $this->botName,
+                'token' => $this->botToken,
             ]
         );
     }
 
     private function initializeBot()
     {
-        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+        $this->telegram = new TelegramBot($this->botToken, $this->botName);
     }
 
-    public function setWebhook($botName, $botToken)
+    /**
+     * @param mixed $botName
+     */
+    public function setBotName($botName)
     {
-        $result = $this->telegram->setWebHook($this->getWebhookUrl($botName, $botToken));
+        $this->botName = $botName;
+    }
+
+    /**
+     * @param mixed $botToken
+     */
+    public function setBotToken($botToken)
+    {
+        $this->botToken = $botToken;
+    }
+
+    public function setWebhook()
+    {
+        $result = $this->telegram->setWebHook($this->getWebhookUrl($this->botName, $this->botToken));
 
         return $this->description = $result->getDescription();
     }
