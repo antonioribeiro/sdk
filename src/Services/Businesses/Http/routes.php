@@ -30,6 +30,8 @@ Route::group(['middleware' => 'web'], function()
 
                 Route::get('{id}/delete', ['as' => 'businesses.clients.delete', 'uses' => 'Clients@delete']);
 
+                Route::get('{id}/telegram/setwebhook', ['as' => 'businesses.clients.telegram.setwebhook', 'uses' => 'Telegram@setWebhook']);
+
                 Route::get('create', ['as' => 'businesses.clients.create', 'uses' => 'Clients@create']);
 
                 Route::post('store', ['as' => 'businesses.clients.store', 'uses' => 'Clients@store']);

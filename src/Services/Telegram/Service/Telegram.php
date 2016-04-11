@@ -15,13 +15,13 @@ class Telegram
         $this->initializeBot();
 	}
 
-    public function getWebhookUrl()
+    public function getWebhookUrl($botName = null, $botToken = null)
     {
         return route(
             'telegram.webhook.handle',
             [
-                'robot' => config('env.TELEGRAM_BOT_NAME'),
-                'token' => config('env.TELEGRAM_API_TOKEN'),
+                'robot' => $botName ?: config('env.TELEGRAM_BOT_NAME'),
+                'token' => $botToken ?: config('env.TELEGRAM_API_TOKEN'),
             ]
         );
     }
@@ -31,9 +31,9 @@ class Telegram
         $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
     }
 
-    public function setWebhook()
+    public function setWebhook($botName, $botToken)
     {
-        $result = $this->telegram->setWebHook($this->getWebhookUrl());
+        $result = $this->telegram->setWebHook($this->getWebhookUrl($botName, $botToken));
 
         return $this->description = $result->getDescription();
     }
