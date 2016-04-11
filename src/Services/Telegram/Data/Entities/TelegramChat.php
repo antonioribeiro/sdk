@@ -10,6 +10,7 @@ class TelegramChat extends Model
 
     protected $fillable = [
         'telegram_id',
+        'bot_id',
         'telegram_chat_type_id',
         'title',
         'username',

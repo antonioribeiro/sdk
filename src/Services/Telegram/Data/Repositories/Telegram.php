@@ -123,13 +123,13 @@ class Telegram
                 'from_id' => $user ? $user->id : null,
                 'date' => $data['date'],
                 'chat_id' => $chat ? $chat->id : null,
-                'text' => $data['text'],
+                'text' => array_get($data, 'text'),
                 'forward_from_id' => $forward_from ? $forward_from->id : null,
                 'forward_date' => array_get($data, 'forward_date'),
                 // 'reply_to_message_id', /// it's a message, will have to think better about this
                 'audio_id' => $audio ? $audio->id : null,
                 'document_id' => $document ? $document->id : null,
-                'photo_id' => $photo ? $photo->id : null,
+                'photo' => is_array($photo) ? json_encode($photo) : json_encode([]),
                 'sticker_id' => $sticker ? $sticker->id : null,
                 'video_id' => $video ? $video->id : null,
                 'voice_id' => $voice ? $voice->id : null,
@@ -159,15 +159,30 @@ class Telegram
         ]);
     }
 
-    private function firstOrCreatePhoto($photo)
+    private function firstOrCreatePhoto($photos)
     {
+        if (is_array($photos) && ! isset($photos['width']))
+        {
+            $result = [];
+
+            foreach ($photos as $photo)
+            {
+                $photoArray = $this->makePhotoArray($photo);
+
+                $result[] = $this->makePhotoArray(
+                    $photoArray,
+                    'id',
+                    $this->firstOrCreatePhoto($photoArray)->id
+                );
+            }
+
+            return $result;
+        }
+
+        $photo = $this->makePhotoArray($photos);
+
         return TelegramPhoto::createOrUpdate(
-            [
-                'telegram_file_id' => array_get($photo, 'file_id'),
-                'width' => array_get($photo, 'width'),
-                'height' => array_get($photo, 'height'),
-                'file_size' => array_get($photo, 'file_size'),
-            ],
+            $photo,
             'telegram_file_id'
         );
     }
@@ -240,6 +255,20 @@ class Telegram
     private function logData($data)
     {
         \Log::info($data);
+    }
+
+    private function makePhotoArray($photo, $idColumnName = 'telegram_file_id', $idColumnValue = null)
+    {
+        $value = array_get($photo, 'file_id') ?: array_get($photo, $idColumnName);
+
+        $result = [
+            $idColumnName => $idColumnValue ?: $value,
+            'width' => array_get($photo, 'width'),
+            'height' => array_get($photo, 'height'),
+            'file_size' => array_get($photo, 'file_size'),
+        ];
+
+        return $result;
     }
 
     public function receive($bot, $token, $data)

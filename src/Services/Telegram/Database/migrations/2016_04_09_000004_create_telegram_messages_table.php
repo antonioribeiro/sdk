@@ -27,7 +27,7 @@ class CreateTelegramMessagesTable extends Migration
             $table->string('text', 4097)->nullable();
             $table->string('audio_id', 64)->nullable();
             $table->string('document_id', 64)->nullable();
-            $table->string('photo_id', 64)->nullable();
+            $table->json('photo')->nullable();
             $table->string('sticker_id', 64)->nullable();
             $table->string('video_id', 64)->nullable();
             $table->string('voice_id', 64)->nullable();
@@ -37,7 +37,7 @@ class CreateTelegramMessagesTable extends Migration
             $table->string('new_chat_participant_id', 64)->nullable();
             $table->string('left_chat_participant_id', 64)->nullable();
             $table->string('new_chat_title')->nullable();
-            $table->string('new_chat_photo', 64)->nullable();
+            $table->json('new_chat_photo')->nullable();
             $table->boolean('delete_chat_photo')->default(false);
             $table->boolean('group_chat_created')->default(false);
             $table->boolean('supergroup_chat_created')->default(false);

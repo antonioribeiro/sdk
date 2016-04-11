@@ -19,7 +19,7 @@ class TelegramMessage extends Model
         'text',
         'audio_id',
         'document_id',
-        'photo_id',
+        'photo',
         'sticker_id',
         'video_id',
         'voice_id',
