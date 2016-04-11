@@ -13,6 +13,9 @@ class BusinessClient extends Model
 	protected $fillable = [
 		'business_id',
 		'name',
+        'telegram_bot_name',
+        'telegram_bot_token',
+        'telegram_bot_webhook_url',
 	];
 
 	protected $presenter = BusinessClientPresenter::class;

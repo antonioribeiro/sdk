@@ -17,10 +17,10 @@ class CreateTelegramMessagesTable extends Migration
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
-			$table->bigInteger('message_id', false)->unsigned()->unique()->index();
+			$table->bigInteger('telegram_message_id', false)->unsigned()->unique()->index();
+            $table->string('chat_id', 64);
 			$table->string('from_id', 64);
             $table->integer('date');
-            $table->string('chat_id', 64);
             $table->string('forward_from_id', 64)->nullable();
             $table->integer('forward_date')->nullable();
             $table->string('reply_to_message_id', 64)->nullable();
@@ -37,6 +37,7 @@ class CreateTelegramMessagesTable extends Migration
             $table->string('new_chat_participant_id', 64)->nullable();
             $table->string('left_chat_participant_id', 64)->nullable();
             $table->string('new_chat_title')->nullable();
+            $table->string('new_chat_photo', 64)->nullable();
             $table->boolean('delete_chat_photo')->default(false);
             $table->boolean('group_chat_created')->default(false);
             $table->boolean('supergroup_chat_created')->default(false);

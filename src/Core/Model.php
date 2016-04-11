@@ -47,4 +47,29 @@ class Model extends Eloquent
 
 		return null;
 	}
+
+    public static function createOrUpdate(array $values = [], $searchKey)
+    {
+        $values = array_filter($values);
+
+        if (! $values)
+        {
+            return null;
+        }
+
+        $instance = new static();
+
+        $keys = array_only($values, $searchKey);
+
+        if (is_null($model = $instance->where($keys)->first()))
+        {
+            return $instance->create($values);
+        }
+
+        $model->fill($values);
+
+        $model->save();
+
+        return $model;
+    }
 }

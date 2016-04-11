@@ -18,6 +18,7 @@ class CreateTelegramChatsTable extends Migration
 			$table->string('id', 64)->unique()->primary()->index();
 
 			$table->bigInteger('telegram_id', false)->unsigned()->unique()->index();
+            $table->string('bot_id', 64)->nullable()->index();
 			$table->string('telegram_chat_type_id', 64);
             $table->string('title')->nullable();
             $table->string('username')->nullable();

@@ -21,7 +21,7 @@ class Telegram extends BaseController
 
 	public function handleWebhook($robot, $token)
 	{
-        $this->repository->receive($this->request->all());
+        $this->repository->receive($robot, $token, $this->request->all());
 
         return $this->success();
 	}

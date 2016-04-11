@@ -17,7 +17,7 @@ class CreateTelegramAudiosTable extends Migration
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
-            $table->bigInteger('file_id', false)->unsigned()->unique()->index();
+            $table->bigInteger('telegram_file_id', false)->unsigned()->unique()->index();
             $table->integer('duration')->nullable();
             $table->string('performer')->nullable();
             $table->string('title')->nullable();
