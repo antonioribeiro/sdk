@@ -9,7 +9,7 @@ class TelegramDocument extends Model
 	protected $table = 'telegram_documents';
 
     protected $fillable = [
-        'file_id',
+        'telegram_file_id',
         'thumb_id',
         'file_name',
         'mime_type',
