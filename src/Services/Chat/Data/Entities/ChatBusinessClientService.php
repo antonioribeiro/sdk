@@ -13,6 +13,9 @@ class ChatBusinessClientService extends Model
 		'business_client_id',
 		'chat_service_id',
 		'description',
+        'bot_name',
+        'bot_token',
+        'bot_webhook_url',
 	];
 
 	public function type()

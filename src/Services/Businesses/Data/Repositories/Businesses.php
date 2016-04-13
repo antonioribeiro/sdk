@@ -10,6 +10,7 @@ use PragmaRX\Sdk\Services\Businesses\Events\UserWasCreated;
 use PragmaRX\Sdk\Services\Businesses\Events\UserWasUpdated;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\Business;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessRole;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientService;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUser;
@@ -120,7 +121,16 @@ class Businesses extends Repository
 		return BusinessClient::all();
 	}
 
-	public function createUser($attributes)
+    public function createServiceForClient($businessId, $clientId, $attributes)
+    {
+        $attributes['business_client_id'] = $clientId;
+
+        $attributes = array_only($attributes, $this->getModelFillableAttributes(new ChatBusinessClientService()));
+
+		return ChatBusinessClientService::firstOrCreate($attributes);
+    }
+
+    public function createUser($attributes)
 	{
 		$user = $this->userRepository->findByEmailOrCreate(
 			$attributes['email'],
@@ -145,12 +155,34 @@ class Businesses extends Repository
 		return $user;
 	}
 
-	public function findUserById($userId)
+    public function deleteService($serviceId)
+    {
+        $service = $this->findServiceById($serviceId);
+
+        $service->delete();
+
+        return $service;
+    }
+
+    public function findUserById($userId)
 	{
 		return $this->userRepository->findById($userId);
 	}
 
-	public function updateUser($attributes)
+    public function updateService($attributes)
+    {
+        $client = $this->findServiceById($attributes['id']);
+
+        $attributes = array_only($attributes, $this->getModelFillableAttributes($client));
+
+        $client->fill($attributes);
+
+        $client->save();
+
+        return $client;
+    }
+
+    public function updateUser($attributes)
 	{
 		$user = $this->userRepository->findById($attributes['id']);
 
@@ -272,6 +304,11 @@ class Businesses extends Repository
 	{
 		return BusinessClient::find($clientId);
 	}
+
+    public function findServiceById($serviceId)
+    {
+        return ChatBusinessClientService::find($serviceId);
+    }
 
 	public function updateClient($attributes)
 	{

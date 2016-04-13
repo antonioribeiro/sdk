@@ -13,6 +13,7 @@ class TelegramMessage extends Model
         'chat_id',
         'from_id',
         'date',
+        'timestamp',
         'forward_from_id',
         'forward_date',
         'reply_to_message_id',

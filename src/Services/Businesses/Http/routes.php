@@ -30,13 +30,26 @@ Route::group(['middleware' => 'web'], function()
 
                 Route::get('{id}/delete', ['as' => 'businesses.clients.delete', 'uses' => 'Clients@delete']);
 
-                Route::get('{id}/telegram/setwebhook', ['as' => 'businesses.clients.telegram.setwebhook', 'uses' => 'Telegram@setWebhook']);
-
                 Route::get('create', ['as' => 'businesses.clients.create', 'uses' => 'Clients@create']);
 
                 Route::post('store', ['as' => 'businesses.clients.store', 'uses' => 'Clients@store']);
 
                 Route::post('update', ['as' => 'businesses.clients.update', 'uses' => 'Clients@update']);
+            });
+
+            Route::group(['prefix' => '{businessId}/clients/{clientId}/services'], function ()
+            {
+                Route::get('{id}/edit', ['as' => 'businesses.clients.services.edit', 'uses' => 'Services@edit']);
+
+                Route::get('{id}/delete', ['as' => 'businesses.clients.services.delete', 'uses' => 'Services@delete']);
+
+                Route::get('create', ['as' => 'businesses.clients.services.create', 'uses' => 'Services@create']);
+
+                Route::post('store', ['as' => 'businesses.clients.services.store', 'uses' => 'Services@store']);
+
+                Route::post('update', ['as' => 'businesses.clients.services.update', 'uses' => 'Services@update']);
+
+                Route::get('{serviceId}/telegram/setwebhook', ['as' => 'businesses.clients.services.telegram.setwebhook', 'uses' => 'Telegram@setWebhook']);
             });
 
             Route::group(['prefix' => 'client/users'], function ()

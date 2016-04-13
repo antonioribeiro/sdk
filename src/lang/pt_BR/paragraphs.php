@@ -151,4 +151,7 @@ return array (
   'business-deleted' => 'A empresa foi deletada.',
   'business-created' => 'Uma empresa foi criada.',
   'business-updated' => 'Os dados da empresa foram modificados.',
+  'chat-service-updated' => 'Os dados do serviço de chat foram atualizados.',
+  'chat-service-created' => 'O serviço de chat foi criado.',
+  'chat-service-deleted' => 'O serviço de chat foi deletado.',
 );

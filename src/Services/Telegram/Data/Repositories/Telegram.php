@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Products\Data\Repositories;
 
+use Carbon\Carbon;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramBot;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramUser;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramChat;
@@ -122,6 +123,7 @@ class Telegram
                 'telegram_message_id' => $data['message_id'],
                 'from_id' => $user ? $user->id : null,
                 'date' => $data['date'],
+                'timestamp' => Carbon::createFromTimestamp($data['date']),
                 'chat_id' => $chat ? $chat->id : null,
                 'text' => array_get($data, 'text'),
                 'forward_from_id' => $forward_from ? $forward_from->id : null,

@@ -64,15 +64,18 @@ class Clients extends BaseController
 
 		$business = $this->businessesRepository->findById($businessId);
 		$client = $this->businessesRepository->findClientById($clientId);
+        $services = $client->chatServices->toArray();
 
 		return view('businesses.enterprises.clients.edit')
 			->with('business', $business)
 			->with('client', $client)
+            ->with('services', $services)
 			->with('postRoute', 'businesses.clients.update')
 			->with('postRouteParameters', $businessId)
 			->with('cancelRoute', 'businesses.enterprises.edit')
 			->with('cancelRouteParameters', $businessId)
-		;
+            ->with('deleteUri', '/businesses/{businessId}/clients/{clientId}/services/{serviceId}/delete/')
+        ;
 	}
 
 	public function update($businessId, UpdateBusinessRequest $updateBusinessRequest)

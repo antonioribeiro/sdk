@@ -21,6 +21,7 @@ class CreateTelegramMessagesTable extends Migration
             $table->string('chat_id', 64);
 			$table->string('from_id', 64);
             $table->integer('date');
+            $table->timestamp('timestamp');
             $table->string('forward_from_id', 64)->nullable();
             $table->integer('forward_date')->nullable();
             $table->string('reply_to_message_id', 64)->nullable();
