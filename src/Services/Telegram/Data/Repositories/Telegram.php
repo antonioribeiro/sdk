@@ -1,11 +1,12 @@
 <?php
 
-namespace PragmaRX\Sdk\Services\Products\Data\Repositories;
+namespace PragmaRX\Sdk\Services\Telegram\Data\Repositories;
 
 use Carbon\Carbon;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramBot;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramUser;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramChat;
+use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramVenue;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramVideo;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramVoice;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramAudio;
@@ -118,6 +119,8 @@ class Telegram
 
         $new_chat_photo = $this->firstOrCreatePhoto(array_get($data, 'new_chat_photo'));
 
+        $venue = $this->firstOrCreateVenue(array_get($data, 'venue'));
+
         return TelegramMessage::createOrUpdate(
             [
                 'telegram_message_id' => $data['message_id'],
@@ -132,6 +135,7 @@ class Telegram
                 'audio_id' => $audio ? $audio->id : null,
                 'document_id' => $document ? $document->id : null,
                 'photo' => is_array($photo) ? json_encode($photo) : json_encode([]),
+                'entities' => json_encode(array_get($data, 'entities')),
                 'sticker_id' => $sticker ? $sticker->id : null,
                 'video_id' => $video ? $video->id : null,
                 'voice_id' => $voice ? $voice->id : null,
@@ -220,6 +224,23 @@ class Telegram
                 'username' => array_get($user, 'username'),
             ],
             'telegram_id'
+        );
+    }
+
+    private function firstOrCreateVenue($data)
+    {
+        if (! $location = $this->firstOrCreateLocation($data['location']))
+        {
+            return null;
+        }
+
+        return TelegramVenue::firstOrCreate(
+            [
+                'location_id' => isset($location) ? $location->id : null,
+                'title' => array_get($data, 'title'),
+                'address' => array_get($data, 'address'),
+                'foursquare_id' => array_get($data, 'foursquare_id'),
+            ]
         );
     }
 

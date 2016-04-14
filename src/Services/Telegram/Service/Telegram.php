@@ -14,13 +14,13 @@ class Telegram
 
     private $telegram;
 
+    private $initialized = false;
+
     public function __construct($botName = null, $botToken = null)
 	{
-        $this->setBotName($botName ?: config('env.TELEGRAM_BOT_NAME'));
+        $this->setBotName($botName);
 
-        $this->setBotToken($botToken ?: config('env.TELEGRAM_API_TOKEN'));
-
-        $this->initializeBot();
+        $this->setBotToken($botToken);
 	}
 
     public function getWebhookUrl()
@@ -36,6 +36,16 @@ class Telegram
 
     private function initializeBot()
     {
+        if ($this->initialized)
+        {
+            return false;
+        }
+
+        if (! $this->botToken || ! $this->botName)
+        {
+            return false;
+        }
+
         $this->telegram = new TelegramBot($this->botToken, $this->botName);
     }
 
@@ -44,7 +54,14 @@ class Telegram
      */
     public function setBotName($botName)
     {
+        if ($this->botName !== $botName)
+        {
+            $this->initialized = false;
+        }
+
         $this->botName = $botName;
+
+        $this->initializeBot();
     }
 
     /**
@@ -52,7 +69,14 @@ class Telegram
      */
     public function setBotToken($botToken)
     {
+        if ($this->botToken !== $botToken)
+        {
+            $this->initialized = false;
+        }
+
         $this->botToken = $botToken;
+
+        $this->initializeBot();
     }
 
     public function setWebhook()

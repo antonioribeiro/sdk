@@ -5,6 +5,7 @@ namespace PragmaRX\Sdk\Services\Businesses\Http\Controllers;
 use Gate;
 use Flash;
 use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Businesses\Http\Requests\SetTelegramWebhookUrl;
 use PragmaRX\Sdk\Services\Telegram\Service\Telegram as TelegramService;
 use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses as BusinessesRepository;
 
@@ -25,24 +26,31 @@ class Telegram extends BaseController
 		$this->businessesRepository = $businessesRepository;
     }
 
-	public function setWebhook($businessId, $clientId)
+	public function setWebhook($businessId, $clientId, $serviceId)
 	{
 		if (Gate::denies('create', $this->businessesRepository->findById($businessId)))
 		{
 			abort(403);
 		}
 
-        $client = $this->businessesRepository->findClientById($clientId);
+        $service = $this->businessesRepository->findServiceById($serviceId);
 
-        $this->telegramService = new TelegramService($client->telegram_bot_name, $client->telegram_bot_token);
+        if (! $service->bot_name || ! $service->bot_token)
+        {
+            Flash::message(t('paragraphs.missing-webhook-data'));
 
-        $client->telegram_bot_webhook_url = $this->telegramService->getWebhookUrl();
+            return redirect()->back();
+        }
 
-        $client->save();
+        $this->telegramService = new TelegramService($service->bot_name, $service->bot_token);
 
-        $message = $this->telegramService->setWebhook();
+        $service->bot_webhook_url = $this->telegramService->getWebhookUrl();
 
-        Flash::message(isset($message) ? $message : 'Webhook configurada.');
+        $service->save();
+
+        $this->telegramService->setWebhook();
+
+        Flash::message(t('paragraphs.webhook-configured'));
 
         return redirect()->back();
 	}

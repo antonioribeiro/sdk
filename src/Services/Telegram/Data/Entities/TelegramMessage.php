@@ -21,6 +21,7 @@ class TelegramMessage extends Model
         'audio_id',
         'document_id',
         'photo',
+        'entities',
         'sticker_id',
         'video_id',
         'voice_id',

@@ -154,4 +154,6 @@ return array (
   'chat-service-updated' => 'Os dados do serviço de chat foram atualizados.',
   'chat-service-created' => 'O serviço de chat foi criado.',
   'chat-service-deleted' => 'O serviço de chat foi deletado.',
+  'webhook-configured' => 'Webhook configurada.',
+  'missing-webhook-data' => 'Faltam dados para configura a webhook.',
 );
