@@ -16,6 +16,7 @@ use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramSticker;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramContact;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramDocument;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramChatType;
+use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramLocation;
 
 class Telegram
 {
@@ -86,7 +87,7 @@ class Telegram
             return null;
         }
 
-        return TelegramDocument::firstOrCreate($location);
+        return TelegramLocation::firstOrCreate($location);
     }
 
     private function firstOrCreateMessage($data, $bot)
