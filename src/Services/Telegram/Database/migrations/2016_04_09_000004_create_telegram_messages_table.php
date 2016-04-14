@@ -32,6 +32,7 @@ class CreateTelegramMessagesTable extends Migration
             $table->string('sticker_id', 64)->nullable();
             $table->string('video_id', 64)->nullable();
             $table->string('voice_id', 64)->nullable();
+            $table->string('venue_id', 64)->nullable();
             $table->string('caption')->nullable();
             $table->string('contact_id', 64)->nullable();
             $table->string('location_id', 64)->nullable();

@@ -25,6 +25,7 @@ class TelegramMessage extends Model
         'sticker_id',
         'video_id',
         'voice_id',
+        'venue_id',
         'caption',
         'contact_id',
         'location_id',

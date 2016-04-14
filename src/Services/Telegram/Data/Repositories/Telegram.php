@@ -140,6 +140,7 @@ class Telegram
                 'sticker_id' => $sticker ? $sticker->id : null,
                 'video_id' => $video ? $video->id : null,
                 'voice_id' => $voice ? $voice->id : null,
+                'venue_id' => $venue ? $venue->id : null,
                 'caption' => array_get($data, 'caption'),
                 'contact_id' => $contact ? $contact->id : null,
                 'location_id' => $location ? $location->id : null,
