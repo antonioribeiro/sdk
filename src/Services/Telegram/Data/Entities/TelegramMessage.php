@@ -3,10 +3,13 @@
 namespace PragmaRX\Sdk\Services\Telegram\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Telegram\Data\Presenters\TelegramMessage as TelegramMessagePresenter;
 
 class TelegramMessage extends Model
 {
 	protected $table = 'telegram_messages';
+
+    protected $presenter = TelegramMessagePresenter::class;
 
     protected $fillable = [
         'telegram_message_id',

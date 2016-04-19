@@ -21,6 +21,11 @@ use PragmaRX\Sdk\Services\Telegram\Events\TelegramMessageReceived;
 
 class Telegram
 {
+    public function findMessageById($telegram_message_id)
+    {
+        return TelegramMessage::find($telegram_message_id);
+    }
+
     private function firstOrCreateAudio($audio)
     {
         return TelegramAudio::createOrUpdate(
