@@ -15,6 +15,7 @@ class Chat extends Model
 		'owner_ip_address',
 	    'closed_at',
         'layout',
+        'telegram_chat_id',
 	];
 
     protected $dates = [

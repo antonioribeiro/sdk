@@ -79,8 +79,6 @@ class Chat extends BaseController
 	{
 		$chat = $this->execute(CreateChatCommand::class, $request->all());
 
-		$this->eventPublisher->publish('ChatCreated');
-
 		return redirect('chat/client/'.$chat->id);
 	}
 

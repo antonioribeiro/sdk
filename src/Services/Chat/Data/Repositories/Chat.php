@@ -8,6 +8,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Data\Repository;
 use Illuminate\Database\Eloquent\Collection;
+use PragmaRX\Sdk\Services\Chat\Events\ChatWasCreated;
+use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramMessage;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatRead;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
@@ -56,30 +58,47 @@ class Chat extends Repository
     }
 
 
-    public function create($name, $email, $clientId, $layout)
+    public function create($names, $email, $clientId, $clientService = null, $ipAddress = null, $layout = 'master')
 	{
-		$user = $this->userRepository->findByEmailOrCreate($email, ['first_name' => $name], true); // allow empty password
+        if (! is_array($names))
+        {
+            $names = ['first_name' => $names];
+        }
+
+		$user = $this->userRepository->findByEmailOrCreate($email, $names, true); // allow empty password
 
 		$talker = ChatBusinessClientTalker::firstOrCreate([
 			'business_client_id' => $clientId,
 			'user_id' => $user->id,
 		]);
 
-		$service = ChatService::firstOrCreate(['name' => 'Chat']);
+        if (! $ipAddress)
+        {
+            $ipAddress = $this->request->ip();
+        }
 
-		$clientService = ChatBusinessClientService::firstOrCreate([
-			'chat_service_id' => $service->id,
-			'business_client_id' => $clientId,
-            'description' => 'Chat do Call Center',
-		]);
+        if (! $clientService)
+        {
+            $service = ChatService::firstOrCreate(['name' => 'Chat']);
 
-		return ChatModel::firstOrCreate([
+            $clientService = ChatBusinessClientService::firstOrCreate([
+                'chat_service_id' => $service->id,
+                'business_client_id' => $clientId,
+                'description' => 'Chat do Call Center',
+            ]);
+        }
+
+		$chat = ChatModel::firstOrCreate([
 			'chat_business_client_service_id' => $clientService->id,
 			'owner_id' => $talker->id,
-			'owner_ip_address' => $this->request->ip(),
+			'owner_ip_address' => $ipAddress,
             'layout' => $layout,
 		    'closed_at' => null,
 		]);
+        
+        event(new ChatWasCreated($chat));
+
+        return $chat;
 	}
 
 	public function allChats($open = true)
@@ -87,7 +106,7 @@ class Chat extends Repository
         return $this->allChatsForClient(null, $open);
 	}
 
-	public function createMessage($chatId, $talkerId, $message)
+	public function createMessage($chatId, $talkerId, $message = '')
 	{
 		$chat = $this->findById($chatId);
 
@@ -105,10 +124,63 @@ class Chat extends Repository
 		return $message;
 	}
 
-	public function findTalker($chat, $userId)
+    private function createTelegramChat($telegramMessage)
+    {
+        $chatBusinessClientService = $this->findChatBusinessClientServiceByTelegramRobot($telegramMessage->chat->bot);
+
+        $chat = $this->create(
+            [
+                'first_name' => $telegramMessage->from->first_name,
+                'last_name' => $telegramMessage->from->last_name,
+            ],
+            $telegramMessage->from->email,
+            $chatBusinessClientService->business_client_id,
+            $chatBusinessClientService
+        );
+
+        $chat->telegram_chat_id = $telegramMessage->chat->id;
+        $chat->save();
+
+        return $chat;
+    }
+
+    private function findChatBusinessClientServiceByTelegramRobot($bot)
+    {
+        $service = ChatBusinessClientService::where('bot_name', $bot->name)
+                    ->where('bot_token', $bot->token)
+                    ->first();
+
+        return $service;
+    }
+
+    private function findOrCreateChatByTelegramChatId($telegramMessage)
+    {
+        $chat = ChatModel::where('telegram_chat_id', $telegramMessage->chat->id)->first();
+
+        if (! $chat)
+        {
+            $chat = $this->createTelegramChat($telegramMessage);
+        }
+
+        return $chat;
+    }
+
+    public function findTalker($chat, $userId)
 	{
 		return $this->findOrCreateTalker($chat->service->client, $userId);
 	}
+
+    private function findUserFromTelegramUser($telegramMessage)
+    {
+        return $this->userRepository->findByEmailOrCreate(
+            $telegramMessage->from->email,
+            [
+                'first_name' => $telegramMessage->from->first_name,
+                'last_name' => $telegramMessage->from->last_name,
+            ],
+            true
+        ); // allow empty password
+    }
 
     /**
      * @param $clientId
@@ -179,7 +251,7 @@ class Chat extends Repository
 		{
 			$messages[$message->id] = [
 				'id' => $message->id,
-				'message' => $message->message,
+				'message' => $message->present()->message,
 			    'talker' => [
 				    'id' => $message->talker->id,
 				    'fullName' => $message->talker->user->present()->fullName,
@@ -261,18 +333,39 @@ class Chat extends Repository
         $user->save();
     }
 
+    public function receiveMessage($message)
+    {
+        if ($message instanceof TelegramMessage)
+        {
+            $this->receiveTelegramMessage($message);
+        }
+    }
+
+    private function receiveTelegramMessage($telegramMessage)
+    {
+        $chat = $this->findOrCreateChatByTelegramChatId($telegramMessage);
+
+        $message = $this->createMessage($chat->id, $chat->owner->id);
+
+        $message->telegram_message_id = $telegramMessage->id;
+
+        $message->save();
+
+        return $telegramMessage;
+    }
+
     public function respond($chatId)
 	{
 		$chat = $this->findById($chatId);
 
 		if ( ! $chat)
 		{
-			return $this->makeResponse(false, 'Chat não localizado');
+			return $this->makeResponse(false, 'Chat não localizado', $chat);
 		}
 
 		if ($chat->responder)
 		{
-			return $this->makeResponse(false, 'Chat já sendo respondido');
+			return $this->makeResponse(false, 'Chat já sendo respondido', $chat);
 		}
 
 		return $this->makeResponse(

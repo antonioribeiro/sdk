@@ -24,7 +24,7 @@ class Chat extends BaseController
 		$currentClientId = BusinessService::getCurrentClient()->id;
 
 		return view('chat.server.index')
-			->with('listenChannel', 'chat-channel:PragmaRX\\\\Sdk\\\\Services\\\\Chat\\\\Events\\\\ChatMessageSent')
+			->with('listenChannel', 'chat-channel:PragmaRX\\\\Sdk\\\\Services\\\\Chat\\\\Events\\\\ChatMessageWasSent')
 			->with('currentOperatorId', $currenOperator->id)
 			->with('currentOperatorUserId', $currenOperator->user->id)
 			->with('currentClientId', $currentClientId)

@@ -20,6 +20,7 @@ class CreateChat extends SelfHandlingCommand
             $this->name,
             $this->email,
             $this->clientId,
+            null,
             $this->layout
         );
 

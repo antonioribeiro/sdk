@@ -17,6 +17,7 @@ use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramContact;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramDocument;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramChatType;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramLocation;
+use PragmaRX\Sdk\Services\Telegram\Events\TelegramMessageReceived;
 
 class Telegram
 {
@@ -300,9 +301,11 @@ class Telegram
     {
         $this->logData($data);
 
-        return $this->firstOrCreateMessage(
+        $message = $this->firstOrCreateMessage(
             $data['message'],
             $this->firstOrCreateBot($bot, $token)
         );
+
+        event(new TelegramMessageReceived($message));
 	}
 }

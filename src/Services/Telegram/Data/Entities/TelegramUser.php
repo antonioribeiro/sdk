@@ -14,4 +14,9 @@ class TelegramUser extends Model
         'last_name',
         'username',
     ];
+
+    public function getEmailAttribute()
+    {
+        return $this->telegram_id.'@telegram.me';
+    }
 }

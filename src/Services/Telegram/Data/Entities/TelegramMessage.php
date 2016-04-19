@@ -40,4 +40,24 @@ class TelegramMessage extends Model
         'migrate_to_chat_id',
         'migrate_from_chat_id',
     ];
+
+    public function chat()
+    {
+        return $this->belongsTo(TelegramChat::class);
+    }
+
+    public function from()
+    {
+        return $this->belongsTo(TelegramUser::class, 'from_id');
+    }
+
+    public function user()
+    {
+        return $this->from();
+    }
+
+    public function getIpAddressAttribute()
+    {
+        return '0.0.0.0';
+    }
 }

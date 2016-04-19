@@ -17,4 +17,9 @@ class TelegramChat extends Model
         'first_name',
         'last_name',
     ];
+
+    public function bot()
+    {
+        return $this->belongsTo(TelegramBot::class);
+    }
 }

@@ -6,4 +6,8 @@ use PragmaRX\Sdk\Core\Presenter;
 
 class ChatMessage extends Presenter
 {
+    public function message()
+    {
+        return 'yes, nos temos bananas podres.';
+    }
 }

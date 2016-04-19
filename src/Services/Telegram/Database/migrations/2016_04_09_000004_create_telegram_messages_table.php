@@ -50,6 +50,15 @@ class CreateTelegramMessagesTable extends Migration
 
 			$table->timestamps();
 		});
+
+        Schema::table('telegram_messages', function(Blueprint $table)
+        {
+            $table->foreign('chat_id')
+                  ->references('id')
+                  ->on('telegram_chats')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
+        });
 	}
 
 	/**

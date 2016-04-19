@@ -14,6 +14,7 @@ class ChatMessage extends Model
 		'chat_business_client_talker_id',
 		'talker_ip_address',
 		'message',
+        'telegram_message_id'
 	];
 
     protected $presenter = ChatMessagePresenter::class;

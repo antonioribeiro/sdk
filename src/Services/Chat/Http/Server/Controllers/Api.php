@@ -5,12 +5,15 @@ namespace PragmaRX\Sdk\Services\Chat\Http\Server\Controllers;
 use Auth;
 use Input;
 use Markdown;
+use PragmaRX\Sdk\Services\Chat\Events\ChatWasRead;
+use PragmaRX\Sdk\Services\Chat\Events\ChatWasResponded;
+use PragmaRX\Sdk\Services\Chat\Events\ChatWasTerminated;
 use Response;
 use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
-use PragmaRX\Sdk\Services\Chat\Events\ChatMessageSent;
+use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasSent;
 use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
 
 class Api extends BaseController
@@ -107,15 +110,17 @@ class Api extends BaseController
 		if ( ! is_null($message) && ! empty($message))
 		{
 			$data = [
+                'chat_id' => $chatId,
 				'message' => $message->message,
 				'fullName' => $chat->owner->user->present()->fullName,
 				'avatar' => $chat->owner->user->present()->avatar,
 				'owner_id' => $chat->owner->id,
+                'talker_id' => $talkerId,
 			];
 
-			$this->eventPublisher->publish($chatId, $data);
+			
 
-			event(new ChatMessageSent($chatId, $talkerId, $message));
+			event(new ChatMessageWasSent($data));
 		}
 	}
 
@@ -123,7 +128,7 @@ class Api extends BaseController
 	{
 		$response = $this->chatRepository->respond($chatId);
 
-		$this->eventPublisher->publish($chatId . ':ChatResponded');
+		event(new ChatWasResponded($response));
 
 		return $response;
 	}
@@ -141,7 +146,7 @@ class Api extends BaseController
 	{
 		$read = $this->chatRepository->readMessage($request['chatId'], $request['serial']);
 
-		$this->eventPublisher->publish('ChatRead');
+        event(new ChatWasRead($read));
 
 		return response()->json(['success' => true, 'data' => $read]);
 	}
@@ -150,8 +155,7 @@ class Api extends BaseController
 	{
 		$chat = $this->chatRepository->terminate($request['chatId']);
 
-		$this->eventPublisher->publish('ChatTerminated');
-		$this->eventPublisher->publish($request['chatId'] . ':ChatTerminated');
+        event(new ChatWasTerminated($chat));
 
 		return response()->json(['success' => true, 'data' => $chat]);
 	}
