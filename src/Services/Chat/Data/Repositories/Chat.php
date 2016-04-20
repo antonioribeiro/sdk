@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PragmaRX\Sdk\Core\Data\Repository;
 use Illuminate\Database\Eloquent\Collection;
+use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasSent;
 use PragmaRX\Sdk\Services\Chat\Events\ChatWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramMessage;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
@@ -119,9 +120,13 @@ class Chat extends Repository
 
 		$chat->last_message_at = Carbon::now();
 
-		$chat->save();
+        $chat = $this->findById($chatId);
 
-		return $message;
+        $chat->save();
+
+        $this->fireChatMessageWasSentEvent($chatId, $talkerId, $message, $chat);
+
+        return $message;
 	}
 
     private function createTelegramChat($telegramMessage)
@@ -180,6 +185,34 @@ class Chat extends Repository
             ],
             true
         ); // allow empty password
+    }
+
+    /**
+     * @param $chatId
+     * @param $talkerId
+     * @param $message
+     * @param $chat
+     * @return array
+     */
+    private function fireChatMessageWasSentEvent($chatId, $talkerId, $message, $chat)
+    {
+        $data = [];
+
+        if (!is_null($message) && !empty($message))
+        {
+            $data = [
+                'chat_id'   => $chatId,
+                'message'   => $message->message,
+                'fullName'  => $chat->owner->user->present()->fullName,
+                'avatar'    => $chat->owner->user->present()->avatar,
+                'owner_id'  => $chat->owner->id,
+                'talker_id' => $talkerId,
+            ];
+
+            event(new ChatMessageWasSent($data));
+        }
+
+        return $data;
     }
 
     /**

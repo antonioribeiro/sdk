@@ -103,25 +103,7 @@ class Api extends BaseController
             return $this->error();
         }
 
-		$message = $this->chatRepository->createMessage($chatId, $talkerId, $message);
-
-		$chat = $this->chatRepository->findById($chatId);
-
-		if ( ! is_null($message) && ! empty($message))
-		{
-			$data = [
-                'chat_id' => $chatId,
-				'message' => $message->message,
-				'fullName' => $chat->owner->user->present()->fullName,
-				'avatar' => $chat->owner->user->present()->avatar,
-				'owner_id' => $chat->owner->id,
-                'talker_id' => $talkerId,
-			];
-
-			
-
-			event(new ChatMessageWasSent($data));
-		}
+		return $this->chatRepository->createMessage($chatId, $talkerId, $message);
 	}
 
 	public function respond($chatId)
