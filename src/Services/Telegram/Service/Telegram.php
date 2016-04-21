@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Services\Telegram\Service;
 
 use Longman\TelegramBot\Telegram as TelegramBot;
 use Longman\TelegramBot\Request as TelegramRequest;
+use PragmaRX\Sdk\Services\Files\Data\Repositories\File as FileRepository;
 
 class Telegram
 {
@@ -22,6 +23,8 @@ class Telegram
 
     public function __construct($botName = null, $botToken = null)
 	{
+        $this->fileRepository = app(FileRepository::class);
+
         $this->configureBot($botName, $botToken);
 	}
 
@@ -110,4 +113,22 @@ class Telegram
     {
         return TelegramRequest::getUserProfilePhotos($data);
     }
+
+    public function makeFileUrl($file, $path)
+    {
+        return 'https://api.telegram.org/file/bot' . $this->botToken . '/' . $path;
+    }
+
+    public function downloadFile($url, $height = null, $width = null)
+    {
+        return $this->fileRepository->downloadFile($url, $height, $width);
+    }
+    
+    public function getFile($fileId)
+    {
+        $response = TelegramRequest::getFile($fileId);
+
+        return $response->getResult();
+    }
+
 }

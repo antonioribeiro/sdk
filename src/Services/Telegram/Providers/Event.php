@@ -2,10 +2,9 @@
 
 namespace PragmaRX\Sdk\Services\Telegram\Providers;
 
-use PragmaRX\Sdk\Services\Login\Events\UserWasLoggedOut;
-use PragmaRX\Sdk\Services\Login\Events\UserWasAuthenticated;
-use PragmaRX\Sdk\Services\Telegram\Listeners\BroadcastLoggedUser;
+use PragmaRX\Sdk\Services\Telegram\Events\TelegramUserWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Listeners\BroadcastLoggedOutUser;
+use PragmaRX\Sdk\Services\Telegram\Listeners\DownloadUserProfilePhotos;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class Event extends ServiceProvider
@@ -16,12 +15,8 @@ class Event extends ServiceProvider
 	 * @var array
 	 */
 	protected $listen = [
-		UserWasAuthenticated::class => [
-            BroadcastLoggedUser::class,
-		],
-
-        UserWasLoggedOut::class => [
-            BroadcastLoggedOutUser::class,
+        TelegramUserWasCreated::class => [
+            DownloadUserProfilePhotos::class,
         ],
 	];
 }

@@ -19,6 +19,11 @@ class User extends Presenter {
 	 */
 	public function avatar($size = 100)
 	{
+        if ($this->entity->telegram_user_id)
+        {
+            return $this->getTelegramAvatar();
+        }
+
 		return Avatar::getUrl($this->entity, $size);
 	}
 
@@ -76,7 +81,14 @@ class User extends Presenter {
 		return "$count Following";
 	}
 
-	public function statusesCount()
+    private function getTelegramAvatar()
+    {
+        $user = $this->entity->telegramUser;
+
+        return $user->avatar->file->url;
+    }
+
+    public function statusesCount()
 	{
 		$count = $this->entity->statuses()->count();
 

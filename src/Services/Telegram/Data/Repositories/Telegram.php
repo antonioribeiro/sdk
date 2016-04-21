@@ -5,6 +5,7 @@ namespace PragmaRX\Sdk\Services\Telegram\Data\Repositories;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramBot;
+use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramFile;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramUser;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramChat;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramVenue;
@@ -19,26 +20,70 @@ use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramDocument;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramChatType;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramLocation;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramMessageReceived;
+use PragmaRX\Sdk\Services\Telegram\Events\TelegramUserWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Service\Facade as TelegramService;
+use PragmaRX\Sdk\Services\Files\Data\Repositories\File as FileRepository;
 
 class Telegram
 {
-    private function downloadUserAvatar($user)
+    /**
+     * @var FileRepository
+     */
+    private $fileRepository;
+
+    public function __construct(FileRepository $fileRepository)
     {
+        $this->fileRepository = $fileRepository;
+    }
+
+    public function downloadUserAvatar($user)
+    {
+        if (! $user)
+        {
+            return null;
+        }
+
+        if ($user->hasAvatar)
+        {
+            return $user->photos;
+        }
+
         $data = [
             'user_id' => $user->telegram_id
         ];
 
-        $photos = TelegramService::getUserProfilePhotos($data)->getResult()->getPhotos();
+        $photos = $this->extractPhotos(TelegramService::getUserProfilePhotos($data)->getResult()->getPhotos());
 
-        $user->photos = json_encode($this->extractPhotos($photos));
-        $user->save();
+        $avatar = null;
 
-        
+        $downloaded = false;
 
-        \Log::info(json_encode($user->photos));
+        // Telegram may have too many photo profiles
+        // Download only the first photo
+        $key = 0;
 
-        return $avatar;
+        if ($fileName = $this->downloadFile($photos[$key]))
+        {
+            $photos[$key]['telegram_file_id'] = $photos[$key]['file_id'];
+
+            $photos[$key]['file_name_id'] = $fileName->id;
+
+            $downloaded = true;
+        }
+
+        if ($downloaded)
+        {
+            $user->photos = json_encode($photos);
+
+            if (isset($photos[0]['file_name_id']))
+            {
+                $user->avatar_id = $photos[0]['file_name_id'];
+            }
+
+            $user->save();
+        }
+
+        return $user->photos;
     }
 
     private function extractPhotos($photos)
@@ -273,10 +318,7 @@ class Telegram
             'telegram_id'
         );
 
-        if ($user && ! $user->hasAvatar)
-        {
-            $this->downloadUserAvatar($user);
-        }
+        event(new TelegramUserWasCreated($user));
 
         return $user;
     }
@@ -327,6 +369,40 @@ class Telegram
             ],
             'telegram_file_id'
         );
+    }
+
+    /**
+     * @param $photo
+     * @return mixed
+     */
+    private function downloadFile($photo)
+    {
+        $telegramFile = TelegramFile::where('telegram_file_id', $photo['file_id'])->first();
+
+        if ($telegramFile)
+        {
+            return $telegramFile->fileName;
+        }
+        
+        if (! $telegramFile = TelegramService::getFile($photo))
+        {
+            return null;
+        }
+
+        $fileName = TelegramService::downloadFile(
+            TelegramService::makeFileUrl($photo, $telegramFile->getFilePath()),
+            $photo['width'],
+            $photo['height']
+        );
+
+        TelegramFile::create([
+             'telegram_file_id' => $photo['file_id'],
+             'file_name_id' => $fileName->id,
+             'file_size' => $photo['file_size'],
+             'file_path' => '',
+        ]);
+
+        return $fileName;
     }
 
     private function logData($data)

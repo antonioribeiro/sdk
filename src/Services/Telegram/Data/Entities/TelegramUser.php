@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Telegram\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Files\Data\Entities\FileName;
 
 class TelegramUser extends Model
 {
@@ -13,6 +14,7 @@ class TelegramUser extends Model
         'first_name',
         'last_name',
         'username',
+        'avatar_url',
     ];
 
     public function getEmailAttribute()
@@ -22,6 +24,11 @@ class TelegramUser extends Model
 
     public function getHasAvatarAttribute()
     {
-        return ! is_null($this->avatar);
+        return ! is_null($this->avatar_id);
+    }
+
+    public function avatar()
+    {
+        return $this->belongsTo(FileName::class);
     }
 }

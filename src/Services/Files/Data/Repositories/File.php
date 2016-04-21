@@ -17,7 +17,17 @@ class File
 {
 	private $guzzle;
 
-	public function upload(UploadedFile $uploaded, User $user)
+    private function makeExtension($uploadedFile)
+    {
+        if (! $extension = $uploadedFile->getExtension())
+        {
+            $extension = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_EXTENSION);
+        }
+
+        return $extension;
+    }
+
+    public function upload(UploadedFile $uploaded, User $user)
 	{
 		return $this->uploadUserFile($uploaded, $user, false);
 	}
@@ -42,7 +52,7 @@ class File
 					: $file;
 		}
 
-		$file = $this->uploadFile($uploaded, $hash);
+		$file = $this->uploadFile($uploaded);
 
 		$userFile = $this->findOrCreateUserFile($user, $file, $originalName);
 
@@ -56,24 +66,27 @@ class File
 
 	private function getRelativePath()
 	{
-		if ( ! $path = Config::get('app.upload_relative_path'))
-		{
-			throw new UploadPathNotSet(
-				'You must set the upload_relative_path directory in config/app.php.'
-			);
-		}
+//		if ( ! $path = Config::get('app.upload_relative_path'))
+//		{
+//            return 'files';
+//		}
+//
+//		return $path;
 
-		return $path;
+        // All files hashed for deduplication will be inside a public/hashed folder
+        return 'public/hashed';
 	}
 
 	private function getRootPath()
 	{
-		if ( ! $path = Config::get('app.upload_root'))
-		{
-			throw new UploadPathNotSet('You must set upload_root directory in config/app.php.');
-		}
+//		if ( ! $path = Config::get('app.upload_root'))
+//		{
+//			throw new UploadPathNotSet('You must set upload_root directory in config/app.php.');
+//		}
+//
+//		return $path;
 
-		return $path;
+        return '/';
 	}
 
 	private function findOrCreateUserFile($user, $file, $originalName)
@@ -89,7 +102,7 @@ class File
 		]);
 	}
 
-	public function downloadFile($url)
+	public function downloadFile($url, $width = null, $height = null)
 	{
 		$pathInfo = pathinfo($url);
 
@@ -103,7 +116,9 @@ class File
 				null,
 				null,
 				true // Test mode
-			)
+			),
+            $width,
+            $height
 		);
 	}
 
@@ -121,40 +136,47 @@ class File
 	 * @param $hash
 	 * @return static
 	 */
-	private function createFile(UploadedFile $uploaded, $hash)
+	private function createFile(UploadedFile $uploaded, $hash, $width = null, $height = null)
 	{
-		$uploadFullPath = $this->getRootPath() . '/' . $this->getRelativePath();
+//		$uploadFullPath = $this->getRootPath() . '/' . $this->getRelativePath();
 
-		list($uploaded, $deepPath) = Filesystem::moveUploadedFile($uploaded, $uploadFullPath, $hash);
+        $uploadFullPath = $this->getRelativePath();
+
+		list($uploaded, $deepPath, $fileSize, $mimeType, $Url) = Filesystem::moveUploadedFile($uploaded, $uploadFullPath, $hash);
 
 		$directory = DirectoryModel::firstOrCreate(
 			[
+                'base_url' => $Url,
 				'path' => $this->getRootPath(),
 				'relative_path' => $this->getRelativePath()
 			]
 		);
+
+        $extension = $this->makeExtension($uploaded);
 
 		$file = FileModel::create(
 			[
 				'directory_id' => $directory->id,
 				'deep_path' => $deepPath,
 				'hash' => $hash,
-				'size' => $uploaded->getSize(),
-				'extension' => $uploaded->getExtension(),
-				'image' => starts_with($uploaded->getMimeType(), 'image/'),
+				'size' => $fileSize,
+                'width' => $width,
+                'height' => $height,
+				'extension' => $extension,
+				'image' => starts_with($mimeType, 'image/'),
 			]
 		);
 
 		return $file;
 	}
 
-	public function uploadFile(UploadedFile $uploaded)
+	public function uploadFile(UploadedFile $uploaded, $width = null, $height = null)
 	{
 		$hash = $this->makeFileHash($uploaded);
 
 		if ( ! $file = FileModel::where('hash', $hash)->first())
 		{
-			$file = $this->createFile($uploaded, $hash);
+			$file = $this->createFile($uploaded, $hash, $width, $height);
 		}
 
 		return FileNameModel::firstOrCreate([

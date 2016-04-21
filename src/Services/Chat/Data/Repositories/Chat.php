@@ -143,6 +143,9 @@ class Chat extends Repository
             $chatBusinessClientService
         );
 
+        $chat->owner->user->telegram_user_id = $telegramMessage->from->id;
+        $chat->owner->user->save();
+
         $chat->telegram_chat_id = $telegramMessage->chat->id;
         $chat->save();
 
@@ -166,6 +169,8 @@ class Chat extends Repository
         {
             $chat = $this->createTelegramChat($telegramMessage);
         }
+
+
 
         return $chat;
     }

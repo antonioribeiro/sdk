@@ -2,13 +2,15 @@
 
 namespace PragmaRX\Sdk\Services\Files\Service;
 
+use App;
 use Symfony\Component\Finder\Finder;
 use Illuminate\Filesystem\Filesystem;
-use App;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Contracts\Filesystem\Filesystem as FilesystemContract;
 
-class File {
-
+class File
+{
 	/**
 	 * @var Filesystem
 	 */
@@ -19,7 +21,75 @@ class File {
 		$this->filesystem = App::make('files');
 	}
 
-	public function upload($file)
+    private function getBaseUrl()
+    {
+        if ($this->isS3())
+        {
+            return sprintf('//%s.amazonaws.com/%s/', $this->getS3Region(true), $this->getS3Bucket());
+        }
+
+        return '/';
+    }
+
+    private function getS3Region($translatedToUrlRegion = false)
+    {
+        $region = config('filesystems.disks.s3.region');
+
+        if ($translatedToUrlRegion)
+        {
+            if ($region == 'us-east-1')
+            {
+                $region = 's3';
+            }
+        }
+
+        return $region;
+    }
+
+    private function getStorage()
+    {
+        if (! $this->isS3())
+        {
+            return Storage::disk('local');
+        }
+
+        return Storage::disk('s3');
+    }
+
+    /**
+     * @return bool
+     */
+    private function isS3()
+    {
+        return $this->getS3Bucket() && $this->getS3Key();
+    }
+
+    public function getS3Bucket()
+    {
+        return config('filesystems.disks.s3.bucket');
+    }
+
+    public function getS3Key()
+    {
+        return config('filesystems.disks.s3.key');
+    }
+
+    /**
+     * @param $hashPath
+     * @param $fileName
+     * @param $uploading
+     */
+    private function storeUploadedFile($hashPath, $fileName, $uploading)
+    {
+        $fileName = $hashPath . '/' . $fileName;
+
+        if (! $this->getStorage()->has($fileName))
+        {
+            $this->getStorage()->put($fileName, file_get_contents($uploading), FilesystemContract::VISIBILITY_PUBLIC);
+        }
+    }
+
+    public function upload($file)
 	{
 		return $file;
 	}
@@ -74,11 +144,19 @@ class File {
 
 		$fileName = "{$hash}.{$extension}";
 
-		$this->makeUploadDirectory($hashPath, 0775, true); // true = recursive
+        $uploading = $file->getPathname();
 
-		$file = $file->move($hashPath, $fileName);
+        $this->storeUploadedFile($hashPath, $fileName, $uploading);
 
-		return [$file, $deepPath];
+        $url = $this->getBaseUrl();
+
+        $filSize = $file->getSize();
+
+        $mimeType = $file->getMimeType();
+
+        unlink($file->getPathname());
+
+		return [$file, $deepPath, $filSize, $mimeType, $url];
 	}
 
 	private function makeDeepPath($string)
@@ -100,5 +178,4 @@ class File {
 			$this->makeDirectory($hashPath, 0775, true); // true = recursive
 		}
 	}
-
 }

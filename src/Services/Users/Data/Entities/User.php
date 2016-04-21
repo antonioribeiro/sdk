@@ -5,6 +5,7 @@ namespace PragmaRX\Sdk\Services\Users\Data\Entities;
 use DB;
 use Auth;
 use Activation;
+use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramUser;
 use Rhumsaa\Uuid\Uuid;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
@@ -275,5 +276,10 @@ class User extends CartalystUser implements CanResetPassword
     public function getAuthIdentifierName()
     {
         return 'id';
+    }
+
+    public function telegramUser()
+    {
+        return $this->belongsTo(TelegramUser::class, 'telegram_user_id');
     }
 }

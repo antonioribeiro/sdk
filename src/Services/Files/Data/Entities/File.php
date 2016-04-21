@@ -12,6 +12,8 @@ class File extends Model
 		'deep_path',
 		'hash',
 		'size',
+        'width',
+        'height',
 		'extension',
 		'image',
 	];
@@ -26,15 +28,27 @@ class File extends Model
 		);
 	}
 
+    public function getUrlAttribute()
+    {
+        return $this->getUrl();
+    }
+
 	public function getUrl()
 	{
-		return asset(sprintf(
-			"%s%s/%s.%s",
-			$this->directory->relative_path,
-			$this->deep_path,
-			$this->hash,
-			$this->extension
-		));
+        $file = sprintf(
+            "%s%s/%s.%s",
+            $this->directory->relative_path,
+            $this->deep_path,
+            $this->hash,
+            $this->extension
+        );
+
+        if (! $this->directory->base_url)
+        {
+            return asset($file);
+        }
+
+        return $this->directory->base_url . $file;
 	}
 
 	public function getIsImageAttribute()

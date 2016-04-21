@@ -17,7 +17,7 @@ class Telegram extends BaseController
     {
         $this->request = $request;
         
-        $this->repository = new TelegramRepository();
+        $this->repository = app(TelegramRepository::class);
     }
 
 	public function handleWebhook($robot, $token)

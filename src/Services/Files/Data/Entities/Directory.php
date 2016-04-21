@@ -10,6 +10,7 @@ class Directory extends Model {
 		'host',
 		'path',
 		'relative_path',
+        'base_url',
 	];
 
 }
