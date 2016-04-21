@@ -19,4 +19,9 @@ class TelegramUser extends Model
     {
         return $this->telegram_id.'@telegram.me';
     }
+
+    public function getHasAvatarAttribute()
+    {
+        return ! is_null($this->avatar);
+    }
 }

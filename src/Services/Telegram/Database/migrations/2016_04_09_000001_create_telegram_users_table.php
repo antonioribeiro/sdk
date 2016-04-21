@@ -19,6 +19,8 @@ class CreateTelegramUsersTable extends Migration
 
 			$table->bigInteger('telegram_id', false)->unsigned()->unique()->index();
 			$table->string('first_name');
+            $table->json('photos')->nullable();
+            $table->string('avatar_id', 64)->nullable();
             $table->string('last_name')->nullable();
 			$table->string('username')->nullable();
 

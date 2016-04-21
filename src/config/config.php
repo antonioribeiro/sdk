@@ -101,6 +101,20 @@ return [
 
 	'packages' => [
 
+        [
+            'name' => 'pragmarx/telegram',
+            'enabled' => true,
+            'serviceProviders' => ['PragmaRX\Sdk\Services\Telegram\Service\Provider'],
+            'facades' => ['Telegram' => 'PragmaRX\Sdk\Services\Telegram\Service\Facade']
+        ],
+
+        [
+            'name' => 'pragmarx/business',
+            'enabled' => true,
+            'serviceProviders' => ['PragmaRX\Sdk\Services\Businesses\Service\Provider'],
+            'facades' => ['Business' => 'PragmaRX\Sdk\Services\Businesses\Service\Facade']
+        ],
+
 		[
 			'name' => 'pragmarx/push',
 			'enabled' => true,

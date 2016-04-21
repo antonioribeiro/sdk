@@ -22,10 +22,13 @@ class Provider extends ServiceProvider
 	 */
 	public function register()
 	{
-//		$this->app[$this->defaultBinding] = $this->app->share(function($app)
-//		{
-//			return new Telegram();
-//		});
+		$this->app[$this->defaultBinding] = $this->app->share(function($app)
+		{
+			return new Telegram(
+                config('env.TELEGRAM_BOT_NAME'),
+                config('env.TELEGRAM_BOT_TOKEN')
+            );
+		});
 	}
 
 	/**

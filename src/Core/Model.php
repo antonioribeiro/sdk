@@ -63,7 +63,9 @@ class Model extends Eloquent
 
         if (is_null($model = $instance->where($keys)->first()))
         {
-            return $instance->create($values);
+            $instance = $instance->create($values);
+
+            return $instance;
         }
 
         $model->fill($values);

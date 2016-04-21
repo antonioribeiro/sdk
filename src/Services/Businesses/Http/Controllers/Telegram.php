@@ -6,7 +6,7 @@ use Gate;
 use Flash;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Businesses\Http\Requests\SetTelegramWebhookUrl;
-use PragmaRX\Sdk\Services\Telegram\Service\Telegram as TelegramService;
+use PragmaRX\Sdk\Services\Telegram\Service\Facade as TelegramService;
 use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses as BusinessesRepository;
 
 class Telegram extends BaseController
@@ -15,11 +15,6 @@ class Telegram extends BaseController
 	 * @var BusinessesRepository
 	 */
 	private $businessesRepository;
-
-    /**
-     * @var TelegramService
-     */
-    private $telegramService;
 
     public function __construct(BusinessesRepository $businessesRepository)
 	{
@@ -42,13 +37,13 @@ class Telegram extends BaseController
             return redirect()->back();
         }
 
-        $this->telegramService = new TelegramService($service->bot_name, $service->bot_token);
+        TelegramService::configureBot($service->bot_name, $service->bot_token);
 
-        $service->bot_webhook_url = $this->telegramService->getWebhookUrl();
+        $service->bot_webhook_url = TelegramService::getWebhookUrl();
 
         $service->save();
 
-        $this->telegramService->setWebhook();
+        TelegramService::setWebhook();
 
         Flash::message(t('paragraphs.webhook-configured'));
 

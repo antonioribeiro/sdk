@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Telegram\Data\Repositories;
 
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramBot;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramUser;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramChat;
@@ -18,9 +19,45 @@ use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramDocument;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramChatType;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramLocation;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramMessageReceived;
+use PragmaRX\Sdk\Services\Telegram\Service\Facade as TelegramService;
 
 class Telegram
 {
+    private function downloadUserAvatar($user)
+    {
+        $data = [
+            'user_id' => $user->telegram_id
+        ];
+
+        $photos = TelegramService::getUserProfilePhotos($data)->getResult()->getPhotos();
+
+        $user->photos = json_encode($this->extractPhotos($photos));
+        $user->save();
+
+        
+
+        \Log::info(json_encode($user->photos));
+
+        return $avatar;
+    }
+
+    private function extractPhotos($photos)
+    {
+        $photos = Arr::flatten($photos);
+
+        foreach ($photos as $key => $photo)
+        {
+            $photos[$key] = [
+                'file_id' => $photo->getFileId(),
+                'width' => $photo->getWidth(),
+                'height' => $photo->getHeight(),
+                'file_size' => $photo->getFileSize(),
+            ];
+        }
+
+        return $photos;
+    }
+
     public function findMessageById($telegram_message_id)
     {
         return TelegramMessage::find($telegram_message_id);
@@ -98,6 +135,8 @@ class Telegram
 
     private function firstOrCreateMessage($data, $bot)
     {
+        TelegramService::configureBot($bot->name, $bot->token);
+
         $user = $this->firstOrCreateUser(array_get($data, 'from'));
 
         $chat = $this->firstOrCreateChat(array_get($data, 'chat'), $bot);
@@ -224,7 +263,7 @@ class Telegram
 
     private function firstOrCreateUser($user)
     {
-        return TelegramUser::createOrUpdate(
+        $user = TelegramUser::createOrUpdate(
             [
                 'telegram_id' => array_get($user, 'id'),
                 'first_name' => array_get($user, 'first_name'),
@@ -233,6 +272,13 @@ class Telegram
             ],
             'telegram_id'
         );
+
+        if ($user && ! $user->hasAvatar)
+        {
+            $this->downloadUserAvatar($user);
+        }
+
+        return $user;
     }
 
     private function firstOrCreateVenue($data)
