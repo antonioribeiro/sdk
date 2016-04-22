@@ -21,7 +21,10 @@ class User extends Presenter {
 	{
         if ($this->entity->telegram_user_id)
         {
-            return $this->getTelegramAvatar();
+            if ($avatar = $this->getTelegramAvatar())
+            {
+                return $avatar;
+            }
         }
 
 		return Avatar::getUrl($this->entity, $size);
@@ -85,7 +88,12 @@ class User extends Presenter {
     {
         $user = $this->entity->telegramUser;
 
-        return $user->avatar->file->url;
+        if (! $avatar = $user->avatar)
+        {
+            return null;
+        }
+
+        return $avatar->file->url;
     }
 
     public function statusesCount()

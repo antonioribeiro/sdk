@@ -36,8 +36,13 @@ class Telegram
         $this->fileRepository = $fileRepository;
     }
 
-    public function downloadUserAvatar($user)
+    public function downloadUserAvatar($user, $bot = null)
     {
+        if ($bot)
+        {
+            TelegramService::configureBot($bot->name, $bot->token);
+        }
+
         if (! $user)
         {
             return null;
@@ -182,11 +187,11 @@ class Telegram
     {
         TelegramService::configureBot($bot->name, $bot->token);
 
-        $user = $this->firstOrCreateUser(array_get($data, 'from'));
+        $user = $this->firstOrCreateUser(array_get($data, 'from'), $bot);
 
         $chat = $this->firstOrCreateChat(array_get($data, 'chat'), $bot);
 
-        $forward_from = $this->firstOrCreateUser(array_get($data, 'forward_from_id'));
+        $forward_from = $this->firstOrCreateUser(array_get($data, 'forward_from_id'), $bot);
 
         $audio = $this->firstOrCreateAudio(array_get($data, 'audio'));
 
@@ -204,9 +209,9 @@ class Telegram
 
         $location = $this->firstOrCreateLocation(array_get($data, 'location'));
 
-        $new_chat_participant = $this->firstOrCreateUser(array_get($data, 'new_chat_participant'));
+        $new_chat_participant = $this->firstOrCreateUser(array_get($data, 'new_chat_participant'), $bot);
 
-        $left_chat_participant_id = $this->firstOrCreateUser(array_get($data, 'left_chat_participant_id'));
+        $left_chat_participant_id = $this->firstOrCreateUser(array_get($data, 'left_chat_participant_id'), $bot);
 
         $new_chat_photo = $this->firstOrCreatePhoto(array_get($data, 'new_chat_photo'));
 
@@ -306,7 +311,7 @@ class Telegram
         return TelegramChatType::firstOrCreate(['name' => $type]);
     }
 
-    private function firstOrCreateUser($user)
+    private function firstOrCreateUser($user, $bot)
     {
         $user = TelegramUser::createOrUpdate(
             [
@@ -318,7 +323,7 @@ class Telegram
             'telegram_id'
         );
 
-        event(new TelegramUserWasCreated($user));
+        event(new TelegramUserWasCreated($user, $bot));
 
         return $user;
     }

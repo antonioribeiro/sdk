@@ -9,10 +9,20 @@ class TelegramUserWasCreated extends Event
 {
     use SerializesModels;
 
-	public $user;
+    /**
+     * @var
+     */
+    public $user;
 
-    public function __construct($user)
+    /**
+     * @var
+     */
+    public $bot;
+
+    public function __construct($user, $bot)
     {
 	    $this->user = $user;
+
+        $this->bot = $bot;
     }
 }
