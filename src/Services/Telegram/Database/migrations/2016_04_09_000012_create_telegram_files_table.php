@@ -18,7 +18,7 @@ class CreateTelegramFilesTable extends Migration
 			$table->string('id', 64)->unique()->primary()->index();
 
             $table->string('telegram_file_id')->unique()->index();
-            $table->string('file_name_id', 64)->unique()->index();
+            $table->string('file_name_id', 64)->nullable()->index();
             $table->integer('file_size')->nullable()->unsigned();
             $table->string('file_path')->nullable();
 

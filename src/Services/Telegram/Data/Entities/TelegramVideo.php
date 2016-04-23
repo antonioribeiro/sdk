@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Telegram\Data\Entities;
 
 use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Services\Files\Data\Entities\FileName;
 
 class TelegramVideo extends Model
 {
@@ -10,6 +11,7 @@ class TelegramVideo extends Model
 
     protected $fillable = [
         'telegram_file_id',
+        'file_name_id',
         'width',
         'height',
         'duration',
@@ -17,4 +19,9 @@ class TelegramVideo extends Model
         'mime_type',
         'file_size',
     ];
+
+    public function fileName()
+    {
+        return $this->belongsTo(FileName::class);
+    }
 }

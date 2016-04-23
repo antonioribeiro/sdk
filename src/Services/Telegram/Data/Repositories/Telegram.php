@@ -20,6 +20,7 @@ use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramDocument;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramChatType;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramLocation;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramMessageReceived;
+use PragmaRX\Sdk\Services\Telegram\Events\TelegramPhotoWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramUserWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Service\Facade as TelegramService;
 use PragmaRX\Sdk\Services\Files\Data\Repositories\File as FileRepository;
@@ -36,12 +37,40 @@ class Telegram
         $this->fileRepository = $fileRepository;
     }
 
-    public function downloadUserAvatar($user, $bot = null)
+    /**
+     * @param $bot
+     */
+    private function configureServiceBot($bot)
     {
         if ($bot)
         {
             TelegramService::configureBot($bot->name, $bot->token);
         }
+    }
+
+    /**
+     * @param $photo
+     * @param $bot
+     * @return null|static
+     */
+    private function createOrUpdatePhoto($photo, $bot)
+    {
+        $photo = TelegramPhoto::createOrUpdate(
+            $photo,
+            'telegram_file_id'
+        );
+
+        if ($photo && $photo->wasRecentlyCreated)
+        {
+            event(new TelegramPhotoWasCreated($photo, $bot));
+        }
+
+        return $photo;
+    }
+
+    public function downloadUserAvatar($user, $bot = null)
+    {
+        $this->configureServiceBot($bot);
 
         if (! $user)
         {
@@ -91,18 +120,47 @@ class Telegram
         return $user->photos;
     }
 
+    public function downloadPhoto($photo, $bot = null)
+    {
+        $this->configureServiceBot($bot);
+
+        if ($photo && ! $photo->file_name_id && $photos = $this->extractPhotos($photo))
+        {
+            $fileName = $this->downloadFile($photos[0]);
+
+            $photo->file_name_id = $fileName->id;
+
+            $photo->save();
+        }
+
+        return $photo;
+    }
+
     private function extractPhotos($photos)
     {
-        $photos = Arr::flatten($photos);
-
-        foreach ($photos as $key => $photo)
+        if (is_array($photos))
         {
-            $photos[$key] = [
-                'file_id' => $photo->getFileId(),
-                'width' => $photo->getWidth(),
-                'height' => $photo->getHeight(),
-                'file_size' => $photo->getFileSize(),
-            ];
+            $photos = Arr::flatten($photos);
+
+            foreach ($photos as $key => $photo)
+            {
+                $photos[$key] = [
+                    'file_id' => $photo->getFileId(),
+                    'width' => $photo->getWidth(),
+                    'height' => $photo->getHeight(),
+                    'file_size' => $photo->getFileSize(),
+                ];
+            }
+        }
+
+        if ($photos instanceof TelegramPhoto)
+        {
+            $photos = [[
+                'file_id' => $photos->telegram_file_id,
+                'width' => $photos->width,
+                'height' => $photos->height,
+                'file_size' => $photos->file_size,
+            ]];
         }
 
         return $photos;
@@ -113,7 +171,7 @@ class Telegram
         return TelegramMessage::find($telegram_message_id);
     }
 
-    private function firstOrCreateAudio($audio)
+    private function firstOrCreateAudio($audio, $bot)
     {
         return TelegramAudio::createOrUpdate(
             [
@@ -157,9 +215,9 @@ class Telegram
         );
     }
 
-    private function firstOrCreateDocument($document)
+    private function firstOrCreateDocument($document, $bot)
     {
-        $thumb = $this->firstOrCreatePhoto(array_get($document, 'thumb'));
+        $thumb = $this->firstOrCreatePhoto(array_get($document, 'thumb'), $bot);
 
         return TelegramDocument::createOrUpdate(
             [
@@ -193,29 +251,29 @@ class Telegram
 
         $forward_from = $this->firstOrCreateUser(array_get($data, 'forward_from_id'), $bot);
 
-        $audio = $this->firstOrCreateAudio(array_get($data, 'audio'));
+        $audio = $this->firstOrCreateAudio(array_get($data, 'audio'), $bot);
 
-        $document = $this->firstOrCreateDocument(array_get($data, 'document'));
+        $document = $this->firstOrCreateDocument(array_get($data, 'document'), $bot);
 
-        $photo = $this->firstOrCreatePhoto(array_get($data, 'photo'));
+        $photo = $this->firstOrCreatePhoto(array_get($data, 'photo'), $bot);
 
-        $sticker = $this->firstOrCreateSticker(array_get($data, 'sticker'));
+        $sticker = $this->firstOrCreateSticker(array_get($data, 'sticker'), $bot);
 
-        $video = $this->firstOrCreateVideo(array_get($data, 'video'));
+        $video = $this->firstOrCreateVideo(array_get($data, 'video'), $bot);
 
-        $voice = $this->firstOrCreateVoice(array_get($data, 'voice'));
+        $voice = $this->firstOrCreateVoice(array_get($data, 'voice'), $bot);
 
-        $contact = $this->firstOrCreateContact(array_get($data, 'contact'));
+        $contact = $this->firstOrCreateContact(array_get($data, 'contact'), $bot);
 
-        $location = $this->firstOrCreateLocation(array_get($data, 'location'));
+        $location = $this->firstOrCreateLocation(array_get($data, 'location'), $bot);
 
         $new_chat_participant = $this->firstOrCreateUser(array_get($data, 'new_chat_participant'), $bot);
 
         $left_chat_participant_id = $this->firstOrCreateUser(array_get($data, 'left_chat_participant_id'), $bot);
 
-        $new_chat_photo = $this->firstOrCreatePhoto(array_get($data, 'new_chat_photo'));
+        $new_chat_photo = $this->firstOrCreatePhoto(array_get($data, 'new_chat_photo'), $bot);
 
-        $venue = $this->firstOrCreateVenue(array_get($data, 'venue'));
+        $venue = $this->firstOrCreateVenue(array_get($data, 'venue'), $bot);
 
         return TelegramMessage::createOrUpdate(
             [
@@ -262,7 +320,7 @@ class Telegram
         ]);
     }
 
-    private function firstOrCreatePhoto($photos)
+    private function firstOrCreatePhoto($photos, $bot)
     {
         if (is_array($photos) && ! isset($photos['width']))
         {
@@ -275,7 +333,7 @@ class Telegram
                 $result[] = $this->makePhotoArray(
                     $photoArray,
                     'id',
-                    $this->firstOrCreatePhoto($photoArray)->id
+                    $this->firstOrCreatePhoto($photoArray, $bot)->id
                 );
             }
 
@@ -284,15 +342,12 @@ class Telegram
 
         $photo = $this->makePhotoArray($photos);
 
-        return TelegramPhoto::createOrUpdate(
-            $photo,
-            'telegram_file_id'
-        );
+        return $this->createOrUpdatePhoto($photo, $bot);
     }
 
-    private function firstOrCreateSticker($sticker)
+    private function firstOrCreateSticker($sticker, $bot)
     {
-        $thumb = $this->firstOrCreatePhoto(array_get($sticker, 'thumb'));
+        $thumb = $this->firstOrCreatePhoto(array_get($sticker, 'thumb'), $bot);
 
         return TelegramSticker::createOrUpdate(
             [
@@ -345,9 +400,9 @@ class Telegram
         );
     }
 
-    private function firstOrCreateVideo($video)
+    private function firstOrCreateVideo($video, $bot)
     {
-        $thumb = $this->firstOrCreatePhoto(array_get($video, 'thumb'));
+        $thumb = $this->firstOrCreatePhoto(array_get($video, 'thumb'), $bot);
 
         return TelegramVideo::createOrUpdate(
             [
@@ -363,7 +418,7 @@ class Telegram
         );
     }
 
-    private function firstOrCreateVoice($voice)
+    private function firstOrCreateVoice($voice, $bot)
     {
         return TelegramVoice::createOrUpdate(
             [

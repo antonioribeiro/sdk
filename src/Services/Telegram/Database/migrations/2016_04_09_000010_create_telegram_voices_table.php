@@ -18,6 +18,7 @@ class CreateTelegramVoicesTable extends Migration
 			$table->string('id', 64)->unique()->primary()->index();
 
             $table->string('telegram_file_id')->unique()->index();
+            $table->string('file_name_id', 64)->nullable()->index();
             $table->integer('duration');
             $table->string('mime_type')->nullable();
             $table->integer('file_size')->unsigned()->nullable();

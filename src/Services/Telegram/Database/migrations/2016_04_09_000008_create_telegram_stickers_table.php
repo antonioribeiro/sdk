@@ -18,6 +18,7 @@ class CreateTelegramStickersTable extends Migration
 			$table->string('id', 64)->unique()->primary()->index();
 
             $table->string('telegram_file_id')->unique()->index();
+            $table->string('file_name_id', 64)->nullable()->index();
             $table->integer('width');
             $table->integer('height');
             $table->string('thumb_id', 64)->nullable();
