@@ -7,26 +7,33 @@ use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramPhoto;
 
 class TelegramMessage extends Presenter
 {
-    private function makeMessage()
+    /**
+     * @return string
+     */
+    private function makePhotoMessage()
     {
-        if ($this->entity->photo)
-        {
-            $photos = $this->makePhotos($this->entity->photo);
+        $photos = $this->makePhotos($this->entity->photo);
 
-            $thumb = $this->selectPhoto($photos, 'medium')['url'];
-            $big = $this->selectPhoto($photos, 'large')['url'];
+        $thumb = $this->selectPhoto($photos, 'md')['url'];
+        $big = $this->selectPhoto($photos, 'lg')['url'];
 
-            return '<img class="kallzenter-chat-telegram-photo" src="'.$thumb.'" data-image-large="'.$big.'" />';
+        if ($thumb) {
+            return '<img class="kallzenter-chat-telegram-photo" src="' . $thumb . '" data-image-large="' . $big . '" />';
         }
+
+        return '<img class="kallzenter-chat-telegram-photo" src="https://www.cirruseo.com/statics/images/spinner.gif" />';
     }
 
     private function makePhotoUrl($photo)
     {
-        $photo = TelegramPhoto::find($photo['id']);
-
-        $fileName = $photo->fileName;
-
-        return $fileName->file->url;
+        try
+        {
+            return TelegramPhoto::find($photo['id'])->fileName->file->url;
+        }
+        catch (\Exception $e)
+        {
+            return null;
+        }
     }
 
     private function makePhotos($photos)
@@ -48,13 +55,21 @@ class TelegramMessage extends Presenter
             return $this->entity->text;
         }
 
-        $message = $this->makeMessage();
+        if ($this->entity->photo)
+        {
+            return $this->makePhotoMessage();
+        }
 
-        return $message;
+        return 'A mensagem recebida não é suportada por este sistema.';
     }
 
     private function selectPhoto($photos, $size)
     {
+        if (! $photos)
+        {
+            return null;
+        }
+
         usort(
             $photos,
             function($a, $b)
@@ -63,19 +78,27 @@ class TelegramMessage extends Presenter
             }
         );
 
-        $sizes['small'] = 0;
-        $sizes['medium'] = 0;
-        $sizes['large'] = 0;
+        $sizes['sm'] = 0;
+        $sizes['md'] = 0;
+        $sizes['lg'] = 0;
+        $sizes['xl'] = 0;
 
         if (count($photos) > 1)
         {
-            $sizes['medium'] = 1;
-            $sizes['large'] = 1;
+            $sizes['md'] = 1;
+            $sizes['lg'] = 1;
+            $sizes['xl'] = 1;
         }
 
         if (count($photos) > 2)
         {
             $sizes['large'] = 2;
+            $sizes['xl'] = 2;
+        }
+
+        if (count($photos) > 3)
+        {
+            $sizes['xl'] = 3;
         }
 
         $photo = $photos[$sizes[$size]];
