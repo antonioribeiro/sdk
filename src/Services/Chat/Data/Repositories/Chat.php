@@ -58,6 +58,16 @@ class Chat extends Repository
         return $data;
     }
 
+    private function clearAndOpenChat($chat)
+    {
+        if ($chat->closed_at)
+        {
+            $chat->closed_at = null;
+            $chat->responder_id = null;
+            $chat->save();
+        }
+    }
+
 
     public function create($names, $email, $clientId, $clientService = null, $ipAddress = null, $layout = 'master')
 	{
@@ -382,6 +392,8 @@ class Chat extends Repository
     private function receiveTelegramMessage($telegramMessage)
     {
         $chat = $this->findOrCreateChatByTelegramChatId($telegramMessage);
+
+        $this->clearAndOpenChat($chat);
 
         $message = $this->createMessage($chat->id, $chat->owner->id);
 
