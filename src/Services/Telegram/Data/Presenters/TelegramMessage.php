@@ -52,15 +52,15 @@ class TelegramMessage extends Presenter
     {
         if ($this->entity->text)
         {
-            return $this->entity->text;
+            return '<p class="kallzenter-chat-telegram-text">'.$this->entity->text.'</p>';
         }
 
-        if ($this->entity->photo)
+        if (json_decode($this->entity->photo))
         {
             return $this->makePhotoMessage();
         }
 
-        return 'A mensagem recebida não é suportada por este sistema.';
+        return '<p class="kallzenter-chat-telegram-warning">A mensagem recebida não é suportada por este sistema.</p>';
     }
 
     private function selectPhoto($photos, $size)
