@@ -19,6 +19,7 @@ use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramContact;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramDocument;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramChatType;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramLocation;
+use PragmaRX\Sdk\Services\Telegram\Events\TelegramDocumentWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramMessageReceived;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramPhotoWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramUserWasCreated;
@@ -66,6 +67,24 @@ class Telegram
         }
 
         return $photo;
+    }
+
+    public function downloadDocument($document, $bot)
+    {
+        $this->configureServiceBot($bot);
+
+        if ($document && ! $document->file_name_id && $downloadable = $this->extractDocument($document))
+        {
+            $fileName = $this->downloadFile($downloadable);
+
+            $document->file_name_id = $fileName->id;
+
+            $document->save();
+        }
+        
+        $this->downloadPhoto($document->thumb, $bot);
+
+        return $document;
     }
 
     public function downloadUserAvatar($user, $bot = null)
@@ -134,6 +153,14 @@ class Telegram
         }
 
         return $photo;
+    }
+
+    private function extractDocument($document)
+    {
+        return [
+            'file_id' => $document->telegram_file_id,
+            'file_size' => $document->file_size,
+        ];
     }
 
     private function extractPhotos($photos)
@@ -219,7 +246,7 @@ class Telegram
     {
         $thumb = $this->firstOrCreatePhoto(array_get($document, 'thumb'), $bot);
 
-        return TelegramDocument::createOrUpdate(
+        $document = TelegramDocument::createOrUpdate(
             [
                 'telegram_file_id' => array_get($document, 'file_id'),
                 'thumb_id' => $thumb ? $thumb->id : null,
@@ -229,6 +256,13 @@ class Telegram
             ],
             'telegram_file_id'
         );
+
+        if ($document && $document->wasRecentlyCreated)
+        {
+            event(new TelegramDocumentWasCreated($document, $bot));
+        }
+
+        return $document;
     }
 
     private function firstOrCreateLocation($location)
@@ -432,33 +466,33 @@ class Telegram
     }
 
     /**
-     * @param $photo
+     * @param $file
      * @return mixed
      */
-    private function downloadFile($photo)
+    private function downloadFile($file)
     {
-        $telegramFile = TelegramFile::where('telegram_file_id', $photo['file_id'])->first();
+        $telegramFile = TelegramFile::where('telegram_file_id', $file['file_id'])->first();
 
         if ($telegramFile)
         {
             return $telegramFile->fileName;
         }
         
-        if (! $telegramFile = TelegramService::getFile($photo))
+        if (! $telegramFile = TelegramService::getFile($file))
         {
             return null;
         }
 
         $fileName = TelegramService::downloadFile(
-            TelegramService::makeFileUrl($photo, $telegramFile->getFilePath()),
-            $photo['width'],
-            $photo['height']
+            TelegramService::makeFileUrl($file, $telegramFile->getFilePath()),
+            isset($file['width']) ? $file['width'] : null,
+            isset($file['height']) ? $file['height'] : null
         );
 
         TelegramFile::create([
-             'telegram_file_id' => $photo['file_id'],
+             'telegram_file_id' => $file['file_id'],
              'file_name_id' => $fileName->id,
-             'file_size' => $photo['file_size'],
+             'file_size' => $file['file_size'],
              'file_path' => '',
         ]);
 

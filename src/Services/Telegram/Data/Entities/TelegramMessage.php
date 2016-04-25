@@ -63,4 +63,9 @@ class TelegramMessage extends Model
     {
         return '0.0.0.0';
     }
+
+    public function document()
+    {
+        return $this->belongsTo(TelegramDocument::class, 'document_id');
+    }
 }

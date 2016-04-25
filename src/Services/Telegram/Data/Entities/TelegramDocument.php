@@ -22,4 +22,9 @@ class TelegramDocument extends Model
     {
         return $this->belongsTo(FileName::class);
     }
+
+    public function thumb()
+    {
+        return $this->belongsTo(TelegramPhoto::class);
+    }
 }

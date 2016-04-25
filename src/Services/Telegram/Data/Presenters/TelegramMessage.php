@@ -10,6 +10,46 @@ class TelegramMessage extends Presenter
     /**
      * @return string
      */
+    private function defaultSpinner()
+    {
+        return '<img class="kallzenter-chat-telegram-photo" src="' . config('chat.spinner') . '" />';
+    }
+
+    private function makeDocumentMessage()
+    {
+        try
+        {
+            $url = $this->entity->document->fileName->file->url;
+            $thumb = $this->entity->document->thumb->fileName->file->url;
+            $name = $this->entity->document->file_name;
+        }
+        catch (\Exception $e)
+        {
+            $thumb = null;
+            $url = null;
+        }
+
+        if ($thumb)
+        {
+            return '
+                <a href="'.$url.'" class="kallzenter-chat-telegram-document-thumb" download>
+                    <img class="kallzenter-chat-telegram-photo" src="' . $thumb . '" />
+                </a>
+                
+                <p>
+                    <a href="'.$url.'" class="kallzenter-chat-telegram-document-name" download>
+                        Baixar '.$name.'
+                    </a>
+                </p>
+            ';
+        }
+
+        return $this->defaultSpinner();
+    }
+
+    /**
+     * @return string
+     */
     private function makePhotoMessage()
     {
         $photos = $this->makePhotos($this->entity->photo);
@@ -17,11 +57,12 @@ class TelegramMessage extends Presenter
         $thumb = $this->selectPhoto($photos, 'md')['url'];
         $big = $this->selectPhoto($photos, 'lg')['url'];
 
-        if ($thumb) {
-            return '<img class="kallzenter-chat-telegram-photo" src="' . $thumb . '" data-image-large="' . $big . '" />';
+        if ($thumb)
+        {
+            return '<img class="kallzenter-chat-telegram-photo" src="' . $thumb . '" data-image-large="' . $big . '" onclick="showImageModal(this)" />';
         }
 
-        return '<img class="kallzenter-chat-telegram-photo" src="https://www.cirruseo.com/statics/images/spinner.gif" />';
+        return $this->defaultSpinner();
     }
 
     private function makePhotoUrl($photo)
@@ -60,7 +101,12 @@ class TelegramMessage extends Presenter
             return $this->makePhotoMessage();
         }
 
-        return '<p class="kallzenter-chat-telegram-warning">A mensagem recebida não é suportada por este sistema.</p>';
+        if (json_decode($this->entity->document))
+        {
+            return $this->makeDocumentMessage();
+        }
+
+        return '<p class="kallzenter-chat-telegram-warning">(ATENÇÃO: A mensagem recebida não é suportada por este sistema)</p>';
     }
 
     private function selectPhoto($photos, $size)
