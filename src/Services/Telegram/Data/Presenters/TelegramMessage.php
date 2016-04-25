@@ -138,7 +138,7 @@ class TelegramMessage extends Presenter
 
         if (count($photos) > 2)
         {
-            $sizes['large'] = 2;
+            $sizes['lg'] = 2;
             $sizes['xl'] = 2;
         }
 
