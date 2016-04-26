@@ -40,7 +40,7 @@ class TelegramMessage extends Presenter
                 </audio>
                 
                 <p>
-                    <a href="'.$url.'" class="kallzenter-chat-telegram-audio-name" download="audio.ogg">
+                    <a href="#" class="kallzenter-chat-telegram-audio-name" onclick="downloadFile(\''.$url. '\', \'audio_'.str_random(8).'.ogg\')">
                         Baixar audio.ogg
                     </a>
                 </p>
@@ -74,12 +74,12 @@ class TelegramMessage extends Presenter
         if ($thumb && $url)
         {
             return '
-                <a href="'.$url.'" class="kallzenter-chat-telegram-document-thumb" download>
+                <a href="#" class="kallzenter-chat-telegram-document-thumb" onclick="downloadFile(\''.$url. '\', \''.$name.'\')">
                     <img class="kallzenter-chat-telegram-photo" src="' . $thumb . '" />
                 </a>
                 
                 <p>
-                    <a href="'.$url.'" class="kallzenter-chat-telegram-document-name" download="'.$name.'">
+                    <a href="#" class="kallzenter-chat-telegram-document-name" onclick="downloadFile(\''.$url. '\', \''.$name.'\')">
                         Baixar '.$name.'
                     </a>
                 </p>
@@ -101,7 +101,7 @@ class TelegramMessage extends Presenter
 
         if ($thumb)
         {
-            return '<img class="kallzenter-chat-telegram-photo" src="' . $thumb . '" data-image-large="' . $big . '" onclick="showImageModal(this)" />';
+            return '<img class="kallzenter-chat-telegram-photo" src="' . $thumb . '" data-image-large="' . $big . '" onclick="showImageModal(this);" />';
         }
 
         return $this->defaultSpinner();
