@@ -15,6 +15,41 @@ class TelegramMessage extends Presenter
         return '<img class="kallzenter-chat-telegram-photo" src="' . asset('assets/images/chat/spinner.gif') . '" />';
     }
 
+    private function makeAudioMessage()
+    {
+        return '<img class="kallzenter-chat-telegram-photo" src="' . asset('assets/images/chat/wav.png') . '" />';
+    }
+
+    private function makeVoiceMessage()
+    {
+        try
+        {
+            $url = $this->entity->voice->fileName->file->url;
+        }
+        catch (\Exception $e)
+        {
+            $url = null;
+        }
+
+        if ($url)
+        {
+            return '
+                <audio controls>
+                    <source src="'.$url.'" type="audio/ogg">
+                    O seu browser não tem suporte a áudio.
+                </audio>
+                
+                <p>
+                    <a href="'.$url.'" class="kallzenter-chat-telegram-audio-name" download="audio.ogg">
+                        Baixar audio.ogg
+                    </a>
+                </p>
+            ';
+        }
+
+        return $this->defaultSpinner();
+    }
+
     private function makeDocumentMessage()
     {
         try
@@ -44,7 +79,7 @@ class TelegramMessage extends Presenter
                 </a>
                 
                 <p>
-                    <a href="'.$url.'" class="kallzenter-chat-telegram-document-name" download>
+                    <a href="'.$url.'" class="kallzenter-chat-telegram-document-name" download="'.$name.'">
                         Baixar '.$name.'
                     </a>
                 </p>
@@ -251,6 +286,16 @@ class TelegramMessage extends Presenter
         if (json_decode($this->entity->document))
         {
             return $this->makeDocumentMessage();
+        }
+
+        if (json_decode($this->entity->audio))
+        {
+            return $this->makeAudioMessage();
+        }
+
+        if (json_decode($this->entity->voice))
+        {
+            return $this->makeVoiceMessage();
         }
 
         return '<p class="kallzenter-chat-telegram-warning">(ATENÇÃO: A mensagem recebida não é suportada por este sistema)</p>';

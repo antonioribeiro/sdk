@@ -5,9 +5,9 @@ namespace PragmaRX\Sdk\Services\Telegram\Listeners;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
 use PragmaRX\Sdk\Services\Telegram\Data\Repositories\Telegram;
-use PragmaRX\Sdk\Services\Telegram\Events\TelegramDocumentWasCreated;
+use PragmaRX\Sdk\Services\Telegram\Events\TelegramAudioWasCreated;
 
-class DownloadTelegramDocument implements ShouldQueue
+class DownloadTelegramAudio // implements ShouldQueue
 {
     /**
      * @var EventPublisher
@@ -27,11 +27,11 @@ class DownloadTelegramDocument implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param TelegramDocumentWasCreated $event
+     * @param TelegramAudioWasCreated $event
      */
-	public function handle(TelegramDocumentWasCreated $event)
+	public function handle(TelegramAudioWasCreated $event)
 	{
-        $this->telegramRepository->downloadDocument($event->document, $event->bot);
+        $this->telegramRepository->downloadAudio($event->audio, $event->bot);
 
         $this->eventPublisher->publish('ChatListWasUpdated');
 	}

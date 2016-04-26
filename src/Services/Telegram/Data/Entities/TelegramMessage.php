@@ -66,6 +66,11 @@ class TelegramMessage extends Model
 
     public function document()
     {
-        return $this->belongsTo(TelegramDocument::class, 'document_id');
+        return $this->belongsTo(TelegramDocument::class);
+    }
+
+    public function voice()
+    {
+        return $this->belongsTo(TelegramVoice::class);
     }
 }

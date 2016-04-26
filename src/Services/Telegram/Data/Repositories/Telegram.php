@@ -23,6 +23,7 @@ use PragmaRX\Sdk\Services\Telegram\Events\TelegramDocumentWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramMessageReceived;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramPhotoWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramUserWasCreated;
+use PragmaRX\Sdk\Services\Telegram\Events\TelegramVoiceWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Service\Facade as TelegramService;
 use PragmaRX\Sdk\Services\Files\Data\Repositories\File as FileRepository;
 
@@ -67,6 +68,22 @@ class Telegram
         }
 
         return $photo;
+    }
+
+    public function downloadVoice($voice, $bot)
+    {
+        $this->configureServiceBot($bot);
+
+        if ($voice && ! $voice->file_name_id && $downloadable = $this->extractDocument($voice))
+        {
+            $fileName = $this->downloadFile($downloadable);
+
+            $voice->file_name_id = $fileName->id;
+
+            $voice->save();
+        }
+
+        return $voice;
     }
 
     public function downloadDocument($document, $bot)
@@ -200,7 +217,7 @@ class Telegram
 
     private function firstOrCreateAudio($audio, $bot)
     {
-        return TelegramAudio::createOrUpdate(
+        $audio = TelegramAudio::createOrUpdate(
             [
                 'telegram_file_id' => array_get($audio, 'file_id'),
                 'duration' => array_get($audio, 'duration'),
@@ -211,6 +228,13 @@ class Telegram
             ],
             'telegram_file_id'
         );
+
+        if ($audio && $audio->wasRecentlyCreated)
+        {
+            event(new TelegramAudioWasCreated($audio, $bot));
+        }
+
+        return $audio;
     }
 
     private function firstOrCreateChat($chat, $bot)
@@ -454,7 +478,7 @@ class Telegram
 
     private function firstOrCreateVoice($voice, $bot)
     {
-        return TelegramVoice::createOrUpdate(
+        $voice = TelegramVoice::createOrUpdate(
             [
                 'telegram_file_id' => array_get($voice, 'file_id'),
                 'duration' => array_get($voice, 'duration'),
@@ -463,6 +487,13 @@ class Telegram
             ],
             'telegram_file_id'
         );
+
+        if ($voice && $voice->wasRecentlyCreated)
+        {
+            event(new TelegramVoiceWasCreated($voice, $bot));
+        }
+
+        return $voice;
     }
 
     /**
