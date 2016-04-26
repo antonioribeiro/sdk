@@ -73,4 +73,9 @@ class TelegramMessage extends Model
     {
         return $this->belongsTo(TelegramVoice::class);
     }
+
+    public function video()
+    {
+        return $this->belongsTo(TelegramVideo::class);
+    }
 }

@@ -23,6 +23,7 @@ use PragmaRX\Sdk\Services\Telegram\Events\TelegramDocumentWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramMessageReceived;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramPhotoWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramUserWasCreated;
+use PragmaRX\Sdk\Services\Telegram\Events\TelegramVideoWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramVoiceWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Service\Facade as TelegramService;
 use PragmaRX\Sdk\Services\Files\Data\Repositories\File as FileRepository;
@@ -70,38 +71,44 @@ class Telegram
         return $photo;
     }
 
-    public function downloadVoice($voice, $bot)
+    /**
+     * @param $document
+     * @param $bot
+     * @return mixed
+     */
+    private function downloadTelegramFile($document, $bot, $hasThumb = false)
     {
         $this->configureServiceBot($bot);
 
-        if ($voice && ! $voice->file_name_id && $downloadable = $this->extractDocument($voice))
-        {
-            $fileName = $this->downloadFile($downloadable);
-
-            $voice->file_name_id = $fileName->id;
-
-            $voice->save();
-        }
-
-        return $voice;
-    }
-
-    public function downloadDocument($document, $bot)
-    {
-        $this->configureServiceBot($bot);
-
-        if ($document && ! $document->file_name_id && $downloadable = $this->extractDocument($document))
-        {
-            $fileName = $this->downloadFile($downloadable);
+        if ($document && !$document->file_name_id && $downloadable = $this->extractDocument($document)) {
+            $fileName = $this->downloadAndMakeFileName($downloadable);
 
             $document->file_name_id = $fileName->id;
 
             $document->save();
         }
-        
-        $this->downloadPhoto($document->thumb, $bot);
+
+        if ($hasThumb)
+        {
+            $this->downloadPhoto($document->thumb, $bot);
+        }
 
         return $document;
+    }
+
+    public function downloadVoice($voice, $bot)
+    {
+        return $this->downloadTelegramFile($voice, $bot, false);
+    }
+
+    public function downloadDocument($document, $bot)
+    {
+        return $this->downloadTelegramFile($document, $bot, true);
+    }
+
+    public function downloadVideo($document, $bot)
+    {
+        return $this->downloadTelegramFile($document, $bot, true);
     }
 
     public function downloadUserAvatar($user, $bot = null)
@@ -132,7 +139,7 @@ class Telegram
         // Download only the first photo
         $key = 0;
 
-        if ($fileName = $this->downloadFile($photos[$key]))
+        if ($fileName = $this->downloadAndMakeFileName($photos[$key]))
         {
             $photos[$key]['telegram_file_id'] = $photos[$key]['file_id'];
 
@@ -158,18 +165,7 @@ class Telegram
 
     public function downloadPhoto($photo, $bot = null)
     {
-        $this->configureServiceBot($bot);
-
-        if ($photo && ! $photo->file_name_id && $photos = $this->extractPhotos($photo))
-        {
-            $fileName = $this->downloadFile($photos[0]);
-
-            $photo->file_name_id = $fileName->id;
-
-            $photo->save();
-        }
-
-        return $photo;
+        return $this->downloadTelegramFile($photo, $bot, false);
     }
 
     private function extractDocument($document)
@@ -462,7 +458,7 @@ class Telegram
     {
         $thumb = $this->firstOrCreatePhoto(array_get($video, 'thumb'), $bot);
 
-        return TelegramVideo::createOrUpdate(
+        $video = TelegramVideo::createOrUpdate(
             [
                 'telegram_file_id' => array_get($video, 'file_id'),
                 'width' => array_get($video, 'width'),
@@ -474,6 +470,13 @@ class Telegram
             ],
             'telegram_file_id'
         );
+
+        if ($video && $video->wasRecentlyCreated)
+        {
+            event(new TelegramVideoWasCreated($video, $bot));
+        }
+
+        return $video;
     }
 
     private function firstOrCreateVoice($voice, $bot)
@@ -500,7 +503,7 @@ class Telegram
      * @param $file
      * @return mixed
      */
-    private function downloadFile($file)
+    private function downloadAndMakeFileName($file)
     {
         $telegramFile = TelegramFile::where('telegram_file_id', $file['file_id'])->first();
 

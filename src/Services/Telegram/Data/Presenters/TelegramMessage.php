@@ -20,6 +20,46 @@ class TelegramMessage extends Presenter
         return '<img class="kallzenter-chat-telegram-photo" src="' . asset('assets/images/chat/wav.png') . '" />';
     }
 
+    private function makeVideoMessage()
+    {
+        try
+        {
+            $thumb = $this->entity->video->thumb->fileName->file->url;
+        }
+        catch (\Exception $e)
+        {
+            $thumb = $this->makeThumb('application/mov');
+        }
+
+        try
+        {
+            $url = $this->entity->video->fileName->file->url;
+        }
+        catch (\Exception $e)
+        {
+            $url = null;
+        }
+
+        if ($url)
+        {
+            return '
+                <video width="320" height="240" controls>
+                    <source src="'.$url.'" type="video/mp4">
+                    <source src="'.$url.'" type="video/ogg">
+                    O seu browser não tem suporte a vídeo.
+                </video>
+                                
+                <p>
+                    <a href="#" class="kallzenter-chat-telegram-audio-name" onclick="downloadFile(\''.$url. '\', \'video_'.str_random(8).'.mp4\')">
+                        Baixar video.mp4
+                    </a>
+                </p>
+            ';
+        }
+
+        return $this->defaultSpinner();
+    }
+
     private function makeVoiceMessage()
     {
         try
@@ -296,6 +336,11 @@ class TelegramMessage extends Presenter
         if (json_decode($this->entity->voice))
         {
             return $this->makeVoiceMessage();
+        }
+
+        if (json_decode($this->entity->video))
+        {
+            return $this->makeVideoMessage();
         }
 
         return '<p class="kallzenter-chat-telegram-warning">(ATENÇÃO: A mensagem recebida não é suportada por este sistema)</p>';
