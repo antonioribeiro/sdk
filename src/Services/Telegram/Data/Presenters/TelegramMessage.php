@@ -113,7 +113,7 @@ class TelegramMessage extends Presenter
             return asset('assets/images/chat/css.png');
         }
 
-        if ($mime_type == 'application/doc' || $mime_type == 'application/docx')
+        if ($mime_type == 'application/doc' || $mime_type == 'application/docx'  || $mime_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
         {
             return asset('assets/images/chat/doc.png');
         }
@@ -218,7 +218,7 @@ class TelegramMessage extends Presenter
             return asset('assets/images/chat/wmv.png');
         }
 
-        if ($mime_type == 'application/xls' || $mime_type == 'application/xlsx')
+        if ($mime_type == 'application/xls' || $mime_type == 'application/xlsx' || $mime_type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         {
             return asset('assets/images/chat/xls.png');
         }
