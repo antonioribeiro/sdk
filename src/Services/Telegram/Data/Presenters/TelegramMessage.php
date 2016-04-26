@@ -12,7 +12,7 @@ class TelegramMessage extends Presenter
      */
     private function defaultSpinner()
     {
-        return '<img class="kallzenter-chat-telegram-photo" src="' . asset('assets/images/chat/spiner.gif') . '" />';
+        return '<img class="kallzenter-chat-telegram-photo" src="' . asset('assets/images/chat/spinner.gif') . '" />';
     }
 
     private function makeDocumentMessage()
