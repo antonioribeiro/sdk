@@ -68,7 +68,6 @@ class Chat extends Repository
         }
     }
 
-
     public function create($names, $email, $clientId, $clientService = null, $ipAddress = null, $layout = 'master')
 	{
         if (! is_array($names))
@@ -180,8 +179,6 @@ class Chat extends Repository
             $chat = $this->createTelegramChat($telegramMessage);
         }
 
-
-
         return $chat;
     }
 
@@ -222,6 +219,7 @@ class Chat extends Repository
                 'avatar'    => $chat->owner->user->present()->avatar,
                 'owner_id'  => $chat->owner->id,
                 'talker_id' => $talkerId,
+                'message_model' => $message,
             ];
 
             event(new ChatMessageWasSent($data));
@@ -425,7 +423,12 @@ class Chat extends Repository
 		);
 	}
 
-	private function setChatResponder($chat, $user)
+    private function sendTelegramMessage($message)
+    {
+
+    }
+
+    private function setChatResponder($chat, $user)
 	{
 		$talker = $this->findOrCreateTalker($chat->service->client, $user);
 

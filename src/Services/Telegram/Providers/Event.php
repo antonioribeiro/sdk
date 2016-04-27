@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Telegram\Providers;
 
+use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasSent;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramUserWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramAudioWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramPhotoWasCreated;
@@ -16,6 +17,7 @@ use PragmaRX\Sdk\Services\Telegram\Events\TelegramDocumentWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Listeners\DownloadTelegramDocument;
 use PragmaRX\Sdk\Services\Telegram\Listeners\DownloadUserProfilePhotos;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use PragmaRX\Sdk\Services\Telegram\Listeners\SendTelegramMessage;
 
 class Event extends ServiceProvider
 {
@@ -47,6 +49,10 @@ class Event extends ServiceProvider
 
         TelegramVideoWasCreated::class => [
             DownloadTelegramVideo::class,
+        ],
+
+        ChatMessageWasSent::class => [
+            SendTelegramMessage::class,
         ],
 	];
 }

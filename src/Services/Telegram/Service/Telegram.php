@@ -131,4 +131,10 @@ class Telegram
         return $response->getResult();
     }
 
+    public function sendMessage($text, $botName, $botToken)
+    {
+        $this->configureBot($botName, $botToken);
+
+        return TelegramRequest::sendMessage(['text' => $text]);
+    }
 }

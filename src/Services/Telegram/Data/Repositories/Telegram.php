@@ -563,4 +563,15 @@ class Telegram
 
         event(new TelegramMessageReceived($message));
 	}
+
+    public function sendMessage($message)
+    {
+        $chat = $message->chat->telegramChat;
+        
+        return TelegramService::sendMessage(
+            $message->message,
+            $message->chat->telegramChat->bot->name,
+            $message->chat->telegramChat->bot->token
+        );
+    }
 }
