@@ -401,7 +401,7 @@ class Chat extends Repository
 
         $this->clearAndOpenChat($chat);
 
-        if ($this->isTelegramCommand($telegramMessage))
+        if (! $this->isTelegramCommand($telegramMessage))
         {
             $message = $this->createMessage($chat->id, $chat->owner->id);
 
