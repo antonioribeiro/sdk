@@ -40,6 +40,11 @@ class Telegram
         $this->fileRepository = $fileRepository;
     }
 
+    private function clearMessage($message)
+    {
+        return strip_tags($message);
+    }
+
     /**
      * @param $bot
      */
@@ -570,7 +575,7 @@ class Telegram
 
         return TelegramService::sendMessage(
             $message->chat->telegramChat->telegram_id,
-            $message->message,
+            $this->clearMessage($message->message),
             $message->chat->telegramChat->bot->name,
             $message->chat->telegramChat->bot->token
         );
