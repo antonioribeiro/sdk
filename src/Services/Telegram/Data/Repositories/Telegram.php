@@ -571,13 +571,16 @@ class Telegram
 
     public function sendMessage($message)
     {
-        $chat = $message->chat->telegramChat;
-
         return TelegramService::sendMessage(
             $message->chat->telegramChat->telegram_id,
             $this->clearMessage($message->message),
             $message->chat->telegramChat->bot->name,
             $message->chat->telegramChat->bot->token
         );
+    }
+
+    public function isCommand($string)
+    {
+        return $string == '/start';
     }
 }

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasSent;
 use PragmaRX\Sdk\Services\Chat\Events\ChatWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramMessage;
+use PragmaRX\Sdk\Services\Telegram\Data\Repositories\Telegram;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatRead;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
@@ -289,6 +290,13 @@ class Chat extends Repository
         return $chats;
     }
 
+    private function isTelegramCommand($telegramMessage)
+    {
+        $repository = app(Telegram::class);
+
+        return $repository->isCommand($telegramMessage->text);
+    }
+
     private function makeMessages($all, $chat = null)
 	{
 		$messages = [];
@@ -393,13 +401,16 @@ class Chat extends Repository
 
         $this->clearAndOpenChat($chat);
 
-        $message = $this->createMessage($chat->id, $chat->owner->id);
+        if ($this->isTelegramCommand($telegramMessage))
+        {
+            $message = $this->createMessage($chat->id, $chat->owner->id);
 
-        $message->telegram_message_id = $telegramMessage->id;
+            $message->telegram_message_id = $telegramMessage->id;
 
-        $message->save();
+            $message->save();
 
-        return $telegramMessage;
+            return $telegramMessage;
+        }
     }
 
     public function respond($chatId)
