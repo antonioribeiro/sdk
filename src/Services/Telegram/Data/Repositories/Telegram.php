@@ -334,6 +334,8 @@ class Telegram
 
         $venue = $this->firstOrCreateVenue(array_get($data, 'venue'), $bot);
 
+        $text = array_get($data, 'text');
+
         return TelegramMessage::createOrUpdate(
             [
                 'telegram_message_id' => $data['message_id'],
@@ -341,7 +343,7 @@ class Telegram
                 'date' => $data['date'],
                 'timestamp' => Carbon::createFromTimestamp($data['date']),
                 'chat_id' => $chat ? $chat->id : null,
-                'text' => array_get($data, 'text'),
+                'text' => $text,
                 'forward_from_id' => $forward_from ? $forward_from->id : null,
                 'forward_date' => array_get($data, 'forward_date'),
                 // 'reply_to_message_id', /// it's a message, will have to think better about this

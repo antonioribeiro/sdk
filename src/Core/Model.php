@@ -34,7 +34,21 @@ class Model extends Eloquent
 		parent::boot();
 	}
 
-	private function getUserId()
+    /**
+     * @param array $values
+     * @return array
+     */
+    private static function filterEmptyValues(array $values)
+    {
+        $values = array_filter(
+            $values,
+            function ($var) { return is_empty_or_null($var); }
+        );
+
+        return $values;
+    }
+
+    private function getUserId()
 	{
 		try {
 			if (\Auth::check())
@@ -50,7 +64,7 @@ class Model extends Eloquent
 
     public static function createOrUpdate(array $values = [], $searchKey)
     {
-        $values = array_filter($values);
+        $values = self::filterEmptyValues($values);
 
         if (! $values)
         {

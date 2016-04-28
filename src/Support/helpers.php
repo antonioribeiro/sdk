@@ -319,3 +319,28 @@ if ( ! function_exists('set_menu_active'))
 		return Request::is($path) ? 'active' : '';
 	}
 }
+
+if ( ! function_exists('is_empty_or_null'))
+{
+    function is_empty_or_null($var)
+    {
+        if (is_null($var))
+        {
+            return true;
+        }
+
+        if (is_bool($var) && $var == false)
+        {
+            return true;
+        }
+
+        if (is_string($var))
+        {
+            $var = trim($var);
+
+            return $var === '';
+        }
+
+        return false;
+    }
+}

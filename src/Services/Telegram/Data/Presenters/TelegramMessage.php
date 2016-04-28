@@ -313,7 +313,7 @@ class TelegramMessage extends Presenter
 
     public function message()
     {
-        if ($this->entity->text)
+        if (! is_empty_or_null($this->entity->text))
         {
             return '<p class="kallzenter-chat-telegram-text">'.$this->entity->text.'</p>';
         }
