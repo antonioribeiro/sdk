@@ -42,7 +42,7 @@ class Model extends Eloquent
     {
         $values = array_filter(
             $values,
-            function ($var) { return is_empty_or_null($var); }
+            function ($var) { return ! is_empty_or_null($var); }
         );
 
         return $values;

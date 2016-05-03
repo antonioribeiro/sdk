@@ -7,7 +7,7 @@ use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
 use PragmaRX\Sdk\Services\Telegram\Data\Repositories\Telegram;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramUserWasCreated;
 
-class DownloadUserProfilePhotos implements ShouldQueue
+class DownloadUserProfilePhotos // implements ShouldQueue
 {
     /**
      * @var EventPublisher
