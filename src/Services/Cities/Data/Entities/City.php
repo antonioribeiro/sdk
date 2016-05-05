@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Cities\Data\Entities;
 
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 
 class City extends Model {
 

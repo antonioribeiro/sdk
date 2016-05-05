@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Telegram\Data\Entities;
 
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 use PragmaRX\Sdk\Services\Telegram\Data\Presenters\TelegramMessage as TelegramMessagePresenter;
 
 class TelegramMessage extends Model

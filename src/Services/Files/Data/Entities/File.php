@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Files\Data\Entities;
 
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 use PragmaRX\Sdk\Services\Files\Data\Presenters\File as FilePresenter;
 
 class File extends Model

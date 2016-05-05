@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Businesses\Data\Entities;
 
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 
 class BusinessRole extends Model
 {

@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Roles\Data\Entities;
 
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 use PragmaRX\Sdk\Services\Permissions\Data\Entities\Permission;
 use PragmaRX\Sdk\Services\Roles\Data\Presenters\Role as RolePresenter;
 class Role extends Model

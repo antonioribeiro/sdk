@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Activation\Data\Entities;
 
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 
 class Activation extends Model {
 

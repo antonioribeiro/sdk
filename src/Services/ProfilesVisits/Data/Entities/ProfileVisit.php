@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\ProfilesVisits\Data\Entities;
 
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 use Session;
 
 class ProfileVisit extends Model {

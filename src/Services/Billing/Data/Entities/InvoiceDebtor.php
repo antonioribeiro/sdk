@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Billing\Data\Entities;
 
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 
 class InvoiceDebtor extends Model {
 

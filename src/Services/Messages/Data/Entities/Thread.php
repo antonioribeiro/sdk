@@ -3,7 +3,7 @@
 namespace PragmaRX\Sdk\Services\Messages\Data\Entities;
 
 use Auth;
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 use PragmaRX\Sdk\Services\Messages\Data\Presenters\Thread as ThreadPresenter;
 
 class Thread extends Model

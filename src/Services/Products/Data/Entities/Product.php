@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Products\Data\Entities;
 
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 use PragmaRX\Sdk\Services\Products\Data\Presenters\Product as ProductPresenter;
 
 class Product extends Model

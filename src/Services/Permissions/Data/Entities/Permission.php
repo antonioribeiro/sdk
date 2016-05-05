@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Permissions\Data\Entities;
 
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Role;
 use PragmaRX\Sdk\Services\Permissions\Data\Presenters\Permission as PermissionPresenter;
 

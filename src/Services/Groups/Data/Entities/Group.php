@@ -3,7 +3,7 @@
 namespace PragmaRX\Sdk\Services\Groups\Data\Entities;
 
 use Illuminate\Support\Collection;
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 
 class Group extends Model
 {

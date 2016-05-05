@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Tags\Data\Entities;
 
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 use PragmaRX\Sdk\Services\Clipping\Data\Entities\ClippingTag;
 
 class Tag extends Model 

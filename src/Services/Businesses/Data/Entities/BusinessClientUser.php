@@ -3,7 +3,7 @@
 namespace PragmaRX\Sdk\Services\Businesses\Data\Entities;
 
 use App\Services\Users\Data\Entities\User;
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 
 class BusinessClientUser extends Model
 {

@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Clipping\Data\Entities;
 
-use PragmaRX\Sdk\Core\Model;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 use PragmaRX\Sdk\Services\Files\Data\Entities\FileName as File;
 use PragmaRX\Sdk\Services\Files\Data\Repositories\File as FileRepository;
 
