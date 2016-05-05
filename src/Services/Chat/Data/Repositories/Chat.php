@@ -19,6 +19,7 @@ use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatMessage;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatCustomer;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScriptType;
+use PragmaRX\Sdk\Services\Caching\Service\Facade as Caching;
 use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\Chat as ChatModel;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
@@ -164,7 +165,8 @@ class Chat extends Repository
 
     private function findChatBusinessClientServiceByTelegramRobot($bot)
     {
-        $service = ChatBusinessClientService::where('bot_name', $bot->name)
+        $service = ChatBusinessClientService::rememberForever()
+                    ->where('bot_name', $bot->name)
                     ->where('bot_token', $bot->token)
                     ->first();
 
@@ -173,7 +175,9 @@ class Chat extends Repository
 
     private function findOrCreateChatByTelegramChatId($telegramMessage)
     {
-        $chat = ChatModel::where('telegram_chat_id', $telegramMessage->chat->id)->first();
+        $chat = ChatModel::rememberForever()
+                    ->where('telegram_chat_id', $telegramMessage->chat->id)
+                    ->first();
 
         if (! $chat)
         {
@@ -336,14 +340,23 @@ class Chat extends Repository
 			]
 		);
 
+        Caching::tags(ChatScript::class)->flush();
+
 		return $script;
 	}
 
 	public function allScripts()
 	{
+        $key = Caching::makeKey(['allScripts', 'client', 'service']);
+
+        if ($result = Caching::get($key))
+        {
+            return $result;
+        }
+
 		$result = [];
 
-		foreach(ChatScript::all() as $script)
+        foreach(ChatScript::with(['client', 'service'])->get() as $script)
 		{
 			$result[] = [
 				'id' => $script->id,
@@ -353,6 +366,8 @@ class Chat extends Repository
 				'service' => $script->service->name,
 			];
 		}
+
+        Caching::tags([ChatScript::class])->forever($key, $result);
 
 		return $result;
 	}
@@ -525,7 +540,8 @@ class Chat extends Repository
 
 	private function findChatLastReadMessage($talker, $chat)
 	{
-		return ChatRead::where('chat_business_client_talker_id', $talker->id)
+		return ChatRead::rememberForever()
+                        ->where('chat_business_client_talker_id', $talker->id)
 						->where('chat_id', $chat->id)
 						->first();
 	}
@@ -633,7 +649,7 @@ class Chat extends Repository
 	 */
 	public function findScriptById($id)
 	{
-		return ChatScript::find($id);
+		return ChatScript::remember(60)->find($id);
 	}
 
 	public function updateScript($attributes)
@@ -664,7 +680,9 @@ class Chat extends Repository
 	{
 		if ($clientUser = $this->findClientUserByTalker($talker))
 		{
-			return BusinessClientUserRole::where('business_client_user_id', $clientUser->id)->first();
+			return BusinessClientUserRole::rememberForever()
+                    ->where('business_client_user_id', $clientUser->id)
+                    ->first();
 		}
 
 		return null;
@@ -672,7 +690,9 @@ class Chat extends Repository
 
 	private function findClientUserByTalker($talker)
 	{
-		return BusinessClientUser::where('user_id', $talker->user->id)->first();
+		return BusinessClientUser::rememberForever()
+                ->where('user_id', $talker->user->id)
+                ->first();
 	}
 
     public function allMessagesForClient($clientId, $open = true, $period = null)

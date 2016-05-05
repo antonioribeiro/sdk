@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services\Cache\Http\Middleware;
+namespace PragmaRX\Sdk\Services\Caching\Http\Middleware;
 
-use Str;
-use Cache;
 use Closure;
+use Illuminate\Http\Request;
+use PragmaRX\Sdk\Services\Caching\Service\Facade as Caching;
 
 class Before extends Base
 {
@@ -15,13 +15,13 @@ class Before extends Base
      * @param Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $key = $this->keygen($request->url());
 
-        if(Cache::has($key))
+        if(Caching::has($key))
         {
-            return Cache::get( $key );
+            return response(Caching::get($key));
         }
 
         return $next($request);

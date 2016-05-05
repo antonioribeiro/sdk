@@ -44,6 +44,7 @@ return [
 		'Services/Block',
 		'Services/Bus',
 
+        'Services/Caching',
 		'Services/Cities',
 		'Services/Clients',
 		'Services/Clipping',
@@ -100,6 +101,13 @@ return [
 	],
 
 	'packages' => [
+
+        [
+            'name' => 'pragmarx/caching',
+            'enabled' => true,
+            'serviceProviders' => ['PragmaRX\Sdk\Services\Caching\Service\Provider'],
+            'facades' => ['Caching' => 'PragmaRX\Sdk\Services\Caching\Service\Facade']
+        ],
 
         [
             'name' => 'pragmarx/telegram',

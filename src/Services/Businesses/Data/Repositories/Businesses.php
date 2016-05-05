@@ -3,17 +3,17 @@
 namespace PragmaRX\Sdk\Services\Businesses\Data\Repositories;
 
 use Auth;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use PragmaRX\Sdk\Core\Data\Repository;
 use PragmaRX\Sdk\Services\Businesses\Events\UserWasCreated;
 use PragmaRX\Sdk\Services\Businesses\Events\UserWasUpdated;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\Business;
+use PragmaRX\Sdk\Services\Caching\Service\Facade as Caching;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessRole;
-use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientService;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUser;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientService;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUserRole;
 
 class Businesses extends Repository
@@ -34,6 +34,8 @@ class Businesses extends Repository
 		$business = Business::firstOrCreate($atributes);
 
 		$this->createDefaultRolesForBusiness($business);
+
+        Caching::tags(Business::class)->flush();
 
 		return $business;
 	}
@@ -267,7 +269,7 @@ class Businesses extends Repository
 
 		if (Auth::user()->is_root)
 		{
-			return Business::all();
+			return Business::cacheTags(Business::class)->remember(60)->get();
 		}
 
 		return Auth::user()->businesses;
@@ -302,7 +304,12 @@ class Businesses extends Repository
 
 	public function findClientById($clientId)
 	{
-		return BusinessClient::find($clientId);
+        if ($clientId instanceof BusinessClient)
+        {
+            $clientId = $clientId->id;
+        }
+
+		return BusinessClient::cacheTags(BusinessClient::class)->remember(60)->find($clientId);
 	}
 
     public function findServiceById($serviceId)
