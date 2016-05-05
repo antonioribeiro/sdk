@@ -2,13 +2,8 @@
 
 namespace PragmaRX\Sdk\Services\Bus\Events;
 
-trait EventGenerator {
-
-	/**
-	 * @var array
-	 */
-	protected $pendingEvents = [];
-
+trait EventGenerator
+{
 	/**
 	 * Raise a new event
 	 *
@@ -30,5 +25,4 @@ trait EventGenerator {
 		$this->pendingEvents = [];
 		return $events;
 	}
-
 }

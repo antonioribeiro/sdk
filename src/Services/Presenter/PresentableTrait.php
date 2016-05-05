@@ -7,13 +7,6 @@ use PragmaRX\Sdk\Services\Presenter\Exceptions\PresenterException;
 trait PresentableTrait
 {
 	/**
-	 * View presenter instance
-	 *
-	 * @var mixed
-	 */
-	protected $presenterInstance;
-
-	/**
 	 * Prepare a new or cached presenter instance
 	 *
 	 * @return mixed

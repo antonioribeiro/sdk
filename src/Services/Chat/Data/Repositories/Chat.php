@@ -144,6 +144,11 @@ class Chat extends Repository
     {
         $chatBusinessClientService = $this->findChatBusinessClientServiceByTelegramRobot($telegramMessage->chat->bot);
 
+        if (! $chatBusinessClientService)
+        {
+            return false;
+        }
+
         $chat = $this->create(
             [
                 'first_name' => $telegramMessage->from->first_name,
@@ -169,6 +174,11 @@ class Chat extends Repository
                     ->where('bot_name', $bot->name)
                     ->where('bot_token', $bot->token)
                     ->first();
+
+        if (! $service)
+        {
+            \Log::error(sprintf('TELEGRAM BOT NOT FOUND. Name: %s - Token: %s', $bot->name, $bot->token));
+        }
 
         return $service;
     }
@@ -413,6 +423,11 @@ class Chat extends Repository
     private function receiveTelegramMessage($telegramMessage)
     {
         $chat = $this->findOrCreateChatByTelegramChatId($telegramMessage);
+
+        if (! $chat)
+        {
+            return false;
+        }
 
         $this->clearAndOpenChat($chat);
 

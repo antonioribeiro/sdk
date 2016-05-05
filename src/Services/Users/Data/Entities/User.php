@@ -5,7 +5,6 @@ namespace PragmaRX\Sdk\Services\Users\Data\Entities;
 use DB;
 use Auth;
 use Activation;
-use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramUser;
 use Rhumsaa\Uuid\Uuid;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +17,8 @@ use PragmaRX\Sdk\Services\Bus\Events\EventGenerator;
 use PragmaRX\Sdk\Services\Presenter\PresentableTrait;
 use PragmaRX\Sdk\Services\Clients\Data\Entities\Client;
 use PragmaRX\Sdk\Services\Settings\Data\Entities\Setting;
-use Cartalyst\Sentinel\Users\EloquentUser as CartalystUser;
+use PragmaRX\Sdk\Core\Database\Eloquent\User as SdkUser;
+use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramUser;
 use PragmaRX\Sdk\Services\Accounts\Exceptions\UserAlreadyActivated;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\BlockableTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\VisitableTrait;
@@ -32,7 +32,7 @@ use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\BusinessableTrait;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\PermissionableTrait;
 
-class User extends CartalystUser implements CanResetPassword
+class User extends SdkUser implements CanResetPassword
 {
 	use
 		FollowableTrait,

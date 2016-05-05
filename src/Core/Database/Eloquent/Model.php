@@ -10,11 +10,36 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 use PragmaRX\Sdk\Services\Bus\Events\EventGenerator;
 use PragmaRX\Sdk\Services\Presenter\PresentableTrait;
 use PragmaRX\Sdk\Core\Database\Caching\Traits\Rememberable;
+use PragmaRX\Sdk\Services\Caching\Service\Facade as Caching;
+use PragmaRX\Sdk\Core\Database\Eloquent\Builder as EloquentBuilder;
 
 class Model extends Eloquent
 {
-	use RevisionableTrait;
-    use CachableTrait;
+    use
+        RevisionableTrait,
+        CachableTrait,
+        EventGenerator,
+        PresentableTrait,
+        ReloadableTrait,
+        Rememberable,
+        IdentifiableTrait;
+
+    /**
+     * @var array
+     */
+    protected $pendingEvents = [];
+
+    /**
+     * View presenter instance
+     *
+     * @var mixed
+     */
+    protected $presenterInstance;
+
+    /**
+     * @var bool
+     */
+    public static $generateId = true;
 
 	protected $revisionCreationsEnabled = true;
 
@@ -26,17 +51,11 @@ class Model extends Eloquent
 
     public $incrementing = false;
 
-	use
-		EventGenerator,
-		PresentableTrait,
-		IdentifiableTrait,
-		ReloadableTrait,
-        Rememberable;
-
-	public static function boot()
-	{
-		parent::boot();
-	}
+    public static function boot()
+    {
+        parent::identifiableTraitBoot();
+        parent::boot();
+    }
 
     /**
      * @param array $values
@@ -91,5 +110,25 @@ class Model extends Eloquent
         $model->save();
 
         return $model;
+    }
+
+    /**
+     * Create a new Eloquent query builder for the model.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
+    public function newEloquentBuilder($query)
+    {
+        return new EloquentBuilder($query);
+    }
+
+    public function save(array $options = array())
+    {
+        Caching::tags($this->getModel()->getTable())->flush();
+
+        $this->identifiableSave();
+
+        return parent::save($options);
     }
 }

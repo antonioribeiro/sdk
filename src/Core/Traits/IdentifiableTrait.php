@@ -4,25 +4,21 @@ namespace PragmaRX\Sdk\Core\Traits;
 
 use Rhumsaa\Uuid\Uuid;
 
-trait IdentifiableTrait {
-
-	public static $generateId = true;
-
+trait IdentifiableTrait 
+{
 	/**
 	 * Boot model and set id as uuid v4 during creation.
 	 *
 	 */
-	protected static function boot()
+	protected static function identifiableTraitBoot()
 	{
-		if (static::$generateId)
+		if (static::canGenerateId())
 		{
 			static::creating(function ($model)
 			{
 				$model->id = (string) Uuid::uuid4();
 			});
 		}
-
-		parent::boot();
 	}
 
 	/**
@@ -33,7 +29,7 @@ trait IdentifiableTrait {
 	 */
 	public static function create(array $attributes = [])
 	{
-		if (static::$generateId)
+		if (static::canGenerateId())
 		{
 			if (!isset($attributes['id']))
 			{
@@ -50,7 +46,7 @@ trait IdentifiableTrait {
 	 * @param  array  $options
 	 * @return bool
 	 */
-	public function save(array $options = array())
+	public function identifiableSave(array $options = array())
 	{
 		$this->incrementing = false;
 
@@ -58,8 +54,15 @@ trait IdentifiableTrait {
 		{
 			$this->id = (string) Uuid::uuid4();
 		}
-
-		return parent::save($options);
 	}
 
+    public static function canGenerateId()
+    {
+        if (property_exists(static::class, 'generateId'))
+        {
+            return static::$generateId;
+        }
+
+        return true;
+    }
 }

@@ -17,7 +17,7 @@ class CreateTelegramMessagesTable extends Migration
 		{
 			$table->string('id', 64)->unique()->primary()->index();
 
-			$table->bigInteger('telegram_message_id', false)->unsigned()->unique()->index();
+			$table->bigInteger('telegram_message_id', false)->unsigned()->index();
             $table->string('chat_id', 64);
 			$table->string('from_id', 64);
             $table->integer('date');

@@ -58,7 +58,7 @@ trait CachableTrait
 
         if (! $key)
         {
-            $key = str_slug(__CLASS__);
+            $key = str_slug(static::class);
         }
 
         foreach ($attributes as $index => $attribute)

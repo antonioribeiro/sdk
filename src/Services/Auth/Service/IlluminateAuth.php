@@ -177,18 +177,22 @@ class IlluminateAuth implements AuthContract
         }
     }
 
-    private function updateLastSeen() {
-        if ($this->lastSeenUpdated) {
-            return;
+    private function updateLastSeen()
+    {
+        if (! $user = $this->auth->user())
+        {
+            return false;
         }
 
-        if ($user = $this->auth->user())
+        $now = Carbon::now();
+
+        $lastSeen = $user->last_seen_at->diffInSeconds($now);
+
+        if ($lastSeen > 15 && $user = $user)
         {
-            $user->last_seen_at = Carbon::now();
+            $user->last_seen_at = $now;
 
             $user->save();
-
-            $this->lastSeenUpdated = true;
         }
     }
 }
