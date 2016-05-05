@@ -22,11 +22,11 @@ class Telegram
     private $initialized = false;
 
     public function __construct($botName = null, $botToken = null)
-	{
+    {
         $this->fileRepository = app(FileRepository::class);
 
         $this->configureBot($botName, $botToken);
-	}
+    }
 
     /**
      * @param $botName
@@ -123,7 +123,7 @@ class Telegram
     {
         return $this->fileRepository->downloadFile($url, $height, $width);
     }
-    
+
     public function getFile($fileId)
     {
         $response = TelegramRequest::getFile($fileId);
