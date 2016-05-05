@@ -28,7 +28,26 @@ class Telegram
 
     private function initializeBot()
     {
-        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
+//        $this->telegram = new TelegramBot(config('env.TELEGRAM_API_TOKEN'), config('env.TELEGRAM_BOT_NAME'));
     }
 
     public function setWebhook()
