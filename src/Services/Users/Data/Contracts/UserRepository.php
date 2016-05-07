@@ -2,8 +2,8 @@
 
 namespace PragmaRX\Sdk\Services\Users\Data\Contracts;
 
-interface UserRepository {
-
+interface UserRepository
+{
 	public function save($user);
 
 	public function getPaginated($howMany = 25);
@@ -72,5 +72,4 @@ interface UserRepository {
 	public function find($user);
 
 	public function deleteUser($userId);
-
 }

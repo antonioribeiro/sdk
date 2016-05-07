@@ -3,9 +3,10 @@
 namespace PragmaRX\Sdk\Services\Kinds\Data\Repositories;
 
 use PragmaRX\Sdk\Services\Kinds\Data\Entities\Kind;
+use PragmaRX\Sdk\Core\Data\Repositories\Repository;
 
-class KindRepository {
-
+class KindRepository extends Repository
+{
 	public function allForSelect()
 	{
 		$kinds = Kind::lists('name', 'id')->toArray();
@@ -17,5 +18,4 @@ class KindRepository {
 
 		return [0 => t('captions.contact-type')] + $kinds;
 	}
-
 }

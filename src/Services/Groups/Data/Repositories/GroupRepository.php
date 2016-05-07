@@ -4,13 +4,14 @@ namespace PragmaRX\Sdk\Services\Groups\Data\Repositories;
 
 use Illuminate\Database\Eloquent\Collection;
 use PragmaRX\Sdk\Core\Exceptions\ForbiddenRequest;
+use PragmaRX\Sdk\Core\Data\Repositories\Repository;
 use PragmaRX\Sdk\Services\Groups\Data\Entities\Group;
 use PragmaRX\Sdk\Services\Groups\Data\Entities\GroupMember;
 use PragmaRX\Sdk\Services\Groups\Data\Entities\GroupRole;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
-class GroupRepository {
-
+class GroupRepository extends Repository
+{
 	/**
 	 * @var UserRepository
 	 */
@@ -246,5 +247,4 @@ class GroupRepository {
 
 		return in_array($user->id, $managers);
 	}
-
 }

@@ -6,12 +6,13 @@ use Config;
 use Carbon;
 use Language;
 use PragmaRX\Sdk\Core\Exceptions\InvalidRequest;
+use PragmaRX\Sdk\Core\Data\Repositories\Repository;
 use PragmaRX\Sdk\Services\Clients\Data\Entities\Client;
 use PragmaRX\Sdk\Services\Clients\Data\Entities\ProviderClient;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
-class ClientRepository {
-
+class ClientRepository extends Repository
+{
 	/**
 	 * @var UserRepository
 	 */
@@ -171,5 +172,4 @@ class ClientRepository {
 
 		return $format;
 	}
-
 }

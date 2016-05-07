@@ -3,11 +3,12 @@
 namespace PragmaRX\Sdk\Services\Statuses\Data\Repositories;
 
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
+use PragmaRX\Sdk\Core\Data\Repositories\Repository;
 use PragmaRX\Sdk\Services\Statuses\Data\Entities\Status;
 use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
 
-class StatusRepository {
-
+class StatusRepository extends Repository
+{
 	private $userRepository;
 
 	function __construct(UserRepository $userRepository)
@@ -40,5 +41,4 @@ class StatusRepository {
 
 		return Status::whereIn('user_id', $userIds)->latest()->get();
 	}
-
 }
