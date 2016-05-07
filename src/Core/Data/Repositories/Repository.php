@@ -1,18 +1,15 @@
 <?php
 
-namespace PragmaRX\Sdk\Core\Data;
+namespace PragmaRX\Sdk\Core\Data\Repositories;
 
 use Config;
+use PragmaRX\Sdk\Core\Data\Repositories\Traits\Find;
 
 class Repository
 {
-	protected $model = '';
+    use Find;
 
-	public function findById($id)
-	{
-		return $this
-			->call($this->getModel(), 'findOrFail', $id);
-	}
+	protected $model = '';
 
 	public function getModel()
 	{

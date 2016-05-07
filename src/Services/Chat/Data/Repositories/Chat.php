@@ -6,7 +6,7 @@ use Gate;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use PragmaRX\Sdk\Core\Data\Repository;
+use PragmaRX\Sdk\Core\Data\Repositories\Repository;
 use Illuminate\Database\Eloquent\Collection;
 use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasSent;
 use PragmaRX\Sdk\Services\Chat\Events\ChatWasCreated;

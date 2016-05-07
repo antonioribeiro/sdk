@@ -4,7 +4,7 @@ namespace PragmaRX\Sdk\Services\Businesses\Data\Repositories;
 
 use Auth;
 use Illuminate\Support\Arr;
-use PragmaRX\Sdk\Core\Data\Repository;
+use PragmaRX\Sdk\Core\Data\Repositories\Repository;
 use PragmaRX\Sdk\Services\Businesses\Events\UserWasCreated;
 use PragmaRX\Sdk\Services\Businesses\Events\UserWasUpdated;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\Business;
