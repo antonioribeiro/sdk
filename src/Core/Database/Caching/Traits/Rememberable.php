@@ -19,12 +19,13 @@ trait Rememberable
 
         $builder = new Builder($conn, $grammar, $conn->getPostProcessor());
 
-        if (isset($this->rememberFor)) {
+        if (isset($this->rememberFor))
+        {
             $builder->remember($this->rememberFor);
         }
         else
         {
-            $builder->cacheTags($this->getTable())->remember(1);
+            $builder->cacheTags($this->getTable())->remember(config('env.CACHE_DATABASE_TIME', 60));
         }
 
         return $builder;

@@ -21,7 +21,14 @@ class Provider extends ServiceProvider {
 	{
 		$this->app['pragmarx.push'] = $this->app->share(function($app)
 		{
-			return new Push(config('env.PUSH.PUBLIC'), config('env.PUSH.SECRET'), config('env.PUSH.APP_ID'));
+			return app()->make(
+                Push::class,
+                [
+                    config('env.PUSH.PUBLIC'),
+                    config('env.PUSH.SECRET'),
+                    config('env.PUSH.APP_ID')
+                ]
+            );
 		});
 	}
 

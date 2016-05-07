@@ -120,7 +120,7 @@ class Model extends Eloquent
      */
     public function newEloquentBuilder($query)
     {
-        return new EloquentBuilder($query);
+        return app()->make(EloquentBuilder::class, [$query]);
     }
 
     public function save(array $options = array())

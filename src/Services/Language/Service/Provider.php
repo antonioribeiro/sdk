@@ -25,7 +25,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app[$this->defaultBinding] = $this->app->share(function($app)
 		{
-			return new Language(new UserRepository());
+			return app()->make(Language::class);
 		});
 	}
 

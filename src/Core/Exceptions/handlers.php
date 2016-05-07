@@ -23,7 +23,7 @@ ExceptionHandler::addHandler(function(PragmaRX\Sdk\Core\Exceptions\InvalidToken 
 
 ExceptionHandler::addHandler(function(Illuminate\Contracts\Validation\ValidationException $exception, $code)
 {
-	return new Illuminate\Http\JsonResponse($exception->errors()->all(), 422);
+	return app()->make(Illuminate\Http\JsonResponse::class, [$exception->errors()->all(), 422]);
 
 //	Flash::error(t('paragraphs.two-factor-token-invalid'));
 

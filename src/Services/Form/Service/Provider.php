@@ -33,7 +33,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app->singleton('html', function($app)
 		{
-			return new HtmlBuilder($app['url'], $app['view']);
+			return app()->make(HtmlBuilder::class, [$app['url'], $app['view']]);
 		});
 	}
 
@@ -51,7 +51,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app->singleton('pragmarx.form', function($app)
 		{
-			return new Form();
+			return app()->make(Form::class);
 		});
 
 //		$this->app->singleton('pragmarx.form', function($app)

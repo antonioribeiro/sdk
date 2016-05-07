@@ -27,7 +27,7 @@ class Provider extends ServiceProvider {
 		{
 			$cache = $app['config']['view.compiled'] ?: $app['path.storage'].'/views';
 
-			return new BladeCompiler($app['files'], $cache);
+			return app()->make(BladeCompiler::class, [$app['files'], $cache]);
 		});
 
 		$this->app->make('view')->addExtension('blade.jsx', 'blade');

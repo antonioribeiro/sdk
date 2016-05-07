@@ -36,6 +36,6 @@ trait AuthorizesRequests
 
 	protected function createGateUnauthorizedException($ability, $arguments)
 	{
-		return new HttpException(403, 'This action is unauthorized.');
+		return app()->make(HttpException::class, [403, 'This action is unauthorized.']);
 	}
 }

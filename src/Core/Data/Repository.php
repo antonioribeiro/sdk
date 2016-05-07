@@ -23,7 +23,7 @@ class Repository
 	{
 		$model = $this->getModel();
 
-		return new $model;
+		return app($model);
 	}
 
 	public function getClassName($className)

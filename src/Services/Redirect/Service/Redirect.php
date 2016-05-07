@@ -39,7 +39,7 @@ class Redirect extends Redirector {
 				];
 			}
 
-			return new JsonResponse($response);
+			return app()->make(JsonResponse::class, [$response]);
 		}
 
 		if ($name == 'back')
@@ -59,7 +59,7 @@ class Redirect extends Redirector {
 	{
 		if ($this->wantsJson())
 		{
-			return new JsonResponse(['redirect' => route_ajax($route, $parameters)]);
+			return app()->make(JsonResponse::class, [['redirect' => route_ajax($route, $parameters)]]);
 		}
 
 		if ($this->wantsAjax($ajax) && $this->isBasedOnAjax())
@@ -76,7 +76,7 @@ class Redirect extends Redirector {
 
 		if ($this->wantsJson())
 		{
-			return new JsonResponse(['redirect' => $back]);
+			return app()->make(JsonResponse::class, [['redirect' => $back]]);
 		}
 
 		return $this->createRedirect($back, $status, $headers);

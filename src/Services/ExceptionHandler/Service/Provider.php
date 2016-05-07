@@ -22,7 +22,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app['pragmarx.exception'] = $this->app->share(function($app)
 		{
-			return new ExceptionHandler;
+			return app()->make(ExceptionHandler::class);
 		});
 	}
 

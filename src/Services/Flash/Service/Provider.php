@@ -22,7 +22,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app['pragmarx.flash'] = $this->app->share(function($app)
 		{
-			return new Flash;
+			return app()->make(Flash::class);
 		});
 	}
 

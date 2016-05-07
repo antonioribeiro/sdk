@@ -24,10 +24,10 @@ class Provider extends ServiceProvider
 	{
 		$this->app[$this->defaultBinding] = $this->app->share(function($app)
 		{
-			return new Telegram(
+			return app()->make(Telegram::class, [
                 config('env.TELEGRAM_BOT_NAME'),
                 config('env.TELEGRAM_BOT_TOKEN')
-            );
+            ]);
 		});
 	}
 

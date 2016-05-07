@@ -45,7 +45,7 @@ class Provider extends ServiceProvider {
 	{
 		$fileLoader = function($app)
 		{
-			return new FileLoader($app['files'], $app['path.lang']);
+			return app()->make(FileLoader::class, [$app['files'], $app['path.lang']]);
 		};
 
 		$this->app->singleton('translation.loader', $fileLoader);

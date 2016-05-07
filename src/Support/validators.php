@@ -1,6 +1,8 @@
 <?php
 
+use PragmaRX\Sdk\Core\Validation\Resolver;
+
 Validator::resolver(function($translator, $data, $rules, $messages)
 {
-	return new PragmaRX\Sdk\Core\Validation\Resolver($translator, $data, $rules, $messages);
+	return app()->make(Resolver::class, [$translator, $data, $rules, $messages]);
 });

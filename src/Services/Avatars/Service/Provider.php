@@ -24,7 +24,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app[$this->defaultBinding] = $this->app->share(function($app)
 		{
-			return new Avatar;
+			return app()->make(Avatar::class);
 		});
 	}
 

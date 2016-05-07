@@ -23,7 +23,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app['pragmarx.sms'] = $this->app->share(function($app)
 		{
-			return new Sms($app['twilio']);
+			return app()->make(Sms::class, [$app['twilio']]);
 		});
 	}
 

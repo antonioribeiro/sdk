@@ -400,7 +400,7 @@ class Chat extends Repository
             $result[ $chat[$id_column] ] = $this->makeChatData($chat);
         }
 
-        return new Collection($result);
+        return app()->make(Collection::class, [$result]);
     }
 
     public function pingUser()
