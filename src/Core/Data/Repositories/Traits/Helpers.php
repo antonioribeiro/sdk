@@ -6,7 +6,7 @@ trait Helpers
 {
     public function getClassName($className)
     {
-        $aliases = Config::get('sdk.aliases');
+        $aliases = config('sdk.aliases');
 
         if (isset($aliases[$className]))
         {

@@ -7,6 +7,7 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
+use PragmaRX\Sdk\Services\Caching\Service\Caching;
 use PragmaRX\Sdk\Core\Data\Repositories\Repository;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 use PragmaRX\Sdk\Services\Chat\Events\ChatWasCreated;
@@ -17,7 +18,6 @@ use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatMessage;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatCustomer;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScriptType;
-use PragmaRX\Sdk\Services\Caching\Service\Facade as Caching;
 use PragmaRX\Sdk\Services\Telegram\Data\Repositories\Telegram;
 use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\Chat as ChatModel;
@@ -45,11 +45,13 @@ class Chat extends Repository
 	 */
 	private $request;
 
-	public function __construct(UserRepository $userRepository, BusinessesRepository $businessesRepository, Request $request)
+	public function __construct(UserRepository $userRepository, BusinessesRepository $businessesRepository, Request $request, Caching $caching)
 	{
 		$this->userRepository = $userRepository;
 		$this->businessesRepository = $businessesRepository;
 		$this->request = $request;
+
+        parent::__construct($caching);
 	}
 
     private function addDateColumnToDataArray($data, $model, $column)
@@ -722,9 +724,22 @@ class Chat extends Repository
 
 	public function allChatsForClient($clientId = null, $open = true, $period = null)
 	{
-        return $this->makeChatResult(
+        $tags = ['chats', 'chat_messages'];
+
+        list($result, $key) = $this->caching->cached($tags, ['clientId' => $clientId, 'period' => $period, 'open' => $open]);
+
+        if ($result)
+        {
+            return $result;
+        }
+
+        $result = $this->makeChatResult(
             $this->getChatAndTalkersForClientInPeriod(Auth::user(), $clientId, $open, $period)
         );
+
+        $this->caching->cache($tags, $key, $result);
+
+        return $result;
 	}
 
     /**

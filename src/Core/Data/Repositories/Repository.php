@@ -9,7 +9,7 @@ use PragmaRX\Sdk\Core\Data\Repositories\Traits\Helpers;
 use PragmaRX\Sdk\Core\Data\Repositories\Traits\Caching;
 use PragmaRX\Sdk\Services\Caching\Service\Caching as CachingService;
 
-class Repository
+abstract class Repository
 {
     use Find;
     use Model;
@@ -22,9 +22,9 @@ class Repository
     protected $model = '';
 
     /**
-     * @var Caching
+     * @var \PragmaRX\Sdk\Services\Caching\Service\Caching
      */
-    private $caching;
+    protected $caching;
 
     public function __construct(CachingService $caching)
     {

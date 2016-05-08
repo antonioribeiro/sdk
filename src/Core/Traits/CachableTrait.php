@@ -2,30 +2,28 @@
 
 namespace PragmaRX\Sdk\Core\Traits;
 
-use PragmaRX\Sdk\Services\Caching\Service\Facade as Caching;
-
 trait CachableTrait
 {
-    public static function firstOrCreateCached(array $attributes)
+    public function firstOrCreateCached(array $attributes)
     {
-        list($model, $key) = static::getCached($attributes);
+        list($model, $key) = $this->getCached($attributes);
 
         if (! $model)
         {
             $model = parent::firstOrCreate($attributes);
 
-            static::putCached($key, $model);
+            $this->putCached($key, $model);
         }
 
         return $model;
     }
 
-    public static function putCached($key, $model)
+    public function cache($tags, $key, $model)
     {
-        Caching::put($key, $model, config('env.CACHE_DATABASE_TIME'));
+        $this->tags($tags)->put($key, $model, config('env.CACHE_DATABASE_TIME'));
     }
 
-    public static function createOrUpdateCached(array $attributes = [], $searchKey)
+    public function createOrUpdateCached(array $attributes = [], $searchKey)
     {
         if (! is_array($searchKey))
         {
@@ -37,19 +35,19 @@ trait CachableTrait
             return null;
         }
 
-        list($model, $key) = static::getCached($attributes, $searchKey);
+        list($model, $key) = $this->getCached($attributes, $searchKey);
 
         if (! $model)
         {
             $model = parent::createOrUpdate($attributes, $searchKey);
 
-            static::putCached($key, $model);
+            $this->putCached($key, $model);
         }
 
         return $model;
     }
 
-    public static function makeKey($attributes, $searchKey = null, $key = null)
+    public function makeKey($attributes, $searchKey = null, $key = null)
     {
         if ($searchKey)
         {
@@ -69,13 +67,13 @@ trait CachableTrait
         return sha1($key);
     }
 
-    public static function getCached($attributes, $searchKey = null, $key = null)
+    public function cached($tags, $attributes, $searchKey = null, $key = null)
     {
-        $key = static::makeKey($attributes, $searchKey, $key);
+        $key = $this->makeKey($attributes, $searchKey, $key);
 
-        if (Caching::has($key))
+        if ($result = $this->tags($tags)->get($key))
         {
-            return [Caching::get($key), $key];
+            return [$result, $key];
         }
 
         return [null, $key];

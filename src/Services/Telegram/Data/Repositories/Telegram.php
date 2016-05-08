@@ -63,7 +63,7 @@ class Telegram
      */
     private function createOrUpdatePhoto($photo, $bot)
     {
-        $photo = TelegramPhoto::createOrUpdateCached(
+        $photo = TelegramPhoto::createOrUpdate(
             $photo,
             'telegram_file_id'
         );
@@ -218,7 +218,7 @@ class Telegram
 
     private function firstOrCreateAudio($audio, $bot)
     {
-        $audio = TelegramAudio::createOrUpdateCached(
+        $audio = TelegramAudio::createOrUpdate(
             [
                 'telegram_file_id' => array_get($audio, 'file_id'),
                 'duration' => array_get($audio, 'duration'),
@@ -240,7 +240,7 @@ class Telegram
 
     private function firstOrCreateChat($chat, $bot)
     {
-        return TelegramChat::createOrUpdateCached(
+        return TelegramChat::createOrUpdate(
             [
                 'telegram_id' => $chat['id'],
                 'bot_id' => $bot->id,
@@ -256,7 +256,7 @@ class Telegram
 
     private function firstOrCreateContact($contact)
     {
-        return TelegramContact::createOrUpdateCached(
+        return TelegramContact::createOrUpdate(
             [
                 'phone_number' => array_get($contact, 'phone_number'),
                 'first_name' => array_get($contact, 'first_name'),
@@ -271,7 +271,7 @@ class Telegram
     {
         $thumb = $this->firstOrCreatePhoto(array_get($document, 'thumb'), $bot);
 
-        $document = TelegramDocument::createOrUpdateCached(
+        $document = TelegramDocument::createOrUpdate(
             [
                 'telegram_file_id' => array_get($document, 'file_id'),
                 'thumb_id' => $thumb ? $thumb->id : null,
@@ -297,7 +297,7 @@ class Telegram
             return null;
         }
 
-        return TelegramLocation::firstOrCreateCached($location);
+        return TelegramLocation::firstOrCreate($location);
     }
 
     private function firstOrCreateMessage($data, $bot)
@@ -375,7 +375,7 @@ class Telegram
 
     private function firstOrCreateBot($bot, $token)
     {
-        return TelegramBot::firstOrCreateCached([
+        return TelegramBot::firstOrCreate([
             'name' => $bot,
             'token' => $token,
         ]);
@@ -410,7 +410,7 @@ class Telegram
     {
         $thumb = $this->firstOrCreatePhoto(array_get($sticker, 'thumb'), $bot);
 
-        return TelegramSticker::createOrUpdateCached(
+        return TelegramSticker::createOrUpdate(
             [
                 'telegram_file_id' => array_get($sticker, 'file_id'),
                 'width' => array_get($sticker, 'width'),
@@ -424,12 +424,12 @@ class Telegram
 
     private function firstOrCreateType($type)
     {
-        return TelegramChatType::firstOrCreateCached(['name' => $type]);
+        return TelegramChatType::firstOrCreate(['name' => $type]);
     }
 
     private function firstOrCreateUser($user, $bot)
     {
-        $user = TelegramUser::createOrUpdateCached(
+        $user = TelegramUser::createOrUpdate(
             [
                 'telegram_id' => array_get($user, 'id'),
                 'first_name' => array_get($user, 'first_name'),
@@ -451,7 +451,7 @@ class Telegram
             return null;
         }
 
-        return TelegramVenue::firstOrCreateCached(
+        return TelegramVenue::firstOrCreate(
             [
                 'location_id' => isset($location) ? $location->id : null,
                 'title' => array_get($data, 'title'),
@@ -465,7 +465,7 @@ class Telegram
     {
         $thumb = $this->firstOrCreatePhoto(array_get($video, 'thumb'), $bot);
 
-        $video = TelegramVideo::createOrUpdateCached(
+        $video = TelegramVideo::createOrUpdate(
             [
                 'telegram_file_id' => array_get($video, 'file_id'),
                 'width' => array_get($video, 'width'),
@@ -488,7 +488,7 @@ class Telegram
 
     private function firstOrCreateVoice($voice, $bot)
     {
-        $voice = TelegramVoice::createOrUpdateCached(
+        $voice = TelegramVoice::createOrUpdate(
             [
                 'telegram_file_id' => array_get($voice, 'file_id'),
                 'duration' => array_get($voice, 'duration'),
