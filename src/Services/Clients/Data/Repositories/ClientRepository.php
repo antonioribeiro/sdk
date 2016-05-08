@@ -13,6 +13,8 @@ use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 class ClientRepository extends Repository
 {
+    protected $model = Client::class;
+    
 	/**
 	 * @var UserRepository
 	 */

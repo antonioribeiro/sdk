@@ -12,6 +12,8 @@ use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 
 class GroupRepository extends Repository
 {
+    protected $model = Group::class;
+
 	/**
 	 * @var UserRepository
 	 */

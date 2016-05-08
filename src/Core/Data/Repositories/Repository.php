@@ -6,14 +6,30 @@ use Config;
 use PragmaRX\Sdk\Core\Data\Repositories\Traits\Find;
 use PragmaRX\Sdk\Core\Data\Repositories\Traits\Model;
 use PragmaRX\Sdk\Core\Data\Repositories\Traits\Helpers;
+use PragmaRX\Sdk\Core\Data\Repositories\Traits\Caching;
+use PragmaRX\Sdk\Services\Caching\Service\Caching as CachingService;
 
 class Repository
 {
     use Find;
     use Model;
     use Helpers;
+    use Caching;
 
-	protected $model = '';
+    /**
+     * @var string
+     */
+    protected $model = '';
+
+    /**
+     * @var Caching
+     */
+    private $caching;
+
+    public function __construct(CachingService $caching)
+    {
+        $this->caching = $caching;
+    }
 
 	protected function call($className, $method = null, $arguments = [])
 	{

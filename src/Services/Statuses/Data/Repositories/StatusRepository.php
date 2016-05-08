@@ -9,6 +9,8 @@ use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
 
 class StatusRepository extends Repository
 {
+    protected $model = Status::class;
+
 	private $userRepository;
 
 	function __construct(UserRepository $userRepository)

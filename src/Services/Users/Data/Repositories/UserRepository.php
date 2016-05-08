@@ -15,7 +15,6 @@ use PragmaRX\Sdk\Core\Exceptions\InvalidToken;
 use Illuminate\Pagination\LengthAwarePaginator;
 use PragmaRX\Sdk\Services\Mailer\Service\Mailer;
 use PragmaRX\Sdk\Core\Exceptions\InvalidRequest;
-use Laracasts\Commander\Events\DispatchableTrait;
 use PragmaRX\Sdk\Core\Data\Repositories\Repository;
 use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 use PragmaRX\Sdk\Services\Auth\Service\Facade as Auth;
@@ -56,7 +55,7 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 	private $twoFactorTypes = ['google', 'email', 'sms'];
 
-	protected $model = \App\Services\Users\Data\Entities\User::class;
+	protected $model = User::class;
 
 	/**
 	 * Save a user.

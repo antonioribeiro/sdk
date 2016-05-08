@@ -7,6 +7,8 @@ use PragmaRX\Sdk\Core\Data\Repositories\Repository;
 
 class KindRepository extends Repository
 {
+    protected $model = Kind::class;
+
 	public function allForSelect()
 	{
 		$kinds = Kind::lists('name', 'id')->toArray();
