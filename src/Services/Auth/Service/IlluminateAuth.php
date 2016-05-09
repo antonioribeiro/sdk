@@ -184,15 +184,6 @@ class IlluminateAuth implements AuthContract
             return false;
         }
 
-        $now = Carbon::now();
-
-        $lastSeen = $user->last_seen_at->diffInSeconds($now);
-
-        if ($lastSeen > 15 && $user = $user)
-        {
-            $user->last_seen_at = $now;
-
-            $user->save();
-        }
+        $user->last_seen_at = Carbon::now();
     }
 }

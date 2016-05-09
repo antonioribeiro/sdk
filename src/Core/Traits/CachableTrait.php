@@ -59,10 +59,7 @@ trait CachableTrait
             $key = str_slug(static::class);
         }
 
-        foreach ($attributes as $index => $attribute)
-        {
-            $key .= sprintf('-{%s => %s}', (string) $index, (string) $attribute);
-        }
+        $key .= is_numeric($attributes) ? $attributes : serialize($attributes);
 
         return sha1($key);
     }

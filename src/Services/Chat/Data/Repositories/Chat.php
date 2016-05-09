@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Services\Chat\Data\Repositories;
 
 use Gate;
 use Auth;
+use DateInterval;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
@@ -306,6 +307,52 @@ class Chat extends Repository
         return $chats;
     }
 
+    public function getDashboard($businessClientId)
+    {
+        $tags = ['chats', 'chat_messages', 'users', 'chats', 'chat_messages', 'users', 'business_client_users', 'business_client_user_roles', 'chat_business_client_talkers'];
+
+        list($result, $key) = $this->caching->cached($tags, ['routine' => 'getDashboard', '$businessClientId' => $businessClientId]);
+
+        if ($result)
+        {
+            return $result;
+        }
+
+        list($chatInCourseCount, $chatInCourseOpenCount) = $this->getChatCount($businessClientId);
+
+        list($operatorCount, $operatorAvailable, $operatorOnlikePeak) = $this->getOperatorCount($businessClientId);
+
+        list($totalChatCount, $totalChatCountLastWeek) = $this->getTotalChatCount($businessClientId);
+
+        list($totalMessageCount, $totalMessageCountToday) = $this->getTotalMessageCount($businessClientId);
+
+        $result = [
+            'inCourse' => [
+                'count' => $chatInCourseOpenCount . ' / ' . $chatInCourseCount,
+                'description' => '.',
+            ],
+
+            'operators' => [
+                'count' => $operatorAvailable . ' de ' . $operatorCount,
+                'description' => 'Pico de operadores online: ' . $operatorOnlikePeak,
+            ],
+
+            'chats' => [
+                'count' => $totalChatCount,
+                'description' => 'Na última semana: ' . $totalChatCountLastWeek,
+            ],
+
+            'messages' => [
+                'count' => $totalMessageCount,
+                'description' => 'Hoje: ' . $totalMessageCountToday,
+            ],
+        ];
+
+        $this->caching->cache($tags, $key, $result);
+
+        return $result;
+    }
+
     private function isTelegramCommand($telegramMessage)
     {
         $repository = app(Telegram::class);
@@ -410,8 +457,6 @@ class Chat extends Repository
         $user = Auth::user();
 
         $user->last_seen_at = Carbon::now();
-
-        $user->save();
     }
 
     public function receiveMessage($message)
@@ -465,11 +510,6 @@ class Chat extends Repository
 			$this->setChatResponder($chat, Auth::user())
 		);
 	}
-
-    private function sendTelegramMessage($message)
-    {
-
-    }
 
     private function setChatResponder($chat, $user)
 	{
@@ -714,19 +754,32 @@ class Chat extends Repository
 
     public function allMessagesForClient($clientId, $open = true, $period = null)
     {
-        return $this->makeChatResult(
+        $tags = ['chats', 'chat_messages'];
+
+        list($result, $key) = $this->caching->cached($tags, ['routine' => 'allMessagesForClient', 'clientId' => $clientId, 'period' => $period, 'open' => $open]);
+
+        if ($result)
+        {
+            return $result;
+        }
+
+        $result = $this->makeChatResult(
             $this->getChatAndTalkersForClientInPeriod(Auth::user(), $clientId, $open, $period)
-                ->addSelect('chat_messages.id as chat_message_id')
-                ->join('chat_messages', 'chats.id', '=', 'chat_messages.chat_id')
+                 ->addSelect('chat_messages.id as chat_message_id')
+                 ->join('chat_messages', 'chats.id', '=', 'chat_messages.chat_id')
             , 'chat_message_id'
         );
+
+        $this->caching->cache($tags, $key, $result);
+
+        return $result;
     }
 
 	public function allChatsForClient($clientId = null, $open = true, $period = null)
 	{
         $tags = ['chats', 'chat_messages'];
 
-        list($result, $key) = $this->caching->cached($tags, ['clientId' => $clientId, 'period' => $period, 'open' => $open]);
+        list($result, $key) = $this->caching->cached($tags, ['routine' => 'allChatsForClient', 'clientId' => $clientId, 'period' => $period, 'open' => $open]);
 
         if ($result)
         {
@@ -750,23 +803,36 @@ class Chat extends Repository
         return BusinessClientUser::
                 select([
                     'business_client_id',
-                    'user_id',
+                    'business_client_users.user_id',
                     'email',
                     'first_name',
                     'last_name',
                     'avatar_id',
-                    'last_seen_at',
+                    'online_users.last_seen_at',
                 ])
                 ->join('users', 'business_client_users.user_id', '=', 'users.id')
+                ->leftJoin('online_users', 'online_users.user_id', '=', 'users.id')
                 ->where('business_client_id', $clientId)
         ;
     }
 
     public function operatorsForClient($clientId = null)
     {
-        return $this->getOperatorsForClient($clientId)
-                    ->get()
-        ;
+        $tags = ['chats', 'chat_messages', 'users', 'business_client_users', 'business_client_user_roles', 'chat_business_client_talkers'];
+
+        list($result, $key) = $this->caching->cached($tags, ['routine' => 'operatorsForClient', 'clientId' => $clientId]);
+
+        if ($result)
+        {
+            return $result;
+        }
+
+        $result = $this->getOperatorsForClient($clientId)
+                       ->get();
+
+        $this->caching->cache($tags, $key, $result);
+
+        return $result;
     }
 
     public function operatorsOnlineForClient($clientId = null)
@@ -774,9 +840,69 @@ class Chat extends Repository
         $now = Carbon::now()->subMinute(1);
 
         return $this->getOperatorsForClient($clientId)
-                ->where('users.last_seen_at', '>=', $now)
+                ->where('online_users.last_seen_at', '>=', $now)
                 ->where('users.logged_in', true)
                 ->get()
         ;
+    }
+
+    /**
+     * @param $businessClientId
+     * @return array
+     */
+    private function getChatCount($businessClientId)
+    {
+        $chats = $this->allChatsForClient($businessClientId);
+
+        $chatInCourseCount = $chats->count();
+
+        $chatInCourseOpenCount = $chats->where('responder_id', null)->count();
+
+        return [$chatInCourseCount, $chatInCourseOpenCount];
+    }
+
+    private function getOperatorCount($businessClientId)
+    {
+        $operatorCount = $this->operatorsForClient($businessClientId)->count();
+        $operatorAvailable = $this->operatorsOnlineForClient($businessClientId)->count();
+        $operatorOnlikePeak = 2;
+
+        return [$operatorCount, $operatorAvailable, $operatorOnlikePeak];
+    }
+
+    private function getTotalChatCount($businessClientId)
+    {
+        $allChats = $this
+            ->allChatsForClient($businessClientId, false)
+            ->count();
+
+        $now = Carbon::now();
+        $lastWeek = Carbon::now()->subDays(2);
+
+        $lastWeekCount = $this
+            ->allChatsForClient($businessClientId, false, [$lastWeek, $now])
+            ->count();
+
+        return [$allChats, $lastWeekCount];
+    }
+
+    private function getTotalMessageCount($businessClientId)
+    {
+        $interval = DateInterval::createFromDateString('-7 days');
+
+        $to = Carbon::now();
+        $from = Carbon::now()->add($interval);
+
+        $interval = [$from, $to];
+
+        $totalMessageCount = $this
+            ->allMessagesForClient($businessClientId)
+            ->count();
+
+        $totalMessageCountToday = $this
+            ->allMessagesForClient($businessClientId, true, $interval)
+            ->count();
+
+        return [$totalMessageCount, $totalMessageCountToday];
     }
 }
