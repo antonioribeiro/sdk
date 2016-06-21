@@ -14,6 +14,8 @@ use PragmaRX\Sdk\Services\Users\Data\Entities\User;
 use PragmaRX\Sdk\Services\Chat\Events\ChatWasCreated;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatRead;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
+use PragmaRX\Sdk\Services\Chat\Events\ChatUserCheckedIn;
+use PragmaRX\Sdk\Services\Chat\Events\ChatUserCheckedOut;
 use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasSent;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatMessage;
@@ -61,6 +63,30 @@ class Chat extends Repository
         $data[$column.'_order'] = (string) $model[$column];
 
         return $data;
+    }
+
+    public function checkIn($clientId, $userId)
+    {
+        $user = User::find($userId);
+
+        $user->online->online_on_chat = true;
+
+        $user->online->last_seen_on_chat = Carbon::now();
+
+        $user->online->save();
+
+        event(new ChatUserCheckedIn($user));
+    }
+
+    public function checkOut($clientId, $userId)
+    {
+        $user = User::find($userId);
+
+        $user->online->online_on_chat = false;
+
+        $user->online->save();
+
+        event(new ChatUserCheckedOut($user));
     }
 
     private function clearAndOpenChat($chat)
@@ -173,8 +199,7 @@ class Chat extends Repository
 
     private function findChatBusinessClientServiceByTelegramRobot($bot)
     {
-        $service = ChatBusinessClientService::rememberForever()
-                    ->where('bot_name', $bot->name)
+        $service = ChatBusinessClientService::where('bot_name', $bot->name)
                     ->where('bot_token', $bot->token)
                     ->first();
 
@@ -188,8 +213,7 @@ class Chat extends Repository
 
     private function findOrCreateChatByTelegramChatId($telegramMessage)
     {
-        $chat = ChatModel::rememberForever()
-                    ->where('telegram_chat_id', $telegramMessage->chat->id)
+        $chat = ChatModel::where('telegram_chat_id', $telegramMessage->chat->id)
                     ->first();
 
         if (! $chat)
@@ -597,8 +621,7 @@ class Chat extends Repository
 
 	private function findChatLastReadMessage($talker, $chat)
 	{
-		return ChatRead::rememberForever()
-                        ->where('chat_business_client_talker_id', $talker->id)
+		return ChatRead::where('chat_business_client_talker_id', $talker->id)
 						->where('chat_id', $chat->id)
 						->first();
 	}
@@ -609,7 +632,9 @@ class Chat extends Repository
 
 		foreach ($messages as $message)
 		{
-			$serial = max($message['serial'], $serial);
+		    $_serial = intval((string) $message['serial']);
+
+			$serial = max($_serial, $serial);
 		}
 
 		return $serial;
@@ -737,8 +762,7 @@ class Chat extends Repository
 	{
 		if ($clientUser = $this->findClientUserByTalker($talker))
 		{
-			return BusinessClientUserRole::rememberForever()
-                    ->where('business_client_user_id', $clientUser->id)
+			return BusinessClientUserRole::where('business_client_user_id', $clientUser->id)
                     ->first();
 		}
 
@@ -747,8 +771,7 @@ class Chat extends Repository
 
 	private function findClientUserByTalker($talker)
 	{
-		return BusinessClientUser::rememberForever()
-                ->where('user_id', $talker->user->id)
+		return BusinessClientUser::where('user_id', $talker->user->id)
                 ->first();
 	}
 
@@ -809,6 +832,7 @@ class Chat extends Repository
                     'last_name',
                     'avatar_id',
                     'online_users.last_seen_at',
+                    'online_users.last_seen_at',
                 ])
                 ->join('users', 'business_client_users.user_id', '=', 'users.id')
                 ->leftJoin('online_users', 'online_users.user_id', '=', 'users.id')
@@ -837,13 +861,20 @@ class Chat extends Repository
 
     public function operatorsOnlineForClient($clientId = null)
     {
+        return $this->getOperatorsForClient($clientId)
+                ->where('online_users.online_on_chat', true)
+                ->get()
+        ;
+    }
+
+    public function operatorsOnlineOnChatForClient($clientId = null)
+    {
         $now = Carbon::now()->subMinute(1);
 
         return $this->getOperatorsForClient($clientId)
-                ->where('online_users.last_seen_at', '>=', $now)
-                ->where('users.logged_in', true)
-                ->get()
-        ;
+                    ->where('online_users.online_on_chat', true)
+                    ->get()
+            ;
     }
 
     /**
@@ -864,7 +895,7 @@ class Chat extends Repository
     private function getOperatorCount($businessClientId)
     {
         $operatorCount = $this->operatorsForClient($businessClientId)->count();
-        $operatorAvailable = $this->operatorsOnlineForClient($businessClientId)->count();
+        $operatorAvailable = $this->operatorsOnlineOnChatForClient($businessClientId)->count();
         $operatorOnlikePeak = 2;
 
         return [$operatorCount, $operatorAvailable, $operatorOnlikePeak];

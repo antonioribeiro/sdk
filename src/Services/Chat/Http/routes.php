@@ -79,6 +79,17 @@ Route::group(['middleware' => 'api'], function()
                 Route::get('get/{chatId}', ['as' => 'chat.client.all', 'uses' => 'Api@getChat']);
 
                 Route::get('operators/online/for/client/{clientId?}', ['as' => 'chat.operators.online.for.client', 'uses' => 'Api@operatorsOnlineForClient']);
+
+                Route::get('checkin/{clientId}/{userId}', ['as' => 'chat.checkin', 'uses' => 'Api@checkIn']);
+
+                Route::get('checkout/{clientId}/{userId}', ['as' => 'chat.checkout', 'uses' => 'Api@checkOut']);
+            });
+
+            Route::group(['prefix' => 'server'], function ()
+            {
+                Route::get('checkin/{clientId}/{userId}', ['as' => 'chat.checkin', 'uses' => 'Api@checkIn']);
+
+                Route::get('checkout/{clientId}/{userId}', ['as' => 'chat.checkout', 'uses' => 'Api@checkOut']);
             });
         });
     });

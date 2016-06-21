@@ -154,6 +154,20 @@ class Api extends BaseController
         return ['success' => true];
     }
 
+    public function checkIn($clientId, $userId)
+    {
+        $this->chatRepository->checkIn($clientId, $userId);
+
+        return ['success' => true];
+    }
+
+    public function checkOut($clientId, $userId)
+    {
+        $this->chatRepository->checkOut($clientId, $userId);
+
+        return ['success' => true];
+    }
+
     public function operatorsOnlineForClient($clientId)
     {
         return $this->response(

@@ -2,10 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Listeners;
 
-use PragmaRX\Sdk\Services\Chat\Events\ChatWasRead;
 use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
+use PragmaRX\Sdk\Services\Chat\Events\ChatUserCheckedOut;
 
-class NotifyChatRead
+class NotifyChatUserCheckedOut
 {
     /**
      * @var EventPublisher
@@ -20,10 +20,10 @@ class NotifyChatRead
     /**
      * Handle the event.
      *
-     * @param ChatWasRead $event
+     * @param ChatUserCheckedOut $event
      */
-	public function handle(ChatWasRead $event)
+	public function handle(ChatUserCheckedOut $event)
 	{
-//        $this->eventPublisher->publish($event->read->chat_id . ':ChatRead', $event->read);
+        $this->eventPublisher->publish('ChatUserCheckedOut', $event->user->id);
 	}
 }

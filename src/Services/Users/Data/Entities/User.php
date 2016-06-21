@@ -6,7 +6,6 @@ use DB;
 use Auth;
 use Activation;
 use Carbon\Carbon;
-use PragmaRX\Sdk\Services\Users\Events\UserGotOnline;
 use Rhumsaa\Uuid\Uuid;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
@@ -17,6 +16,7 @@ use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\User as UserContract;
 use PragmaRX\Sdk\Services\Bus\Events\EventGenerator;
 use PragmaRX\Sdk\Services\Presenter\PresentableTrait;
+use PragmaRX\Sdk\Services\Users\Events\UserGotOnline;
 use PragmaRX\Sdk\Services\Online\Data\Entities\Online;
 use PragmaRX\Sdk\Services\Clients\Data\Entities\Client;
 use PragmaRX\Sdk\Services\Settings\Data\Entities\Setting;
@@ -288,6 +288,17 @@ class User extends SdkUser implements CanResetPassword
 
     public function online()
     {
+        if (! $online = Online::where('user_id', $this->id)->first())
+        {
+            $online = new Online();
+
+            $online->user_id = $this->id;
+
+            $online->last_seen_at = Carbon::now();
+
+            $online->save();
+        }
+
         return $this->belongsTo(Online::class, 'id', 'user_id');
     }
 
@@ -305,30 +316,13 @@ class User extends SdkUser implements CanResetPassword
 
         $value = $value ?: $now;
 
-        $userArrivedNow = false;
-
-        if (! $this->online)
-        {
-            $online = new Online();
-
-            $online->user_id = $this->id;
-
-            $online->last_seen_at = $now;
-
-            $userArrivedNow = true;
-        }
-        else
-        {
-            $online = $this->online;
-        }
-
-        $userArrivedNow = $userArrivedNow || $now->diffInSeconds($online->last_seen_at) >= config('env.OFFLINE_USER_SECONDS');
+        $userArrivedNow = $now->diffInSeconds($this->online->last_seen_at) >= config('env.OFFLINE_USER_SECONDS');
             
-        $online->last_seen_at = $value;
+        $this->online->last_seen_at = $value;
 
-        $online->online = true;
+        $this->online->online = true;
 
-        $online->save();
+        $this->online->save();
         
         if ($userArrivedNow)
         {

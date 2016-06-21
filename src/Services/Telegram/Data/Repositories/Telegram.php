@@ -134,7 +134,11 @@ class Telegram
             'user_id' => $user->telegram_id
         ];
 
-        $photos = $this->extractPhotos(TelegramService::getUserProfilePhotos($data)->getResult()->getPhotos());
+        $result = TelegramService::getUserProfilePhotos($data)->getResult();
+
+        $photos = $result
+                    ? $this->extractPhotos($result->getPhotos())
+                    : null;
 
         $avatar = null;
 
@@ -144,7 +148,7 @@ class Telegram
         // Download only the first photo
         $key = 0;
 
-        if ($fileName = $this->downloadAndMakeFileName($photos[$key]))
+        if ($photos && $fileName = $this->downloadAndMakeFileName($photos[$key]))
         {
             $photos[$key]['telegram_file_id'] = $photos[$key]['file_id'];
 
@@ -439,7 +443,10 @@ class Telegram
             'telegram_id'
         );
 
-        event(new TelegramUserWasCreated($user, $bot));
+        if ($user && $user->wasRecentlyCreated)
+        {
+            event(new TelegramUserWasCreated($user, $bot));
+        }
 
         return $user;
     }

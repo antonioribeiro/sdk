@@ -17,11 +17,11 @@ class Model extends Eloquent
 {
     use
         RevisionableTrait,
-        CachableTrait,
+//        CachableTrait,
+//        Rememberable,
         EventGenerator,
         PresentableTrait,
         ReloadableTrait,
-        Rememberable,
         IdentifiableTrait;
 
     /**

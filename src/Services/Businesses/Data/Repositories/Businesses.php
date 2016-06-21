@@ -269,7 +269,9 @@ class Businesses extends Repository
 
 		if (Auth::user()->is_root)
 		{
-			return Business::cacheTags(Business::class)->remember(60)->get();
+//			return Business::cacheTags(Business::class)->remember(60)->get();
+
+            return Business::all();
 		}
 
 		return Auth::user()->businesses;
@@ -309,7 +311,8 @@ class Businesses extends Repository
             $clientId = $clientId->id;
         }
 
-		return BusinessClient::cacheTags(BusinessClient::class)->remember(60)->find($clientId);
+//		return BusinessClient::cacheTags(BusinessClient::class)->remember(60)->find($clientId);
+        return BusinessClient::find($clientId);
 	}
 
     public function findServiceById($serviceId)
