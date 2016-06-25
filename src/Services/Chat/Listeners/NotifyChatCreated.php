@@ -24,6 +24,8 @@ class NotifyChatCreated
      */
 	public function handle(ChatWasCreated $event)
 	{
-        $this->eventPublisher->publish('ChatWasCreated');
+	    $data = ['chat' => $event->chat, 'allChats' => $event->allChats];
+
+        $this->eventPublisher->publish('ChatWasCreated', $data);
 	}
 }

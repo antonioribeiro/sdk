@@ -11,8 +11,11 @@ class ChatWasCreated extends Event
 
 	public $chat;
 
-    public function __construct($chat)
+    public $allChats;
+
+    public function __construct($chat, $allChats)
     {
 	    $this->chat = $chat;
+        $this->allChats = $allChats;
     }
 }

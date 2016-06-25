@@ -12,7 +12,7 @@ class EventPublisher
 
 	public function publish($event, $data = null, $username = null)
 	{
-        Redis::publish(static::CHANNEL, $this->makeMessage(static::EVENT_OCCURED, $data, $username));
+//        Redis::publish(static::CHANNEL, $this->makeMessage(static::EVENT_OCCURED, $data, $username));
 
 		Redis::publish(static::CHANNEL, $this->makeMessage($event, $data, $username));
 	}

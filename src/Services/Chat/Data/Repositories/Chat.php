@@ -136,8 +136,11 @@ class Chat extends Repository
             'layout' => $layout,
 		    'closed_at' => null,
 		]);
-        
-        event(new ChatWasCreated($chat));
+
+        /// we need the user or we will have to send everything to everyone
+        // $allChats = $this->allChatsForClient($clientId);
+
+        event(new ChatWasCreated($chat, []));
 
         return $chat;
 	}
