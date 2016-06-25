@@ -6,7 +6,8 @@ Route::group(['prefix' => config('env.ROUTE_GLOBAL_PREFIX')], function()
     {
         Route::group(['prefix' => 'facebook'], function()
         {
-            Route::any('{robot}/{token}/webhook/handle', ['as' => 'facebookMessenger.webhook.handle', 'uses' => 'FacebookMessenger@handleWebhook']);
+            Route::get('{robot}/{token}/webhook/handle', ['as' => 'facebookMessenger.webhook.handle', 'uses' => 'FacebookMessenger@verifyBot']);
+            Route::post('{robot}/{token}/webhook/handle', ['as' => 'facebookMessenger.webhook.handle', 'uses' => 'FacebookMessenger@handleWebhook']);
         });
     });
 });

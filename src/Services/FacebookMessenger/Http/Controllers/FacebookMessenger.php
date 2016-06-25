@@ -20,8 +20,13 @@ class FacebookMessenger extends BaseController
         $this->repository = app(FacebookMessengerRepository::class);
     }
 
+    public function verifyBot($robot, $token)
+    {
+        return response($this->request->get('hub_challenge'));
+    }
+    
 	public function handleWebhook($robot, $token)
 	{
-        return response($this->request->get('hub_challenge'));
+	    \Log::info($this->request->all());
 	}
 }
