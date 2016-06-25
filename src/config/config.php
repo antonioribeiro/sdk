@@ -56,6 +56,7 @@ return [
 		'Services/EmailChanges',
         'Services/Errors',
 
+        'Services/FacebookMessenger',
 		'Services/Files',
 		'Services/Firewall',
 		'Services/Follow',
