@@ -22,6 +22,6 @@ class FacebookMessenger extends BaseController
 
 	public function handleWebhook($robot, $token)
 	{
-        \Log::info($this->request->all());
+        return response($this->request->get('hub_challenge'));
 	}
 }
