@@ -16,9 +16,13 @@ class ChatBusinessClientService extends Model
         'bot_name',
         'bot_token',
         'bot_webhook_url',
+        'app_id',
+        'app_secret',
 	];
 
-	public function type()
+    protected $appends = ['bot_token_ellipse'];
+
+    public function type()
 	{
 		return $this->belongsTo(ChatService::class, 'chat_service_id');
 	}
@@ -27,4 +31,14 @@ class ChatBusinessClientService extends Model
 	{
 		return $this->belongsTo(BusinessClient::class, 'business_client_id');
 	}
+
+    public function getBotTokenEllipseAttribute()
+    {
+        if (strlen($this->bot_token) > 60)
+        {
+            return substr($this->bot_token, 0, 60). '...';
+        }
+
+        return $this->bot_token;
+    }
 }

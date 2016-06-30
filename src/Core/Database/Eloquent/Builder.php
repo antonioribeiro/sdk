@@ -16,19 +16,19 @@ class Builder extends IlluminateEloquentBuilder
 
     public function find($id, $columns = ['*'])
     {
-        list($model, $key) = Caching::cached($this->getModel(), $this->query->from.'-'.$id);
-
-        if ($model)
-        {
-            return $model;
-        }
+//        list($model, $key) = Caching::cached($this->getModel(), $this->query->from.'-'.$id);
+//
+//        if ($model)
+//        {
+//            return $model;
+//        }
 
         if (! $model = parent::find($id, $columns))
         {
             return null;
         }
 
-        Caching::cache($this->getModel(), $key, $model);
+//        Caching::cache($this->getModel(), $key, $model);
 
         return $model;
     }

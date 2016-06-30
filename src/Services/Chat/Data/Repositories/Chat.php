@@ -21,6 +21,7 @@ use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatMessage;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatCustomer;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScriptType;
+use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasReceived;
 use PragmaRX\Sdk\Services\Telegram\Data\Repositories\Telegram;
 use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\Chat as ChatModel;
@@ -30,6 +31,8 @@ use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientTalker;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUser;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientService;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClientUserRole;
+use PragmaRX\Sdk\Services\FacebookMessenger\Data\Repositories\FacebookMessenger;
+use PragmaRX\Sdk\Services\FacebookMessenger\Data\Entities\FacebookMessengerMessage;
 use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses as BusinessesRepository;
 
 class Chat extends Repository
@@ -150,7 +153,35 @@ class Chat extends Repository
         return $this->allChatsForClient(null, $open);
 	}
 
-	public function createMessage($chatId, $talkerId, $message = '')
+    private function createFacebookMessengerChat($facebookMessengerMessage)
+    {
+        $chatBusinessClientService = $this->findChatBusinessClientServiceByRobot($facebookMessengerMessage->chat->bot);
+
+        if (! $chatBusinessClientService)
+        {
+            return false;
+        }
+
+        $chat = $this->create(
+            [
+                'first_name' => $facebookMessengerMessage->from->first_name,
+                'last_name' => $facebookMessengerMessage->from->last_name,
+            ],
+            $facebookMessengerMessage->from->email,
+            $chatBusinessClientService->business_client_id,
+            $chatBusinessClientService
+        );
+
+        $chat->owner->user->facebook_messenger_user_id = $facebookMessengerMessage->from->id;
+        $chat->owner->user->save();
+
+        $chat->facebook_messenger_chat_id = $facebookMessengerMessage->chat->id;
+        $chat->save();
+
+        return $chat;
+    }
+
+    public function createMessage($chatId, $talkerId, $message = '', $received = false)
 	{
 		$chat = $this->findById($chatId);
 
@@ -167,14 +198,26 @@ class Chat extends Repository
 
         $chat->save();
 
-        $this->fireChatMessageWasSentEvent($chatId, $talkerId, $message, $chat);
+        if ($received)
+        {
+            $this->fireChatMessageWasReceivedEvent($chatId, $talkerId, $message, $chat);
+        }
+        else
+        {
+            $this->fireChatMessageWasSentEvent($chatId, $talkerId, $message, $chat);
+        }
 
         return $message;
 	}
 
+    private function createReceivedMessage($chatId, $talkerId, $message = '')
+    {
+        return $this->createMessage($chatId, $talkerId, $message, true);
+    }
+
     private function createTelegramChat($telegramMessage)
     {
-        $chatBusinessClientService = $this->findChatBusinessClientServiceByTelegramRobot($telegramMessage->chat->bot);
+        $chatBusinessClientService = $this->findChatBusinessClientServiceByRobot($telegramMessage->chat->bot);
 
         if (! $chatBusinessClientService)
         {
@@ -200,7 +243,7 @@ class Chat extends Repository
         return $chat;
     }
 
-    private function findChatBusinessClientServiceByTelegramRobot($bot)
+    private function findChatBusinessClientServiceByRobot($bot)
     {
         $service = ChatBusinessClientService::where('bot_name', $bot->name)
                     ->where('bot_token', $bot->token)
@@ -208,10 +251,23 @@ class Chat extends Repository
 
         if (! $service)
         {
-            \Log::error(sprintf('TELEGRAM BOT NOT FOUND. Name: %s - Token: %s', $bot->name, $bot->token));
+            \Log::error(sprintf('BOT NOT FOUND. Name: %s - Token: %s', $bot->name, $bot->token));
         }
 
         return $service;
+    }
+
+    private function findOrCreateChatByFacebookMessengerChatId($facebookMessengerMessage)
+    {
+        $chat = ChatModel::where('facebook_messenger_chat_id', $facebookMessengerMessage->chat->id)
+                         ->first();
+
+        if (! $chat)
+        {
+            $chat = $this->createFacebookMessengerChat($facebookMessengerMessage);
+        }
+
+        return $chat;
     }
 
     private function findOrCreateChatByTelegramChatId($telegramMessage)
@@ -244,6 +300,20 @@ class Chat extends Repository
         ); // allow empty password
     }
 
+    private function fireChatMessageWasReceivedEvent($chatId, $talkerId, $message, $chat)
+    {
+        $data = [];
+
+        if (!is_null($message) && !empty($message))
+        {
+            $data = $this->makeMessageData($chatId, $talkerId, $message, $chat);
+
+            event(new ChatMessageWasReceived($data));
+        }
+
+        return $data;
+    }
+
     /**
      * @param $chatId
      * @param $talkerId
@@ -257,15 +327,7 @@ class Chat extends Repository
 
         if (!is_null($message) && !empty($message))
         {
-            $data = [
-                'chat_id'   => $chatId,
-                'message'   => $message->message,
-                'fullName'  => $chat->owner->user->present()->fullName,
-                'avatar'    => $chat->owner->user->present()->avatar,
-                'owner_id'  => $chat->owner->id,
-                'talker_id' => $talkerId,
-                'message_model' => $message,
-            ];
+            $data = $this->makeMessageData($chatId, $talkerId, $message, $chat);
 
             event(new ChatMessageWasSent($data));
         }
@@ -380,11 +442,40 @@ class Chat extends Repository
         return $result;
     }
 
+    private function isFacebookMessengerCommand($facebookMessengerMessage)
+    {
+        $repository = app(FacebookMessenger::class);
+
+        return $repository->isCommand($facebookMessengerMessage->text);
+    }
+    
     private function isTelegramCommand($telegramMessage)
     {
         $repository = app(Telegram::class);
 
         return $repository->isCommand($telegramMessage->text);
+    }
+
+    /**
+     * @param $chatId
+     * @param $talkerId
+     * @param $message
+     * @param $chat
+     * @return array
+     */
+    private function makeMessageData($chatId, $talkerId, $message, $chat)
+    {
+        $data = [
+            'chat_id'       => $chatId,
+            'message'       => $message->message,
+            'fullName'      => $chat->owner->user->present()->fullName,
+            'avatar'        => $chat->owner->user->present()->avatar,
+            'owner_id'      => $chat->owner->id,
+            'talker_id'     => $talkerId,
+            'message_model' => $message,
+        ];
+
+        return $data;
     }
 
     private function makeMessages($all, $chat = null)
@@ -486,11 +577,39 @@ class Chat extends Repository
         $user->last_seen_at = Carbon::now();
     }
 
+    private function receiveFacebookMessengerMessage($facebookMessengerMessage)
+    {
+        $chat = $this->findOrCreateChatByFacebookMessengerChatId($facebookMessengerMessage);
+
+        if (! $chat)
+        {
+            return false;
+        }
+
+        $this->clearAndOpenChat($chat);
+
+        if (! $this->isFacebookMessengerCommand($facebookMessengerMessage))
+        {
+            $message = $this->createReceivedMessage($chat->id, $chat->owner->id);
+
+            $message->facebook_messenger_message_id = $facebookMessengerMessage->id;
+
+            $message->save();
+
+            return $facebookMessengerMessage;
+        }
+    }
+
     public function receiveMessage($message)
     {
         if ($message instanceof TelegramMessage)
         {
             $this->receiveTelegramMessage($message);
+        }
+
+        if ($message instanceof FacebookMessengerMessage)
+        {
+            $this->receiveFacebookMessengerMessage($message);
         }
     }
 
@@ -507,7 +626,7 @@ class Chat extends Repository
 
         if (! $this->isTelegramCommand($telegramMessage))
         {
-            $message = $this->createMessage($chat->id, $chat->owner->id);
+            $message = $this->createReceivedMessage($chat->id, $chat->owner->id);
 
             $message->telegram_message_id = $telegramMessage->id;
 

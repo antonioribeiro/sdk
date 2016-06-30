@@ -12,36 +12,15 @@ class FacebookMessengerMessage extends Model
     protected $presenter = FacebookMessengerMessagePresenter::class;
 
     protected $fillable = [
-        'facebook_messenger_message_id',
         'chat_id',
-        'from_id',
-        'date',
+        'mid',
+        'seq',
+        'sender_id',
+        'recipient_id',
+        'time',
         'timestamp',
-        'forward_from_id',
-        'forward_date',
-        'reply_to_message_id',
         'text',
-        'audio_id',
-        'document_id',
-        'photo',
-        'entities',
-        'sticker_id',
-        'video_id',
-        'voice_id',
-        'venue_id',
-        'caption',
-        'contact_id',
-        'location_id',
-        'new_chat_participant_id',
-        'left_chat_participant_id',
-        'new_chat_title',
-        'new_chat_photo',
-        'delete_chat_photo',
-        'group_chat_created',
-        'supergroup_chat_created',
-        'channel_chat_created',
-        'migrate_to_chat_id',
-        'migrate_from_chat_id',
+        'attachments',
     ];
 
     public function chat()
@@ -51,31 +30,16 @@ class FacebookMessengerMessage extends Model
 
     public function from()
     {
-        return $this->belongsTo(FacebookMessengerUser::class, 'from_id');
+        return $this->belongsTo(FacebookMessengerUser::class, 'sender_id');
+    }
+
+    public function to()
+    {
+        return $this->belongsTo(FacebookMessengerUser::class, 'recipient_id');
     }
 
     public function user()
     {
         return $this->from();
-    }
-
-    public function getIpAddressAttribute()
-    {
-        return '0.0.0.0';
-    }
-
-    public function document()
-    {
-        return $this->belongsTo(FacebookMessengerDocument::class);
-    }
-
-    public function voice()
-    {
-        return $this->belongsTo(FacebookMessengerVoice::class);
-    }
-
-    public function video()
-    {
-        return $this->belongsTo(FacebookMessengerVideo::class);
     }
 }

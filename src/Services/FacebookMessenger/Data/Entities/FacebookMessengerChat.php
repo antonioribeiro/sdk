@@ -11,7 +11,6 @@ class FacebookMessengerChat extends Model
     protected $fillable = [
         'facebook_messenger_id',
         'bot_id',
-        'facebook_messenger_chat_type_id',
         'title',
         'username',
         'first_name',

@@ -2,7 +2,9 @@
 
 namespace PragmaRX\Sdk\Services\Telegram\Providers;
 
+use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasReceived;
 use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasSent;
+use PragmaRX\Sdk\Services\Chat\Listeners\NotifyChatMessageReceived;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramUserWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramAudioWasCreated;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramPhotoWasCreated;
@@ -53,6 +55,10 @@ class Event extends ServiceProvider
 
         ChatMessageWasSent::class => [
             SendTelegramMessage::class,
+        ],
+
+        ChatMessageWasReceived::class => [
+            NotifyChatMessageReceived::class,
         ],
 	];
 }

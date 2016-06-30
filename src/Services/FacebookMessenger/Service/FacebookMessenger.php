@@ -2,36 +2,31 @@
 
 namespace PragmaRX\Sdk\Services\FacebookMessenger\Service;
 
-use PragmaRX\Sdk\Services\Files\Data\Repositories\File as FileRepository;
+use GuzzleHttp\Client as Guzzle;
 
 class FacebookMessenger
 {
-    private $botName;
+    private $pageName;
 
-    private $botToken;
+    private $pageToken;
 
-    private $description;
+    // private $userProfileUrl = 'https://graph.facebook.com/v2.6/%s?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=%s';
+    private $userProfileUrl = 'https://graph.facebook.com/v2.6/%s?access_token=%s';
 
-    private $facebookMessenger;
-
-    private $initialized = false;
-
-    public function __construct($botName = null, $botToken = null)
+    public function __construct($pageName = null, $pageToken = null)
     {
-        $this->fileRepository = app(FileRepository::class);
-
-        $this->configureBot($botName, $botToken);
+        $this->configurePage($pageName, $pageToken);
     }
 
     /**
-     * @param $botName
-     * @param $botToken
+     * @param $pageName
+     * @param $pageToken
      */
-    public function configureBot($botName, $botToken)
+    public function configurePage($pageName, $pageToken)
     {
-        $this->setBotName($botName);
+        $this->setPageName($pageName);
 
-        $this->setBotToken($botToken);
+        $this->setPageToken($pageToken);
     }
 
     public function getWebhookUrl()
@@ -39,62 +34,55 @@ class FacebookMessenger
         return route(
             'facebookMessenger.webhook.handle',
             [
-                'robot' => $this->botName,
-                'token' => $this->botToken,
+                'name' => $this->pageName,
+                'token' => $this->pageToken,
             ]
         );
     }
 
-    private function initializeBot()
+    private function guzzleGet($url)
     {
-        if ($this->initialized)
+        $client = new Guzzle();
+
+        $res = $client->get($url);
+
+        if ($res->getStatusCode() == 200)
         {
-            return false;
+            return json_decode((string) $res->getBody(), true);
         }
 
-        if (! $this->botToken || ! $this->botName)
-        {
-            return false;
-        }
-
-        $this->facebookMessenger = new FacebookMessengerBot($this->botToken, $this->botName);
-
-        FacebookMessengerRequest::initialize($this->facebookMessenger);
+        return [];
     }
 
     /**
-     * @param mixed $botName
+     * @param mixed $pageName
      */
-    public function setBotName($botName)
+    public function setPageName($pageName)
     {
-        if ($this->botName !== $botName)
+        if ($this->pageName !== $pageName)
         {
             $this->initialized = false;
         }
 
-        $this->botName = $botName;
-
-        $this->initializeBot();
+        $this->pageName = $pageName;
     }
 
     /**
-     * @param mixed $botToken
+     * @param mixed $pageToken
      */
-    public function setBotToken($botToken)
+    public function setPageToken($pageToken)
     {
-        if ($this->botToken !== $botToken)
+        if ($this->pageToken !== $pageToken)
         {
             $this->initialized = false;
         }
 
-        $this->botToken = $botToken;
-
-        $this->initializeBot();
+        $this->pageToken = $pageToken;
     }
 
     public function setWebhook()
     {
-        $result = $this->facebookMessenger->setWebHook($this->getWebhookUrl($this->botName, $this->botToken));
+        $result = $this->facebookMessenger->setWebHook($this->getWebhookUrl($this->pageName, $this->pageToken));
 
         return $this->description = $result->getDescription();
     }
@@ -104,31 +92,9 @@ class FacebookMessenger
         $this->facebookMessenger->handle();
     }
 
-    public function getUserProfilePhotos($data)
+    public function sendMessage($chatId, $text, $pageName, $pageToken)
     {
-        return FacebookMessengerRequest::getUserProfilePhotos($data);
-    }
-
-    public function makeFileUrl($file, $path)
-    {
-        return 'https://api.telegram.org/file/bot' . $this->botToken . '/' . $path;
-    }
-
-    public function downloadFile($url, $height = null, $width = null)
-    {
-        return $this->fileRepository->downloadFile($url, $height, $width);
-    }
-
-    public function getFile($fileId)
-    {
-        $response = FacebookMessengerRequest::getFile($fileId);
-
-        return $response->getResult();
-    }
-
-    public function sendMessage($chatId, $text, $botName, $botToken)
-    {
-        $this->configureBot($botName, $botToken);
+        $this->configurePage($pageName, $pageToken);
 
         return FacebookMessengerRequest::sendMessage(
             [
@@ -136,5 +102,12 @@ class FacebookMessenger
                 'chat_id' => $chatId,
             ]
         );
+    }
+
+    public function getUserProfile($user, $bot)
+    {
+        $url = sprintf($this->userProfileUrl, $user->facebook_messenger_id, $bot->token);
+
+        return $this->guzzleGet($url);
     }
 }

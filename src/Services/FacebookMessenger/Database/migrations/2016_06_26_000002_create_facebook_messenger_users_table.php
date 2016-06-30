@@ -18,11 +18,13 @@ class CreateFacebookMessengerUsersTable extends Migration
 			$table->string('id', 64)->unique()->primary()->index();
 
 			$table->bigInteger('facebook_messenger_id', false)->unsigned()->unique()->index();
-			$table->string('first_name');
-            $table->json('photos')->nullable();
-            $table->string('avatar_id', 64)->nullable();
+            $table->string('name')->nullable();
+			$table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
-			$table->string('username')->nullable();
+            $table->string('profile_pic')->nullable();
+            $table->string('locale')->nullable();
+            $table->string('timezone')->nullable();
+            $table->string('gender')->nullable();
 
 			$table->timestamps();
 		});

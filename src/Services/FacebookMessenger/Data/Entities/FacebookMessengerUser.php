@@ -3,7 +3,6 @@
 namespace PragmaRX\Sdk\Services\FacebookMessenger\Data\Entities;
 
 use PragmaRX\Sdk\Core\Database\Eloquent\Model;
-use PragmaRX\Sdk\Services\Files\Data\Entities\FileName;
 
 class FacebookMessengerUser extends Model
 {
@@ -11,10 +10,13 @@ class FacebookMessengerUser extends Model
 
 	protected $fillable = [
         'facebook_messenger_id',
+        'name',
         'first_name',
         'last_name',
-        'username',
-        'avatar_url',
+        'profile_pic',
+        'locale',
+        'timezone',
+        'gender',
     ];
 
     public function getEmailAttribute()
@@ -27,8 +29,8 @@ class FacebookMessengerUser extends Model
         return ! is_null($this->avatar_id);
     }
 
-    public function avatar()
+    public function getAvatarAttribute()
     {
-        return $this->belongsTo(FileName::class);
+        return $this->profile_pic;
     }
 }

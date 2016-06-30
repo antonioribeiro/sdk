@@ -5,6 +5,7 @@ namespace PragmaRX\Sdk\Services\Businesses\Http\Controllers;
 use Gate;
 use Auth;
 use Flash;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatBusinessClientService;
 use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatService;
 use Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;

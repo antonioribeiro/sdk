@@ -2,7 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\FacebookMessenger\Providers;
 
+use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasReceived;
 use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasSent;
+use PragmaRX\Sdk\Services\Chat\Listeners\NotifyChatMessageReceived;
+use PragmaRX\Sdk\Services\Chat\Listeners\NotifyChatMessageSent;
 use PragmaRX\Sdk\Services\FacebookMessenger\Events\FacebookMessengerUserWasCreated;
 use PragmaRX\Sdk\Services\FacebookMessenger\Events\FacebookMessengerAudioWasCreated;
 use PragmaRX\Sdk\Services\FacebookMessenger\Events\FacebookMessengerPhotoWasCreated;
@@ -15,7 +18,7 @@ use PragmaRX\Sdk\Services\FacebookMessenger\Listeners\DownloadFacebookMessengerP
 use PragmaRX\Sdk\Services\FacebookMessenger\Listeners\BroadcastLoggedOutUser;
 use PragmaRX\Sdk\Services\FacebookMessenger\Events\FacebookMessengerDocumentWasCreated;
 use PragmaRX\Sdk\Services\FacebookMessenger\Listeners\DownloadFacebookMessengerDocument;
-use PragmaRX\Sdk\Services\FacebookMessenger\Listeners\DownloadUserProfilePhotos;
+use PragmaRX\Sdk\Services\FacebookMessenger\Listeners\DownloadUserProfileAndPhotos;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use PragmaRX\Sdk\Services\FacebookMessenger\Listeners\SendFacebookMessengerMessage;
 
@@ -28,7 +31,7 @@ class Event extends ServiceProvider
 	 */
 	protected $listen = [
         FacebookMessengerUserWasCreated::class => [
-            DownloadUserProfilePhotos::class,
+            DownloadUserProfileAndPhotos::class,
         ],
 
         FacebookMessengerPhotoWasCreated::class => [
@@ -53,6 +56,10 @@ class Event extends ServiceProvider
 
         ChatMessageWasSent::class => [
             SendFacebookMessengerMessage::class,
+        ],
+
+        ChatMessageWasReceived::class => [
+            NotifyChatMessageReceived::class,
         ],
 	];
 }

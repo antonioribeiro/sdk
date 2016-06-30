@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Services\Chat\Data\Presenters;
 
 use PragmaRX\Sdk\Core\Presenter;
 use PragmaRX\Sdk\Services\Telegram\Data\Repositories\Telegram;
+use PragmaRX\Sdk\Services\FacebookMessenger\Data\Repositories\FacebookMessenger;
 
 class ChatMessage extends Presenter
 {
@@ -11,6 +12,11 @@ class ChatMessage extends Presenter
      * @var Telegram
      */
     private $telegramRepository;
+
+    /**
+     * @var FacebookMessenger
+     */
+    private $facebookMessengerRepository;
 
     function __construct($entity)
     {
@@ -28,12 +34,19 @@ class ChatMessage extends Presenter
             return $this->telegramRepository->findMessageById($this->entity->telegram_message_id)->present();
         }
 
+        if ($entity->facebook_messenger_message_id)
+        {
+            return $this->facebookMessengerRepository->findMessageById($this->entity->facebook_messenger_message_id)->present();
+        }
+
         return $entity;
     }
 
     private function instantiateRepositories()
     {
         $this->telegramRepository = app()->make(Telegram::class);
+
+        $this->facebookMessengerRepository = app()->make(FacebookMessenger::class);
     }
 
     public function message()

@@ -27,6 +27,14 @@ class User extends Presenter {
             }
         }
 
+        if ($this->entity->facebook_messenger_user_id)
+        {
+            if ($avatar = $this->getFacebookMessengerAvatar())
+            {
+                return $avatar;
+            }
+        }
+
 		return Avatar::getUrl($this->entity, $size);
 	}
 
@@ -84,6 +92,18 @@ class User extends Presenter {
 		return "$count Following";
 	}
 
+    private function getFacebookMessengerAvatar()
+    {
+        $user = $this->entity->facebookMessengerUser;
+
+        if ($user->avatar)
+        {
+            return $user->avatar;
+        }
+
+        return null;
+    }
+
     private function getTelegramAvatar()
     {
         $user = $this->entity->telegramUser;
@@ -107,12 +127,23 @@ class User extends Presenter {
 
 	public function fullName()
 	{
-		$name = $this->first_name .
-					($this->last_name ? ' ' : '') .
-					$this->last_name;
+        $entity = $this;
 
+	    if ($this->entity->telegramUser)
+        {
+            $entity = $this->entity->telegramUser;
+        }
 
-		return $name ?: $this->username;
+        if ($this->entity->facebookMessengerUser)
+        {
+            $entity = $this->entity->facebookMessengerUser;
+        }
+
+		$name = $entity->first_name .
+					($entity->last_name ? ' ' : '') .
+					$entity->last_name;
+
+		return $name ?: $entity->username;
 	}
 
 	public function position()

@@ -7,7 +7,7 @@ use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
 use PragmaRX\Sdk\Services\FacebookMessenger\Data\Repositories\FacebookMessenger;
 use PragmaRX\Sdk\Services\FacebookMessenger\Events\FacebookMessengerUserWasCreated;
 
-class DownloadUserProfilePhotos // implements ShouldQueue
+class DownloadUserProfileAndPhotos // implements ShouldQueue
 {
     /**
      * @var EventPublisher
@@ -31,7 +31,7 @@ class DownloadUserProfilePhotos // implements ShouldQueue
      */
 	public function handle(FacebookMessengerUserWasCreated $event)
 	{
-        $this->facebookMessengerRepository->downloadUserAvatar($event->user, $event->bot);
+        $this->facebookMessengerRepository->downloadUserProfileAndAvatar($event->user, $event->bot);
 
         $this->eventPublisher->publish('ChatListWasUpdated');
 	}

@@ -3,7 +3,7 @@
 use PragmaRX\Support\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateUserColumn extends Migration
+class CreateFacebookUserColumn extends Migration
 {
 	/**
 	 * Run the migrations.

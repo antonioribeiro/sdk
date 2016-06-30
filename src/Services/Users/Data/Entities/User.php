@@ -34,6 +34,7 @@ use PragmaRX\Sdk\Services\Users\Data\Presenters\User as UserPresenter;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\BusinessableTrait;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\PermissionableTrait;
+use PragmaRX\Sdk\Services\FacebookMessenger\Data\Entities\FacebookMessengerUser;
 
 class User extends SdkUser implements CanResetPassword
 {
@@ -284,6 +285,11 @@ class User extends SdkUser implements CanResetPassword
     public function telegramUser()
     {
         return $this->belongsTo(TelegramUser::class, 'telegram_user_id');
+    }
+
+    public function facebookMessengerUser()
+    {
+        return $this->belongsTo(FacebookMessengerUser::class, 'facebook_messenger_user_id');
     }
 
     public function online()

@@ -22,6 +22,8 @@ use PragmaRX\Sdk\Services\Chat\Listeners\NotifyChatUserCheckedIn;
 use PragmaRX\Sdk\Services\Chat\Listeners\NotifyChatUserCheckedOut;
 use PragmaRX\Sdk\Services\Telegram\Events\TelegramMessageReceived;
 use PragmaRX\Sdk\Services\Chat\Listeners\TransferTelegramMessageToChat;
+use PragmaRX\Sdk\Services\Chat\Listeners\TransferFacebookMessengerMessageToChat;
+use PragmaRX\Sdk\Services\FacebookMessenger\Events\FacebookMessengerMessageReceived;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class Event extends ServiceProvider
@@ -44,6 +46,10 @@ class Event extends ServiceProvider
             TransferTelegramMessageToChat::class,
         ],
 
+        FacebookMessengerMessageReceived::class => [
+            TransferFacebookMessengerMessageToChat::class,
+        ],
+        
         ChatWasCreated::class => [
             NotifyChatCreated::class,
         ],

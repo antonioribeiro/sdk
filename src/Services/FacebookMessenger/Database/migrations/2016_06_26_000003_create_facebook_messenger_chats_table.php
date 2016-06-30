@@ -19,7 +19,6 @@ class CreateFacebookMessengerChatsTable extends Migration
 
 			$table->bigInteger('facebook_messenger_id', false)->unsigned()->unique()->index();
             $table->string('bot_id', 64)->nullable()->index();
-			$table->string('facebook_messenger_chat_type_id', 64);
             $table->string('title')->nullable();
             $table->string('username')->nullable();
             $table->string('first_name')->nullable();

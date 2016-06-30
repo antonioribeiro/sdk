@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\Chat\Data\Entities;
 
 use PragmaRX\Sdk\Core\Database\Eloquent\Model;
+use PragmaRX\Sdk\Services\FacebookMessenger\Data\Entities\FacebookMessengerChat;
 use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramChat;
 use PragmaRX\Sdk\Services\Chat\Data\Presenters\Chat as ChatPresenter;
 
@@ -17,6 +18,7 @@ class Chat extends Model
 	    'closed_at',
         'layout',
         'telegram_chat_id',
+        'facebook_messenger_chat_id',
 	];
 
     protected $dates = [
@@ -52,5 +54,10 @@ class Chat extends Model
     public function telegramChat()
     {
         return $this->belongsTo(TelegramChat::class, 'telegram_chat_id');
+    }
+
+    public function facebookMessengerChat()
+    {
+        return $this->belongsTo(FacebookMessengerChat::class, 'facebook_messenger_chat_id');
     }
 }
