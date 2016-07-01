@@ -22,6 +22,16 @@ class FacebookMessenger extends BaseController
 
     public function verifyBot($robot, $token)
     {
+        \Log::info('Facebook - Verifying hub token');
+        \Log::info('Facebook - hub_mode: '.$this->request->get('hub_mode'));
+        \Log::info('Facebook - hub_challenge: '.$this->request->get('hub_challenge'));
+        \Log::info('Facebook - hub_verify_token: '.$this->request->get('hub_verify_token'));
+
+        if (config('env.FACEBOOK_HUB_VERIFY_TOKEN') !== $this->request->get('hub_verify_token'))
+        {
+            abort(403);
+        }
+
         return response($this->request->get('hub_challenge'));
     }
     
