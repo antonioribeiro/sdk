@@ -2,9 +2,9 @@
 
 namespace PragmaRX\Sdk\Services\FacebookMessenger\Data\Presenters;
 
-use PragmaRX\Sdk\Core\Presenter;
+use PragmaRX\Sdk\Services\Chat\Data\Presenters\ChatBase as ChatBasePresenter;
 
-class FacebookMessengerMessage extends Presenter
+class FacebookMessengerMessage extends ChatBasePresenter
 {
     private function defaultSpinner()
     {
@@ -13,7 +13,7 @@ class FacebookMessengerMessage extends Presenter
 
     private function makeDocumentMessage($url)
     {
-        $thumb = asset('assets/images/chat/file.png');
+        $thumb = $this->makeThumb('application/generic');
 
         $name = 'baixar';
 

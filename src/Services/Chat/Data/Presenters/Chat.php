@@ -2,9 +2,9 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Data\Presenters;
 
-use PragmaRX\Sdk\Core\Presenter;
+use ChatBase as ChatBasePresenter;
 
-class Chat extends Presenter
+class Chat extends ChatBasePresenter
 {
     public function lastMessageAt()
     {
