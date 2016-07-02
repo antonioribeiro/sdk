@@ -129,22 +129,9 @@ class FacebookMessengerMessage extends Presenter
         return $this->defaultSpinner();
     }
 
-    /**
-     * @return string
-     */
-    private function makePhotoMessage()
+    private function makeImageMessage($url)
     {
-        $photos = $this->makePhotos($this->entity->photo);
-
-        $thumb = $this->selectPhoto($photos, 'md')['url'];
-        $big = $this->selectPhoto($photos, 'lg')['url'];
-
-        if ($thumb)
-        {
-            return '<img class="kallzenter-chat-facebook-messenger-photo" src="' . $thumb . '" data-image-large="' . $big . '" onclick="showImageModal(this);" />';
-        }
-
-        return $this->defaultSpinner();
+        return '<img class="kallzenter-chat-facebook-messenger-photo" src="' . $url . '" data-image-large="' . $url . '" onclick="showImageModal(this);" />';
     }
 
     private function makePhotoUrl($photo)
@@ -313,37 +300,57 @@ class FacebookMessengerMessage extends Presenter
 
     public function message()
     {
-        if (! is_empty_or_null($this->entity->text))
+        $message = '';
+
+        $message = $this->getTextMessage($message);
+
+        $message = $this->getAttachmentsMessages($message);
+
+        if (! $message)
         {
-            return '<p class="kallzenter-chat-facebook-messenger-text">'.$this->entity->text.'</p>';
+            return $this->unrecognizedMessage();
         }
 
-        if (json_decode($this->entity->photo))
+        return $message;
+    }
+
+    /**
+     * @param $message
+     * @return string
+     */
+    private function getAttachmentsMessages($message)
+    {
+        if ($this->entity->attachments)
         {
-            return $this->makePhotoMessage();
+            $attachments = json_decode($this->entity->attachments, true);
+
+            foreach ($attachments as $attachment)
+            {
+                if ($attachment['type'] == 'image')
+                {
+                    $message .= $this->makeImageMessage($attachment['payload']['url']);
+                }
+            }
+
+            return $message;
         }
 
-        if (json_decode($this->entity->document))
-        {
-            return $this->makeDocumentMessage();
+        return $message;
+    }
+
+    /**
+     * @param $message
+     * @return string
+     */
+    private function getTextMessage($message)
+    {
+        if (!is_empty_or_null($this->entity->text)) {
+            $message .= '<p class="kallzenter-chat-facebook-messenger-text">' . $this->entity->text . '</p>';
+
+            return $message;
         }
 
-        if (json_decode($this->entity->audio))
-        {
-            return $this->makeAudioMessage();
-        }
-
-        if (json_decode($this->entity->voice))
-        {
-            return $this->makeVoiceMessage();
-        }
-
-        if (json_decode($this->entity->video))
-        {
-            return $this->makeVideoMessage();
-        }
-
-        return '<p class="kallzenter-chat-facebook-messenger-warning">(ATENÇÃO: A mensagem recebida não é suportada por este sistema)</p>';
+        return $message;
     }
 
     private function selectPhoto($photos, $size)
@@ -387,5 +394,13 @@ class FacebookMessengerMessage extends Presenter
         $photo = $photos[$sizes[$size]];
 
         return $photo;
+    }
+
+    /**
+     * @return string
+     */
+    private function unrecognizedMessage()
+    {
+        return '<p class="kallzenter-chat-facebook-messenger-warning">(ATENÇÃO: A mensagem recebida não é suportada por este sistema)</p>';
     }
 }

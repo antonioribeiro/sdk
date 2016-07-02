@@ -104,8 +104,8 @@ class FacebookMessenger
                 'time' => (int) ($time / 1000),
                 'timestamp' => Carbon::createFromTimestamp((int) ($message['timestamp'] / 1000)),
                 'chat_id' => $chat ? $chat->id : null,
-                'text' => $message['message']['text'],
-                'attachments' => isset($message['attachments']) ? json_encode($message['attachments']) : null,
+                'text' => isset($message['message']['text']) ? $message['message']['text'] : null,
+                'attachments' => isset($message['message']['attachments']) ? json_encode($message['message']['attachments']) : null,
             ],
             ['mid', 'chat_id']
         );
