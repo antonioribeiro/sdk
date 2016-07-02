@@ -90,36 +90,21 @@ class FacebookMessengerMessage extends Presenter
         return $this->defaultSpinner();
     }
 
-    private function makeDocumentMessage()
+    private function makeDocumentMessage($url)
     {
-        try
-        {
-            $thumb = $this->entity->document->thumb->fileName->file->url;
-        }
-        catch (\Exception $e)
-        {
-            $thumb = $this->makeThumb($this->entity->document->mime_type);
-        }
+        $thumb = config('thumbs.message.document');
 
-        try
-        {
-            $url = $this->entity->document->fileName->file->url;
-            $name = $this->entity->document->file_name;
-        }
-        catch (\Exception $e)
-        {
-            $url = null;
-        }
+        $name = 'Arquivo';
 
         if ($thumb && $url)
         {
             return '
-                <a href="#" class="kallzenter-chat-facebook-messenger-document-thumb" onclick="downloadFile(\''.$url. '\', \''.$name.'\')">
+                <a href="'.$url.'" class="kallzenter-chat-facebook-messenger-document-thumb" download>
                     <img class="kallzenter-chat-facebook-messenger-photo" src="' . $thumb . '" />
                 </a>
                 
                 <p>
-                    <a href="#" class="kallzenter-chat-facebook-messenger-document-name" onclick="downloadFile(\''.$url. '\', \''.$name.'\')">
+                    <a href="'.$url.'" class="kallzenter-chat-facebook-messenger-document-thumb" download>
                         Baixar '.$name.'
                     </a>
                 </p>
@@ -329,6 +314,10 @@ class FacebookMessengerMessage extends Presenter
                 if ($attachment['type'] == 'image')
                 {
                     $message .= $this->makeImageMessage($attachment['payload']['url']);
+                }
+                elseif ($attachment['type'] == 'file')
+                {
+                    $message .= $this->makeDocumentMessage($attachment['payload']['url']);
                 }
             }
 
