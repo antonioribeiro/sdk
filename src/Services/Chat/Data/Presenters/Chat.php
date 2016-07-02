@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Data\Presenters;
 
-use ChatBase as ChatBasePresenter;
+use PragmaRX\Sdk\Services\Chat\Data\Presenters\ChatBase as ChatBasePresenter;
 
 class Chat extends ChatBasePresenter
 {

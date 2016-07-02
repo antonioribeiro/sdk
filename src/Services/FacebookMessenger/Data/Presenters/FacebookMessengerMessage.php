@@ -15,8 +15,6 @@ class FacebookMessengerMessage extends ChatBasePresenter
     {
         $thumb = $this->makeThumb('application/generic');
 
-        $name = 'baixar';
-
         if ($thumb && $url)
         {
             return '
@@ -26,7 +24,7 @@ class FacebookMessengerMessage extends ChatBasePresenter
                 
                 <p>
                     <a href="'.$url.'" class="kallzenter-chat-facebook-messenger-document-thumb" download>
-                        Baixar '.$name.'
+                        baixar
                     </a>
                 </p>
             ';
@@ -90,5 +88,20 @@ class FacebookMessengerMessage extends ChatBasePresenter
     private function unrecognizedMessage()
     {
         return '<p class="kallzenter-chat-facebook-messenger-warning">(ATENÇÃO: A mensagem recebida não é suportada por este sistema)</p>';
+    }
+
+    /**
+     * @param $message
+     * @return string
+     */
+    private function getTextMessage($message)
+    {
+        if (!is_empty_or_null($this->entity->text)) {
+            $message .= '<p class="kallzenter-chat-facebook-messenger-text">' . $this->entity->text . '</p>';
+
+            return $message;
+        }
+
+        return $message;
     }
 }
