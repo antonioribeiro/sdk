@@ -13,9 +13,15 @@ class FacebookMessenger
     // private $userProfileUrl = 'https://graph.facebook.com/v2.6/%s?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=%s';
     private $userProfileUrl = 'https://graph.facebook.com/v2.6/%s?access_token=%s';
 
+    private $subscribeUrl = 'https://graph.facebook.com/v2.6/:pageid/subscribed_apps?access_token=:token';
+
+    private $guzzle;
+
     public function __construct($pageName = null, $pageToken = null)
     {
         $this->configurePage($pageName, $pageToken);
+
+        $this->instantiateGuzzle();
     }
 
     /**
@@ -42,9 +48,7 @@ class FacebookMessenger
 
     private function guzzleGet($url)
     {
-        $client = new Guzzle();
-
-        $res = $client->get($url);
+        $res = $this->guzzle->get($url);
 
         if ($res->getStatusCode() == 200)
         {
@@ -52,6 +56,23 @@ class FacebookMessenger
         }
 
         return [];
+    }
+
+    private function guzzlePost($url)
+    {
+        $res = $this->guzzle->post($url);
+
+        if ($res->getStatusCode() == 200)
+        {
+            return json_decode((string) $res->getBody(), true);
+        }
+
+        return [];
+    }
+
+    private function instantiateGuzzle()
+    {
+        $this->guzzle = new Guzzle();
     }
 
     /**
@@ -109,5 +130,13 @@ class FacebookMessenger
         $url = sprintf($this->userProfileUrl, $user->facebook_messenger_id, $bot->token);
 
         return $this->guzzleGet($url);
+    }
+
+    public function subscribe($pageId, $token)
+    {
+        $url = str_replace(':pageid', $pageId, $this->subscribeUrl);
+        $url = str_replace(':token', $token, $url);
+
+        return $this->guzzlePost($url);
     }
 }

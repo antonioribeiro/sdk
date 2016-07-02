@@ -50,6 +50,8 @@ Route::group(['middleware' => 'web'], function()
                 Route::post('update', ['as' => 'businesses.clients.services.update', 'uses' => 'Services@update']);
 
                 Route::get('{serviceId}/telegram/setwebhook', ['as' => 'businesses.clients.services.telegram.setwebhook', 'uses' => 'Telegram@setWebhook']);
+
+                Route::get('{serviceId}/facebookMessenger/subscribe', ['as' => 'businesses.clients.services.facebookMessenger.subscribe', 'uses' => 'FacebookMessenger@subscribe']);
             });
 
             Route::group(['prefix' => 'client/users'], function ()
