@@ -570,6 +570,13 @@ class Chat extends Repository
         return app()->make(Collection::class, [$result]);
     }
 
+    public function markAsDelivered($message)
+    {
+        $message->delivered_at = new Carbon();
+
+        $message->save();
+    }
+
     public function pingUser()
     {
         $user = Auth::user();

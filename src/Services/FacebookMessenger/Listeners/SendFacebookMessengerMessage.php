@@ -2,8 +2,9 @@
 
 namespace PragmaRX\Sdk\Services\FacebookMessenger\Listeners;
 
-use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasSent;
 use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
+use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasSent;
+use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasDelivered;
 use PragmaRX\Sdk\Services\FacebookMessenger\Data\Repositories\FacebookMessenger;
 use PragmaRX\Sdk\Services\FacebookMessenger\Events\FacebookMessengerAudioWasCreated;
 
@@ -31,9 +32,14 @@ class SendFacebookMessengerMessage
      */
     public function handle(ChatMessageWasSent $event)
     {
-        if ($event->data['message_model']->chat->facebook_messenger_chat_id)
+        $message = $event->data['message_model'];
+
+        if ($message->chat->facebook_messenger_chat_id)
         {
-            $this->facebookMessengerRepository->sendMessage($event->data['message_model']);
+            if ($this->facebookMessengerRepository->sendMessage($event->data['message_model']))
+            {
+                event(new ChatMessageWasDelivered($message));
+            }
         }
 
         $this->eventPublisher->publish('ChatListWasUpdated');

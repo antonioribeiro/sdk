@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\FacebookMessenger\Service;
 
+use Log;
 use GuzzleHttp\Client as Guzzle;
 
 class FacebookMessenger
@@ -66,31 +67,38 @@ class FacebookMessenger
 
     private function guzzleGet($url)
     {
-        $res = $this->guzzle->get($url);
-
-        if ($res->getStatusCode() == 200)
-        {
-            return json_decode((string) $res->getBody(), true);
-        }
-
-        return [];
+        return $this->processResponse($this->guzzle->get($url));
     }
 
     private function guzzlePost($url, $data = null)
     {
-        $res = $this->guzzle->post($url, $data);
-
-        if ($res->getStatusCode() == 200)
-        {
-            return json_decode((string) $res->getBody(), true);
-        }
-
-        return [];
+        return $this->processResponse($this->guzzle->post($url, $data));
     }
 
     private function instantiateGuzzle()
     {
         $this->guzzle = new Guzzle();
+    }
+
+    /**
+     * @param $response
+     * @return array|mixed
+     */
+    private function processResponse($response)
+    {
+        $result = json_decode((string) $response->getBody(), true) ?: [];
+
+        $result['status_code'] = $response->getStatusCode();
+
+        $result['success'] = $response->getStatusCode() == 200;
+
+        if (! $result['success'])
+        {
+            Log::error('GUZZLE ERROR');
+            Log::error($response->getBody());
+        }
+
+        return $result;
     }
 
     /**
@@ -145,6 +153,8 @@ class FacebookMessenger
         ];
 
         $response = $this->guzzlePost($url, ['json' => $data]);
+
+        return $response['success'];
     }
 
     public function getUserProfile($user, $bot)

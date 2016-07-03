@@ -15,8 +15,10 @@ use PragmaRX\Sdk\Services\Chat\Listeners\NotifyChatCreated;
 use PragmaRX\Sdk\Services\Login\Events\UserWasAuthenticated;
 use PragmaRX\Sdk\Services\Chat\Listeners\NotifyChatResponded;
 use PragmaRX\Sdk\Services\Chat\Listeners\BroadcastLoggedUser;
+use PragmaRX\Sdk\Services\Chat\Events\ChatMessageWasDelivered;
 use PragmaRX\Sdk\Services\Chat\Listeners\NotifyChatTerminated;
 use PragmaRX\Sdk\Services\Chat\Listeners\NotifyChatMessageSent;
+use PragmaRX\Sdk\Services\Chat\Listeners\NotifyMessageDelivery;
 use PragmaRX\Sdk\Services\Chat\Listeners\BroadcastLoggedOutUser;
 use PragmaRX\Sdk\Services\Chat\Listeners\NotifyChatUserCheckedIn;
 use PragmaRX\Sdk\Services\Chat\Listeners\NotifyChatUserCheckedOut;
@@ -76,6 +78,10 @@ class Event extends ServiceProvider
 
         ChatUserCheckedOut::class => [
             NotifyChatUserCheckedOut::class,
+        ],
+
+        ChatMessageWasDelivered::class => [
+            NotifyMessageDelivery::class,
         ],
 	];
 }
