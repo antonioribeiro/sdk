@@ -15,6 +15,11 @@ class FacebookMessenger
 
     private $subscribeUrl = 'https://graph.facebook.com/v2.6/:pageid/subscribed_apps?access_token=:token';
 
+    private $messageUrl = 'https://graph.facebook.com/v2.6/me/messages?access_token=:token';
+
+    /**
+     * @var Guzzle
+     */
     private $guzzle;
 
     public function __construct($pageName = null, $pageToken = null)
@@ -33,6 +38,19 @@ class FacebookMessenger
         $this->setPageName($pageName);
 
         $this->setPageToken($pageToken);
+    }
+
+    /**
+     * @param $pageId
+     * @param $pageToken
+     * @return mixed
+     */
+    private function configureUrl($url, $pageToken, $pageId = null)
+    {
+        $url = str_replace(':pageid', $pageId, $url);
+        $url = str_replace(':token', $pageToken, $url);
+
+        return $url;
     }
 
     public function getWebhookUrl()
@@ -58,9 +76,9 @@ class FacebookMessenger
         return [];
     }
 
-    private function guzzlePost($url)
+    private function guzzlePost($url, $data = null)
     {
-        $res = $this->guzzle->post($url);
+        $res = $this->guzzle->post($url, $data);
 
         if ($res->getStatusCode() == 200)
         {
@@ -113,16 +131,20 @@ class FacebookMessenger
         $this->facebookMessenger->handle();
     }
 
-    public function sendMessage($chatId, $text, $pageName, $pageToken)
+    public function sendMessage($recipientId, $text, $pageName, $pageToken)
     {
-        $this->configurePage($pageName, $pageToken);
+        $url = $this->configureUrl($this->messageUrl, $pageToken);
 
-        return FacebookMessengerRequest::sendMessage(
-            [
-                'text' => $text,
-                'chat_id' => $chatId,
+        $data = [
+            'recipient' => [
+                'id' => $recipientId
+            ],
+            'message' => [
+                'text' => $text
             ]
-        );
+        ];
+
+        $response = $this->guzzlePost($url, ['json' => $data]);
     }
 
     public function getUserProfile($user, $bot)
@@ -132,10 +154,9 @@ class FacebookMessenger
         return $this->guzzleGet($url);
     }
 
-    public function subscribe($pageId, $token)
+    public function subscribe($pageId, $pageToken)
     {
-        $url = str_replace(':pageid', $pageId, $this->subscribeUrl);
-        $url = str_replace(':token', $token, $url);
+        $url = $this->configureUrl($this->subscribeUrl, $pageToken, $pageId);
 
         return $this->guzzlePost($url);
     }
