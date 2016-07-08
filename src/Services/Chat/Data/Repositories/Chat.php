@@ -524,13 +524,6 @@ class Chat extends Repository
 
 	public function allScripts()
 	{
-        $key = Caching::makeKey(['allScripts', 'client', 'service']);
-
-        if ($result = Caching::get($key))
-        {
-            return $result;
-        }
-
 		$result = [];
 
         foreach(ChatScript::with(['client', 'service'])->get() as $script)
@@ -543,8 +536,6 @@ class Chat extends Repository
 				'service' => $script->service->name,
 			];
 		}
-
-        Caching::tags([ChatScript::class])->forever($key, $result);
 
 		return $result;
 	}
