@@ -517,8 +517,6 @@ class Chat extends Repository
 			]
 		);
 
-        Caching::tags(ChatScript::class)->flush();
-
 		return $script;
 	}
 
