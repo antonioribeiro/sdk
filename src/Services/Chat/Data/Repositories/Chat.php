@@ -849,7 +849,7 @@ class Chat extends Repository
 	 */
 	public function findScriptById($id)
 	{
-		return ChatScript::remember(60)->find($id);
+		return ChatScript::find($id);
 	}
 
 	public function updateScript($attributes)
