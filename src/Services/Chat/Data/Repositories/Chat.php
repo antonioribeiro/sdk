@@ -183,7 +183,7 @@ class Chat extends Repository
 
     public function createMessage($chatId, $talkerId, $message = '', $received = false)
 	{
-        $chat = $this->createMessageForProvider($chatId, $talkerId, $message);
+        list($chat, $message) = $this->createMessageForProvider($chatId, $talkerId, $message);
 
         $chat->last_message_at = Carbon::now();
 
@@ -211,9 +211,9 @@ class Chat extends Repository
     {
         $chat = $this->findById($chatId);
 
-        $message = new ChatMessage;
+        $messageModel = new ChatMessage;
 
-        $message->fill([
+        $messageModel->fill([
             'chat_id'                        => $chat->id,
             'chat_business_client_talker_id' => $talkerId,
             'talker_ip_address'              => $this->request->ip(),
@@ -223,10 +223,10 @@ class Chat extends Repository
         // We do not need a Facebook message, because Facebook will send it to us
         if (! $chat->isFacebookMessenger)
         {
-            $message->save();
+            $messageModel->save();
         }
 
-        return $chat;
+        return [$chat, $messageModel];
     }
 
     private function createReceivedMessage($chatId, $talkerId, $message = '')
