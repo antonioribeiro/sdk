@@ -60,4 +60,14 @@ class Chat extends Model
     {
         return $this->belongsTo(FacebookMessengerChat::class, 'facebook_messenger_chat_id');
     }
+
+    public function getIsFacebookMessengerAttribute()
+    {
+        return ! is_null($this->facebook_messenger_chat_id);
+    }
+
+    public function getIsTelegramAttribute()
+    {
+        return ! is_null($this->telegram_chat_id);
+    }
 }

@@ -185,14 +185,9 @@ class Chat extends Repository
 	{
 		$chat = $this->findById($chatId);
 
-		$message = ChatMessage::create([
-            'chat_id' => $chatId,
-            'chat_business_client_talker_id' => $talkerId,
-            'talker_ip_address' => $this->request->ip(),
-			'message' => $message,
-		]);
+        $message = $this->createMessageForProvider($chat, $talkerId, $message);
 
-		$chat->last_message_at = Carbon::now();
+        $chat->last_message_at = Carbon::now();
 
         $chat = $this->findById($chatId);
 
@@ -209,6 +204,32 @@ class Chat extends Repository
 
         return $message;
 	}
+
+    /**
+     * @param \PragmaRX\Sdk\Services\Chat\Data\Entities\Chat $chat
+     * @param $talkerId
+     * @param $message
+     * @return \PragmaRX\Sdk\Services\Chat\Data\Entities\ChatMessage
+     */
+    private function createMessageForProvider($chat, $talkerId, $message)
+    {
+        $message = new ChatMessage;
+
+        $message->fill([
+            'chat_id'                        => $chat->id,
+            'chat_business_client_talker_id' => $talkerId,
+            'talker_ip_address'              => $this->request->ip(),
+            'message'                        => $message,
+        ]);
+
+        // We do not need a Facebook message, because Facebook will send it to us
+        if (! $chat->isFacebookMessenger)
+        {
+            $message->save();
+        }
+
+        return $message;
+    }
 
     private function createReceivedMessage($chatId, $talkerId, $message = '')
     {
