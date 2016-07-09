@@ -36,7 +36,7 @@ class SendFacebookMessengerMessage
 
         if ($message->chat->facebook_messenger_chat_id)
         {
-            $this->facebookMessengerRepository->sendMessage($event->data['message_model'])
+            $this->facebookMessengerRepository->sendMessage($event->data['message_model']);
         }
 
         $this->eventPublisher->publish('ChatListWasUpdated');
