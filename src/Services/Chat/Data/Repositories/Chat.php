@@ -183,13 +183,9 @@ class Chat extends Repository
 
     public function createMessage($chatId, $talkerId, $message = '', $received = false)
 	{
-		$chat = $this->findById($chatId);
-
-        $message = $this->createMessageForProvider($chat, $talkerId, $message);
+        $chat = $this->createMessageForProvider($chatId, $talkerId, $message);
 
         $chat->last_message_at = Carbon::now();
-
-        $chat = $this->findById($chatId);
 
         $chat->save();
 
@@ -211,8 +207,10 @@ class Chat extends Repository
      * @param $message
      * @return \PragmaRX\Sdk\Services\Chat\Data\Entities\ChatMessage
      */
-    private function createMessageForProvider($chat, $talkerId, $message)
+    private function createMessageForProvider($chatId, $talkerId, $message)
     {
+        $chat = $this->findById($chatId);
+
         $message = new ChatMessage;
 
         $message->fill([
@@ -228,7 +226,7 @@ class Chat extends Repository
             $message->save();
         }
 
-        return $message;
+        return $chat;
     }
 
     private function createReceivedMessage($chatId, $talkerId, $message = '')
