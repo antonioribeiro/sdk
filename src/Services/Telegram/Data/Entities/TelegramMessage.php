@@ -2,10 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Telegram\Data\Entities;
 
-use PragmaRX\Sdk\Core\Database\Eloquent\Model;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\BaseChatMessageModel;
 use PragmaRX\Sdk\Services\Telegram\Data\Presenters\TelegramMessage as TelegramMessagePresenter;
 
-class TelegramMessage extends Model
+class TelegramMessage extends BaseChatMessageModel
 {
 	protected $table = 'telegram_messages';
 
@@ -77,5 +77,10 @@ class TelegramMessage extends Model
     public function video()
     {
         return $this->belongsTo(TelegramVideo::class);
+    }
+
+    public function sender()
+    {
+        return $this->belongsTo(TelegramUser::class, 'from_id');
     }
 }

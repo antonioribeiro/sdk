@@ -2,10 +2,11 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Data\Entities;
 
-use PragmaRX\Sdk\Core\Database\Eloquent\Model;
+use PragmaRX\Sdk\Services\Telegram\Data\Entities\TelegramMessage;
+use PragmaRX\Sdk\Services\FacebookMessenger\Data\Entities\FacebookMessengerMessage;
 use PragmaRX\Sdk\Services\Chat\Data\Presenters\ChatMessage as ChatMessagePresenter;
 
-class ChatMessage extends Model
+class ChatMessage extends BaseChatMessageModel
 {
 	protected $table = 'chat_messages';
 
@@ -25,8 +26,33 @@ class ChatMessage extends Model
 		return $this->belongsTo(ChatBusinessClientTalker::class, 'chat_business_client_talker_id');
 	}
 
+    public function sender()
+    {
+        if ($this->telegram_message_id)
+        {
+            return $this->telegramMessage->sender();
+        }
+
+        if ($this->facebook_messenger_message_id)
+        {
+            return $this->facebookMessengerMessage->sender();
+        }
+
+        return $this->talker();
+	}
+
     public function chat()
     {
         return $this->belongsTo(Chat::class);
+    }
+
+    public function facebookMessengerMessage()
+    {
+        return $this->belongsTo(FacebookMessengerMessage::class, 'facebook_messenger_message_id');
+    }
+
+    public function telegramMessage()
+    {
+        return $this->belongsTo(TelegramMessage::class, 'telegram_message_id');
     }
 }

@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Services\Telegram\Data\Entities;
 
 use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 use PragmaRX\Sdk\Services\Files\Data\Entities\FileName;
+use PragmaRX\Sdk\Services\Telegram\Data\Presenters\TelegramUser as TelegramUserPresenter;
 
 class TelegramUser extends Model
 {
@@ -16,6 +17,8 @@ class TelegramUser extends Model
         'username',
         'avatar_url',
     ];
+
+    protected $presenter = TelegramUserPresenter::class;
 
     public function getEmailAttribute()
     {

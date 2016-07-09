@@ -3,6 +3,7 @@
 namespace PragmaRX\Sdk\Services\FacebookMessenger\Data\Entities;
 
 use PragmaRX\Sdk\Core\Database\Eloquent\Model;
+use PragmaRX\Sdk\Services\FacebookMessenger\Data\Presenters\FacebookMessengerUser as FacebookMessengerUserPresenter;
 
 class FacebookMessengerUser extends Model
 {
@@ -18,6 +19,8 @@ class FacebookMessengerUser extends Model
         'timezone',
         'gender',
     ];
+
+    protected $presenter = FacebookMessengerUserPresenter::class;
 
     public function getEmailAttribute()
     {

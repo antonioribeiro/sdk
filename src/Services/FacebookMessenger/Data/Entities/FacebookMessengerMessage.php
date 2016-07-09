@@ -2,10 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\FacebookMessenger\Data\Entities;
 
-use PragmaRX\Sdk\Core\Database\Eloquent\Model;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\BaseChatMessageModel;
 use PragmaRX\Sdk\Services\FacebookMessenger\Data\Presenters\FacebookMessengerMessage as FacebookMessengerMessagePresenter;
 
-class FacebookMessengerMessage extends Model
+class FacebookMessengerMessage extends BaseChatMessageModel
 {
 	protected $table = 'facebook_messenger_messages';
 
@@ -39,6 +39,11 @@ class FacebookMessengerMessage extends Model
     }
 
     public function user()
+    {
+        return $this->from();
+    }
+
+    public function sender()
     {
         return $this->from();
     }

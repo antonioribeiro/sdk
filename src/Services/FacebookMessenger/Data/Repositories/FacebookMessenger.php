@@ -41,6 +41,39 @@ class FacebookMessenger
         }
     }
 
+    /**
+     * @param $robot
+     * @param $page
+     * @param $senderId
+     * @param $recipientId
+     * @return null|static
+     */
+    private function createChat($robot, $page, $senderId, $recipientId)
+    {
+        $chatId = $senderId == $page->facebook_id
+            ? $recipientId
+            : $senderId;
+
+        $chat = $this->firstOrCreateChat($chatId, $robot);
+
+        return $chat;
+    }
+
+    /**
+     * @param $robot
+     * @param $senderId
+     * @param $recipientId
+     * @return array
+     */
+    private function createSenderAndRecipient($robot, $senderId, $recipientId)
+    {
+        $sender = $this->firstOrCreateUser($senderId, $robot);
+
+        $recipient = $this->firstOrCreateUser($recipientId, $robot);
+
+        return [$sender, $recipient];
+    }
+
     public function downloadUserProfileAndAvatar($user, $bot)
     {
         $profile = $user->id;
@@ -59,6 +92,19 @@ class FacebookMessenger
 
             $user->save();
         }
+    }
+
+    /**
+     * @param $message
+     * @return array
+     */
+    private function extractSenderAndRecipient($message)
+    {
+        $senderId = array_get($message, 'sender.id');
+
+        $recipientId = array_get($message, 'recipient.id');
+
+        return [$senderId, $recipientId];
     }
 
     public function findMessageById($facebook_messenger_message_id)
@@ -85,15 +131,15 @@ class FacebookMessenger
         );
     }
     
-    private function firstOrCreateMessage($page, $page2, $time, $message)
+    private function firstOrCreateMessage($robot, $page, $time, $message)
     {
-        FacebookMessengerService::configurePage($page->name, $page->token);
+        FacebookMessengerService::configurePage($robot->name, $robot->token);
 
-        $sender = $this->firstOrCreateUser(array_get($message, 'sender.id'), $page);
+        list($senderId, $recipientId) = $this->extractSenderAndRecipient($message);
 
-        $recipient = $this->firstOrCreateUser(array_get($message, 'recipient.id'), $page);
+        list($sender, $recipient) = $this->createSenderAndRecipient($robot, $senderId, $recipientId);
 
-        $chat = $this->firstOrCreateChat(array_get($message, 'sender.id'), $page);
+        $chat = $this->createChat($robot, $page, $senderId, $recipientId);
 
         return FacebookMessengerMessage::createOrUpdate(
             [

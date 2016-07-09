@@ -481,16 +481,17 @@ class Chat extends Repository
     private function makeMessages($all, $chat = null)
 	{
 		$messages = [];
-
 		foreach($all as $message)
 		{
-			$messages[$message->id] = [
+            $avatar = $this->makeAvatar($message->sender->present()->avatar);
+
+            $messages[$message->id] = [
 				'id' => $message->id,
 				'message' => $message->present()->message,
 			    'talker' => [
-				    'id' => $message->talker->id,
-				    'fullName' => $message->talker->user->present()->fullName,
-			        'avatar' => $this->makeAvatar($message->talker, $chat),
+				    'id' => $message->sender->id,
+				    'fullName' => $message->sender->present()->fullName,
+			        'avatar' => $avatar,
 			    ],
 				'serial' => str_pad($message->serial, 10, "0", STR_PAD_LEFT),
 			    'created_at' => (string) $message->present()->createdAt(),
@@ -827,22 +828,6 @@ class Chat extends Repository
 		return $data;
 	}
 
-	private function makeAvatar($talker, $chat)
-	{
-		$role = $this->findRoleByTalker($talker);
-
-		if ($role && $talker->client->avatar)
-		{
-			$avatar = $talker->client->avatar->file->getUrl();
-		}
-		else
-		{
-			$avatar = $talker->user->present()->avatar;
-		}
-
-		return $avatar;
-	}
-
 	/**
 	 * @param $id
 	 * @return \PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript|null
@@ -876,7 +861,7 @@ class Chat extends Repository
 	 * @param $talker
 	 * @return mixed
 	 */
-	private function findRoleByTalker($talker)
+	public function findRoleByTalker($talker)
 	{
 		if ($clientUser = $this->findClientUserByTalker($talker))
 		{
@@ -1053,5 +1038,15 @@ class Chat extends Repository
             ->count();
 
         return [$totalMessageCount, $totalMessageCountToday];
+    }
+
+    public function makeAvatar($avatar)
+    {
+        if ($avatar)
+        {
+            return $avatar;
+        }
+
+        return asset(config('env.CHAT_OPERATOR_AVATAR'));
     }
 }

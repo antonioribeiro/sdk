@@ -2,9 +2,10 @@
 
 namespace PragmaRX\Sdk\Services\Chat\Data\Entities;
 
-use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 use App\Services\Users\Data\Entities\User;
+use PragmaRX\Sdk\Core\Database\Eloquent\Model;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
+use PragmaRX\Sdk\Services\Chat\Data\Presenters\ChatBusinessClientTalker as ChatBusinessClientTalkerPresenter;
 
 class ChatBusinessClientTalker extends Model
 {
@@ -15,6 +16,8 @@ class ChatBusinessClientTalker extends Model
 		'user_id',
 		'phone_id',
 	];
+
+    protected $presenter = ChatBusinessClientTalkerPresenter::class;
 
 	public function user()
 	{
