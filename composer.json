@@ -30,7 +30,7 @@
         "jenssegers/date": "~3",
         "league/commonmark": "~0.9",
         "baum/baum": "~1.1",
-        "laravelcollective/html": "~5.1",
+        "antonioribeiro/laravel-collective-html": "~5.2",
         "watson/rememberable": "^1.0"
     },
 
