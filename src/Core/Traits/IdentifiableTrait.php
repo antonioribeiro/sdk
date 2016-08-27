@@ -2,7 +2,7 @@
 
 namespace PragmaRX\Sdk\Core\Traits;
 
-use Rhumsaa\Uuid\Uuid;
+use Ramsey\Uuid\Uuid;
 
 trait IdentifiableTrait 
 {

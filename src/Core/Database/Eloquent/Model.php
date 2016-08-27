@@ -125,7 +125,7 @@ class Model extends Eloquent
 
     public function save(array $options = array())
     {
-        Caching::tags($this->getModel()->getTable())->flush();
+        // Caching::tags($this->getModel()->getTable())->flush();
 
         $this->identifiableSave();
 

@@ -6,7 +6,7 @@ use DB;
 use Auth;
 use Activation;
 use Carbon\Carbon;
-use Rhumsaa\Uuid\Uuid;
+use Ramsey\Uuid\Uuid;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Model;
@@ -36,8 +36,9 @@ use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\BusinessableTrait;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use PragmaRX\Sdk\Services\Users\Data\Entities\Traits\PermissionableTrait;
 use PragmaRX\Sdk\Services\FacebookMessenger\Data\Entities\FacebookMessengerUser;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
-class User extends SdkUser implements CanResetPassword
+class User extends SdkUser implements CanResetPassword, AuthenticatableContract
 {
     use
         FollowableTrait,

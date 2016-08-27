@@ -10,7 +10,7 @@ use Session;
 use Sentinel;
 use Google2FA;
 use Activation;
-use Rhumsaa\Uuid\Uuid;
+use Ramsey\Uuid\Uuid;
 use PragmaRX\Sdk\Core\Exceptions\InvalidToken;
 use Illuminate\Pagination\LengthAwarePaginator;
 use PragmaRX\Sdk\Services\Mailer\Service\Mailer;

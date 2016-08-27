@@ -259,7 +259,7 @@ if ( ! function_exists( 'uuid' ))
 {
 	function uuid()
 	{
-		return (string) Rhumsaa\Uuid\Uuid::uuid4();
+		return (string) Ramsey\Uuid\Uuid::uuid4();
 	}
 }
 

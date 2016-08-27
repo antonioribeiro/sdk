@@ -9,7 +9,7 @@ class Builder extends IlluminateEloquentBuilder
 {
     public function update(array $values)
     {
-        Caching::tags($this->getModel()->getTable())->flush();
+        // Caching::tags($this->getModel()->getTable())->flush();
 
         return $this->toBase()->update($this->addUpdatedAtColumn($values));
     }
