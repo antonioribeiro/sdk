@@ -21,9 +21,16 @@ class RollbackCommand extends IlluminateRollbackCommand {
 
 		$pretend = $this->input->getOption('pretend');
 
-		$this->requireServiceMigrations();
+        if (! isLaravel53())
+        {
+            $this->requireServiceMigrations();
 
-		$this->migrator->rollback($pretend);
+            $this->migrator->rollback($pretend);
+        }
+        else
+        {
+            $this->migrator->rollback($this->getServicesMigrationPaths(), ['pretend' => $pretend]);
+        }
 
 		$this->cleanTemporaryDirectory();
 
