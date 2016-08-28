@@ -39,7 +39,7 @@ trait MigratableTrait {
 		return $this->migrationPath;
 	}
 
-	private function getServicesMigrationPaths()
+	private function getServicesMigrationPaths($appenPaths = [])
 	{
 		$services = App::make('config')->get('sdk.services');
 
@@ -53,10 +53,12 @@ trait MigratableTrait {
 		// Get Application migrations
 		$paths = array_merge($paths, $this->getMigrationsPaths($this->getApplicationServices($applicationservicesPath), $applicationservicesPath));
 
+        $paths = array_merge($paths, $appenPaths);
+
 		return $paths;
 	}
 
-	private function getMigrationsPaths($services = [], $directory )
+	private function getMigrationsPaths($services = [], $directory, $addLaravelPath = false)
 	{
 		$paths = [];
 

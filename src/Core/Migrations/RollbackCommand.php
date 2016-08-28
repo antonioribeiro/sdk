@@ -29,7 +29,7 @@ class RollbackCommand extends IlluminateRollbackCommand {
         }
         else
         {
-            $this->migrator->rollback($this->getServicesMigrationPaths(), ['pretend' => $pretend]);
+            $this->migrator->rollback($this->getServicesMigrationPaths([$this->getMigrationPath()]), ['pretend' => $pretend]);
         }
 
 		$this->cleanTemporaryDirectory();
