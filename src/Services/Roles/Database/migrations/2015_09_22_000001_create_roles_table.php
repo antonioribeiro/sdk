@@ -3,8 +3,8 @@
 use PragmaRX\Support\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateRolesTable extends Migration {
-
+class CreateRolesTable extends Migration
+{
 	/**
 	 * Run the migrations.
 	 *
@@ -15,11 +15,11 @@ class CreateRolesTable extends Migration {
 		// Roles
 		Schema::create('roles', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
 			$table->string('name');
 			$table->string('slug');
-			$table->text('permissions')->nullable();
+			$table->text('permission_list')->nullable();
 
 			$table->timestamps();
 		});
@@ -27,8 +27,8 @@ class CreateRolesTable extends Migration {
 		// Permission Roles
 		Schema::create('permissions_roles', function(Blueprint $table)
 		{
-			$table->string('permission_id', 64)->index();
-			$table->string('role_id', 64)->index();
+			$table->uuid('permission_id')->index();
+			$table->uuid('role_id')->index();
 
 			$table->primary(['permission_id', 'role_id']);
 
@@ -56,8 +56,8 @@ class CreateRolesTable extends Migration {
 		// User Roles
 		Schema::create('users_roles', function(Blueprint $table)
 		{
-			$table->string('user_id', 64)->index();
-			$table->string('role_id', 64)->index();
+			$table->uuid('user_id')->index();
+			$table->uuid('role_id')->index();
 
 			$table->primary(['user_id', 'role_id']);
 

@@ -14,6 +14,11 @@ trait PermissionableTrait
 
 	public function hasRole($roles)
 	{
+        if ($roles instanceof Role)
+        {
+            $roles = $roles->name;
+        }
+
 		if (is_string($roles))
 		{
 			return $this->roles->contains('name', $roles);

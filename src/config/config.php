@@ -53,6 +53,8 @@ return [
 		'Services/Countries',
 		'Services/Currencies',
 
+        'Services/DegreeLevels',
+
 		'Services/EmailChanges',
         'Services/Errors',
 
@@ -74,8 +76,10 @@ return [
 		'Services/Notifications',
 
 		'Services/Passwords',
+        'Services/Permissions',
 		'Services/Profiles',
 
+        'Services/Roles',
 		'Services/Registration',
 
 		'Services/Settings',

@@ -26,9 +26,9 @@ abstract class Repository
      */
     protected $caching;
 
-    public function __construct(CachingService $caching)
+    public function __construct(/*CachingService $caching*/)
     {
-        $this->caching = $caching;
+        // $this->caching = $caching;
     }
 
 	protected function call($className, $method = null, $arguments = [])
