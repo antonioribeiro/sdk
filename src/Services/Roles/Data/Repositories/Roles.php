@@ -4,6 +4,7 @@ namespace PragmaRX\Sdk\Services\Roles\Data\Repositories;
 
 use App\Data\Entities\User;
 use PragmaRX\Sdk\Core\Data\Repositories\Repository;
+use PragmaRX\Sdk\Services\Permissions\Data\Entities\Permission;
 use PragmaRX\Sdk\Services\Roles\Data\Entities\Role as Model;
 
 class Roles extends Repository
@@ -46,7 +47,7 @@ class Roles extends Repository
     {
         if (is_string($roleName))
         {
-            $role = Role::where('name', $roleName)->first();
+            $role = Model::where('name', $roleName)->first();
         }
 
         if (is_string($permissionName))
