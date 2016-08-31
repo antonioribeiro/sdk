@@ -11,6 +11,7 @@ use Sentinel;
 use Google2FA;
 use Activation;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Facades\Password;
 use PragmaRX\Sdk\Core\Exceptions\InvalidToken;
 use Illuminate\Pagination\LengthAwarePaginator;
 use PragmaRX\Sdk\Services\Mailer\Service\Mailer;
@@ -1160,4 +1161,17 @@ class UserRepository extends Repository implements UserRepositoryContract
             'activated' => $user->present()->isActivated('Sim', ''),
 		];
 	}
+
+    public function createUserFromCommandLine($email, $username, $first_name, $last_name)
+    {
+        $data = ['email' => $email, 'username' => $username, 'first_name' => $first_name, 'last_name' => $last_name];
+
+        $user = $this->firstOrCreate($data, true);
+
+        Password::broker()->sendResetLink(
+            ['email' => $email], null
+        );
+
+        return $user;
+    }
 }

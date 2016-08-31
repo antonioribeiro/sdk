@@ -5,6 +5,7 @@ namespace PragmaRX\Sdk\Services\Users\Data\Presenters;
 use Config;
 use Avatar;
 use Google2FA;
+use Illuminate\Support\Facades\Schema;
 use PragmaRX\Sdk\Core\Presenter;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessClient;
 use PragmaRX\Sdk\Services\Businesses\Data\Entities\BusinessRole;
@@ -116,6 +117,16 @@ class User extends Presenter {
         return $avatar->file->url;
     }
 
+    private function isFacebookMessengerAvailable()
+    {
+        return Schema::hasTable('facebook_messenger_users');
+    }
+
+    private function isTelegramAvailable()
+    {
+        return Schema::hasTable('telegram_users');
+    }
+
     public function statusesCount()
 	{
 		$count = $this->entity->statuses()->count();
@@ -129,12 +140,12 @@ class User extends Presenter {
 	{
         $entity = $this;
 
-	    if ($this->entity->telegramUser)
+	    if ($this->isTelegramAvailable() && $this->entity->telegramUser)
         {
             $entity = $this->entity->telegramUser;
         }
 
-        if ($this->entity->facebookMessengerUser)
+        if ($this->isFacebookMessengerAvailable() && $this->entity->facebookMessengerUser)
         {
             $entity = $this->entity->facebookMessengerUser;
         }
