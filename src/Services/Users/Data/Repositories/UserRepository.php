@@ -57,6 +57,11 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 	protected $model = User::class;
 
+    public function all()
+    {
+        return $this->call($this->getModel(), 'orderBy', 'first_name')->get();
+    }
+
 	/**
 	 * Save a user.
 	 *
