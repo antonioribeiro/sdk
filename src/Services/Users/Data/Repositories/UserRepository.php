@@ -1128,9 +1128,15 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 	public function deleteUser($userId)
 	{
-		$user = $this->findById($userId);
+        if (! is_uuid($userId) || ! $user = $this->findById($userId))
+        {
+            $user = $this->findByEmail($userId);
+        }
 
-		\DB::table('users')->where('id', $userId)->delete();
+        if ($user)
+        {
+            $user->delete();
+        }
 
 		return $user;
 	}
