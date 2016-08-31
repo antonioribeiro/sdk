@@ -16,10 +16,10 @@ class CreateStatesTable extends Migration {
 	{
 		Schema::create('states', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 			$table->string('code', 5);
 			$table->string('name')->nullable();
-			$table->string('country_id', 64);
+			$table->uuid('country_id');
 			$table->float('latitude')->nullable();
 			$table->float('longitude')->nullable();
 			$table->timestamps();

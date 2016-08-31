@@ -17,11 +17,11 @@ class CreateCitiesTable extends Migration
 	{
 		Schema::create('cities', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 			$table->string('name');
 			$table->string('abbreviation')->nullable();
-			$table->string('state_id', 64);
-            $table->string('country_id', 64);
+			$table->uuid('state_id');
+            $table->uuid('country_id');
 			$table->float('latitude')->nullable();
 			$table->float('longitude')->nullable();
 			$table->timestamps();
