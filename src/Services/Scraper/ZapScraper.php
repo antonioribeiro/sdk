@@ -3,7 +3,7 @@
 namespace Imobiliario\Services\Scraper;
 
 
-class ZapScrapper extends BaseScraper {
+class ZapScraper extends BaseScraper {
 
 	protected $webserviceName = 'Zap';
 

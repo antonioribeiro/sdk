@@ -45,7 +45,7 @@ class DeepScraper {
 
 	public function links($command)
 	{
-		$scraper = new ZapScrapper();
+		$scraper = new ZapScraper();
 
 		$links = $scraper->getLinks();
 
