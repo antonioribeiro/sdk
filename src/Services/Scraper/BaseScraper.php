@@ -1,6 +1,6 @@
 <?php
 
-namespace Imobiliario\Services\Scraper;
+namespace PragmaRX\Sdk\Services\Scraper;
 
 use Goutte\Client as Goutte;
 
@@ -42,7 +42,15 @@ abstract class BaseScraper implements ScraperInterface {
 	    $this->goutte = new Goutte();
 	}
 
-	/**
+    /**
+     * @return string
+     */
+    public function getCrawler()
+    {
+        return $this->crawler;
+    }
+
+    /**
 	 * @return array
 	 */
 	public function links()
@@ -65,15 +73,21 @@ abstract class BaseScraper implements ScraperInterface {
 		return $this->rules['url'];
 	}
 
-	/**
-	 * @param mixed $url
-	 */
+    /**
+     * @param mixed $url
+     * @return mixed
+     */
 	public function setUrl($url)
 	{
 		$this->currentUrl = $url;
 
-		$this->request($url);
+		return $this->request($url);
 	}
+
+    public function getContent($url)
+    {
+        return $this->setUrl($url);
+    }
 
 	/**
 	 * @param mixed $method
@@ -88,7 +102,7 @@ abstract class BaseScraper implements ScraperInterface {
 	 * @param null $method
 	 * @return mixed
 	 */
-	private function request($url = null, $method = null)
+	private function request($url = null, $method = 'GET')
 	{
 		$this->crawler = $this->goutte->request(
 			$method ?: $this->method,

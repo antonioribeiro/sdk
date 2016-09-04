@@ -1,6 +1,6 @@
 <?php
 
-namespace Imobiliario\Services\Scraper;
+namespace PragmaRX\Sdk\Services\Scraper;
 
 class Service
 {
@@ -218,9 +218,9 @@ class Service
 		$goutte = new \Goutte\Client();
 		$crawler = $goutte->request('GET', 'http://development.imobiliar.io/zap.com.br.html');
 
-		$client = new \Imobiliario\Services\Scraper\GoutteClient();
+		$client = new \PragmaRX\Sdk\Services\Scraper\GoutteClient();
 
-		$scraper = new \Imobiliario\Services\Scraper\Service($client, $this->rules, $this->data);
+		$scraper = new \PragmaRX\Sdk\Services\Scraper\Service($client, $this->rules, $this->data);
 
 		$urls = $scraper->getAllUrls();
 

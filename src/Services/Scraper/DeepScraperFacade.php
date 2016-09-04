@@ -1,4 +1,4 @@
-<?php namespace Imobiliario\Services\Scraper;
+<?php namespace PragmaRX\Sdk\Services\Scraper;
 
 use Illuminate\Support\Facades\Facade as LaravelFacade;
 

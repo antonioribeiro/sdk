@@ -6,12 +6,12 @@
  * Time: 14:13
  */
 
-namespace Imobiliario\Services\Scraper;
+namespace PragmaRX\Sdk\Services\Scraper;
 
 
-use Imobiliario\Entities\Ads\AdRepository;
-use Imobiliario\Entities\Realties\RealtyRepository;
-use Imobiliario\Entities\Webservices\WebserviceRepository;
+use PragmaRX\Sdk\Entities\Ads\AdRepository;
+use PragmaRX\Sdk\Entities\Realties\RealtyRepository;
+use PragmaRX\Sdk\Entities\Webservices\WebserviceRepository;
 
 class DeepScraper {
 

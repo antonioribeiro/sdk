@@ -33,7 +33,8 @@
         "antonioribeiro/laravel-collective-html": "~5.2",
         "watson/rememberable": "^1.0",
         "h4kuna/number-format": "1.2.*",
-        "fabpot/goutte": "~3.1"
+        "fabpot/goutte": "~3.1",
+        "thiagoalessio/tesseract_ocr": "1.0.0-RC"
     },
 
     "require-dev": {

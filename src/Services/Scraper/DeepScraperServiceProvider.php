@@ -1,10 +1,10 @@
-<?php namespace Imobiliario\Services\Scraper;
+<?php namespace PragmaRX\Sdk\Services\Scraper;
 
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
-use Imobiliario\Console\ScrapeLinksCommand;
-use Imobiliario\Entities\Ads\AdRepository;
-use Imobiliario\Entities\Realties\RealtyRepository;
-use Imobiliario\Entities\Webservices\WebserviceRepository;
+use PragmaRX\Sdk\Console\ScrapeLinksCommand;
+use PragmaRX\Sdk\Entities\Ads\AdRepository;
+use PragmaRX\Sdk\Entities\Realties\RealtyRepository;
+use PragmaRX\Sdk\Entities\Webservices\WebserviceRepository;
 
 class DeepScraperServiceProvider extends IlluminateServiceProvider {
 

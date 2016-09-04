@@ -1,6 +1,6 @@
 <?php
 
-namespace Imobiliario\Services\Scraper;
+namespace PragmaRX\Sdk\Services\Scraper;
 
 interface ClientInterface
 {
