@@ -39,7 +39,12 @@ abstract class BaseScraper implements ScraperInterface {
 	 */
 	public function __construct(Goutte $goutte = null)
 	{
-	    $this->goutte = new Goutte();
+	    if (! $goutte)
+        {
+            $goutte = new Goutte();
+        }
+
+        $this->goutte = $goutte;
 	}
 
     /**
@@ -124,20 +129,29 @@ abstract class BaseScraper implements ScraperInterface {
 	    return array_strings_generator($this->data, $this->rules['url']);
     }
 
-	public function nextPage()
+	public function nextPage($url, $page = null)
 	{
-		$filter = $this->crawler->filter($this->rules['next.page.link']);
+	    if (! $page)
+        {
+            $filter = $this->crawler->filter($this->rules['next.page.link']);
 
-		try
-		{
-			$link = $filter->links()[0];
+            try
+            {
+                $link = $filter->links()[0];
 
-			$this->crawler = $this->goutte->click($link);
-		}
-		catch(\Exception $e)
-		{
-			$this->hasContent = false;
-		}
+                $this->crawler = $this->goutte->click($link);
+            }
+            catch(\Exception $e)
+            {
+                $this->hasContent = false;
+            }
+        }
+        else
+        {
+            $query = str_replace('%page%', $page, $this->rules['next.page.query']);
+
+            $this->setUrl($url.$query);
+        }
 	}
 
 	public function getWebserviceName()
@@ -155,4 +169,17 @@ abstract class BaseScraper implements ScraperInterface {
 		return $links;
 	}
 
+    /**
+     * @param $command
+     * @param $log
+     */
+    public function log($command, $log)
+    {
+        if ($command) {
+            $command->info($log);
+        }
+        else {
+            echo "$log<br>";
+        }
+    }
 }
