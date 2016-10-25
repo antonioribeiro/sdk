@@ -344,3 +344,44 @@ if ( ! function_exists('is_empty_or_null'))
         return false;
     }
 }
+
+if (! function_exists('tables')) {
+    /**
+     * Cache move_file
+     * @param string $connection
+     * @return mixed
+     */
+    function tables($connection = null)
+    {
+        return collect(json_decode(json_encode(DB::connection($connection)->select(get_show_tables_query($connection))), true))
+            ->map(function ($item) {
+                return array_values($item)[0];
+            });
+    }
+
+    function get_show_tables_query($connection = null)
+    {
+        $queryGrammar = DB::connection($connection)->getQueryGrammar();
+
+        if ($queryGrammar instanceof Illuminate\Database\Query\Grammars\MySqlGrammar) {
+            return 'SHOW TABLES';
+        } elseif ($queryGrammar instanceof Illuminate\Database\Query\Grammars\PostgresGrammar) {
+            return sprintf(
+                "SELECT table_name FROM information_schema.tables where table_schema = '%s' ORDER BY table_schema,table_name;",
+                DB::connection($connection)->getConfig('schema') ?: 'public'
+            );
+        } elseif ($queryGrammar instanceof Illuminate\Database\Query\Grammars\SQLiteGrammar) {
+            return "SELECT name FROM sqlite_master WHERE type='table';";
+        }
+    }
+
+    function zapAllTables()
+    {
+        tables()->reject(function ($name) {
+            return $name == 'migrations';
+        })->each(function ($item) {
+            DB::table($item)->delete();
+        });
+    }
+}
+
