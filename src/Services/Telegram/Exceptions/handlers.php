@@ -2,9 +2,12 @@
 
 use Longman\TelegramBot\Exception\TelegramException;
 
-ExceptionHandler::addHandler(function(TelegramException $exception, $code)
+if (class_exists(Longman\TelegramBot\Exception\TelegramException::class))
 {
-    \Flash::error($exception->getMessage());
+    ExceptionHandler::addHandler(function(TelegramException $exception, $code)
+    {
+        \Flash::error($exception->getMessage());
 
-	return redirect()->back()->withInput();
-});
+        return redirect()->back()->withInput();
+    });
+}

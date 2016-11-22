@@ -21,14 +21,14 @@ ExceptionHandler::addHandler(function(PragmaRX\Sdk\Core\Exceptions\InvalidToken 
 	return Redirect::home();
 });
 
-ExceptionHandler::addHandler(function(Illuminate\Contracts\Validation\ValidationException $exception, $code)
-{
-	return app()->make(Illuminate\Http\JsonResponse::class, [$exception->errors()->all(), 422]);
-
-//	Flash::error(t('paragraphs.two-factor-token-invalid'));
-
-//	return Redirect::home();
-});
+//ExceptionHandler::addHandler(function(Illuminate\Contracts\Validation\ValidationException $exception, $code)
+//{
+//	return app()->make(Illuminate\Http\JsonResponse::class, [$exception->errors()->all(), 422]);
+//
+////	Flash::error(t('paragraphs.two-factor-token-invalid'));
+//
+////	return Redirect::home();
+//});
 
 ExceptionHandler::addHandler(function(Symfony\Component\HttpKernel\Exception\HttpException $exception, $code)
 {
