@@ -9,12 +9,12 @@ class AddFacebookMessengerChatToChatsColumn extends Migration
 	{
 		Schema::table('chats', function(Blueprint $table)
 		{
-			$table->string('facebook_messenger_chat_id', 64)->nullable()->index();
+			$table->uuid('facebook_messenger_chat_id')->nullable()->index();
 		});
 
         Schema::table('chat_messages', function(Blueprint $table)
         {
-            $table->string('facebook_messenger_message_id', 64)->nullable()->index();
+            $table->uuid('facebook_messenger_message_id')->nullable()->index();
         });
 	}
 

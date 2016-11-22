@@ -43,8 +43,10 @@ return [
 		'Services/Billing',
 		'Services/Block',
 		'Services/Bus',
+        'Services/Businesses',
 
         'Services/Caching',
+        'Services/Chat',
 		'Services/Cities',
 		'Services/Clients',
 		'Services/Clipping',
@@ -75,12 +77,15 @@ return [
 
 		'Services/Notifications',
 
+        'Services/Online',
+
 		'Services/Passwords',
         'Services/Permissions',
 		'Services/Profiles',
 
         'Services/Roles',
 		'Services/Registration',
+        'Services/Revisions',
 
 		'Services/Settings',
 		'Services/Sms',
@@ -283,11 +288,11 @@ return [
 			'serviceProviders' => ['PragmaRX\SqlI\Vendor\Laravel\ServiceProvider'],
 		],
 
-		[
-			'name' => 'pragmarx/glottos',
-			'enabled' => true,
-			'serviceProviders' => ['PragmaRX\Glottos\Vendor\Laravel\ServiceProvider'],
-		],
+//		[
+//			'name' => 'pragmarx/glottos',
+//			'enabled' => true,
+//			'serviceProviders' => ['PragmaRX\Glottos\Vendor\Laravel\ServiceProvider'],
+//		],
 
 		[
 			'name' => 'way/generators',

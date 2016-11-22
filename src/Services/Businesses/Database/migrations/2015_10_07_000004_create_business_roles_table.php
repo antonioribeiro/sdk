@@ -9,9 +9,9 @@ class CreateBusinessRolesTable extends Migration
 	{
 		Schema::create('business_roles', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('business_id', 64);
+			$table->uuid('business_id');
 			$table->string('name');
 			$table->string('description');
 			$table->integer('power')->default(256);

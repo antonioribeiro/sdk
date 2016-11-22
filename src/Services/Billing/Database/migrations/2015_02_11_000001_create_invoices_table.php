@@ -14,12 +14,12 @@ class CreateInvoicesTable extends Migration {
 	{
 		Schema::create('invoices', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('items_entity_id', 64);
-			$table->string('creditor_entity_id', 64);
-			$table->string('debtor_entity_id', 64);
-			$table->string('currency_id', 64);
+			$table->uuid('items_entity_id');
+			$table->uuid('creditor_entity_id');
+			$table->uuid('debtor_entity_id');
+			$table->uuid('currency_id');
 			$table->decimal('total', 13, 2);
 			$table->timestamp('due_date')->nullable();
 			$table->timestamp('fully_payed_at')->nullable();

@@ -8,6 +8,6 @@ class SystemFolder extends Model {
 
 	protected $table = 'messages_system_folders';
 
-	protected $fillable = ['name', 'user_id'];
+	protected $fillable = ['name', 'user_id', 'slug'];
 
 }

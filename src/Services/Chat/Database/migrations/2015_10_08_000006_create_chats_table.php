@@ -9,14 +9,14 @@ class CreateChatsTable extends Migration
 	{
 		Schema::create('chats', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('chat_business_client_service_id', 64)->index();
+			$table->uuid('chat_business_client_service_id')->index();
 
-			$table->string('owner_id', 64)->index();
+			$table->uuid('owner_id')->index();
 			$table->string('owner_ip_address');
 
-			$table->string('responder_id', 64)->index()->nullable();
+			$table->uuid('responder_id')->index()->nullable();
 
 			$table->timestamp('opened_at')->index()->nullable();
 			$table->timestamp('last_message_at')->index()->nullable();

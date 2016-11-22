@@ -14,10 +14,10 @@ class CreateContactInformationTable extends Migration {
 	{
 		Schema::create('contact_information', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 
-			$table->string('user_id', 64)->nullable();
-			$table->string('kind_id', 64);
+			$table->uuid('user_id')->nullable();
+			$table->uuid('kind_id');
 			$table->string('info');
 
 			$table->timestamps();

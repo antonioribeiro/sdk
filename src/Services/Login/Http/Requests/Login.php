@@ -18,5 +18,4 @@ class Login extends FormRequest {
 			'password' => 'required',
 		];
 	}
-
 }

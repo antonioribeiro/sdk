@@ -22,7 +22,7 @@ class ChangeIdOnUsersTable extends Migration {
 
 		Schema::create('users', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 
 			$table->string('email')->unique()->index();
 			$table->string('password');
@@ -36,9 +36,9 @@ class ChangeIdOnUsersTable extends Migration {
 
 		Schema::create('activations', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 
-			$table->string('user_id', 64);
+			$table->uuid('user_id');
 			$table->string('code');
 			$table->boolean('completed')->default(0);
 			$table->timestamp('completed_at')->nullable();
@@ -48,9 +48,9 @@ class ChangeIdOnUsersTable extends Migration {
 
 		Schema::create('persistences', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 
-			$table->string('user_id', 64);
+			$table->uuid('user_id');
 			$table->string('code');
 
 			$table->timestamps();
@@ -58,9 +58,9 @@ class ChangeIdOnUsersTable extends Migration {
 
 		Schema::create('reminders', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 
-			$table->string('user_id', 64);
+			$table->uuid('user_id');
 			$table->string('code');
 			$table->boolean('completed')->default(0);
 			$table->timestamp('completed_at')->nullable();
@@ -70,9 +70,9 @@ class ChangeIdOnUsersTable extends Migration {
 
 		Schema::create('throttle', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 
-			$table->string('user_id', 64);
+			$table->uuid('user_id');
 			$table->string('type');
 			$table->string('ip')->nullable();
 

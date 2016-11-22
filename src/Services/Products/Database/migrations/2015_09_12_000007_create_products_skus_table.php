@@ -15,9 +15,9 @@ class CreateProductsSkusTable extends Migration {
 	{
 		Schema::create('products_skus', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('product_id', 64)->index();
+			$table->uuid('product_id')->index();
 			$table->string('color_id')->nullable();
 			$table->string('size_id')->nullable();
 			$table->decimal('cost', 13, 2)->default(0);

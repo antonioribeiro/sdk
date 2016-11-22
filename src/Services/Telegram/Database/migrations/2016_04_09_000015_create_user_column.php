@@ -14,7 +14,7 @@ class CreateUserColumn extends Migration
 	{
 		Schema::table('users', function(Blueprint $table)
 		{
-			$table->string('telegram_user_id', 64)->nullable()->index();
+			$table->uuid('telegram_user_id')->nullable()->index();
 		});
 	}
 

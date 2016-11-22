@@ -14,11 +14,11 @@ class CreateMessagesAttachmentsTable extends Migration {
 	{
 		Schema::create('messages_attachments', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 
-			$table->string('message_id', 64)->index();
+			$table->uuid('message_id')->index();
 
-			$table->string('user_file_id', 64)->index();
+			$table->uuid('user_file_id')->index();
 
 			$table->timestamps();
 		});

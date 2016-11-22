@@ -14,11 +14,11 @@ class CreateProvidersClientsTable extends Migration {
 	{
 		Schema::create('providers_clients', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 
-			$table->string('provider_id', 64)->index();
+			$table->uuid('provider_id')->index();
 
-			$table->string('client_id', 64)->index();
+			$table->uuid('client_id')->index();
 
 			$table->string('color', 64)->default(Config::get('app.event_color'));
 

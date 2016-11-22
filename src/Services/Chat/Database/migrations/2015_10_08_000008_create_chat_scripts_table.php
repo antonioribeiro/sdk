@@ -9,11 +9,11 @@ class CreateChatScriptsTable extends Migration
 	{
 		Schema::create('chat_scripts', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('business_client_id', 64)->index();
-			$table->string('chat_service_id', 64)->index()->nullable();
-			$table->string('chat_script_type_id')->index();
+			$table->uuid('business_client_id')->index();
+			$table->uuid('chat_service_id')->index()->nullable();
+			$table->uuid('chat_script_type_id')->index();
 			$table->integer('order')->nullable();
 			$table->string('name');
 			$table->text('script');

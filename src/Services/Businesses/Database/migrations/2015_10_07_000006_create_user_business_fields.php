@@ -9,8 +9,8 @@ class CreateUserBusinessFields extends Migration
 	{
 		Schema::table('users', function(Blueprint $table)
 		{
-			$table->string('preferred_business_id', 64)->nullable();
-			$table->string('preferred_business_client_id', 64)->nullable();
+			$table->uuid('preferred_business_id')->nullable();
+			$table->uuid('preferred_business_client_id')->nullable();
 		});
 	}
 

@@ -14,11 +14,11 @@ class CreateClippingTagsTable extends Migration
 	{
 		Schema::create('clipping_tags', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('clipping_id', 64)->nullable();
+			$table->uuid('clipping_id')->nullable();
 
-			$table->string('tag_id', 64)->nullable();
+			$table->uuid('tag_id')->nullable();
 
 			$table->timestamps();
 		});

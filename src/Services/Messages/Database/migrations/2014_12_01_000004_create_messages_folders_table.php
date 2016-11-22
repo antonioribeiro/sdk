@@ -14,9 +14,9 @@ class CreateMessagesFoldersTable extends Migration {
 	{
 		Schema::create('messages_folders', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 
-			$table->string('user_id', 64)->index();
+			$table->uuid('user_id')->index();
 
 			$table->string('name');
 

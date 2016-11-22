@@ -15,12 +15,12 @@ class CreateTelegramContactsTable extends Migration
 		// Roles
 		Schema::create('telegram_contacts', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
             $table->string('phone_number');
             $table->string('first_name');
             $table->string('last_name')->nullable();
-            $table->string('telegram_user_id', 64)->nullable();
+            $table->uuid('telegram_user_id')->nullable();
 
 			$table->timestamps();
 		});

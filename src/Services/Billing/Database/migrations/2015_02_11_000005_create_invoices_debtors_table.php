@@ -14,10 +14,10 @@ class CreateInvoicesDebtorsTable extends Migration {
 	{
 		Schema::create('invoices_debtors', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('invoice_id', 64)->index();
-			$table->string('debtor_id', 64)->index();
+			$table->uuid('invoice_id')->index();
+			$table->uuid('debtor_id')->index();
 
 			$table->timestamps();
 		});

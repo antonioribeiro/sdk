@@ -14,10 +14,10 @@ class CreateInvoicesItemsTable extends Migration {
 	{
 		Schema::create('invoices_items', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('invoice_id', 64)->index();
-			$table->string('item_id', 64)->index();
+			$table->uuid('invoice_id')->index();
+			$table->uuid('item_id')->index();
 			$table->decimal('amount', 13, 2);
 
 			$table->timestamps();

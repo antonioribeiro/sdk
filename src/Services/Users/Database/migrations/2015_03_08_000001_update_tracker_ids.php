@@ -18,7 +18,7 @@ class UpdateTrackerIds extends Migration {
 
 			Schema::table('tracker_sessions', function(Blueprint $table)
 			{
-				$table->string('user_id', 64)->nullable();
+				$table->uuid('user_id')->nullable();
 			});
 		}
 	}

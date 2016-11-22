@@ -14,7 +14,7 @@ class CreateUsersSettingsTable extends Migration {
 	{
 		Schema::create('users_settings', function(Blueprint $table)
 		{
-			$table->string('user_id', 64)->unique()->index();
+			$table->uuid('user_id')->unique()->index();
 
 			$table->string('client_field_name')->nullable();
 

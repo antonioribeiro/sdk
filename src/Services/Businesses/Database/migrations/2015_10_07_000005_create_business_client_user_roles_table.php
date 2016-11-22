@@ -9,10 +9,10 @@ class CreateBusinessClientUserRolesTable extends Migration
 	{
 		Schema::create('business_client_user_roles', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('business_client_user_id', 64);
-			$table->string('business_role_id', 64);
+			$table->uuid('business_client_user_id');
+			$table->uuid('business_role_id');
 
 			$table->timestamps();
 		});

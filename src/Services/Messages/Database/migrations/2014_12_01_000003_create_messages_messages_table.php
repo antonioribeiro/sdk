@@ -14,13 +14,13 @@ class CreateMessagesMessagesTable extends Migration {
 	{
 		Schema::create('messages_messages', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 
-			$table->string('thread_id', 64)->index();
+			$table->uuid('thread_id')->index();
 
-            $table->string('sender_id')->index();
+            $table->uuid('sender_id')->index();
 
-			$table->string('answering_message_id', 64)->index()->nullable();
+			$table->uuid('answering_message_id')->index()->nullable();
 
             $table->text('body');
 

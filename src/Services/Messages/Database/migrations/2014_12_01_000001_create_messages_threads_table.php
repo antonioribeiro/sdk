@@ -14,9 +14,9 @@ class CreateMessagesThreadsTable extends Migration {
 	{
 		Schema::create('messages_threads', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 
-			$table->string('owner_id', 64)->index();
+			$table->uuid('owner_id')->index();
 
 			$table->string('subject');
 

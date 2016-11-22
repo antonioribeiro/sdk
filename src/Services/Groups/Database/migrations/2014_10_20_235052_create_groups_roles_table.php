@@ -15,7 +15,7 @@ class CreateGroupsRolesTable extends Migration {
 	{
 		Schema::create('groups_roles', function(Blueprint $table)
 		{
-			$table->string('id', 64)->index();
+			$table->uuid('id')->index();
 
 			$table->string('name', 64)->index()->nullable();
 

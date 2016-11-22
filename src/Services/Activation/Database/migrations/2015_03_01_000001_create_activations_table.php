@@ -16,9 +16,9 @@ class CreateActivationsTable extends Migration {
 
 //		Schema::create('activations', function(Blueprint $table)
 //		{
-//			$table->string('id', 64)->unique()->primary()->index();
+//			$table->uuid('id')->unique()->primary()->index();
 //
-//			$table->string('user_id', 64);
+//			$table->uuid('user_id');
 //			$table->string('code');
 //			$table->boolean('completed')->default(0);
 //			$table->timestamp('completed_at')->nullable();

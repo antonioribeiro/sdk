@@ -7,7 +7,7 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 
 class NodeJs extends ServiceProvider
 {
-	public function boot(Dispatcher $events)
+	public function boot()
 	{
 		$this->publishes([
 			__DIR__.'/../NodeJs' => app_path('Services/Chat/Server/NodeJs'),

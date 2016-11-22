@@ -9,10 +9,10 @@ class CreateChatReadsTable extends Migration
 	{
 		Schema::create('chat_reads', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('chat_business_client_talker_id', 64)->index();
-			$table->string('chat_id', 64)->index();
+			$table->uuid('chat_business_client_talker_id')->index();
+			$table->uuid('chat_id')->index();
 			$table->bigInteger('last_read_message_serial');
 
 			$table->timestamps();

@@ -9,10 +9,10 @@ class CreateChatBusinessClientServicesTable extends Migration
 	{
 		Schema::create('chat_business_client_services', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('business_client_id', 64);
-			$table->string('chat_service_id', 64);
+			$table->uuid('business_client_id');
+			$table->uuid('chat_service_id');
 			$table->string('description');
 
 			$table->timestamps();

@@ -1,11 +1,17 @@
 <?php
 
+use PragmaRX\Sdk\Services\Messages\Data\Entities\SystemFolder;
 use PragmaRX\Support\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateMessagesParticipantsTable extends Migration {
+class CreateMessagesParticipantsTable extends Migration
+{
+    private function getInbox()
+    {
+        return SystemFolder::where('slug', 'inbox')->first();
+    }
 
-	/**
+    /**
 	 * Run the migrations.
 	 *
 	 * @return void
@@ -14,13 +20,15 @@ class CreateMessagesParticipantsTable extends Migration {
 	{
 		Schema::create('messages_participants', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+		    $inbox = $this->getInbox();
 
-			$table->string('thread_id', 64)->index();
+			$table->uuid('id')->primary();
 
-			$table->string('user_id', 64)->index();
+			$table->uuid('thread_id')->index();
 
-			$table->string('folder_id', 64)->index()->nullable()->default('inbox');
+			$table->uuid('user_id')->index();
+
+			$table->uuid('folder_id')->index()->nullable()->default($inbox->id);
 
 			$table->timestamp('last_read')->nullable();
 

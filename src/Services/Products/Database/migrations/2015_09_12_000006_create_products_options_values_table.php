@@ -14,9 +14,9 @@ class CreateProductsOptionsValuesTable extends Migration
 	{
 		Schema::create('products_options_values', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('product_option_id', 64);
+			$table->uuid('product_option_id');
 			$table->string('name');
 
 			$table->timestamps();

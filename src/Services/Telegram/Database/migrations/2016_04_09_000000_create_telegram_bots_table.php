@@ -15,7 +15,7 @@ class CreateTelegramBotsTable extends Migration
 		// Roles
 		Schema::create('telegram_bots', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
 			$table->string('name')->nullable();
             $table->string('token')->nullable();

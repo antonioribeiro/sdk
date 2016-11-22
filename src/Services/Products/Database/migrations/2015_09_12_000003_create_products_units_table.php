@@ -14,7 +14,7 @@ class CreateProductsUnitsTable extends Migration {
 	{
 		Schema::create('products_units', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
 			$table->string('code');
 			$table->string('name');

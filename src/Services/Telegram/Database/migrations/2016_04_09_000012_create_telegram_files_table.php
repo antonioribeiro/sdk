@@ -15,10 +15,10 @@ class CreateTelegramFilesTable extends Migration
 		// Roles
 		Schema::create('telegram_files', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
             $table->string('telegram_file_id')->unique()->index();
-            $table->string('file_name_id', 64)->nullable()->index();
+            $table->uuid('file_name_id')->nullable()->index();
             $table->integer('file_size')->nullable()->unsigned();
             $table->string('file_path')->nullable();
 

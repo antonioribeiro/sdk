@@ -14,19 +14,19 @@ class CreateClippingTable extends Migration {
 	{
 		Schema::create('clipping', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
 			$table->text('heading')->nullable();
 			$table->text('subheading')->nullable();
 			$table->text('body')->nullable();
 			$table->string('url', 1024)->nullable();
 			$table->string('article_preview_url', 1024)->nullable();
-			$table->string('category_id', 64)->nullable()->index();
-			$table->string('vehicle_id', 64)->nullable()->index();
-			$table->string('author_id')->nullable()->index();
-			$table->string('locality_id', 64)->nullable()->index();
+			$table->uuid('category_id')->nullable()->index();
+			$table->uuid('vehicle_id')->nullable()->index();
+			$table->uuid('author_id')->nullable()->index();
+			$table->uuid('locality_id')->nullable()->index();
 			$table->timestamp('published_at')->nullable();
-			$table->string('main_image_id', 64)->nullable();
+			$table->uuid('main_image_id')->nullable();
 
 			$table->timestamps();
 		});

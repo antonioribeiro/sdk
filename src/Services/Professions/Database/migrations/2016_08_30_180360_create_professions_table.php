@@ -16,7 +16,7 @@ class CreateProfessionsTable extends Migration
 	{
 		Schema::create('professions', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 
             $table->string('name')->index();
             $table->string('code')->nullable()->index();

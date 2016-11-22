@@ -14,8 +14,8 @@ class CreateBlockagesTable extends Migration {
 	{
 		Schema::create('blockages', function(Blueprint $table)
 		{
-			$table->string('blocker_id', 64)->index();
-			$table->string('blocked_id', 64)->index();
+			$table->uuid('blocker_id')->index();
+			$table->uuid('blocked_id')->index();
 
 			$table->timestamps();
 		});

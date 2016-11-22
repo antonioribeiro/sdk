@@ -9,11 +9,11 @@ class CreateBusinessClientsTable extends Migration
 	{
 		Schema::create('business_clients', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('business_id', 64);
+			$table->uuid('business_id');
 			$table->string('name')->index();
-			$table->string('avatar_id', 64)->nullable();
+			$table->uuid('avatar_id')->nullable();
 
 			$table->timestamps();
 		});

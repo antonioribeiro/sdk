@@ -14,7 +14,7 @@ class CreateClippingFilesTypesTable extends Migration
 	{
 		Schema::create('clipping_files_types', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
 			$table->string('name');
 

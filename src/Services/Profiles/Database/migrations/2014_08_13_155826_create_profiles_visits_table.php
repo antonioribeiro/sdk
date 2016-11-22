@@ -14,8 +14,8 @@ class CreateProfilesVisitsTable extends Migration {
 	{
 		Schema::create('profiles_visits', function(Blueprint $table)
 		{
-			$table->string('visitor_id', 64)->index();
-			$table->string('visited_id', 64)->index();
+			$table->uuid('visitor_id')->index();
+			$table->uuid('visited_id')->index();
 			$table->string('session_id')->index();
 
 			$table->timestamps();

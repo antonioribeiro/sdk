@@ -14,7 +14,7 @@ class AddInvitationToUsersTable extends Migration {
 	{
 		Schema::table('users', function(Blueprint $table)
 		{
-			$table->string('inviter_id', 64)->nullable()->index();
+			$table->uuid('inviter_id')->nullable()->index();
 
 			$table->timestamp('invited_at')->nullable();
 

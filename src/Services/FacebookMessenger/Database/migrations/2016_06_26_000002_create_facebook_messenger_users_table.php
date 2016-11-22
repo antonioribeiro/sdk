@@ -15,7 +15,7 @@ class CreateFacebookMessengerUsersTable extends Migration
 		// Roles
 		Schema::create('facebook_messenger_users', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
 			$table->bigInteger('facebook_messenger_id', false)->unsigned()->unique()->index();
             $table->string('name')->nullable();

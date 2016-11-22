@@ -14,13 +14,13 @@ class CreateProductsTable extends Migration {
 	{
 		Schema::create('products', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
 			$table->text('name');
 			$table->text('description')->nullable();
-			$table->string('brand_id', 64);
-			$table->string('category_id', 64);
-			$table->string('unit_id', 64);
+			$table->uuid('brand_id');
+			$table->uuid('category_id');
+			$table->uuid('unit_id');
 			$table->boolean('active')->default(true);
 			$table->float('package_weight')->nullable();
 			$table->integer('package_width')->nullable();

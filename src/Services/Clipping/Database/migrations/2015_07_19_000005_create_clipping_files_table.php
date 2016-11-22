@@ -14,9 +14,9 @@ class CreateClippingFilesTable extends Migration
 	{
 		Schema::create('clipping_files', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('clipping_id', 64)->nullable();
+			$table->uuid('clipping_id')->nullable();
 
 			$table->boolean('is_main')->default(false);
 
@@ -24,9 +24,9 @@ class CreateClippingFilesTable extends Migration
 
 			$table->boolean('is_video')->default(false);
 
-			$table->string('file_name_id', 64)->nullable();
+			$table->uuid('file_name_id')->nullable();
 
-			$table->string('file_type_id', 64);
+			$table->uuid('file_type_id');
 
 			$table->string('url', 1024);
 

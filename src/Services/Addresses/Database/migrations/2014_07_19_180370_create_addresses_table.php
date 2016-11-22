@@ -14,11 +14,11 @@ class CreateAddressesTable extends Migration {
 	{
 		Schema::create('addresses', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+            $table->uuid('id')->unique()->primary()->index();
 
 			$table->string('street')->nullable();
 			$table->string('neighborhood')->nullable();
-			$table->string('city_id', 64);
+			$table->uuid('city_id');
 			$table->string('zip_code')->nullable();
 			$table->float('latitude')->nullable();
 			$table->float('longitude')->nullable();

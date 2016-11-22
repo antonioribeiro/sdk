@@ -14,10 +14,10 @@ class CreateProductsCategoriesTable extends Migration {
 	{
 		Schema::create('products_categories', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
 			$table->string('name');
-			$table->string('parent_id', 64)->nullable();
+			$table->uuid('parent_id')->nullable();
 
 			$table->timestamps();
 		});

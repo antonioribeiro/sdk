@@ -15,10 +15,10 @@ class CreateFacebookMessengerAudiosTable extends Migration
 		// Roles
 		Schema::create('facebook_messenger_audios', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
             $table->string('facebook_messenger_file_id')->unique()->index();
-            $table->string('file_name_id', 64)->nullable()->index();
+            $table->uuid('file_name_id')->nullable()->index();
             $table->integer('duration')->nullable();
             $table->string('performer')->nullable();
             $table->string('title')->nullable();

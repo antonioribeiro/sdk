@@ -15,7 +15,7 @@ class AddUsersTable extends Migration {
 		Schema::table('users', function(Blueprint $table)
 		{
 			$table->string('username')->index()->nullable();
-			$table->string('avatar_id', 64)->nullable();
+			$table->uuid('avatar_id')->nullable();
 		});
 
 		DB::statement(

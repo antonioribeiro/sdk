@@ -14,10 +14,10 @@ class CreateConnectionsTable extends Migration {
 	{
 		Schema::create('connections', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('requestor_id', 64)->index();
-			$table->string('requested_id', 64)->index();
+			$table->uuid('requestor_id')->index();
+			$table->uuid('requested_id')->index();
 
 			$table->boolean('authorized')->index()->default(false);
 			$table->timestamp('authorized_at')->nullable();

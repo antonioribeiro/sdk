@@ -14,7 +14,7 @@ class CreateClippingAuthorsTable extends Migration
 	{
 		Schema::create('clipping_authors', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
 			$table->string('name');
 

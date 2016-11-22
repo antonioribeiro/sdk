@@ -14,11 +14,11 @@ class CreateInvoicesPaymentsTable extends Migration {
 	{
 		Schema::create('invoices_payments', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('invoice_id', 64)->index();
+			$table->uuid('invoice_id')->index();
 			$table->decimal('amount', 13, 2);
-			$table->string('payer_id', 64)->index();
+			$table->uuid('payer_id')->index();
 
 			$table->timestamps();
 		});

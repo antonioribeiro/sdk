@@ -15,10 +15,10 @@ class CreateFacebookMessengerChatsTable extends Migration
 		// Roles
 		Schema::create('facebook_messenger_chats', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
 			$table->bigInteger('facebook_messenger_id', false)->unsigned()->unique()->index();
-            $table->string('bot_id', 64)->nullable()->index();
+            $table->uuid('bot_id')->nullable()->index();
             $table->string('title')->nullable();
             $table->string('username')->nullable();
             $table->string('first_name')->nullable();

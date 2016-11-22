@@ -9,9 +9,9 @@ class CreateChatBusinessClientServiceRoomsTable extends Migration
 	{
 		Schema::create('chat_business_client_service_rooms', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('chat_business_client_service_id', 64);
+			$table->uuid('chat_business_client_service_id');
 			$table->boolean('allow_many_talkers')->default(false);
 			$table->string('name')->index();
 

@@ -14,11 +14,11 @@ class CreateCategoriesTable extends Migration
 	{
 		Schema::create('categories', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 
 			$table->string('name', 255);
 
-			$table->string('parent_id', 64)->nullable();
+			$table->uuid('parent_id')->nullable();
 			$table->integer('left')->nullable();
 			$table->integer('right')->nullable();
 			$table->integer('depth')->nullable();

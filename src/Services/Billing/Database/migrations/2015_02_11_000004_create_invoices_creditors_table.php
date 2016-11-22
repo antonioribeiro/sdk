@@ -14,10 +14,10 @@ class CreateInvoicesCreditorsTable extends Migration {
 	{
 		Schema::create('invoices_creditors', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
-			$table->string('invoice_id', 64)->index();
-			$table->string('creditor_id', 64)->index();
+			$table->uuid('invoice_id')->index();
+			$table->uuid('creditor_id')->index();
 
 			$table->timestamps();
 		});

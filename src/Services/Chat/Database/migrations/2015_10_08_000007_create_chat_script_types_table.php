@@ -10,7 +10,7 @@ class CreateChatScriptTypesTable extends Migration
 	{
 		Schema::create('chat_script_types', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
 			$table->text('name')->index();
 			$table->text('description')->index();

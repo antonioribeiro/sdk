@@ -14,7 +14,7 @@ class CreateFacebookUserColumn extends Migration
 	{
 		Schema::table('users', function(Blueprint $table)
 		{
-			$table->string('facebook_messenger_user_id', 64)->nullable()->index();
+			$table->uuid('facebook_messenger_user_id')->nullable()->index();
 		});
 	}
 

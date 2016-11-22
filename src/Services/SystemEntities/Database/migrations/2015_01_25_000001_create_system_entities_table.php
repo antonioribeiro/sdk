@@ -14,7 +14,7 @@ class CreateSystemEntitiesTable extends Migration {
 	{
 		Schema::create('system_entities', function(Blueprint $table)
 		{
-			$table->string('id', 64)->primary();
+			$table->uuid('id')->primary();
 
 			$table->string('name');
 			$table->string('class');

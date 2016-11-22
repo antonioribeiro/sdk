@@ -15,14 +15,14 @@ class CreateFacebookMessengerVideosTable extends Migration
 		// Roles
 		Schema::create('facebook_messenger_videos', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
             $table->string('facebook_messenger_file_id')->unique()->index();
-            $table->string('file_name_id', 64)->nullable()->index();
+            $table->uuid('file_name_id')->nullable()->index();
             $table->integer('width');
             $table->integer('height');
             $table->integer('duration');
-            $table->string('thumb_id', 64)->nullable();
+            $table->uuid('thumb_id')->nullable();
             $table->string('mime_type')->nullable();
             $table->integer('file_size')->nullable()->unsigned();
 

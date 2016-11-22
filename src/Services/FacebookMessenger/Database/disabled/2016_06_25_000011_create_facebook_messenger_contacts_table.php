@@ -15,12 +15,12 @@ class CreateFacebookMessengerContactsTable extends Migration
 		// Roles
 		Schema::create('facebook_messenger_contacts', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
             $table->string('phone_number');
             $table->string('first_name');
             $table->string('last_name')->nullable();
-            $table->string('facebook_messenger_user_id', 64)->nullable();
+            $table->uuid('facebook_messenger_user_id')->nullable();
 
 			$table->timestamps();
 		});

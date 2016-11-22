@@ -15,11 +15,11 @@ class CreateTelegramChatsTable extends Migration
 		// Roles
 		Schema::create('telegram_chats', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
 			$table->bigInteger('telegram_id', false)->unsigned()->unique()->index();
-            $table->string('bot_id', 64)->nullable()->index();
-			$table->string('telegram_chat_type_id', 64);
+            $table->uuid('bot_id')->nullable()->index();
+			$table->uuid('telegram_chat_type_id');
             $table->string('title')->nullable();
             $table->string('username')->nullable();
             $table->string('first_name')->nullable();

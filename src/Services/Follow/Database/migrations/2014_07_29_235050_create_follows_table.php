@@ -14,8 +14,8 @@ class CreateFollowsTable extends Migration {
 	{
 		Schema::create('follows', function(Blueprint $table)
 		{
-			$table->string('follower_id', 64)->index();
-			$table->string('followed_id', 64)->index();
+			$table->uuid('follower_id')->index();
+			$table->uuid('followed_id')->index();
 
 			$table->timestamps();
 		});

@@ -15,7 +15,7 @@ class CreateFacebookPagesTable extends Migration
 		// Roles
 		Schema::create('facebook_pages', function(Blueprint $table)
 		{
-			$table->string('id', 64)->unique()->primary()->index();
+			$table->uuid('id')->unique()->primary()->index();
 
 			$table->string('facebook_id');
 
