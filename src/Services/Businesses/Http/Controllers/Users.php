@@ -52,7 +52,7 @@ class Users extends BaseController
 			abort(403);
 		}
 
-		$clients = $this->businessesRepository->allClients()->lists('name', 'id');
+		$clients = $this->businessesRepository->allClients()->pluck('name', 'id');
 
 		$roles = $this->businessesRepository->allowedRoles();
 
@@ -61,7 +61,7 @@ class Users extends BaseController
 				->with('postRoute', 'businesses.users.store')
 				->with('cancelRoute', 'businesses.users.index')
 				->with('submitButton', 'Criar usuário')
-				->with('roles', $roles->lists('description', 'id'));
+				->with('roles', $roles->pluck('description', 'id'));
 	}
 
 	public function store(CreateUserRequest $createUser)
@@ -93,14 +93,14 @@ class Users extends BaseController
 
 		$user->business_client_id = $user->present()->businessClient->id;
 
-		$clients = $this->businessesRepository->allClients()->lists('name', 'id');
+		$clients = $this->businessesRepository->allClients()->pluck('name', 'id');
 
 		return view('businesses.users.edit')
 			->with('user', $user)
 			->with('businessClients', $clients)
 			->with('postRoute', 'businesses.users.update')
 			->with('cancelRoute', 'businesses.users.index')
-			->with('roles', $roles->lists('description', 'id'))
+			->with('roles', $roles->pluck('description', 'id'))
 		;
 	}
 

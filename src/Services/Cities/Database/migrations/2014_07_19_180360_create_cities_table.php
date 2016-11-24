@@ -51,7 +51,9 @@ class CreateCitiesTable extends Migration
 
     private function seedTable()
     {
-        $cities = require __DIR__.'/cities.php';
+        echo "Seeding cities...\n";
+
+        $cities = require get_class_path(City::class).'/../../Database/seeds/cities.php';
 
         $country = Country::where('code', 'BR')->first();
         $state = State::where('code', 'RJ')->first();

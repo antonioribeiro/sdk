@@ -39,6 +39,8 @@ class CreateCountriesTable extends Migration
 
     private function seedTable()
     {
+        echo "Seeding countries...\n";
+
         $countries =
             [
                 ['code' => 'AD' , 'name' => 'Andorra', 'latitude' => 42.546245, 'longitude' =>	1.601554, 'created_at' => new DateTime, 'updated_at' => new DateTime],

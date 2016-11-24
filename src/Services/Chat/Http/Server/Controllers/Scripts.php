@@ -96,9 +96,9 @@ class Scripts extends BaseController
 	private function getAllLists()
 	{
 		return [
-			$this->chatRepository->allServices()->lists('name', 'id'),
-			$clients = $this->businessesRepository->allClients()->lists('name', 'id'),
-			$types = $this->chatRepository->allScriptTypes()->lists('description', 'id'),
+			$this->chatRepository->allServices()->pluck('name', 'id'),
+			$clients = $this->businessesRepository->allClients()->pluck('name', 'id'),
+			$types = $this->chatRepository->allScriptTypes()->pluck('description', 'id'),
 		];
 	}
 

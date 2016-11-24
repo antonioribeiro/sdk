@@ -7,7 +7,7 @@ use PragmaRX\Sdk\Services\Currencies\Data\Presenters\Currency as CurrencyPresent
 
 class Currency extends Model
 {
-	protected $table = 'glottos_currencies';
+	protected $table = 'currencies';
 
     protected $presenter = CurrencyPresenter::class;
 }

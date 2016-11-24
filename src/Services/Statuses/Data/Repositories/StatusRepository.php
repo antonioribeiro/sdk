@@ -37,7 +37,7 @@ class StatusRepository extends Repository
 
 	public function getFeedForUser($user)
 	{
-		$userIds = $user->following()->lists('followed_id')->toArray();
+		$userIds = $user->following()->pluck('followed_id')->toArray();
 
 		$userIds[] = $user->id;
 

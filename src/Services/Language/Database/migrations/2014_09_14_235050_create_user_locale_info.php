@@ -3,8 +3,8 @@
 use PragmaRX\Support\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateUserLocaleInfo extends Migration {
-
+class CreateUserLocaleInfo extends Migration
+{
 	/**
 	 * Run the migrations.
 	 *
@@ -28,5 +28,4 @@ class CreateUserLocaleInfo extends Migration {
 	{
 		$this->dropColumn('users', 'locale');
 	}
-
 }

@@ -70,6 +70,7 @@ return [
 		'Services/Kinds',
 
 		'Services/Language',
+        'Services/Languages',
 		'Services/Login',
 
 		'Services/Mailer',

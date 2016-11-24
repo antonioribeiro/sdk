@@ -141,7 +141,7 @@ class GroupRepository extends Repository
 		return $members;
 	}
 
-	private function findById($group_id)
+	public function findById($group_id)
 	{
 		return Group::find($group_id);
 	}
@@ -238,14 +238,14 @@ class GroupRepository extends Repository
 
 	public function isGroupManager($group_id, $user)
 	{
-		$managers = $this->getManagers($group_id)->lists('id')->toArray();
+		$managers = $this->getManagers($group_id)->pluck('id')->toArray();
 
 		return in_array($user->id, $managers);
 	}
 
 	public function isGroupOwner($group_id, $user)
 	{
-		$managers = $this->getManagers($group_id, 'owner')->lists('id')->toArray();
+		$managers = $this->getManagers($group_id, 'owner')->pluck('id')->toArray();
 
 		return in_array($user->id, $managers);
 	}

@@ -28,7 +28,7 @@ trait FollowableTrait {
 
 		$this->filterRelationBlockages($relation, 'followed_id', 'follower_id');
 
-		if ($blocked = $this->blockages()->lists('blocked_id')->toArray())
+		if ($blocked = $this->blockages()->pluck('blocked_id')->toArray())
 		{
 			$relation->whereNotIn('follower_id', $blocked);
 		}
@@ -44,7 +44,7 @@ trait FollowableTrait {
 	 */
 	public function isFollowedBy(User $otherUser)
 	{
-		$idsWhoOtherUserFollows = $otherUser->following()->lists('followed_id')->toArray();
+		$idsWhoOtherUserFollows = $otherUser->following()->pluck('followed_id')->toArray();
 
 		return in_array($this->id, $idsWhoOtherUserFollows);
 	}

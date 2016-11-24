@@ -1097,11 +1097,11 @@ class UserRepository extends Repository implements UserRepositoryContract
 
 		$result = [];
 
-		$authUserClients = $loggedUser->businessClientUsers->lists('business_client_id')->toArray();
+		$authUserClients = $loggedUser->businessClientUsers->pluck('business_client_id')->toArray();
 
 		foreach($users as $user)
 		{
-			$clients = $user->businessClientUsers->lists('business_client_id')->toArray();
+			$clients = $user->businessClientUsers->pluck('business_client_id')->toArray();
 
 			if ($loggedUser->is_root || (!$user->is_root && array_intersect($authUserClients, $clients)))
 			{

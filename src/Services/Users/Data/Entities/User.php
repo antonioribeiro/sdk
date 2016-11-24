@@ -175,12 +175,12 @@ class User extends SdkUser implements CanResetPassword, AuthenticatableContract
 
     public function filterRelationBlockages($relation, $otherColumn, $userColumn)
     {
-        if ($blocked = $this->blockages()->lists('blocked_id'))
+        if ($blocked = $this->blockages()->pluck('blocked_id'))
         {
             $relation->whereNotIn($otherColumn, $blocked);
         }
 
-        if ($blocked = $this->blockedBy()->lists('blocker_id'))
+        if ($blocked = $this->blockedBy()->pluck('blocker_id'))
         {
             $relation->whereNotIn($userColumn, $blocked);
         }
