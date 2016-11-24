@@ -4,11 +4,11 @@ namespace PragmaRX\Sdk\Services\Groups\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
 
-use PragmaRX\Sdk\Services\Groups\Commands\AddGroupCommand;
-use PragmaRX\Sdk\Services\Groups\Commands\AddMembersToGroupCommand;
-use PragmaRX\Sdk\Services\Groups\Commands\DeleteGroupCommand;
-use PragmaRX\Sdk\Services\Groups\Commands\DeleteGroupMembersCommand;
-use PragmaRX\Sdk\Services\Groups\Commands\UpdateGroupCommand;
+use PragmaRX\Sdk\Services\Groups\Jobs\AddGroup as AddGroupJob;
+use PragmaRX\Sdk\Services\Groups\Jobs\AddMembersToGroup as AddMembersToGroupJob;
+use PragmaRX\Sdk\Services\Groups\Jobs\DeleteGroup as DeleteGroupJob;
+use PragmaRX\Sdk\Services\Groups\Jobs\DeleteGroupMembers as DeleteGroupMembersJob;
+use PragmaRX\Sdk\Services\Groups\Jobs\UpdateGroup as UpdateGroupJob;
 use PragmaRX\Sdk\Services\Groups\Data\Repositories\GroupRepository;
 use PragmaRX\Sdk\Services\Groups\Http\Requests\AddGroup as AddGroupRequest;
 use PragmaRX\Sdk\Services\Groups\Http\Requests\AddMembers as AddMembersRequest;
@@ -54,7 +54,7 @@ class Groups extends BaseController {
 	{
 		$input = ['user' => Auth::user()] + $request->all();
 
-		$this->execute(AddGroupCommand::class, $input);
+		dispatch(new AddGroupJob($input));
 
 		Flash::message(t('paragraphs.group-added'));
 
@@ -68,7 +68,7 @@ class Groups extends BaseController {
 			'group_id' => $id,
 		];
 
-		$this->execute(DeleteGroupCommand::class, $input);
+		dispatch(new DeleteGroupJob($input));
 
 		Flash::message(t('paragraphs.group-deleted'));
 
@@ -83,7 +83,7 @@ class Groups extends BaseController {
 		    'members' => $request->get('members'),
 		];
 
-		$members = $this->execute(AddMembersToGroupCommand::class, $input);
+		$members = dispatch(new AddMembersToGroupJob($input));
 
 		Flash::message(t(count($members) > 1 ? 'paragraphs.members-added' : 'paragraphs.member-added'));
 
@@ -105,7 +105,7 @@ class Groups extends BaseController {
 			'administrators' => $request->get('administrators', []),
 		];
 
-		$this->execute(UpdateGroupCommand::class, $input);
+		dispatch(new UpdateGroupJob($input));
 
 		Flash::message(t('paragraphs.group-was-updated'));
 
@@ -121,7 +121,7 @@ class Groups extends BaseController {
 			'administrators' => $request->get('administrators', []),
 		];
 
-		$this->execute(DeleteGroupMembersCommand::class, $input);
+		dispatch(new DeleteGroupMembersJob($input));
 
 		Flash::message(t('paragraphs.one-or-more-members-deleted'));
 

@@ -4,7 +4,7 @@ namespace PragmaRX\Sdk\Services\Messages\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller;
 
-use PragmaRX\Sdk\Services\Messages\Commands\AddFolderCommand;
+use PragmaRX\Sdk\Services\Messages\Jobs\AddFolder as AddFolderJob;
 use PragmaRX\Sdk\Services\Messages\Data\Repositories\Message as MessageRepository;
 use PragmaRX\Sdk\Services\Messages\Http\Requests\AddFolder;
 use Redirect;
@@ -30,13 +30,12 @@ class Folders extends Controller {
 
 	public function store(AddFolder $request)
 	{
-		$thread = $this->execute(
-			AddFolderCommand::class,
-			[
-				'user' => Auth::user(),
-				'folder_name' => $request->get('folder_name')
-			]
-		);
+	    $input = [
+            'user' => Auth::user(),
+            'folder_name' => $request->get('folder_name')
+        ];
+
+		dispatch(AddFolderJob($input));
 
 		Flash::message(t('paragraphs.folder-was-created'));
 

@@ -2,13 +2,12 @@
 
 namespace PragmaRX\Sdk\Services\Follow\Http\Controllers;
 
-use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Services\Follow\Commands\FollowUserCommand;
-use PragmaRX\Sdk\Services\Follow\Commands\UnfollowUserCommand;
-
 use Auth;
 use Flash;
 use Redirect;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Follow\Jobs\FollowUser as FollowUserJob;
+use PragmaRX\Sdk\Services\Follow\Jobs\UnfollowUser as UnfollowUserJob;
 
 class Follow extends BaseController {
 
@@ -22,7 +21,7 @@ class Follow extends BaseController {
 	{
 		$input = ['user_to_follow' => $user_to_follow, 'user_id' => Auth::id()];
 
-		$this->execute(FollowUserCommand::class, $input);
+		dispatch(new FollowUserJob($input));
 
 		Flash::message(t('paragraphs.you-are-following'));
 
@@ -42,7 +41,7 @@ class Follow extends BaseController {
 			'user_id' => Auth::id()
 		];
 
-		$this->execute(UnfollowUserCommand::class, $input);
+		dispatch(new UnfollowUserJob($input));
 
 		Flash::message(t('paragraphs.you-are-not-following'));
 

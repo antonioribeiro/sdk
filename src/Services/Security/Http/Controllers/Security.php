@@ -2,16 +2,15 @@
 
 namespace PragmaRX\Sdk\Services\Security\Http\Controllers;
 
-use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Services\Security\Commands\RequestToggleEmailCommand;
-use PragmaRX\Sdk\Services\Security\Commands\ToggleEmailCommand;
-use PragmaRX\Sdk\Services\Security\Commands\ToggleGoogleCodeCommand;
-use PragmaRX\Sdk\Services\Security\Http\Requests\GoogleCodeRequest;
-
 use View;
 use Auth;
 use Flash;
 use Redirect;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Security\Http\Requests\GoogleCodeRequest;
+use PragmaRX\Sdk\Services\Security\Jobs\ToggleEmail as ToggleEmailJob;
+use PragmaRX\Sdk\Services\Security\Jobs\ToggleGoogleCode as ToggleGoogleCodeJob;
+use PragmaRX\Sdk\Services\Security\Jobs\RequestToggleEmail as RequestToggleEmailJob;
 
 class Security extends BaseController {
 
@@ -22,7 +21,7 @@ class Security extends BaseController {
 
 	public function google(GoogleCodeRequest $request)
 	{
-		$user = $this->execute(ToggleGoogleCodeCommand::class, ['user' => Auth::user()]);
+		$user = dispatch(new ToggleGoogleCodeJob(['user' => Auth::user()]));
 
 		if ($user->two_factor_google_enabled)
 		{
@@ -38,20 +37,19 @@ class Security extends BaseController {
 
 	public function email()
 	{
-		$this->execute(RequestToggleEmailCommand::class, ['user' => Auth::user()]);
+		dispatch(new RequestToggleEmailJob(['user' => Auth::user()]));
 
 		return Redirect::back();
 	}
 
 	public function emailToggle($code)
 	{
-		$user = $this->execute(
-			ToggleEmailCommand::class,
-			[
-				'code' => $code,
-				'user' => Auth::user()
-			]
-		);
+	    $input = [
+            'code' => $code,
+            'user' => Auth::user()
+        ];
+
+		$user = dispatch(new ToggleEmailJob($input));
 
 		if ($user->two_factor_email_enabled)
 		{
@@ -64,5 +62,4 @@ class Security extends BaseController {
 
 		return Redirect::back();
 	}
-
 }

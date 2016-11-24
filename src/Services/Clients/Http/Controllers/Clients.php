@@ -9,9 +9,9 @@ use Redirect;
 use Response;
 use PragmaRX\Support\Inflectors\Inflector;
 use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Services\Clients\Commands\AddClientCommand;
-use PragmaRX\Sdk\Services\Clients\Commands\DeleteClientCommand;
-use PragmaRX\Sdk\Services\Clients\Commands\UpdateClientCommand;
+use PragmaRX\Sdk\Services\Clients\Jobs\AddClientJob;
+use PragmaRX\Sdk\Services\Clients\Jobs\DeleteClientJob;
+use PragmaRX\Sdk\Services\Clients\Jobs\UpdateClientJob;
 use PragmaRX\Sdk\Services\Kinds\Data\Repositories\KindRepository;
 use PragmaRX\Sdk\Services\Clients\Data\Repositories\ClientRepository;
 use PragmaRX\Sdk\Services\Clients\Http\Requests\AddClient as AddClientRequest;
@@ -36,7 +36,7 @@ class Clients extends BaseController {
 			'birthdate' => $request->get('birthdate') ?: null,
 		];
 
-		$this->execute(AddClientCommand::class, $input);
+		dispatch(new AddClientJob($input));
 
 		Flash::message(
 			t(
@@ -81,7 +81,7 @@ class Clients extends BaseController {
 			'birthdate' => $request->get('birthdate') ?: null,
 		];
 
-		$client = $this->execute(UpdateClientCommand::class, $input);
+		$client = dispatch(new UpdateClientJob($input));
 
 		Flash::message(
 			t(
@@ -100,7 +100,7 @@ class Clients extends BaseController {
 			'id' => $id,
 		];
 
-		$this->execute(DeleteClientCommand::class, $input);
+		dispatch(new DeleteClientJob($input));
 
 		Flash::message(
 			t(

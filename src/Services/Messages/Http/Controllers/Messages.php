@@ -9,9 +9,9 @@ use Input;
 use Redirect;
 use PragmaRX\Sdk\Core\Controller;
 use PragmaRX\Sdk\Services\Messages\Http\Requests\SendMessage;
-use PragmaRX\Sdk\Services\Messages\Commands\ReadMessageCommand;
-use PragmaRX\Sdk\Services\Messages\Commands\SendMessageCommand;
-use PragmaRX\Sdk\Services\Messages\Commands\MoveMessagesCommand;
+use PragmaRX\Sdk\Services\Messages\Jobs\ReadMessage as ReadMessageJob;
+use PragmaRX\Sdk\Services\Messages\Jobs\SendMessage as SendMessageJob;
+use PragmaRX\Sdk\Services\Messages\Jobs\MoveMessages as MoveMessagesJob;
 use PragmaRX\Sdk\Services\Messages\Data\Repositories\Message as MessageRepository;
 use PragmaRX\Sdk\Services\Connect\Data\Repositories\Connection as ConnectionRepository;
 
@@ -91,7 +91,7 @@ class Messages extends Controller {
 		    'answering_message_id' => $request->get('answering_message_id'),
 		];
 
-		$this->execute(SendMessageCommand::class, $input);
+		dispatch(new SendMessageJob($input));
 
 		Flash::message(t('paragraphs.message-was-sent'));
 
@@ -105,13 +105,12 @@ class Messages extends Controller {
 
 	public function read($thread_id)
 	{
-		$thread = $this->execute(
-			ReadMessageCommand::class,
-			[
-				'user' => Auth::user(),
-				'thread_id' => $thread_id
-			]
-		);
+	    $input = [
+            'user' => Auth::user(),
+            'thread_id' => $thread_id
+        ];
+
+		$thread = dispatch(new ReadMessageJob($input));
 
 		return View::make('messages.show')->with('thread', $thread);
 	}
@@ -128,7 +127,7 @@ class Messages extends Controller {
 			'user' => Auth::user(),
 		];
 
-		$this->execute(MoveMessagesCommand::class, $input);
+		dispatch(new MoveMessagesJob($input));
 
 		return Redirect::back();
 	}

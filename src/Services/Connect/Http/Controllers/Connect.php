@@ -3,11 +3,11 @@
 namespace PragmaRX\Sdk\Services\Connect\Http\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Services\Connect\Commands\AcceptInvitationCommand;
-use PragmaRX\Sdk\Services\Connect\Commands\ConnectActionCommand;
-use PragmaRX\Sdk\Services\Connect\Commands\ConnectUserCommand;
-use PragmaRX\Sdk\Services\Connect\Commands\DisconnectUserCommand;
-use PragmaRX\Sdk\Services\Connect\Commands\InviteCommand;
+use PragmaRX\Sdk\Services\Connect\Jobs\AcceptInvitation as AcceptInvitationJob;
+use PragmaRX\Sdk\Services\Connect\Jobs\ConnectAction as ConnectActionJob;
+use PragmaRX\Sdk\Services\Connect\Jobs\ConnectUser as ConnectUserJob;
+use PragmaRX\Sdk\Services\Connect\Jobs\DisconnectUser as DisconnectUserJob;
+use PragmaRX\Sdk\Services\Connect\Jobs\InviteJob;
 use PragmaRX\Sdk\Services\Connect\Http\Requests\Invite as InviteRequest;
 
 use Auth;
@@ -27,7 +27,7 @@ class Connect extends BaseController {
 	{
 		$input = ['user_to_connect' => $user_to_connect, 'user_id' => Auth::id()];
 
-		$this->execute(ConnectUserCommand::class, $input);
+		dispatch(new ConnectUserJob($input));
 
 		Flash::message(t('paragraphs.connection-request-sent'));
 
@@ -47,7 +47,7 @@ class Connect extends BaseController {
 			'user_id' => Auth::id()
 		];
 
-		$this->execute(DisconnectUserCommand::class, $input);
+		dispatch(new DisconnectUserJob($input));
 
 		Flash::message(t('paragraphs.disconnected-from-user'));
 
@@ -62,7 +62,7 @@ class Connect extends BaseController {
 			'action' => $action,
 		];
 
-		$this->execute(ConnectActionCommand::class, $input);
+		dispatch(new ConnectActionJob($input));
 
 		return Redirect::back();
 	}
@@ -74,7 +74,7 @@ class Connect extends BaseController {
 			'emails' => $request->get('emails'),
 		];
 
-		$this->execute(InviteCommand::class, $input);
+		dispatch(new InviteJob($input));
 
 		return Redirect::back();
 	}
@@ -90,7 +90,7 @@ class Connect extends BaseController {
 			'user_id' => $user_id,
 		];
 
-		$this->execute(AcceptInvitationCommand::class, $input);
+		dispatch(new AcceptInvitationJob($input));
 
 		return Redirect::route_no_ajax('notification')
 				->with('title', t('titles.invitation-accepted'))

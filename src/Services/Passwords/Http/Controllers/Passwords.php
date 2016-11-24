@@ -7,8 +7,8 @@ use Redirect;
 use Password as PasswordReminder;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
-use PragmaRX\Sdk\Services\Passwords\Commands\ResetPasswordCommand;
-use PragmaRX\Sdk\Services\Passwords\Commands\UpdatePasswordCommand;
+use PragmaRX\Sdk\Services\Passwords\Jobs\ResetPassword as ResetPasswordJob;
+use PragmaRX\Sdk\Services\Passwords\Jobs\UpdatePassword as UpdatePasswordJob;
 use PragmaRX\Sdk\Services\Passwords\Http\Requests\RemindPassword as RemindPasswordRequest;
 use PragmaRX\Sdk\Services\Passwords\Http\Requests\ResetPassword as ResetPasswordRequest;
 use PragmaRX\Sdk\Services\Passwords\Http\Requests\UpdatePassword as UpdatePasswordRequest;
@@ -83,7 +83,7 @@ class Passwords extends BaseController
 			'token'
 		);
 
-		$this->execute(UpdatePasswordCommand::class, $credentials);
+		dispatch(new UpdatePasswordJob($credentials));
 
 		return Redirect::route('auth.login');
 	}
@@ -94,13 +94,12 @@ class Passwords extends BaseController
 	 */
 	private function resetPassword($username, $email)
 	{
-		$this->execute(
-			ResetPasswordCommand::class,
-			[
-				'username' => $username,
-				'email' => $email,
-			]
-		);
+	    $input = [
+            'username' => $username,
+            'email' => $email,
+        ];
+
+		dispatch(new ResetPasswordJob($input));
 
 		return Redirect::route_no_ajax('notification')
 			->with('title', t('titles.reset-your-password'))

@@ -7,15 +7,15 @@ use Auth;
 use Flash;
 use Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Services\Profiles\Commands\EditProfileCommand;
+use PragmaRX\Sdk\Services\Profiles\Jobs\EditProfileJob;
 use PragmaRX\Sdk\Services\Profiles\Http\Requests\UpdateProfile;
 use PragmaRX\Sdk\Services\Kinds\Data\Repositories\KindRepository;
 use PragmaRX\Sdk\Services\Users\Data\Repositories\UserRepository;
 use PragmaRX\Sdk\Services\Statuses\Data\Repositories\StatusRepository;
 
 
-class Profiles extends BaseController {
-
+class Profiles extends BaseController
+{
 	/**
 	 * @var UserRepository
 	 */
@@ -60,11 +60,10 @@ class Profiles extends BaseController {
 
 	public function update(UpdateProfile $request)
 	{
-		$user = $this->execute(EditProfileCommand::class);
+		$user = dispatch(new EditProfileJob());
 
 		Flash::message(t('paragraphs.profile-updated'));
 
 		return Redirect::route('profile.edit', [$user->username]);
 	}
-
 }

@@ -4,8 +4,8 @@ namespace PragmaRX\Sdk\Services\Chat\Http\Client\Controllers;
 
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Chat\Events\EventPublisher;
+use PragmaRX\Sdk\Services\Chat\Jobs\CreateChat as CreateChatJob;
 use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses;
-use PragmaRX\Sdk\Services\Chat\Commands\CreateChat as CreateChatCommand;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
 use PragmaRX\Sdk\Services\Chat\Http\Client\Requests\CreateChat as CreateChatRequest;
 
@@ -77,7 +77,7 @@ class Chat extends BaseController
 
 	public function store(CreateChatRequest $request)
 	{
-		$chat = $this->execute(CreateChatCommand::class, $request->all());
+		$chat = dispatch(new CreateChatJob($request->all()));
 
 		return redirect('chat/client/'.$chat->id);
 	}

@@ -5,10 +5,10 @@ namespace PragmaRX\Sdk\Services\Chat\Http\Server\Controllers;
 use Gate;
 use Auth;
 use Flash;
-use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
 use Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Services\Chat\Commands\CreateScript as CreateScriptCommand;
+use PragmaRX\Sdk\Services\Chat\Data\Entities\ChatScript;
+use PragmaRX\Sdk\Services\Chat\Jobs\CreateScript as CreateScriptJob;
 use PragmaRX\Sdk\Services\Chat\Data\Repositories\Chat as ChatRepository;
 use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses as BusinessesRepository;
 use PragmaRX\Sdk\Services\Chat\Http\Server\Requests\CreateScript as CreateScriptRequest;
@@ -65,7 +65,7 @@ class Scripts extends BaseController
 			abort(403);
 		}
 
-		$this->execute(CreateScriptCommand::class);
+		dispatch(new CreateScriptJob());
 
 		Flash::message(t('paragraphs.script-created'));
 

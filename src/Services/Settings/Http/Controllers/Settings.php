@@ -2,14 +2,13 @@
 
 namespace PragmaRX\Sdk\Services\Settings\Http\Controllers;
 
-use PragmaRX\Sdk\Core\Controller as BaseController;
-
 use Auth;
-use Flash;
-use PragmaRX\Sdk\Services\Settings\Commands\UpdateCommand;
-use PragmaRX\Sdk\Services\Settings\Http\Requests\Update as UpdateRequest;
-use Redirect;
 use View;
+use Flash;
+use Redirect;
+use PragmaRX\Sdk\Services\Settings\Jobs\UpdateJob;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Settings\Http\Requests\Update as UpdateRequest;
 
 class Settings extends BaseController {
 
@@ -27,11 +26,10 @@ class Settings extends BaseController {
 			'input' => $request->except('_method', '_token', 'referer-url'),
 		];
 
-		$this->execute(UpdateCommand::class, $input);
+		dispatch(new UpdateJob($input));
 
 		Flash::message(t('paragraphs.your-settings-were-updated'));
 
 		return Redirect::back();
 	}
-
 }

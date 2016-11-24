@@ -8,7 +8,7 @@ use Flash;
 use Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
 use PragmaRX\Sdk\Services\Statuses\Http\Requests\PostStatus;
-use PragmaRX\Sdk\Services\Statuses\Commands\PostStatusCommand;
+use PragmaRX\Sdk\Services\Statuses\Jobs\PostStatus as PostStatusJob;
 use PragmaRX\Sdk\Services\Statuses\Data\Repositories\StatusRepository;
 use PragmaRX\Sdk\Services\Statuses\Http\Requests\PostStatus as PostStatusRequest;
 
@@ -47,7 +47,7 @@ class Statuses extends BaseController {
 
 		$input['user_id'] = Auth::id();
 
-		$this->execute(PostStatusCommand::class, $input);
+		dispatch(new PostStatusJob($input));
 
 		Flash::message(t('paragraphs.status-posted'));
 

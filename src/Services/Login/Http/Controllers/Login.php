@@ -2,21 +2,19 @@
 
 namespace PragmaRX\Sdk\Services\Login\Http\Controllers;
 
-use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Services\Accounts\Commands\SignInCommand;
-use PragmaRX\Sdk\Services\Accounts\Commands\SignOutCommand;
-use PragmaRX\Sdk\Services\Login\Forms\SignIn as SignInForm;
-
-use PragmaRX\Sdk\Services\Login\Http\Requests\Login as LoginRequest;
-
 use View;
 use Auth;
-use Sentinel;
 use Flash;
 use Redirect;
+use Sentinel;
+use PragmaRX\Sdk\Core\Controller as BaseController;
+use PragmaRX\Sdk\Services\Accounts\Jobs\SignIn;
+use PragmaRX\Sdk\Services\Accounts\Jobs\SignOut;
+use PragmaRX\Sdk\Services\Login\Forms\SignIn as SignInForm;
+use PragmaRX\Sdk\Services\Login\Http\Requests\Login as LoginRequest;
 
-class Login extends BaseController {
-
+class Login extends BaseController
+{
 	/**
 	 * @return mixed
 	 */
@@ -41,7 +39,7 @@ class Login extends BaseController {
 
 	public function destroy()
 	{
-        $this->execute(SignOutCommand::class);
+        dispatch(new SignOut());
 
 		Flash::message(t('paragraphs.you-are-logged-out'));
 
@@ -59,7 +57,7 @@ class Login extends BaseController {
 
 	private function login($input)
 	{
-		$result = $this->execute(SignInCommand::class, $input);
+		$result = dispatch(new SignIn($input['email'], $input['password'], $input['remember']));
 
 		if ($result['next'] == 'two-factor')
 		{
@@ -70,5 +68,4 @@ class Login extends BaseController {
 
 		return Redirect::intended('/');
 	}
-
 }

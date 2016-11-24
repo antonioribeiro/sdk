@@ -6,7 +6,7 @@ use Config;
 use View;
 use Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Services\Registration\Commands\RegisterUserCommand;
+use PragmaRX\Sdk\Services\Registration\Jobs\RegisterUser as RegisterUserJob;
 use PragmaRX\Sdk\Services\Registration\Http\Requests\Register as RegisterRequest;
 
 class Registration extends BaseController
@@ -27,9 +27,7 @@ class Registration extends BaseController
 	 */
 	public function store(RegisterRequest $request)
 	{
-		$input = $this->getRequestInput($request);
-
-		$this->execute(RegisterUserCommand::class, $input);
+		dispatch(new RegisterUserJob($this->getRequestInput($request)));
 
 		return Redirect::route_no_ajax('notification')
 				->with('title', t('titles.welcome'))

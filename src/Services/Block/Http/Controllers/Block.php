@@ -2,13 +2,12 @@
 
 namespace PragmaRX\Sdk\Services\Block\Http\Controllers;
 
-use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Services\Block\Commands\BlockUserCommand;
-use PragmaRX\Sdk\Services\Block\Commands\UnblockUserCommand;
-
 use Auth;
 use Flash;
 use Redirect;
+use PragmaRX\Sdk\Services\Block\Jobs\BlockUser;
+use PragmaRX\Sdk\Services\Block\Jobs\UnblockUser;
+use PragmaRX\Sdk\Core\Controller as BaseController;
 
 class Block extends BaseController {
 
@@ -29,9 +28,7 @@ class Block extends BaseController {
 	 */
 	public function store($user_to_block)
 	{
-		$input = ['user_to_block' => $user_to_block, 'user_id' => Auth::id()];
-
-		$this->execute(BlockUserCommand::class, $input);
+		dispatch(new BlockUser($user_to_block, Auth::id()));
 
 		Flash::message(t('paragraphs.you-are-blocking'));
 
@@ -46,12 +43,7 @@ class Block extends BaseController {
 	 */
 	public function destroy($user_to_unblock)
 	{
-		$input = [
-			'user_to_unblock' => $user_to_unblock,
-			'user_id' => Auth::id()
-		];
-
-		$this->execute(UnblockUserCommand::class, $input);
+		dispatch(new UnblockUser($user_to_unblock, Auth::id()));
 
 		Flash::message(t('paragraphs.you-are-not-blocking'));
 

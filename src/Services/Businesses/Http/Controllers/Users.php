@@ -7,11 +7,11 @@ use Auth;
 use Flash;
 use Redirect;
 use PragmaRX\Sdk\Core\Controller as BaseController;
-use PragmaRX\Sdk\Services\Businesses\Commands\UpdateUser as UpdateUserCommand;
+use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
+use PragmaRX\Sdk\Services\Businesses\Jobs\UpdateUser as UpdateUserJob;
+use \PragmaRX\Sdk\Services\Businesses\Jobs\CreateUser as CreateUserJob;
 use PragmaRX\Sdk\Services\Businesses\Http\Requests\CreateUser as CreateUserRequest;
 use PragmaRX\Sdk\Services\Businesses\Http\Requests\UpdateUser as UpdateUserRequest;
-use PragmaRX\Sdk\Services\Users\Data\Contracts\UserRepository;
-use \PragmaRX\Sdk\Services\Businesses\Commands\CreateUser as CreateUserCommand;
 use PragmaRX\Sdk\Services\Businesses\Data\Repositories\Businesses as BusinessesRepository;
 
 class Users extends BaseController
@@ -71,7 +71,7 @@ class Users extends BaseController
 			abort(403);
 		}
 
-		$this->execute(CreateUserCommand::class);
+		dispatch(new CreateUserJob($createUser));
 
 		Flash::message(t('paragraphs.user-created'));
 
@@ -111,7 +111,7 @@ class Users extends BaseController
 			abort(403);
 		}
 
-		$this->execute(UpdateUserCommand::class);
+		dispatch(new UpdateUserJob($updateUserRequest));
 
 		Flash::message(t('paragraphs.user-updated'));
 
