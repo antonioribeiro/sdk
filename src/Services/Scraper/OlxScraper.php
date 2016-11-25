@@ -8,6 +8,8 @@ use Storage;
 use Illuminate\Support\Str;
 use App\Data\Repositories\Olx;
 use PragmaRX\Sdk\Services\Ocr\Service\Ocr;
+use Exception;
+use Throwable;
 
 class OlxScraper extends BaseScraper
 {
@@ -15,7 +17,7 @@ class OlxScraper extends BaseScraper
 
 	protected $rules = [
 		'result' => 'links',
-        'url' => 'http://%state%.olx.com.br/%district%/%region%',
+        'url' => 'http://%state%.olx.com.br/%zone%/%region%',
 
 //		'url' => 'http://local.crm.com/olx-saogoncalo.html',
 
@@ -36,8 +38,10 @@ class OlxScraper extends BaseScraper
 
 	protected $data = [
 	    '%state%' => ['rj'],
-        '%district%' => ['rio-de-janeiro-e-regiao'],
-        '%region%' => ['zona-sul'],
+        '%zone%' => ['rio-de-janeiro-e-regiao'],
+        '%region%' => ['zona-oeste'],
+//        '%region%' => ['zona-sul'],
+//        '%region%' => ['sao-goncalo'],
 
 		'%city%' => ['rio-de-janeiro'],
 	    '%unit-type%' => ['apartamento-padrao'],
@@ -54,6 +58,38 @@ class OlxScraper extends BaseScraper
         $this->repository = $repository = app(Olx::class);
 
         parent::__construct();
+    }
+
+    private function _ocr($url, $command, $prefix)
+    {
+        $file = $prefix.Str::random().'.gif';
+        echo "$file\n";
+
+        Storage::drive($disk = 'local')->put($file, file_get_contents('http:'.$url));
+
+        $gifFile = Storage::disk($disk)->getDriver()->getAdapter()->applyPathPrefix($file);
+        $tiffFile = str_replace('.gif', '.tiff', $gifFile);
+
+//        $exec = 'convert '.$gifFile.' -alpha off -compress none '.$tiffFile.' 2>/dev/null';
+//        echo $exec."/n";
+//        exec($exec);
+
+        $im = new Imagick($gifFile);
+
+        $im->setCompression(Imagick::COMPRESSION_NO);
+        $im->setImageBackgroundColor('white');
+        $im->setImageAlphaChannel(Imagick::ALPHACHANNEL_REMOVE);
+        $im->mergeImageLayers(Imagick::LAYERMETHOD_FLATTEN);
+        $im->setImageCompressionQuality(100);
+
+        $im->writeImage($tiffFile);
+
+        $text = Ocr::run($tiffFile);
+
+        @unlink($gifFile);
+        @unlink($tiffFile);
+
+        return [$text, $url];
     }
 
     private function addAreaCode($phone)
@@ -78,7 +114,11 @@ class OlxScraper extends BaseScraper
     {
         if (! $this->repository->findByUrl($url = $link['url']))
         {
-            return $this->repository->create(['url' => $url]);
+            return $this->repository->create([
+                'url' => $url,
+                'zone' => $this->data['%zone%'][0],
+                'region' => $this->data['%region%'][0],
+            ]);
         }
     }
 
@@ -210,7 +250,7 @@ class OlxScraper extends BaseScraper
 		{
 			$this->setUrl($url);
 
-			while($this->hasContent)
+            while($this->hasContent)
 			{
 				foreach($this->links() as $link)
 				{
@@ -241,9 +281,9 @@ class OlxScraper extends BaseScraper
      * @param $data
      * @return string
      */
-    private function getLogLine($counter, $data)
+    private function getLogLine($counter, $data, $link = null)
     {
-        return sprintf("%s: %s - %s", str_pad($counter, 6, '0', STR_PAD_LEFT), $data['phone'], $data['name']);
+        return sprintf("%s: %s - %s | %s | %s", str_pad($counter, 6, '0', STR_PAD_LEFT), $data['phone'], $data['name'], $link, $data['url']);
     }
 
     private function getNodeText($node, $string)
@@ -268,9 +308,9 @@ class OlxScraper extends BaseScraper
      * @param $counter
      * @param $data
      */
-    private function logLine($command, $counter, $data)
+    private function logLine($command, $counter, $data, $link = null)
     {
-        $this->log($command, $this->getLogLine($counter, $data));
+        $this->log($command, $this->getLogLine($counter, $data, $link));
     }
 
     private function normalizeName($name)
@@ -291,33 +331,26 @@ class OlxScraper extends BaseScraper
         return implode('', $normalized);
     }
 
-    private function ocr($url)
+    private function ocr($url, $command = null, $prefix = '')
     {
-        $file = Str::random().'.gif';
+        $errors = 0;
 
-        Storage::drive($disk = 'local')->put($file, file_get_contents('http:'.$url));
+        while ($errors < 3)
+        {
+            try
+            {
+                return $this->_ocr($url, $command, $prefix);
+            }
+            catch (Exception $exception)
+            {
+                $errors++;
+            }
+        }
+    }
 
-        $gifFile = Storage::disk($disk)->getDriver()->getAdapter()->applyPathPrefix($file);
-        $tiffFile = Storage::disk($disk)->getDriver()->getAdapter()->applyPathPrefix($file);
-
-        $im = new Imagick($tiffFile);
-
-        $tiffFile = str_replace('.gif', '.tiff', $tiffFile);
-
-        $im->setCompression(Imagick::COMPRESSION_NO);
-        $im->setImageBackgroundColor('white');
-        $im->setImageAlphaChannel(Imagick::ALPHACHANNEL_REMOVE);
-        $im->mergeImageLayers(Imagick::LAYERMETHOD_FLATTEN);
-        $im->setImageCompressionQuality(100);
-
-        $im->writeImage($tiffFile);
-
-        $text = Ocr::run($tiffFile);
-
-        unlink($gifFile);
-        unlink($tiffFile);
-
-        return [$text, $url];
+    private function sanitizeForCsv($string)
+    {
+        return str_replace(';', '.', $string);
     }
 
     public function scrapeLink($link)
@@ -356,11 +389,6 @@ class OlxScraper extends BaseScraper
             $notes = $this->extractNotes($linkCrawler->filter('div.OLXad-description > p.text'));
             $phones = $this->extractPhonesFromNotes($notes);
 
-            if ($phone)
-            {
-                $phones[] = $phone;
-            }
-
             $data = [
                 'url' => $link,
                 'name' => $linkCrawler->filter('.item.owner > p')->text(),
@@ -370,7 +398,8 @@ class OlxScraper extends BaseScraper
                 'city' => isset($items['município']) ? $items['município'] : null,
                 'category' => $category,
                 'postalcode' => isset($items['cep']) ? $items['cep'] : null,
-                'phone' => join(',', $phones),
+                'phone' => $phone,
+                'other_phones' => join(',', $phones),
                 'url_phone' => $urlPhone,
             ];
 
@@ -387,7 +416,7 @@ class OlxScraper extends BaseScraper
             {
                 $counter++;
 
-                $this->logLine($command, $counter, $data);
+                $this->logLine($command, $counter, $data, $link);
 
                 $this->repository->create($data);
             }
@@ -396,7 +425,7 @@ class OlxScraper extends BaseScraper
 
     public function scrapeUrls($command = null, $order = 'asc', $rescrape = false)
     {
-        $rescrape = $rescrape && (strtolower($rescrape) == 'yes' || strtolower($rescrape) == 'true');
+        $rescrape = $rescrape && ($rescrape === true || strtolower($rescrape) == 'yes' || strtolower($rescrape) == 'true');
 
         $counter = 0;
 
@@ -411,50 +440,96 @@ class OlxScraper extends BaseScraper
                 continue;
             }
 
-            $data = $this->scrapeData($row->url);
+            if (! $data = $this->scrapeData($row->url))
+            {
+                continue;
+            }
 
             $this->logLine($command, $counter, $data);
 
             $data['scraped'] = true;
+            $data['ocr_done'] = true;
 
             $row->update($data);
         }
     }
 
-    public function normalizePhones($command = null)
+    public function normalizePhones($command = null, $columns = '*', $filter = '')
     {
-        $this->log($command, 'name;phone_mobile;primary_address_neighbourhood;primary_address_city;primary_address_postalcode');
+        if ($columns == '*')
+        {
+            $columns = 'name;phone_mobile;phone_home;phone_other;primary_address_neighbourhood;primary_address_city;primary_address_postalcode;zone;region';
+        }
 
-        foreach ($this->repository->all() as $row) {
+        $columns = explode(';', $columns);
+
+        $this->log($command, implode(';', $columns));
+
+        foreach ($this->repository->filterWith($filter) as $row) {
             if (! trim($row->phone))
             {
                 continue;
             }
 
-            $phone = preg_split("#[,;/\\\]+#", $row->phone);
+            $phone = preg_split($regex = "#[,;/\\\]+#", $row->phone);
 
             $phones = new Collection($phone);
+
+            foreach(preg_split($regex, $row->other_phones) as $phone)
+            {
+                if (! empty($phone))
+                {
+                    $phones->push($phone);
+                }
+            }
 
             $phones = $phones->map(function($value) use ($command, $row, &$counter) {
                 $phone = $this->keepOnlyNumbers($value);
                 $phone = $this->addAreaCode($phone);
 
+                if (strlen($phone) <= 8)
+                {
+                    return null;
+                }
+
                 return $phone;
             });
 
-            $phones = $phones->unique();
+            try {
+                $phones = $phones->unique();
+            }
+            catch (\Exception $e)
+            {
+                $phones = new Collection();
+            }
+            catch (Throwable $e)
+            {
+                $phones = new Collection();
+            }
 
-            $phones->map(function($phone) use ($row, $command) {
+            $phones->map(function($phone) use ($row, $command, $columns) {
                 $name = $this->normalizeName($row->name);
-                $log = sprintf(
-                    "%s;%s;%s;%s;%s",
-                    $name,
-                    $phone,
-                    $row->neighbourhood,
-                    $row->city,
-                    $row->postalcode
-                );
-                $this->log($command, $log);
+
+                list($mobile, $home, $other) = $this->selectPhone($phone);
+
+                $data['name'] = $name;
+                $data['phone_mobile'] = $mobile;
+                $data['phone_home'] = $home;
+                $data['phone_other'] = $other;
+                $data['primary_address_neighbourhood'] = $row->neighbourhood;
+                $data['primary_address_city'] = $row->city;
+                $data['primary_address_postalcode'] = $row->postalcode;
+                $data['zone'] = $row->zone;
+                $data['region'] = $row->region;
+
+                if($mobile || $home || $other)
+                {
+                    $data = array_only($data, $columns);
+
+                    $log = '"'.implode('";"', $data).'"';
+
+                    $this->log($command, $log);
+                }
             });
         }
     }
@@ -506,6 +581,58 @@ class OlxScraper extends BaseScraper
                 $row->save();
                 $this->log($console, $log);
             }
+        }
+    }
+
+    public function selectPhone($phone)
+    {
+        $mobile = null;
+        $home = null;
+        $other = null;
+
+        if (strlen($phone) < 10 || strlen($phone) > 11)
+        {
+            $other = $phone;
+        }
+        elseif (strlen($phone) == 10)
+        {
+            $home = $phone;
+        }
+        else
+        {
+            $mobile = $phone;
+        }
+
+        return [$mobile, $home, $other];
+    }
+
+    public function executeOcr($command = null)
+    {
+        $counter = 0;
+
+        foreach ($this->repository->withoutOcr() as $row) {
+            if (! $row->url_phone)
+            {
+                continue;
+            }
+
+            $prefix = str_pad($counter++, 6, '0', STR_PAD_LEFT);
+
+            list($phone, $url) = $this->ocr($row->url_phone, $command, $prefix.'-');
+
+            $log = $prefix . " - {$row->name} - {$phone}";
+
+            if ($phone != $row->phone)
+            {
+                $row->phone = $phone;
+                $row->other_phones = join(',', $this->extractPhonesFromNotes($row->notes));
+                $log .= ' - NEW';
+            }
+
+            $row->ocr_done = true;
+            $row->save();
+
+            $this->log($command, $log);
         }
     }
 }

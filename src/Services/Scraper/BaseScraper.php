@@ -150,7 +150,8 @@ abstract class BaseScraper implements ScraperInterface {
         {
             $query = str_replace('%page%', $page, $this->rules['next.page.query']);
 
-            $this->setUrl($url.$query);
+            $this->setUrl($url = $url.$query);
+            $this->log(null, $url);
         }
 	}
 

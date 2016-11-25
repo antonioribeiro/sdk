@@ -8,6 +8,6 @@ class Ocr
 {
     public static function run($file)
     {
-        return (new TesseractOCR($file))->run();
+        return (new TesseractOCR($file))->lang('olx')->run();
     }
 }
