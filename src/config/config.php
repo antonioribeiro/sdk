@@ -36,6 +36,7 @@ return [
 	],
 
 	'services' => [
+<<<<<<< HEAD
 		'Services/Accounts',
 		'Services/Addresses',
 		'Services/Activation',
@@ -83,6 +84,45 @@ return [
 		'Services/Passwords',
         'Services/Permissions',
 		'Services/Profiles',
+=======
+//		'Services/Accounts',
+//		'Services/Addresses',
+//		'Services/Activation',
+//
+//		'Services/Billing',
+//		'Services/Block',
+//		'Services/Bus',
+//
+//		'Services/Cities',
+//		'Services/Clients',
+//		'Services/Clipping',
+//		'Services/Connect',
+//		'Services/ContactInformation',
+//		'Services/Countries',
+//		'Services/Currencies',
+//
+//		'Services/EmailChanges',
+//        'Services/Errors',
+//
+//		'Services/Files',
+//		'Services/Firewall',
+//		'Services/Follow',
+//
+//		'Services/Groups',
+//
+//		'Services/Kinds',
+//
+//		'Services/Language',
+//		'Services/Login',
+//
+//		'Services/Mailer',
+//		'Services/Messages',
+//
+//		'Services/Notifications',
+//
+//		'Services/Passwords',
+//		'Services/Profiles',
+>>>>>>> 88d196b
 
         'Services/Roles',
 		'Services/Registration',
@@ -224,15 +264,15 @@ return [
 			]
 		],
 
-		[
-			'name' => 'pragmarx/auth',
-			'enabled' => true,
-			'serviceProviders' => ['PragmaRX\Sdk\Services\Auth\Service\Provider'],
-			'facades' => [
-				'Authentication' => 'PragmaRX\Sdk\Services\Auth\Service\Facade',
-				'Auth'           => 'PragmaRX\Sdk\Services\Auth\Service\Facade', /// overrides the Laravel Facade
-			]
-		],
+//		[
+//			'name' => 'pragmarx/auth',
+//			'enabled' => true,
+//			'serviceProviders' => ['PragmaRX\Sdk\Services\Auth\Service\Provider'],
+//			'facades' => [
+//				'Authentication' => 'PragmaRX\Sdk\Services\Auth\Service\Facade',
+//				'Auth'           => 'PragmaRX\Sdk\Services\Auth\Service\Facade', /// overrides the Laravel Facade
+//			]
+//		],
 
 		[
 			'name' => 'pragmarx/activation',
@@ -365,6 +405,12 @@ return [
 			'enabled' => true,
 			'serviceProviders' => ['Illuminate\Html\HtmlServiceProvider'],
 		],
+
+        [
+            'name' => 'laracasts/javascript',
+            'enabled' => true,
+            'serviceProviders' => ['Laracasts\Utilities\JavaScript\JavaScriptServiceProvider'],
+        ],
 
 		//		[
 		//			'name' => 'barryvdh/translationmanager',

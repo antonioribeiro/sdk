@@ -13,7 +13,7 @@ class Provider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app['redirect'] = $this->app->share(function($app)
+		$this->app->singleton('redirect', function($app)
 		{
 			$redirector = new Redirect($app['url']);
 

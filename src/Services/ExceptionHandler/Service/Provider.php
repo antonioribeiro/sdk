@@ -20,7 +20,7 @@ class Provider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app['pragmarx.exception'] = $this->app->share(function($app)
+		$this->app->singleton('pragmarx.exception', function($app)
 		{
 			return app()->make(ExceptionHandler::class);
 		});

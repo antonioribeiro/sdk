@@ -319,7 +319,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 				{
 					$instance = $this->app->make($class);
 
-					$this->app[$class] = $this->app->share(function($app) use ($instance)
+					$this->app->singleton($class, function($app) use ($instance)
 					{
 						return $instance;
 					});
@@ -341,19 +341,19 @@ class ServiceProvider extends PragmaRXServiceProvider {
 	 */
 	private function registerMigrationCommands()
 	{
-		$this->app->bindShared('command.migrate', function($app)
+		$this->app->singleton('command.migrate', function($app)
 		{
 			$packagePath = $app['path.base'].'/vendor';
 
 			return new MigrateCommand($app['migrator'], $packagePath);
 		});
 
-		$this->app->bindShared('command.migrate.rollback', function($app)
+		$this->app->singleton('command.migrate.rollback', function($app)
 		{
 			return new RollbackCommand($app['migrator']);
 		});
 
-		$this->app->bindShared('command.migrate.reset', function($app)
+		$this->app->singleton('command.migrate.reset', function($app)
 		{
 			return new ResetCommand($app['migrator']);
 		});
@@ -404,7 +404,7 @@ class ServiceProvider extends PragmaRXServiceProvider {
 
 		$this->sdk = $sdk;
 
-		$this->app->bindShared('pragmarx.sdk', function($app) use ($sdk)
+		$this->app->singleton('pragmarx.sdk', function($app) use ($sdk)
 		{
 			return $sdk;
 		});

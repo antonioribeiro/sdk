@@ -20,7 +20,7 @@ class Provider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app['pragmarx.activation'] = $this->app->share(function($app)
+		$this->app->singleton('pragmarx.activation', function($app)
 		{
 			return $app->make('PragmaRX\Sdk\Services\Activation\Service\Activation');
 		});

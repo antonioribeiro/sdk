@@ -39,6 +39,7 @@ class IlluminateAuth implements AuthContract
     private function getTokenRepository() {
         return app()->make(DatabaseTokenRepository::class, [
             app('db')->connection(),
+            app('hash'),
             config('auth.passwords.users.table'),
             config('app.key'),
             config('auth.passwords.users.expire')

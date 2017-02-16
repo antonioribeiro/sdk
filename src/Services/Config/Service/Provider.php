@@ -29,7 +29,7 @@ class Provider extends ServiceProvider {
 		$config = new Config();
 
 		// Override Laravel's config IoC binding
-		$this->app->bindShared('config', function($app) use ($config)
+		$this->app->singleton('config', function($app) use ($config)
 		{
 			return $config;
 		});
