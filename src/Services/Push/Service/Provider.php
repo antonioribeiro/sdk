@@ -21,14 +21,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app->singleton('pragmarx.push', function($app)
 		{
-			return app()->make(
-                Push::class,
-                [
-                    config('env.PUSH.PUBLIC'),
-                    config('env.PUSH.SECRET'),
-                    config('env.PUSH.APP_ID')
-                ]
-            );
+			return new Push(config('env.PUSH.PUBLIC'), config('env.PUSH.SECRET'), config('env.PUSH.APP_ID'));
 		});
 	}
 

@@ -23,7 +23,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app->singleton('pragmarx.sms', function($app)
 		{
-			return app()->make(Sms::class, [$app['twilio']]);
+			return new Sms($app['twilio']);
 		});
 	}
 

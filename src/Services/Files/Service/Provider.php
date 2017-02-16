@@ -22,7 +22,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app->singleton('pragmarx.files', function($app)
 		{
-			return app()->make(File::class);
+			return new File;
 		});
 	}
 

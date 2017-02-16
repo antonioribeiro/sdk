@@ -25,7 +25,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app->singleton($this->defaultBinding, function($app)
 		{
-			return app()->make(Language::class);
+			return new Language(new UserRepository());
 		});
 	}
 

@@ -20,7 +20,7 @@ class Provider extends ServiceProvider
 	 */
 	public function register()
 	{
-		$this->app['pragmarx.caching'] = $this->app->share(function($app)
+		$this->app->singleton('pragmarx.caching', function($app)
 		{
 			return app(Caching::class);
 		});

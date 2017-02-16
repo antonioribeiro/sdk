@@ -22,7 +22,7 @@ class DeepScraperServiceProvider extends IlluminateServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app['pragmarx.deep.scraper'] = $this->app->share(function($app)
+		$this->app->singleton('pragmarx.deep.scraper', function($app)
 		{
 			$realtyRepository = new RealtyRepository;
 
@@ -38,7 +38,7 @@ class DeepScraperServiceProvider extends IlluminateServiceProvider {
 
     private function registerScrapeLinksCommand()
     {
-        $this->app['imobiliario.commands.scrape.links'] = $this->app->share(function($app)
+        $this->app->singleton('imobiliario.commands.scrape.links', function($app)
         {
             return new ScrapeLinksCommand();
         });

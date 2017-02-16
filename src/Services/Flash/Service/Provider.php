@@ -22,7 +22,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app->singleton('pragmarx.flash', function($app)
 		{
-			return app()->make(Flash::class);
+			return new Flash;
 		});
 	}
 

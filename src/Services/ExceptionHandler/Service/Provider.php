@@ -22,7 +22,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app->singleton('pragmarx.exception', function($app)
 		{
-			return app()->make(ExceptionHandler::class);
+			return new ExceptionHandler;
 		});
 	}
 

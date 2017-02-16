@@ -24,7 +24,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app->singleton($this->defaultBinding, function($app)
 		{
-			return app()->make(Avatar::class);
+			return new Avatar;
 		});
 	}
 

@@ -24,10 +24,7 @@ class Provider extends ServiceProvider
 	{
 		$this->app->singleton($this->defaultBinding, function($app)
 		{
-			return app()->make(Telegram::class, [
-                config('env.TELEGRAM_BOT_NAME'),
-                config('env.TELEGRAM_BOT_TOKEN')
-            ]);
+			return new Telegram();
 		});
 	}
 
