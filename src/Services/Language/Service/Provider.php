@@ -23,7 +23,7 @@ class Provider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app[$this->defaultBinding] = $this->app->share(function($app)
+		$this->app->singleton($this->defaultBinding, function($app)
 		{
 			return new Language(new UserRepository());
 		});

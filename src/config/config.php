@@ -36,43 +36,43 @@ return [
 	],
 
 	'services' => [
-		'Services/Accounts',
-		'Services/Addresses',
-		'Services/Activation',
-
-		'Services/Billing',
-		'Services/Block',
-		'Services/Bus',
-
-		'Services/Cities',
-		'Services/Clients',
-		'Services/Clipping',
-		'Services/Connect',
-		'Services/ContactInformation',
-		'Services/Countries',
-		'Services/Currencies',
-
-		'Services/EmailChanges',
-        'Services/Errors',
-
-		'Services/Files',
-		'Services/Firewall',
-		'Services/Follow',
-
-		'Services/Groups',
-
-		'Services/Kinds',
-
-		'Services/Language',
-		'Services/Login',
-
-		'Services/Mailer',
-		'Services/Messages',
-
-		'Services/Notifications',
-
-		'Services/Passwords',
-		'Services/Profiles',
+//		'Services/Accounts',
+//		'Services/Addresses',
+//		'Services/Activation',
+//
+//		'Services/Billing',
+//		'Services/Block',
+//		'Services/Bus',
+//
+//		'Services/Cities',
+//		'Services/Clients',
+//		'Services/Clipping',
+//		'Services/Connect',
+//		'Services/ContactInformation',
+//		'Services/Countries',
+//		'Services/Currencies',
+//
+//		'Services/EmailChanges',
+//        'Services/Errors',
+//
+//		'Services/Files',
+//		'Services/Firewall',
+//		'Services/Follow',
+//
+//		'Services/Groups',
+//
+//		'Services/Kinds',
+//
+//		'Services/Language',
+//		'Services/Login',
+//
+//		'Services/Mailer',
+//		'Services/Messages',
+//
+//		'Services/Notifications',
+//
+//		'Services/Passwords',
+//		'Services/Profiles',
 
 		'Services/Registration',
 
@@ -191,15 +191,15 @@ return [
 			]
 		],
 
-		[
-			'name' => 'pragmarx/auth',
-			'enabled' => true,
-			'serviceProviders' => ['PragmaRX\Sdk\Services\Auth\Service\Provider'],
-			'facades' => [
-				'Authentication' => 'PragmaRX\Sdk\Services\Auth\Service\Facade',
-				'Auth'           => 'PragmaRX\Sdk\Services\Auth\Service\Facade', /// overrides the Laravel Facade
-			]
-		],
+//		[
+//			'name' => 'pragmarx/auth',
+//			'enabled' => true,
+//			'serviceProviders' => ['PragmaRX\Sdk\Services\Auth\Service\Provider'],
+//			'facades' => [
+//				'Authentication' => 'PragmaRX\Sdk\Services\Auth\Service\Facade',
+//				'Auth'           => 'PragmaRX\Sdk\Services\Auth\Service\Facade', /// overrides the Laravel Facade
+//			]
+//		],
 
 		[
 			'name' => 'pragmarx/activation',
@@ -256,11 +256,11 @@ return [
 			'serviceProviders' => ['PragmaRX\SqlI\Vendor\Laravel\ServiceProvider'],
 		],
 
-		[
-			'name' => 'pragmarx/glottos',
-			'enabled' => true,
-			'serviceProviders' => ['PragmaRX\Glottos\Vendor\Laravel\ServiceProvider'],
-		],
+//		[
+//			'name' => 'pragmarx/glottos',
+//			'enabled' => true,
+//			'serviceProviders' => ['PragmaRX\Glottos\Vendor\Laravel\ServiceProvider'],
+//		],
 
 		[
 			'name' => 'way/generators',
@@ -332,6 +332,12 @@ return [
 			'enabled' => true,
 			'serviceProviders' => ['Illuminate\Html\HtmlServiceProvider'],
 		],
+
+        [
+            'name' => 'laracasts/javascript',
+            'enabled' => true,
+            'serviceProviders' => ['Laracasts\Utilities\JavaScript\JavaScriptServiceProvider'],
+        ],
 
 		//		[
 		//			'name' => 'barryvdh/translationmanager',

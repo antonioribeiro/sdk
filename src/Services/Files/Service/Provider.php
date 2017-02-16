@@ -20,7 +20,7 @@ class Provider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app['pragmarx.files'] = $this->app->share(function($app)
+		$this->app->singleton('pragmarx.files', function($app)
 		{
 			return new File;
 		});

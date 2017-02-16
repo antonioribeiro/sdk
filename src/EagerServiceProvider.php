@@ -319,7 +319,7 @@ class EagerServiceProvider extends PragmaRXServiceProvider {
 				{
 					$instance = $this->app->make($class);
 
-					$this->app[$class] = $this->app->share(function($app) use ($instance)
+					$this->app->singleton($class, function($app) use ($instance)
 					{
 						return $instance;
 					});

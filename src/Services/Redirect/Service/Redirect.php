@@ -70,7 +70,7 @@ class Redirect extends Redirector {
 		return parent::to(route($route, $parameters));
 	}
 
-	public function back($status = 302, $headers = array())
+	public function back($status = 302, $headers = array(), $fallback = false)
 	{
 		$back = $this->__getReferer();
 

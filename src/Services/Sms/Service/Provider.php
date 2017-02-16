@@ -21,7 +21,7 @@ class Provider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app['pragmarx.sms'] = $this->app->share(function($app)
+		$this->app->singleton('pragmarx.sms', function($app)
 		{
 			return new Sms($app['twilio']);
 		});

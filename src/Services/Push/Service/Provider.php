@@ -19,7 +19,7 @@ class Provider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app['pragmarx.push'] = $this->app->share(function($app)
+		$this->app->singleton('pragmarx.push', function($app)
 		{
 			return new Push(config('env.PUSH.PUBLIC'), config('env.PUSH.SECRET'), config('env.PUSH.APP_ID'));
 		});

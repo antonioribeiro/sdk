@@ -20,7 +20,6 @@
         "laravel/framework": ">=5.0",
         "pragmarx/tracker": "~2.0",
         "pragmarx/firewall": "~0.5",
-        "pragmarx/glottos": "~1.5",
         "pragmarx/zipcode": "~1.5",
         "pragmarx/google2fa": "~0.5",
         "guzzlehttp/guzzle": "~5.0|~6.0",
