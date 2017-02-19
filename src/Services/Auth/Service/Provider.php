@@ -22,7 +22,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app->singleton('pragmarx.auth', function($app)
 		{
-			return app()->make(IlluminateAuth::class);
+			return app(IlluminateAuth::class);
 		});
 	}
 

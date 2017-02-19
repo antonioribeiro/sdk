@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Markdown\Service;
 
+use PragmaRX\Sdk\Services\Markdown\Service\Markdown;
 use PragmaRX\Support\ServiceProvider;
 
 class Provider extends ServiceProvider {
@@ -22,7 +23,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app->singleton('pragmarx.markdown', function($app)
 		{
-			return $app->make('PragmaRX\Sdk\Services\Markdown\Service\Markdown');
+			return $app->make(Markdown::class);
 		});
 	}
 

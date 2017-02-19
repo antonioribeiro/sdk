@@ -48,15 +48,13 @@ class Bus extends ServiceProvider
         $this->checkLaravelConflict();
 
         $this->app->singleton('AltThree\Bus\Dispatcher', function ($app) {
-            return app()->make(
-                Dispatcher::class,
-                [
-                    $app,
-                    function () use ($app)
-                    {
-                        return $app['Illuminate\Contracts\Queue\Queue'];
-                    }
-                ]);
+            return new Dispatcher(
+                $app,
+                function () use ($app)
+                {
+                    return $app['Illuminate\Contracts\Queue\Queue'];
+                }
+            );
         });
 
         $this->app->alias(

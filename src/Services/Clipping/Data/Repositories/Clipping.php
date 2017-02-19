@@ -80,7 +80,7 @@ class Clipping
 	{
 		$urls = explode("\r\n", $urls);
 
-		$clippingFile = app()->make(ClippingFile::class);
+		$clippingFile = app(ClippingFile::class);
 
 		foreach ($urls as $url)
 		{

@@ -27,7 +27,7 @@ class Group extends Model
 							->where('group_role_id', GroupRole::memberId())->get()
 					);
 
-		return app()->make(Collection::class, [$members]);
+		return collect($members);
 	}
 
 	public function getAdministratorsAttribute()
@@ -38,7 +38,7 @@ class Group extends Model
 							->where('group_role_id', GroupRole::administratorId())->get()
 					);
 
-		return app()->make(Collection::class, [$members]);
+		return collect($members);
 	}
 
 	public function getOwnerAttribute()

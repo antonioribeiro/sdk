@@ -78,7 +78,7 @@ return [
 //		'Services/Registration',
 //        'Services/Revisions',
 //
-//		'Services/Settings',
+		'Services/Settings',
 //		'Services/Sms',
 //		'Services/States',
 //		'Services/Statuses',

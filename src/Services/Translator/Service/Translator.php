@@ -31,11 +31,11 @@ class Translator extends IlluminateTranslator {
 	{
 		if ( ! $locale)
 		{
-			if ( ! $locale = app()->make('session')->get('locale'))
+			if ( ! $locale = app('session')->get('locale'))
 			{
-				if ( ! app()->make('auth')->check() || ! $locale = app()->make('auth')->user()->locale)
+				if ( ! app('auth')->check() || ! $locale = app()->make('auth')->user()->locale)
 				{
-					$locale = app()->make('config')['app.locale'];
+					$locale = app('config')['app.locale'];
 				}
 			}
 		}

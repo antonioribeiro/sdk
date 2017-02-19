@@ -76,7 +76,7 @@ trait BusinessableTrait
 			$clients[] = $clientUser->client;
 		}
 
-		return app()->make(Collection::class, [$clients]);
+		return collect($clients);
 	}
 
 	public function getBusinessesAttribute()
@@ -88,6 +88,6 @@ trait BusinessableTrait
 			$businesses[] = $clientUser->client->business;
 		}
 
-		return app()->make(Collection::class, [$businesses]);
+		return collect($businesses);
 	}
 }

@@ -44,9 +44,9 @@ class ChatMessage extends Presenter
 
     private function instantiateRepositories()
     {
-        $this->telegramRepository = app()->make(Telegram::class);
+        $this->telegramRepository = app(Telegram::class);
 
-        $this->facebookMessengerRepository = app()->make(FacebookMessenger::class);
+        $this->facebookMessengerRepository = app(FacebookMessenger::class);
     }
 
     public function message()

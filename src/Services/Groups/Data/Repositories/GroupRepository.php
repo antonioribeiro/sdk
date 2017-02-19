@@ -33,7 +33,7 @@ class GroupRepository extends Repository
 			$groups = array_merge($groups, [$membership->group]);
 		}
 
-		return app()->make(Collection::class, [$groups]);
+		return collect($groups);
 	}
 
 	public function getConnectionsAndGroups($user)
@@ -233,7 +233,7 @@ class GroupRepository extends Repository
 			$members[] = $association->membership;
 		}
 
-		return app()->make(Collection::class, [$members]);
+		return collect($members);
 	}
 
 	public function isGroupManager($group_id, $user)

@@ -3,7 +3,7 @@
 namespace PragmaRX\Sdk\Core;
 
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Http\Exception\HttpResponseException as IlluminateHttpResponseException;
+use Illuminate\Http\Exceptions\HttpResponseException as IlluminateHttpResponseException;
 
 use Redirect;
 use Flash;

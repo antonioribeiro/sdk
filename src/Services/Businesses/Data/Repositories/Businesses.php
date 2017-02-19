@@ -354,7 +354,7 @@ class Businesses extends Repository
 
 	public function getNewClientModel()
 	{
-		return app()->make(BusinessClient::class);
+		return app(BusinessClient::class);
 	}
 
 	public function addChatLinkToClients($clients)

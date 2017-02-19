@@ -576,7 +576,7 @@ class Chat extends Repository
             $result[ $chat[$id_column] ] = $this->makeChatData($chat);
         }
 
-        return app()->make(Collection::class, [$result]);
+        return collect($results);
     }
 
     public function markAsDelivered($message)

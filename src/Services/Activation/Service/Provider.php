@@ -2,6 +2,7 @@
 
 namespace PragmaRX\Sdk\Services\Activation\Service;
 
+use PragmaRX\Sdk\Services\Activation\Service\Activation;
 use PragmaRX\Support\ServiceProvider;
 
 class Provider extends ServiceProvider {
@@ -22,7 +23,7 @@ class Provider extends ServiceProvider {
 	{
 		$this->app->singleton(function($app)
 		{
-			return $app->make('PragmaRX\Sdk\Services\Activation\Service\Activation');
+			return $app->make(Activation::class);
 		});
 	}
 

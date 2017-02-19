@@ -279,7 +279,7 @@ class Business
 			}
 		}
 
-		return app()->make(Collection::class, [$clients]);
+		return new Collection($clients);
 	}
 
 	public function getAllClientsExceptCurrent()

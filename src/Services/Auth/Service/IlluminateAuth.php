@@ -37,13 +37,13 @@ class IlluminateAuth implements AuthContract
     }
 
     private function getTokenRepository() {
-        return app()->make(DatabaseTokenRepository::class, [
+        return new DatabaseTokenRepository(
             app('db')->connection(),
             app('hash'),
             config('auth.passwords.users.table'),
             config('app.key'),
             config('auth.passwords.users.expire')
-        ]);
+        );
     }
 
     private function setLoggedIn($user, $isLoggedIn)

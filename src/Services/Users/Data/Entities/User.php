@@ -276,7 +276,7 @@ class User extends SdkUser implements CanResetPassword, AuthenticatableContract
             $connections[] = $connection->connectedTo($this);
         }
 
-        return app()->make(Collection::class, [$connections]);
+        return collect($connections);
     }
 
     public function getAuthIdentifierName()

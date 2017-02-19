@@ -21,7 +21,7 @@ class FormRequest extends IlluminateFormRequest
 	{
 		if ($this->ajax())
 		{
-			return app()->make(JsonResponse::class, [[t('paragraphs.forbidden')], 403]);
+			return new JsonResponse([t('paragraphs.forbidden')], 403);
 		}
 		else
 		{
@@ -45,7 +45,7 @@ class FormRequest extends IlluminateFormRequest
 	{
 		if ($this->ajax())
 		{
-			return app()->make(JsonResponse::class, [$errors, 422]);
+			return new JsonResponse($errors, 422);
 		}
 		else
 		{

@@ -10,7 +10,7 @@ class Config implements ArrayAccess {
 
 	public function __construct()
 	{
-	    $this->config = app()->make('config');
+	    $this->config = app('config');
 	}
 
 	public function get($key, $default = null)
