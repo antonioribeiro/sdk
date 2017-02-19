@@ -55,7 +55,7 @@ return [
 //		'Services/EmailChanges',
 //        'Services/Errors',
 //
-//		'Services/Files',
+		'Services/Files',
 //		'Services/Firewall',
 //		'Services/Follow',
 //
@@ -94,7 +94,7 @@ return [
 //
 //		'Services/View',
 //
-//		'Services/Zip',
+		'Services/Zip',
 	],
 
 	'disabled_packages' => [
@@ -187,15 +187,15 @@ return [
 //			]
 //		],
 //
-//		[
-//			'name' => 'pragmarx/zipcode',
-//			'enabled' => true,
-//			'serviceProviders' => ['PragmaRX\ZipCode\Vendor\Laravel\ServiceProvider'],
-//			'facades' => [
-//				'ZipCode' => 'PragmaRX\ZipCode\Vendor\Laravel\Facade',
-//			]
-//		],
-//
+		[
+			'name' => 'pragmarx/zipcode',
+			'enabled' => true,
+			'serviceProviders' => ['PragmaRX\ZipCode\Vendor\Laravel\ServiceProvider'],
+			'facades' => [
+				'ZipCode' => 'PragmaRX\ZipCode\Vendor\Laravel\Facade',
+			]
+		],
+
 //		[
 //			'name' => 'pragmarx/avatar',
 //			'enabled' => true,
@@ -205,14 +205,14 @@ return [
 //			]
 //		],
 //
-//		[
-//			'name' => 'pragmarx/file',
-//			'enabled' => true,
-//			'serviceProviders' => ['PragmaRX\Sdk\Services\Files\Service\Provider'],
-//			'facades' => [
-//				'File' => 'PragmaRX\Sdk\Services\Files\Service\Facade', /// overrides the Laravel Facade
-//			]
-//		],
+		[
+			'name' => 'pragmarx/file',
+			'enabled' => true,
+			'serviceProviders' => ['PragmaRX\Sdk\Services\Files\Service\Provider'],
+			'facades' => [
+				'File' => 'PragmaRX\Sdk\Services\Files\Service\Facade', /// overrides the Laravel Facade
+			]
+		],
 
 //		[
 //			'name' => 'pragmarx/auth',
