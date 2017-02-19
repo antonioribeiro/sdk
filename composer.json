@@ -1,68 +1,68 @@
 {
-    "name": "pragmarx/sdk",
+  "name": "pragmarx/sdk",
 
-    "description": "A Laravel 5.2+ Sdk",
+  "description": "A Laravel 5.2+ Sdk",
 
-    "keywords": ["sdk", "laravel", "pragmarx"],
+  "keywords": ["sdk", "laravel", "pragmarx"],
 
-    "license": "MIT",
+  "license": "MIT",
 
-    "authors": [
-        {
-            "name": "Antonio Carlos Ribeiro",
-            "email": "acr@antoniocarlosribeiro.com",
-            "role": "Creator & Designer"
-        }
-    ],
+  "authors": [
+    {
+      "name": "Antonio Carlos Ribeiro",
+      "email": "acr@antoniocarlosribeiro.com",
+      "role": "Creator & Designer"
+    }
+  ],
 
-    "require": {
-        "php": ">=5.5.0",
-        "laravel/framework": ">=5.0",
-        "pragmarx/tracker": "~2.0",
-        "pragmarx/firewall": "~1.0.3",
-        "pragmarx/glottos": "~1.5",
-        "pragmarx/zipcode": "~1.5",
-        "pragmarx/google2fa": "~0.5",
-        "guzzlehttp/guzzle": "~5.0|~6.0",
-        "cartalyst/sentinel": "*",
-        "cartalyst/support": "*",
-        "twilio/sdk":"3.12.*",
-        "jenssegers/date": "~3",
-        "league/commonmark": "~0.9",
-        "baum/baum": "~1.1",
-        "laravelcollective/html": "^5.3",
-        "watson/rememberable": "^1.0",
-        "h4kuna/number-format": "1.2.*",
-        "fabpot/goutte": "~3.1",
-        "thiagoalessio/tesseract_ocr": "1.0.0-RC"
+  "require": {
+    "php": ">=7.1",
+    "laravel/framework": ">=5.3",
+    "pragmarx/tracker": "~3.1",
+    "pragmarx/firewall": "~1.0",
+    "pragmarx/glottos": "~1.5",
+    "pragmarx/zipcode": "~1.5",
+    "pragmarx/google2fa": "~1.0",
+    "guzzlehttp/guzzle": "~6.0",
+    "cartalyst/sentinel": "*",
+    "cartalyst/support": "*",
+    "twilio/sdk":"3.12.*",
+    "jenssegers/date": "~3",
+    "league/commonmark": "~0.9",
+    "baum/baum": "~1.1",
+    "laravelcollective/html": "^5.3",
+    "watson/rememberable": "^1.0",
+    "h4kuna/number-format": "1.2.*",
+    "fabpot/goutte": "~3.1",
+    "thiagoalessio/tesseract_ocr": "1.0.0-RC"
+  },
+
+  "require-dev": {
+    "phpspec/phpspec": "2.0.*@dev",
+    "codeception/codeception": "2.0.*@dev",
+    "behat/behat": "3.0.*",
+    "mockery/mockery": "~0.8",
+    "laracasts/testdummy": "1.*",
+    "fzaninotto/faker": "1.4.*",
+    "pragmarx/sqli": "0.*"
+  },
+
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "http://packages.cartalyst.com"
     },
+    {
+      "type": "vcs",
+      "url":  "https://github.com/antonioribeiro/backup-manager.git"
+    }
+  ],
 
-    "require-dev": {
-        "phpspec/phpspec": "2.0.*@dev",
-        "codeception/codeception": "2.0.*@dev",
-        "behat/behat": "3.0.*",
-        "mockery/mockery": "~0.8",
-        "laracasts/testdummy": "1.*",
-        "fzaninotto/faker": "1.4.*",
-        "pragmarx/sqli": "0.*"
-    },
+  "autoload": {
+    "psr-4": {
+      "PragmaRX\\Sdk\\": "src/"
+    }
+  },
 
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "http://packages.cartalyst.com"
-        },
-        {
-            "type": "vcs",
-            "url":  "https://github.com/antonioribeiro/backup-manager.git"
-        }
-    ],
-
-    "autoload": {
-        "psr-4": {
-            "PragmaRX\\Sdk\\": "src/"
-        }
-    },
-
-    "minimum-stability": "dev"
+  "minimum-stability": "dev"
 }
