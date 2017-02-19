@@ -90,7 +90,7 @@ return [
 //		'Services/TwoFactor',
 //		'Services/Translator',
 //
-//		'Services/Users',
+		'Services/Users',
 //
 //		'Services/View',
 //

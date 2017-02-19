@@ -24,6 +24,8 @@ class CreateProvidersClientsTable extends Migration {
 
 			$table->date('birthdate')->nullable();
 
+            $table->text('notes')->nullable();
+
 			$table->timestamps();
 		});
 
