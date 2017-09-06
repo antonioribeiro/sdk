@@ -38,25 +38,14 @@
   },
 
   "require-dev": {
-    "phpspec/phpspec": "2.0.*@dev",
-    "codeception/codeception": "2.0.*@dev",
-    "behat/behat": "3.0.*",
+    "phpspec/phpspec": "~2.0",
+    "codeception/codeception": "~2.0",
+    "behat/behat": "~3.0",
     "mockery/mockery": "~0.8",
     "laracasts/testdummy": "1.*",
     "fzaninotto/faker": "1.4.*",
     "pragmarx/sqli": "0.*"
   },
-
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "http://packages.cartalyst.com"
-    },
-    {
-      "type": "vcs",
-      "url":  "https://github.com/antonioribeiro/backup-manager.git"
-    }
-  ],
 
   "autoload": {
     "psr-4": {
