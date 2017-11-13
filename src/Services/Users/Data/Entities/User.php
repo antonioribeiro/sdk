@@ -150,17 +150,17 @@ class User extends SdkUser implements CanResetPassword, AuthenticatableContract
     }
 
     /**
-     * @param $current
+     * @param Model $model
      * @return bool|null
      */
-    public function is(Model $current)
+    public function is($model)
     {
-        if (is_null($current) || ! $current)
+        if (is_null($model) || ! $model)
         {
             return false;
         }
 
-        return $this->id === $current->id;
+        return $this->id === $model->id;
     }
 
     public function getActivateAccountToken()

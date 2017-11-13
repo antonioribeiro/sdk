@@ -27,7 +27,7 @@ trait IdentifiableTrait
 	 * @param  array  $attributes
 	 * @return static
 	 */
-	public static function create(array $attributes = [])
+	public static function createWithUuid(array $attributes = [])
 	{
 		if (static::canGenerateId())
 		{
