@@ -2,6 +2,8 @@
 
 namespace PragmaRX\Sdk\Services\Scraper;
 
+use App\Data\Entities\OlxNeighbourhood;
+use Cache;
 use Goutte\Client as Goutte;
 
 abstract class BaseScraper implements ScraperInterface {
@@ -86,7 +88,7 @@ abstract class BaseScraper implements ScraperInterface {
 	{
 		$this->currentUrl = $url;
 
-		return $this->request($url);
+        return $this->request($url);
 	}
 
     public function getContent($url)
@@ -126,7 +128,8 @@ abstract class BaseScraper implements ScraperInterface {
 	 */
 	public function generateUrls()
     {
-	    return array_strings_generator($this->data, $this->rules['url']);
+        return OlxNeighbourhood::where('state_code', 'rj')->get()->pluck('neighbourhood_url');
+	    /// return array_strings_generator($this->data, $this->rules['url']);
     }
 
 	public function nextPage($url, $page = null)

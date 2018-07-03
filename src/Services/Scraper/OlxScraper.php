@@ -2,6 +2,8 @@
 
 namespace PragmaRX\Sdk\Services\Scraper;
 
+use App\Data\Entities\OlxNeighbourhood;
+use App\Support\Accent;
 use Baum\Extensions\Eloquent\Collection;
 use Imagick;
 use Storage;
@@ -17,7 +19,8 @@ class OlxScraper extends BaseScraper
 
 	protected $rules = [
 		'result' => 'links',
-        'url' => 'http://%state%.olx.com.br/%zone%/%region%',
+
+        'url' => 'http://%state%.olx.com.br/%region%/%subregion%/%city_or_neighbourhood',
 
 //		'url' => 'http://local.crm.com/olx-saogoncalo.html',
 
@@ -38,20 +41,22 @@ class OlxScraper extends BaseScraper
 
 	protected $data = [
 	    '%state%' => ['rj'],
+
         '%zone%' => ['rio-de-janeiro-e-regiao'],
-        '%region%' => ['zona-oeste'],
-//        '%region%' => ['zona-sul'],
-//        '%region%' => ['sao-goncalo'],
+
+        '%region%' => ['sao-goncalo'],
 
 		'%city%' => ['rio-de-janeiro'],
+
 	    '%unit-type%' => ['apartamento-padrao'],
+
 	    '%sell-rent%' => ['venda','aluguel'],
 	];
 
     /**
      * @var \App\Data\Repositories\Olx
      */
-    private $repository;
+    protected $repository;
 
     public function __construct()
     {
@@ -60,12 +65,12 @@ class OlxScraper extends BaseScraper
         parent::__construct();
     }
 
-    private function _ocr($url, $command, $prefix)
+    protected function _ocr($url, $command, $prefix)
     {
         $file = $prefix.Str::random().'.gif';
         echo "$file\n";
 
-        Storage::drive($disk = 'local')->put($file, file_get_contents('http:'.$url));
+        Storage::drive($disk = 'ocr')->put($file, file_get_contents($url));
 
         $gifFile = Storage::disk($disk)->getDriver()->getAdapter()->applyPathPrefix($file);
         $tiffFile = str_replace('.gif', '.tiff', $gifFile);
@@ -92,7 +97,7 @@ class OlxScraper extends BaseScraper
         return [$text, $url];
     }
 
-    private function addAreaCode($phone)
+    protected function addAreaCode($phone)
     {
         $areacode = '21';
         $number = $phone;
@@ -110,7 +115,7 @@ class OlxScraper extends BaseScraper
         return $areacode.$number;
     }
 
-    private function addLinkToDatabase($link)
+    protected function addLinkToDatabase($link)
     {
         if (! $this->repository->findByUrl($url = $link['url']))
         {
@@ -122,12 +127,12 @@ class OlxScraper extends BaseScraper
         }
     }
 
-    private function clearString($string)
+    protected function clearString($string)
     {
         return trim(str_replace(array("\r\n", "\n", "\r", "\t"), ' ', $string));
     }
 
-    private function extractAreaCode($phone)
+    protected function extractAreaCode($phone)
     {
         $areas = [
             '21',
@@ -158,7 +163,7 @@ class OlxScraper extends BaseScraper
         return ['', $phone];
     }
 
-    private function extractCategory($items)
+    protected function extractCategory($items)
     {
         if ($items)
         {
@@ -168,14 +173,14 @@ class OlxScraper extends BaseScraper
         }
     }
 
-    private function extractItems($string, $linkCrawler)
+    protected function extractItems($string, $linkCrawler)
     {
         $items = $linkCrawler->filter($string)->each(function ($node)
         {
             $type = $this->getNodeText($node, 'span');
             $data = $this->getNodeText($node, 'strong');
 
-            return [strtolower(str_replace(':', '', $type)) => $data];
+            return [strtolower(str_replace(':', '', Accent::remove($type))) => $data];
         });
 
         $result = [];
@@ -195,7 +200,7 @@ class OlxScraper extends BaseScraper
         return $result;
     }
 
-    private function extractNotes($filter)
+    protected function extractNotes($filter)
     {
         if (! $filter->count())
         {
@@ -205,7 +210,7 @@ class OlxScraper extends BaseScraper
         return $this->clearString($filter->text());
     }
 
-    private function extractPhone($filter)
+    protected function extractPhone($filter)
     {
         if ($filter->count())
         {
@@ -215,7 +220,7 @@ class OlxScraper extends BaseScraper
         return ['',''];
     }
 
-    private function extractPhonesFromNotes($notes)
+    protected function extractPhonesFromNotes($notes)
     {
         if (! $notes)
         {
@@ -232,7 +237,7 @@ class OlxScraper extends BaseScraper
         {
             if (isset($match[0]) && strlen($match[0]) >= 8)
             {
-                $result[] = $match[0];
+                $result[] = $this->cleanPhone($match[0]);
             }
         }
 
@@ -245,9 +250,13 @@ class OlxScraper extends BaseScraper
 
         $linkCount = 0;
         $linkFound = 0;
+        $linkAlreadyAdded = 0;
+        $pageAlreadyAdded = 0;
 
-		foreach($this->generateUrls() as $url)
+        foreach($this->generateUrls() as $url)
 		{
+		    $command->info('scraping '.$url);
+
 			$this->setUrl($url);
 
             while($this->hasContent)
@@ -258,16 +267,30 @@ class OlxScraper extends BaseScraper
                     {
                         $links[$link['webservice_url_code']] = $link;
                         $linkCount++;
+                        $linkAlreadyAdded = 0;
+                        $pageAlreadyAdded = 0;
                     }
                     else
                     {
                         $linkFound++;
+                        $linkAlreadyAdded++;
                     }
 				}
 
                 $pageCount++;
+                $pageAlreadyAdded++;
 
-                $this->log($command, "Getting links from page $pageCount. Total link count: ".$linkCount." - Links already downloaded: ".$linkFound);
+                $this->log($command, "Getting links from page $pageCount. New links found: ".$linkCount." - Already in database: ".$linkFound." - ".$linkAlreadyAdded." - ".$pageAlreadyAdded);
+
+                if ($pageCount > 100 || $linkAlreadyAdded > 170 || $pageAlreadyAdded > 9) {
+                    $pageCount = 0;
+
+                    $linkAlreadyAdded = 0;
+
+                    $pageAlreadyAdded = 0;
+
+				    break;
+                }
 
 				$this->nextPage($url, $pageCount);
 			}
@@ -281,12 +304,23 @@ class OlxScraper extends BaseScraper
      * @param $data
      * @return string
      */
-    private function getLogLine($counter, $data, $link = null)
+    protected function getLogLine($counter, $data, $link = null)
     {
         return sprintf("%s: %s - %s | %s | %s", str_pad($counter, 6, '0', STR_PAD_LEFT), $data['phone'], $data['name'], $link, $data['url']);
     }
 
-    private function getNodeText($node, $string)
+    /**
+     * @param $items
+     * @return null
+     */
+    protected function getMunicipioFromItems($items)
+    {
+        $columnName = isset($items['município']) ? 'município' : (isset($items['municã­pio']) ? 'municã­pio' : 'municipio');
+
+        return isset($items[$columnName]) ? $items[$columnName] : null;
+    }
+
+    protected function getNodeText($node, $string)
     {
         $node = $node->filter($string);
 
@@ -298,7 +332,7 @@ class OlxScraper extends BaseScraper
         return $node->text();
     }
 
-    private function keepOnlyNumbers($phone)
+    protected function keepOnlyNumbers($phone)
     {
         return preg_replace('/\D/', '', $phone);
     }
@@ -308,12 +342,12 @@ class OlxScraper extends BaseScraper
      * @param $counter
      * @param $data
      */
-    private function logLine($command, $counter, $data, $link = null)
+    protected function logLine($command, $counter, $data, $link = null)
     {
         $this->log($command, $this->getLogLine($counter, $data, $link));
     }
 
-    private function normalizeName($name)
+    protected function normalizeName($name)
     {
         $name = strtolower($name);
         $normalized = array();
@@ -331,7 +365,7 @@ class OlxScraper extends BaseScraper
         return implode('', $normalized);
     }
 
-    private function ocr($url, $command = null, $prefix = '')
+    protected function ocr($url, $command = null, $prefix = '')
     {
         $errors = 0;
 
@@ -348,7 +382,7 @@ class OlxScraper extends BaseScraper
         }
     }
 
-    private function sanitizeForCsv($string)
+    protected function sanitizeForCsv($string)
     {
         return str_replace(';', '.', $string);
     }
@@ -372,6 +406,14 @@ class OlxScraper extends BaseScraper
 
         $linkCrawler = $this->setUrl($link);
 
+        if ($link !== $linkCrawler->getUri()) {
+            return 'not found';
+        }
+
+        if ($linkCrawler->filter('.OLXad-title')->count() == 0) {
+            return 'not found';
+        }
+
         $phone = '';
         $urlPhone = '';
 
@@ -383,10 +425,15 @@ class OlxScraper extends BaseScraper
             }
 
             $items = $this->extractItems('li.item > p.text', $linkCrawler);
+            
+            $items = collect($items)->mapWithKeys(function ($item, $key) {
+                return [Accent::remove($key) => $item];
+            });
 
             $category = $this->extractCategory($items);
 
             $notes = $this->extractNotes($linkCrawler->filter('div.OLXad-description > p.text'));
+
             $phones = $this->extractPhonesFromNotes($notes);
 
             $data = [
@@ -395,16 +442,21 @@ class OlxScraper extends BaseScraper
                 'description' => $linkCrawler->filter('title')->text(),
                 'notes' => $notes,
                 'neighbourhood' => isset($items['bairro']) ? $items['bairro'] : null,
-                'city' => isset($items['município']) ? $items['município'] : null,
+                'city' => $this->getMunicipioFromItems($items),
                 'category' => $category,
                 'postalcode' => isset($items['cep']) ? $items['cep'] : null,
-                'phone' => $phone,
+                'phone' => $this->cleanPhone($phone),
                 'other_phones' => join(',', $phones),
                 'url_phone' => $urlPhone,
             ];
 
             return $data;
         }
+    }
+
+    protected function cleanPhone($phone)
+    {
+        return preg_replace('/[^0-9.]+/', '', $phone);
     }
 
     public function scrape($command = null, $pageStart = 0)
@@ -423,6 +475,146 @@ class OlxScraper extends BaseScraper
         }
     }
 
+    public function getTextFromNode($Node, $Text = "") {
+        if ($Node->tagName == null)
+            return $Text.$Node->textContent;
+
+        $Node = $Node->firstChild;
+        if ($Node != null)
+            $Text = $this->getTextFromNode($Node, $Text);
+
+        while($Node->nextSibling != null) {
+            $Text = $this->getTextFromNode($Node->nextSibling, $Text);
+            $Node = $Node->nextSibling;
+        }
+        return $Text;
+    }
+
+    public function getUriLastPart($uri)
+    {
+        $parts = explode('/', $uri);
+
+        return $parts[count($parts)-1];
+    }
+
+    public function makeCrawlerUrl($state, $region = null, $zone = null, $neighbourhood_slug = null)
+    {
+        $url = "https://{$state}.olx.com.br/";
+
+        if ($region) {
+            $url .= "{$region}/";
+        }
+
+        if ($zone) {
+            $url .= "{$zone}/";
+        }
+
+        if ($neighbourhood_slug) {
+            $url .= "{$neighbourhood_slug}/";
+        }
+
+        return $url;
+    }
+
+    public function scrapeStateRegions() {
+        return coollect($this->setUrl('https://rj.olx.com.br/')->filter('.linkshelf-tabs-content.state')->filter('a')->links())->map(function ($link)
+        {
+            return coollect([
+                'state_code' => 'rj',
+                'region_url' => $uri = $link->getUri(),
+                'region_code' => $this->getUriLastPart($uri),
+                'region_name' => $link->getNode()->getAttribute('title')
+            ]);
+        });
+    }
+
+    public function scrapeRegionZones($region)
+    {
+        return coollect($this->setUrl($this->makeCrawlerUrl($region->state_code,
+            $region->region_code))->filter('div.linkshelf-tabs-content.zones')->filter('ul')->filter('a')->links())->reject(function (
+            $link
+        ) {
+            return !starts_with($link->getUri(), 'https:');
+        })->map(function ($link) use ($region) {
+            return coollect(
+                [
+                    'zone_url' => $uri = $link->getUri(),
+                    'zone_code' => $this->getUriLastPart($uri),
+                    'zone_name' => $link->getNode()->getAttribute('title')
+                ]
+            );
+        });
+    }
+
+    public function scrapeZoneCities($region, $zone)
+    {
+        $crawler = $this->setUrl($this->makeCrawlerUrl($region->state_code, $region->region_code, $zone['zone_code']));
+
+        $labels = coollect($crawler->filter('.linkshelf-tabs-content.neighbourhood')->filter('label')->extract(['_text']))->map(function ($label) {
+            preg_match('|(.*),|', $label, $matches);
+
+            return trim($matches[1]);
+        });
+
+        $ids = coollect($crawler->filter('.linkshelf-tabs-content.neighbourhood')->filter('input')->extract(['value']))->reject(function ($value) {
+            return !is_numeric($value);
+        })->map(function ($item, $index) use ($labels, $region, $zone) {
+            $slug = $this->makeSlug($labels[$index]);
+
+            return [
+                'neighbourhood_code' => $item,
+                'neighbourhood_name' => $labels[$index],
+                'neighbourhood_url' => $this->makeCrawlerUrl($region->state_code, $region->region_code, $zone['zone_code'], $slug),
+                'neighbourhood_slug' => $slug,
+            ];
+        })->each(function ($neighbourhood) use ($region, $zone) {
+            $this->createOlxNeighbourhood($region, $zone, $neighbourhood);
+        });
+
+        return $ids;
+    }
+
+    public function makeSlug($string)
+    {
+        $slug = trim(strtolower(Accent::remove($string)));
+
+        return str_replace(' ', '-', $slug);
+    }
+
+    public function createOlxNeighbourhood($region, $zone, $neighbourhood)
+    {
+        OlxNeighbourhood::create([
+            'state_code' => $region['state_code'],
+            'region_url' => $region['region_url'],
+            'region_code' => $region['region_code'],
+            'region_name' => $region['region_name'],
+            'zone_url' => $zone['zone_url'],
+            'zone_code' => $zone['zone_code'],
+            'zone_name' => $zone['zone_name'],
+            'neighbourhood_url' => $neighbourhood['neighbourhood_url'],
+            'neighbourhood_code' => $neighbourhood['neighbourhood_code'],
+            'neighbourhood_name' => $neighbourhood['neighbourhood_name'],
+            'neighbourhood_slug' => $neighbourhood['neighbourhood_slug'],
+        ]);
+    }
+
+    public function scrapeStates($command = null, $pageStart = 0)
+    {
+        OlxNeighbourhood::where('state_code', 'rj')->delete();
+
+        $states = $this->scrapeStateRegions()->map(function ($region) {
+            $region['zones'] = $this->scrapeRegionZones($region)->map(function ($zone) use ($region) {
+                $zone['cities'] = $this->scrapeZoneCities($region, $zone);
+
+                return $zone;
+            });
+
+            return $region;
+        });
+
+        $command->info(OlxNeighbourhood::where('state_code', 'rj')->get()->count().' neighbourhoods generated');
+    }
+
     public function scrapeUrls($command = null, $order = 'asc', $rescrape = false)
     {
         $rescrape = $rescrape && ($rescrape === true || strtolower($rescrape) == 'yes' || strtolower($rescrape) == 'true');
@@ -433,6 +625,9 @@ class OlxScraper extends BaseScraper
         {
             $counter++;
 
+            $command->info('----------------------------------------------------------------------------');
+            $command->info($row->url);
+
             if ($row->scraped && ! $rescrape)
             {
                 $this->log($command, 'Skipping already scraped.');
@@ -442,6 +637,16 @@ class OlxScraper extends BaseScraper
 
             if (! $data = $this->scrapeData($row->url))
             {
+                continue;
+            }
+
+            if ($data === 'not found') {
+                $this->log($command, 'Not found, removing from next runs...');
+
+                $row->not_found = true;
+
+                $row->save();
+
                 continue;
             }
 
@@ -635,4 +840,69 @@ class OlxScraper extends BaseScraper
             $this->log($command, $log);
         }
     }
+
+    public function getStates()
+    {
+        return coollect([
+            'state' => [[
+                'code' => 'rj',
+
+                'name' => 'Rio de Janeiro',
+
+                'region' => [
+                    [
+                        'code' => 'rio-de-janeiro-e-regiao',
+                        'name' => 'Rio de Janeiro e região',
+                        'area-code' => '21',
+                        'sub_zones' => [
+                            'sao_goncalo' => [
+                                'code' => 'sao_goncalo',
+                                'name' => 'São Gonçalo',
+                                'cities_and_neighbourhoods' => [
+                                    [ 'code' => '2207', 'name' => '7 Pontes' ],
+                                    [ 'code' => '2191', 'name' => 'Alcântara' ],
+                                    [ 'code' => '2206', 'name' => 'Arsenal' ],
+                                    [ 'code' => '2197', 'name' => 'Bandeirantes' ],
+                                    [ 'code' => '2210', 'name' => 'Barreto' ],
+                                    [ 'code' => '2214', 'name' => 'Barro Vermelho' ],
+                                    [ 'code' => '2192', 'name' => 'Boaçu' ],
+                                    [ 'code' => '2193', 'name' => 'Centro' ],
+                                    [ 'code' => '2203', 'name' => 'Colubande' ],
+                                    [ 'code' => '2202', 'name' => 'Estrela do Norte' ],
+                                    [ 'code' => '2190', 'name' => 'Jardim Catarina' ],
+                                    [ 'code' => '2198', 'name' => 'Maria Paula' ],
+                                    [ 'code' => '2201', 'name' => 'Mutondo' ],
+                                    [ 'code' => '2213', 'name' => 'Mutuá' ],
+                                    [ 'code' => '2215', 'name' => 'Neves' ],
+                                    [ 'code' => '2211', 'name' => 'Nova Cidade' ],
+                                    [ 'code' => '2212', 'name' => 'Pacheco' ],
+                                    [ 'code' => '2205', 'name' => 'Paraíso' ],
+                                    [ 'code' => '2199', 'name' => 'Pita' ],
+                                    [ 'code' => '2200', 'name' => 'Porto da Pedra' ],
+                                    [ 'code' => '2208', 'name' => 'Porto do Rosa' ],
+                                    [ 'code' => '2209', 'name' => 'Porto Novo' ],
+                                    [ 'code' => '2189', 'name' => 'Rio do Ouro' ],
+                                    [ 'code' => '2196', 'name' => 'Rocha' ],
+                                    [ 'code' => '2194', 'name' => 'Santa Catarina' ],
+                                    [ 'code' => '2195', 'name' => 'Vista Alegre' ],
+                                    [ 'code' => '2204', 'name' => 'Zé Garoto' ],
+                                ]
+                            ]
+                        ]
+                    ],
+                    [
+                        'code' => 'serra-angra-dos-reis-e-regiao',
+                        'name' => 'Serra, Angra dos Reis e região',
+                        'area-code' => '24'
+                    ],
+                    [
+                        'code' => 'norte-do-estado-do-rio',
+                        'name' => 'Norte do Estado e Região dos Lagos',
+                        'area-code' => '22'
+                    ]
+                ]
+            ],
+        ]]);
+    }
 }
+
