@@ -6,6 +6,7 @@ use App\Data\Entities\OlxNeighbourhood;
 use App\Support\Accent;
 use Baum\Extensions\Eloquent\Collection;
 use Imagick;
+use PragmaRX\Support\Timer;
 use Storage;
 use Illuminate\Support\Str;
 use App\Data\Repositories\Olx;
@@ -52,6 +53,36 @@ class OlxScraper extends BaseScraper
 
 	    '%sell-rent%' => ['venda','aluguel'],
 	];
+
+	protected $states = [
+        'sp',
+        'rj',
+        'mg',
+        'se',
+        'to',
+        'ac',
+        'al',
+        'ap',
+        'am',
+        'ba',
+        'ce',
+        'df',
+        'es',
+        'go',
+        'ma',
+        'mt',
+        'ms',
+        'pa',
+        'pb',
+        'pr',
+        'pe',
+        'pi',
+        'rn',
+        'rs',
+        'ro',
+        'rr',
+        'sc',
+    ];
 
     /**
      * @var \App\Data\Repositories\Olx
@@ -121,10 +152,22 @@ class OlxScraper extends BaseScraper
         {
             return $this->repository->create([
                 'url' => $url,
+                'state_code' => $this->extractStateCodeFromOlxUrl($url),
                 'zone' => $this->data['%zone%'][0],
                 'region' => $this->data['%region%'][0],
             ]);
         }
+    }
+
+    public function extractStateCodeFromOlxUrl($url)
+    {
+        preg_match('|https://(.*)\.olx|', $url, $matches);
+
+        if (isset($matches[1])) {
+            return upper($matches[1]);
+        }
+
+        return null;
     }
 
     protected function clearString($string)
@@ -257,7 +300,12 @@ class OlxScraper extends BaseScraper
 		{
 		    $command->info('scraping '.$url);
 
-			$this->setUrl($url);
+			$crawler = $this->setUrl($url);
+
+			if ($crawler === static::ERROR_CONNECTION_IS_DOWN) {
+                $this->log($command, 'Connection is down. Exiting...');
+                die;
+            }
 
             while($this->hasContent)
 			{
@@ -282,7 +330,7 @@ class OlxScraper extends BaseScraper
 
                 $this->log($command, "Getting links from page $pageCount. New links found: ".$linkCount." - Already in database: ".$linkFound." - ".$linkAlreadyAdded." - ".$pageAlreadyAdded);
 
-                if ($pageCount > 100 || $linkAlreadyAdded > 170 || $pageAlreadyAdded > 9) {
+                if ($pageCount > 100 || $linkAlreadyAdded > 170 || $pageAlreadyAdded > 4) {
                     $pageCount = 0;
 
                     $linkAlreadyAdded = 0;
@@ -406,12 +454,12 @@ class OlxScraper extends BaseScraper
 
         $linkCrawler = $this->setUrl($link);
 
-        if ($link !== $linkCrawler->getUri()) {
-            return 'not found';
+        if (is_string($linkCrawler) || $link !== $linkCrawler->getUri()) {
+            return is_string($linkCrawler) ? $linkCrawler : static::ERROR_NOT_FOUND;
         }
 
         if ($linkCrawler->filter('.OLXad-title')->count() == 0) {
-            return 'not found';
+            return static::ERROR_NOT_FOUND;
         }
 
         $phone = '';
@@ -516,16 +564,23 @@ class OlxScraper extends BaseScraper
         return $url;
     }
 
-    public function scrapeStateRegions() {
-        return coollect($this->setUrl('https://rj.olx.com.br/')->filter('.linkshelf-tabs-content.state')->filter('a')->links())->map(function ($link)
-        {
-            return coollect([
-                'state_code' => 'rj',
-                'region_url' => $uri = $link->getUri(),
-                'region_code' => $this->getUriLastPart($uri),
-                'region_name' => $link->getNode()->getAttribute('title')
-            ]);
+    public function scrapeStateRegions()
+    {
+        $states = $this->getAllStates()->map(function ($state) {
+            OlxNeighbourhood::where('state_code', $state)->delete();
+
+            return coollect($this->setUrl("https://{$state}.olx.com.br/")->filter('.linkshelf-tabs-content.state')->filter('a')->links())->map(function ($link) use ($state)
+            {
+                return coollect([
+                    'state_code' => $state,
+                    'region_url' => $uri = $link->getUri(),
+                    'region_code' => $this->getUriLastPart($uri),
+                    'region_name' => $link->getNode()->getAttribute('title')
+                ]);
+            });
         });
+
+        return $states->flatten(1);
     }
 
     public function scrapeRegionZones($region)
@@ -600,9 +655,9 @@ class OlxScraper extends BaseScraper
 
     public function scrapeStates($command = null, $pageStart = 0)
     {
-        OlxNeighbourhood::where('state_code', 'rj')->delete();
+        $states = $this->scrapeStateRegions()->map(function ($region) use ($command) {
+            $command->info($region["state_code"] . ' - ' .    $region["region_url"] . ' - ' .    $region["region_code"] . ' - ' .    $region["region_name"]);
 
-        $states = $this->scrapeStateRegions()->map(function ($region) {
             $region['zones'] = $this->scrapeRegionZones($region)->map(function ($zone) use ($region) {
                 $zone['cities'] = $this->scrapeZoneCities($region, $zone);
 
@@ -612,7 +667,7 @@ class OlxScraper extends BaseScraper
             return $region;
         });
 
-        $command->info(OlxNeighbourhood::where('state_code', 'rj')->get()->count().' neighbourhoods generated');
+        $command->info(OlxNeighbourhood::count().' neighbourhoods generated');
     }
 
     public function scrapeUrls($command = null, $order = 'asc', $rescrape = false)
@@ -621,9 +676,18 @@ class OlxScraper extends BaseScraper
 
         $counter = 0;
 
-        foreach ($this->repository->getAllNotScraped($order, $rescrape) as $row)
-        {
+        $timeout = 0;
+
+        while (true) {
+            $row = $this->repository->getAllNotScraped($order, $rescrape);
+
+            if (is_null($row)) {
+                break;
+            }
+
             $counter++;
+
+            Timer::start();
 
             $command->info('----------------------------------------------------------------------------');
             $command->info($row->url);
@@ -635,12 +699,21 @@ class OlxScraper extends BaseScraper
                 continue;
             }
 
-            if (! $data = $this->scrapeData($row->url))
-            {
-                continue;
+            try {
+                if (! $data = $this->scrapeData($row->url))
+                {
+                    continue;
+                }
+            } catch (\Exception $exception) {
+                $data = static::ERROR_NOT_FOUND;
             }
 
-            if ($data === 'not found') {
+            if ($data === static::ERROR_CONNECTION_IS_DOWN) {
+                $this->log($command, 'Looks like the internet connection is down. Exiting...');
+                die;
+            }
+
+            if ($data === static::ERROR_NOT_FOUND) {
                 $this->log($command, 'Not found, removing from next runs...');
 
                 $row->not_found = true;
@@ -656,6 +729,21 @@ class OlxScraper extends BaseScraper
             $data['ocr_done'] = true;
 
             $row->update($data);
+
+            $command->info("Elapsed: ".Timer::elapsed());
+
+            if (Timer::elapsed() > 0.6) {
+                $timeout++;
+
+                if ($timeout > 10) {
+                    $command->info("It's taking too long! Dying...");
+                    die();
+                }
+            } else {
+                if (Timer::elapsed() <= 0.45) {
+                    $timeout = 0;
+                }
+            }
         }
     }
 
@@ -903,6 +991,11 @@ class OlxScraper extends BaseScraper
                 ]
             ],
         ]]);
+    }
+
+    public function getAllStates()
+    {
+        return coollect($this->states);
     }
 }
 

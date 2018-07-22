@@ -16,7 +16,6 @@ use PragmaRX\Sdk\Core\Database\Eloquent\Builder as EloquentBuilder;
 class Model extends Eloquent
 {
     use
-        RevisionableTrait,
 //        CachableTrait,
 //        Rememberable,
         EventGenerator,

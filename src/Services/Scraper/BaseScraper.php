@@ -5,8 +5,13 @@ namespace PragmaRX\Sdk\Services\Scraper;
 use App\Data\Entities\OlxNeighbourhood;
 use Cache;
 use Goutte\Client as Goutte;
+use GuzzleHttp\Client as Guzzle;
 
-abstract class BaseScraper implements ScraperInterface {
+abstract class BaseScraper implements ScraperInterface
+{
+    const ERROR_CONNECTION_IS_DOWN = 'connection is down';
+
+    const ERROR_NOT_FOUND = 'not found';
 
 	/**
 	 * @var \Symfony\Component\DomCrawler\Crawler
@@ -41,12 +46,23 @@ abstract class BaseScraper implements ScraperInterface {
 	 */
 	public function __construct(Goutte $goutte = null)
 	{
-	    if (! $goutte)
-        {
-            $goutte = new Goutte();
-        }
+        $this->goutte = $goutte ?: $this->instantiateGoutte();
+	}
 
-        $this->goutte = $goutte;
+    public function instantiateGoutte()
+    {
+        $goutte = new Goutte();
+
+        $goutte->setMaxRedirects(5);
+
+        $guzzle = new Guzzle([
+            'timeout' => 30,
+            'allow_redirects' => false,
+        ]);
+
+        $goutte->setClient($guzzle);
+
+        return $goutte;
 	}
 
     /**
@@ -88,7 +104,17 @@ abstract class BaseScraper implements ScraperInterface {
 	{
 		$this->currentUrl = $url;
 
-        return $this->request($url);
+		try {
+            $request = $this->request($url);
+        } catch (\GuzzleHttp\Exception\ConnectException $exception) {
+            return static::ERROR_CONNECTION_IS_DOWN;
+        } catch (\Exception $exception) {
+            return static::ERROR_NOT_FOUND;
+        } catch (\Symfony\Component\Debug\Exception\FatalThrowableError $exception) {
+            return static::ERROR_NOT_FOUND;
+        }
+
+        return $request;
 	}
 
     public function getContent($url)
@@ -111,9 +137,12 @@ abstract class BaseScraper implements ScraperInterface {
 	 */
 	private function request($url = null, $method = 'GET')
 	{
+        // (new Guzzle())->request('GET', $url); // force an exception in case of error
+
 		$this->crawler = $this->goutte->request(
 			$method ?: $this->method,
-			$url ?: $this->currentUrl
+			$url ?: $this->currentUrl,
+            ['allow_redirects' => false]
 		);
 
 		$this->hasContent = true;
@@ -128,8 +157,14 @@ abstract class BaseScraper implements ScraperInterface {
 	 */
 	public function generateUrls()
     {
-        return OlxNeighbourhood::where('state_code', 'rj')->get()->pluck('neighbourhood_url');
-	    /// return array_strings_generator($this->data, $this->rules['url']);
+        return OlxNeighbourhood::whereIn('state_code', $this->states)
+            ->orderBy('state_code')
+            ->orderBy('region_name')
+            ->get()->sortBy(function ($state) {
+                return key(coollect($this->states)->filter(function ($item) use ($state) {
+                    return upper($item) === upper($state['state_code']);
+                })->toArray());
+            })->pluck('neighbourhood_url');
     }
 
 	public function nextPage($url, $page = null)
