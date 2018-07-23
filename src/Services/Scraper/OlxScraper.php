@@ -87,11 +87,13 @@ class OlxScraper extends BaseScraper
     /**
      * @var \App\Data\Repositories\Olx
      */
-    protected $repository;
+    public $repository;
 
     public function __construct()
     {
         $this->repository = $repository = app(Olx::class);
+
+        $this->repository->setScraper($this);
 
         parent::__construct();
     }
@@ -263,28 +265,67 @@ class OlxScraper extends BaseScraper
         return ['',''];
     }
 
-    protected function extractPhonesFromNotes($notes)
+    public function extractPhonesFromNotes($notes)
     {
         if (! $notes)
         {
-            return [];
+            return coollect([]);
         }
 
-        $regex = '/(\d|\+|\()(\+|\d|\(|\)|-| |\/){7,}(\d|\))+\b/';
+        $regex = '/(?:\(|\b|0)[0-9]{0,2}\s*\)?\s?[0-9]{0,1}[.-]?\s*[0-9]{3,5}\s*[.-]?\s*[0-9]{4,5}\b/';
 
         preg_match_all($regex, $notes, $matches);
 
         $result = [];
 
-        foreach ($matches as $match)
+        foreach ($matches[0] as $match)
         {
-            if (isset($match[0]) && strlen($match[0]) >= 8)
-            {
-                $result[] = $this->cleanPhone($match[0]);
-            }
+            $result[] = $this->cleanPhone($match);
         }
 
-        return $result;
+        return coollect($result);
+    }
+
+    public function guessAndAddAreaCode($phones)
+    {
+        if ($phones->count() < 2) {
+            return $phones;
+        }
+
+        if (!$areaCode = $this->guessAreaCode($phones)) {
+            return $phones;
+        }
+
+        return $phones->map(function ($phone) use ($areaCode) {
+            $lengthWithoutAreaCode = $this->isMobile($phone) ? 9 : 8;
+
+            if (strlen($phone) == $lengthWithoutAreaCode) {
+                $phone = "{$areaCode}{$phone}";
+            }
+
+            return $phone;
+        });
+    }
+
+    public function guessAreaCode($phones)
+    {
+        $areas = $phones->map(function ($phone) {
+            $lengthWithoutAreaCode = $this->isMobile($phone) ? 9 : 8;
+
+            if (strlen($phone) != $lengthWithoutAreaCode+2) {
+                return '';
+            }
+
+            return substr($phone, 0, 2);
+        })->reject(function ($phone) {
+            return empty($phone);
+        })->unique();
+
+        if ($areas->count() == 0 || $areas->count() > 1) {
+            return null;
+        }
+
+        return $areas->first();
     }
 
     public function getLinks($command, $pageCount = 0)
@@ -502,13 +543,47 @@ class OlxScraper extends BaseScraper
         }
     }
 
-    protected function cleanPhone($phone)
+    public function cleanPhone($phone, $areaCode = null)
     {
-        return preg_replace('/[^0-9.]+/', '', $phone);
+        if (empty($phone)) {
+            return '';
+        }
+
+        $phone = preg_replace('/[^0-9]+/', '', $phone);
+
+        if (strlen($phone) == 8 && starts_with($phone, '9')) {
+            $phone = "9{$phone}";
+        }
+
+        if (starts_with($phone, '0')) {
+            $landlineWithZero = strlen($phone) == 11 && !$this->isMobile($phone);
+
+            $mobileWithZero = strlen($phone) == 12 && $this->isMobile(substr($phone, 1));
+
+            if ($landlineWithZero || $mobileWithZero) {
+                $phone = substr($phone, 1);
+            }
+        }
+
+        if ($areaCode && (strlen($phone) == 8 or strlen($phone) == 9)) {
+            $phone = "{$areaCode}{$phone}";
+        }
+
+        return $phone;
     }
+
+    public function isMobile($phone)
+    {
+        return (
+            (strlen($phone) == 9 && $phone[0] == '9') ||
+            (strlen($phone) == 11 && $phone[2] == '9')
+        );
+    }
+
 
     public function scrape($command = null, $pageStart = 0)
     {
+
         $counter = 0;
 
         foreach ($this->getLinks($command, $pageStart) as $link) {
